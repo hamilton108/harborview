@@ -1,0 +1,92 @@
+$fs : 1.3em;
+$bg-color: #FFFAF0; // orig: #FFF8DC, ghost white: 	#F8F8FF
+
+//--------------- Foreground Colors ------------------>>>
+$nav-color: #52555e;
+$color: #000;
+$a-color: #b9becf;  // #a7acbd;
+
+//--------------- Table Colors ------------------>>>
+$table-border-color: #000;
+$td-ajax-color: #000;
+
+//--------------- Navbar Colors ------------------>>>
+$navbar-color-1: #FFF8DC;
+$navbar-color-2: #52555E;
+$navbar-color-3: #FFFFFF;
+
+//--------------- Main Colors------------------>>>
+$bg-main: #FFF8DC;
+
+//--------------- Pop-up dialog ------------------>>>
+$pop-width: 400px;
+
+//--------------- Href Button ------------------>>>
+$bg-href-btn: #942d16;
+$fg-href-btn: #ccc;
+
+body {
+    color: $color;
+    background-color: $bg-color;
+    font-family: Verdana, Arial, serif;
+    font-size: $fs; margin: 0; padding: 0;
+    padding-top: 50px; /* When using the navbar-top-fixed */
+}
+
+
+a, a:link, a:visited, a:active, a.current {
+    margin: 0px;
+    text-decoration: none;
+    color: $a-color;
+    font-weight: normal;
+}
+
+
+img {
+    border: 0px;
+}
+
+/*
+nav a {
+    &, &:link, &:visited, &:active, &.current {
+       padding: 10px;
+       font-size: $fs;
+       margin: 0px;
+       text-decoration: none;
+       color: $nav-color;
+    }
+}
+*/
+
+
+.logo {
+    background:url('/img/02.png') center no-repeat;
+    position: absolute;
+    top: 10px;
+    left: 88%;
+	//float: right;
+   	//display:inline;
+	//float: right;
+    width: 163px;
+    height: 159px;
+    z-index: 9999;
+}
+.top-canvas {
+  border:1px solid red;
+  position:absolute;
+  top:300px;
+  left:200px;
+  width:1310px;
+  height:600px;
+}
+
+// @import "ribbon";
+// @import "navbar-harvest";
+@import "navbar-simple";
+@import "dialog";
+@import "href-button";
+@import "canvas";
+@import "bootstrap";
+
+// @import "fieldset";
+// @import "table-std";

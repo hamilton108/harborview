@@ -1,0 +1,24 @@
+a.href-button {
+   background: $bg-href-btn;
+   padding: 10px 20px;
+   color: #fff;
+   font-size: 14px;
+   font-family: Helvetica, Arial, Sans-Serif;
+   text-decoration: none;
+   vertical-align: middle;
+   }
+
+a.href-button:hover {
+   background: $bg-href-btn;
+   color: $fg-href-btn;
+   }
+
+a.href-button:active {
+   background: $bg-href-btn;
+   }
+
+a.href-td {
+   padding: 5px 5px 5px 5px;
+   background: $bg-href-btn;
+   color: #fff;
+}

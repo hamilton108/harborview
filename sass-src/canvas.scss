@@ -1,0 +1,26 @@
+
+$c-left: 200px;
+$c-width: 1310px;
+$c1-top : 200px;
+$c2-top : 850px;
+$c3-top : 720px;
+
+div.c1, div.c2, div.c3 {
+    position: absolute;
+    left: $c-left;
+}
+
+div.c1 {
+    top: $c1-top;
+}
+div.c2 {
+    top: $c2-top;
+}
+div.c3 {
+    top: $c3-top;
+}
+canvas.c1, canvas.c2, canvas.c3 {
+  border-style: solid;
+  border-width: 1px;
+  border-color: #000000;
+}
