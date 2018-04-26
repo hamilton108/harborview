@@ -1,4 +1,4 @@
-package harborview.server;
+package harborview.service;
 
 public interface HttpServer {
 }
