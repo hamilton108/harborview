@@ -32,6 +32,7 @@ dependencies {
     //------------------- spring -------------------
     runtime "org.springframework:spring-core:$springVersion"
     runtime "org.springframework:spring-context:$springVersion"
+    compile "org.springframework:spring-webmvc:${springVersion}"
 
     //------------------- Aspectj -------------------
     //compile "org.aspectj:aspectjrt:$aspectjVersion"
