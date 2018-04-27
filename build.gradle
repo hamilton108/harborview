@@ -34,6 +34,10 @@ dependencies {
     runtime "org.springframework:spring-context:$springVersion"
     compile "org.springframework:spring-webmvc:${springVersion}"
 
+    //------------------- Jetty -------------------
+    //runtime "org.eclipse.jetty:jetty-server:${jettyVersion}"
+    runtime "org.eclipse.jetty:jetty-servlet:${jettyVersion}"
+
     //------------------- Aspectj -------------------
     //compile "org.aspectj:aspectjrt:$aspectjVersion"
     //aspectjTask "org.aspectj:aspectjweaver:$aspectjVersion"
