@@ -41,6 +41,12 @@ dependencies {
     compile "org.eclipse.jetty:jetty-jsp:${jettyVersion}"
 
 
+    //------------------- Thmeleaf -------------------
+    // https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf-spring4
+    compile "org.thymeleaf:thymeleaf-spring4:${thymeleafVersion}"
+    compile "org.thymeleaf:thymeleaf:${thymeleafVersion}"
+
+
 
 
     //------------------- Aspectj -------------------
