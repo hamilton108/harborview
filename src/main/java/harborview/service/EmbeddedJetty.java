@@ -22,12 +22,16 @@ public class EmbeddedJetty {
         new EmbeddedJetty().startJetty(PORT);
     }
 
+    private String getResourceBasePath() {
+        //String webapp = new ClassPathResource(WEBAPP_DIRECTORY).getURI().toString();
+        String result = "file:/home/rcs/opt/java/harborview/src/main/webapp";
+        return result;
+    }
     private void startJetty(int port) throws Exception {
         Server server = new Server(port);
 
         WebAppContext context = new WebAppContext();
-        String webapp = new ClassPathResource(WEBAPP_DIRECTORY).getURI().toString();
-
+        String webapp = getResourceBasePath();
         context.setDescriptor(webapp+"/WEB-INF/web.xml");
         context.setResourceBase(webapp);
         context.setContextPath("/");
