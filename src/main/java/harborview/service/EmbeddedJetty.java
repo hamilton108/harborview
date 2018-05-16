@@ -6,28 +6,33 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
-public class EmbeddedJetty {
+import java.io.IOException;
 
+public class EmbeddedJetty {
+    private static final Boolean DEBUG = true;
     // https://wiki.eclipse.org/Jetty/Tutorial/Embedding_Jetty
     private static final Logger LOGGER = LoggerFactory.getLogger(EmbeddedJetty.class);
     
     private static final int PORT = 8084;
     
     private static final String CONTEXT_PATH = "/";
-    private static final String CONFIG_LOCATION_PACKAGE = "com.fernandospr.example.config";
     private static final String MAPPING_URL = "/";
     private static final String WEBAPP_DIRECTORY = "webapp";
     
     public static void main(String[] args) throws Exception {
-        new EmbeddedJetty().startJetty(PORT);
+        startJetty(PORT);
     }
 
-    private String getResourceBasePath() {
-        //String webapp = new ClassPathResource(WEBAPP_DIRECTORY).getURI().toString();
-        String result = "file:/home/rcs/opt/java/harborview/src/main/webapp";
-        return result;
+    private static String getResourceBasePath() throws IOException {
+        if (DEBUG) {
+            return "file:/home/rcs/opt/java/harborview/src/main/webapp";
+        }
+        else {
+            return new ClassPathResource(WEBAPP_DIRECTORY).getURI().toString();
+        }
     }
-    private void startJetty(int port) throws Exception {
+
+    private static void startJetty(int port) throws Exception {
         Server server = new Server(port);
 
         WebAppContext context = new WebAppContext();
@@ -140,35 +145,33 @@ public class EmbeddedJetty {
 
 }
 
-/*
-        For Example you can create VirtualHosts with ServletContextHandler and you can management context easily. That means different context handlers on different ports.
-
-        Server server = new Server();
-        ServerConnector pContext = new ServerConnector(server);
-        pContext.setPort(8080);
-        pContext.setName("Public");
-        ServerConnector localConn = new ServerConnector(server);
-        localConn.setPort(9090);
-        localConn.setName("Local");
-
-        ServletContextHandler publicContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        publicContext.setContextPath("/");
-        ServletHolder sh = new ServletHolder(new HttpServletDispatcher());  sh.setInitParameter("javax.ws.rs.Application", "ServiceListPublic");
-        publicContext.addServlet(sh, "/*");
-        publicContext.setVirtualHosts(new String[]{"@Public"});
-
-
-        ServletContextHandler localContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        localContext .setContextPath("/");
-        ServletHolder shl = new ServletHolder(new HttpServletDispatcher()); shl.setInitParameter("javax.ws.rs.Application", "ServiceListLocal");
-        localContext.addServlet(shl, "/*");
-        localContext.setVirtualHosts(new String[]{"@Local"}); //see localConn.SetName
-
-
-        HandlerCollection collection = new HandlerCollection();
-        collection.addHandler(publicContext);
-        collection.addHandler(localContext);
-        server.setHandler(collection);
-        server.addConnector(pContext);
-        server.addConnector(localContext);
- */
+//        For Example you can create VirtualHosts with ServletContextHandler and you can management context easily. That means different context handlers on different ports.
+//
+//        Server server = new Server();
+//        ServerConnector pContext = new ServerConnector(server);
+//        pContext.setPort(8080);
+//        pContext.setName("Public");
+//        ServerConnector localConn = new ServerConnector(server);
+//        localConn.setPort(9090);
+//        localConn.setName("Local");
+//
+//        ServletContextHandler publicContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
+//        publicContext.setContextPath("/");
+//        ServletHolder sh = new ServletHolder(new HttpServletDispatcher());  sh.setInitParameter("javax.ws.rs.Application", "ServiceListPublic");
+//        publicContext.addServlet(sh, "/*");
+//        publicContext.setVirtualHosts(new String[]{"@Public"});
+//
+//
+//        ServletContextHandler localContext = new ServletContextHandler(ServletContextHandler.SESSIONS);
+//        localContext .setContextPath("/");
+//        ServletHolder shl = new ServletHolder(new HttpServletDispatcher()); shl.setInitParameter("javax.ws.rs.Application", "ServiceListLocal");
+//        localContext.addServlet(shl, "/*");
+//        localContext.setVirtualHosts(new String[]{"@Local"}); //see localConn.SetName
+//
+//
+//        HandlerCollection collection = new HandlerCollection();
+//        collection.addHandler(publicContext);
+//        collection.addHandler(localContext);
+//        server.setHandler(collection);
+//        server.addConnector(pContext);
+//        server.addConnector(localContext);
