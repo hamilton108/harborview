@@ -18,7 +18,7 @@
     <mvc:annotation-driven />
     
     <!-- User @Controller, @Service... annotations -->
-    <context:component-scan base-package="mvcdemo.web" />
+    <context:component-scan base-package="harborview.web" />
 
     <!-- Thymeleaf View Resolver - implementation of Spring's ViewResolver interface -->
     <bean id="viewResolver" class="org.thymeleaf.spring4.view.ThymeleafViewResolver">

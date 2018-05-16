@@ -14,6 +14,7 @@ public class HomeController {
     @RequestMapping(method =  RequestMethod.GET)
     public String index(Locale locale, Model model) {
         System.out.printf("here I am");
-        return "home";
+        model.addAttribute("recipient", "Ralfy dude!");
+        return "index.html";
     }
 }
