@@ -38,7 +38,10 @@
     <!-- Thymeleaf Template Resolver -->
     <bean id="templateResolver" class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
         <property name="prefix" value="/WEB-INF/templates/" />
-        <property name="templateMode" value="HTML" />
+        <!--
+k       <property name="templateMode" value="HTML"/>
+        -->
+        <property name="cacheable" value="false" />
     </bean>
     
 </beans>

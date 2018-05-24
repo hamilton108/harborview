@@ -101,8 +101,8 @@ task printClazzPath << {
 
 jar {
     manifest {
-        attributes 'Main-Class': "harborview.webapp"
+        attributes 'Main-Class': "harborview.service.EmbeddedJetty"
         attributes 'Class-Path': clazzPath()
     }
-    from ("target/classes") include "**/*.class"
+    //from ("target/classes") include "**/*.class"
 }
