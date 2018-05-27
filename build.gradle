@@ -13,6 +13,10 @@ ext.parentDist = '/home/rcs/opt/java/harborview/dist'
 ext.myName = "harborview"
 ext.myLibName = "${myName}-${version}"
 
+sourceSets.main.resources {
+    srcDirs = ["src/main/resources", "src/main/webapp"]
+}
+
 repositories {
     mavenCentral()
 }

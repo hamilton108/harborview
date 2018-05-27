@@ -10,6 +10,8 @@ import java.io.IOException;
 
 public class EmbeddedJetty {
     private static final Boolean DEBUG = true;
+    private static final Boolean JETTY_DUMP = false;
+
     // https://wiki.eclipse.org/Jetty/Tutorial/Embedding_Jetty
     private static final Logger LOGGER = LoggerFactory.getLogger(EmbeddedJetty.class);
     
@@ -51,7 +53,9 @@ public class EmbeddedJetty {
         server.setHandler(context);
 
         server.start();
-        //server.dump(System.err);
+        if (JETTY_DUMP) {
+            server.dump(System.err);
+        }
         server.join();
     }
 
