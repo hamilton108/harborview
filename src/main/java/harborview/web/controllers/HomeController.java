@@ -23,14 +23,18 @@ public class HomeController {
     }
     private List<Stock> getStocks() {
         List<Stock> result = new ArrayList<>();
-
+        result.add(new StockDemo("NHY", 1));
+        result.add(new StockDemo("YAR", 2));
+        result.add(new StockDemo("STL", 3));
         return result;
     }
 }
 class StockDemo implements Stock {
-    private String ticker;
-    public StockDemo(String ticker) {
+    private final String ticker;
+    private final int oid;
+    public StockDemo(String ticker, int oid) {
         this.ticker = ticker;
+        this.oid = oid;
     }
     @Override
     public String getCompanyName() {
@@ -49,7 +53,7 @@ class StockDemo implements Stock {
 
     @Override
     public int getOid() {
-        return 0;
+        return oid;
     }
 
     @Override

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -16,31 +16,50 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
+                <!--
                 <li class="nav-item active">
                     <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Link</a>
                 </li>
+                -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle"
-                       href="#" id="navbarDropdown"
+                       href="#" id="navbarDropdownCalls"
                        role="button" data-toggle="dropdown"
                        aria-haspopup="true"
-                       aria-expanded="false">Calls
-                    </a>
-                    <div th:each="d : ${stockTickers}" class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#" th:text="${d.ticker}">1</a>
+                       aria-expanded="false">Calls</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownCalls">
+                        <a th:each="d : ${stockTickers}" class="dropdown-item" href="/opx/calls/${d.oid}" th:text="${d.ticker}">YAR</a>
                         <!--
                         <div class="dropdown-divider"></div>
                         -->
                     </div>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
+                       href="#" id="navbarDropdownPuts"
+                       role="button" data-toggle="dropdown"
+                       aria-haspopup="true"
+                       aria-expanded="false">Puts</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownPuts">
+                        <a th:each="d : ${stockTickers}" class="dropdown-item" href="/opx/puts/${d.oid}" th:text="${d.ticker}">YAR</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
+                       href="#" id="navbarDropdownMaunaloa"
+                       role="button" data-toggle="dropdown"
+                       aria-haspopup="true"
+                       aria-expanded="false">Maunaloa</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMaunaloa">
+                        <a class="dropdown-item" href="/maunaloa/charts">Charts</a>
+                        <a class="dropdown-item" href="/maunaloa/optiontickers">Options</a>
+                        <a class="dropdown-item" href="/maunaloa/optionpurchases">Option Purchases</a>
+                    </div>
+                </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
         </div>
     </nav>
 </body>
