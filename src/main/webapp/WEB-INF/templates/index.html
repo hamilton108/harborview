@@ -5,11 +5,7 @@
 	<body>
         <div th:replace="navbar.html :: navbar"></div>
         <img src="/img/02.png" height="159" width="163" />
-        <h1>Thymeleaf 3 + Spring 4 example</h1>
-        <p th:text="#{index.what}">Sccru</p>
-        <p>
-            Ah, ah ahd ah suit you, sir <span th:text="${recipient}">Peter</span>!!!
-        </p>
+        <!--
         <div class="dropdown">
             <button class="btn btn-primary" id="myDropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown trigger <span class="caret"></span></button>
             <ul class="dropdown-menu" aria-labelledby="myDropdown" aria-expanded="false">
@@ -18,6 +14,7 @@
                 <li role="presentation"><a role="menuitem" href="#">Something else here</a></li>
             </ul>
         </div>
+        -->
         <div th:replace="head.html :: scripts"></div>
 	</body>
 </html>

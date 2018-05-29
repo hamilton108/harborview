@@ -19,7 +19,7 @@ public class EmbeddedJetty {
     
     private static final String CONTEXT_PATH = "/";
     private static final String MAPPING_URL = "/";
-    private static final String WEBAPP_DIRECTORY = "webapp";
+    private static final String WEBAPP_DIRECTORY = "/";
     
     public static void main(String[] args) throws Exception {
         startJetty(PORT);
@@ -30,7 +30,9 @@ public class EmbeddedJetty {
             return "file:/home/rcs/opt/java/harborview/src/main/webapp";
         }
         else {
-            return new ClassPathResource(WEBAPP_DIRECTORY).getURI().toString();
+            String cpr = new ClassPathResource(WEBAPP_DIRECTORY).getURI().toString();
+            System.out.println(cpr);
+            return cpr;
         }
     }
 
