@@ -16,7 +16,7 @@ import java.util.Locale;
 @Controller
 @RequestMapping("/")
 public class HomeController {
-@RequestMapping(method =  RequestMethod.GET)
+    @RequestMapping(method =  RequestMethod.GET)
     public String index(Locale locale, Model model) {
         model.addAttribute("stockTickers", getStocks());
         return "index.html";
