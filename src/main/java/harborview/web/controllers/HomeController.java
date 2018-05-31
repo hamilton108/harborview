@@ -19,10 +19,12 @@ public class HomeController {
     HomeController(StockMarketRepository stockMarketRepository) {
         this.stockMarketRepository = stockMarketRepository;
     }
+
     @RequestMapping(method =  RequestMethod.GET)
     public String index(Locale locale, Model model) {
         //Collection<Stock> stocks = stockMarketRepository.getStocks();
         model.addAttribute("stockTickers", stockMarketRepository.getStocks());
         return "index.html";
     }
+
 }
