@@ -4,31 +4,31 @@
 
 ELM_VERSION="0.18"
 
-case "$1" in 
-    
+case "$1" in
+
     1) ELM="src/Vinapu/Projects.elm"
-       JS="elm-projects.js" 
-       TODIR="vinapu" 
+       JS="elm-projects.js"
+       TODIR="vinapu"
         ;;
 
     2) ELM="src/Maunaloa/Charts.elm"
-       JS="elm-charts.js" 
+       JS="elm-charts.js"
        TODIR="maunaloa"
         ;;
 
     3) ELM="src/Maunaloa/Options.elm"
-       JS="elm-options.js" 
+       JS="elm-options.js"
        TODIR="maunaloa"
         ;;
 
     4) ELM="src/Maunaloa/OptionPurchases.elm"
-       JS="elm-optionpurchases.js" 
+       JS="elm-optionpurchases.js"
        TODIR="maunaloa"
         ;;
 esac
 
 docker run -it --rm -v "$(pwd):/code" -w "/code" -e "HOME=/tmp" -u $UID:$GID -p 8000:8000 codesimple/elm:$ELM_VERSION make $ELM --output $JS
 
-cp $JS ../src/resources/public/js/elm/$TODIR/$JS
+cp $JS ../src/main/webapp/js/$TODIR/$JS
 
 exit 0

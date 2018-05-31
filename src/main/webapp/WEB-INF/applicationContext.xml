@@ -4,6 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="stockMarketRepos" class="critterrepos.models.impl.CachedStockMarketReposImpl">
-        <property name="mybatisConfigFile" value="ranoraraku-mybatis.conf.xml" />
+        <property name="mybatisConfigFile" value="critters-mybatis.conf.xml" />
     </bean>
 </beans>

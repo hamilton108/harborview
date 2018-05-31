@@ -1,15 +1,12 @@
 package harborview.web.controllers;
 
-import oahu.financial.Stock;
 import oahu.financial.repository.StockMarketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.ui.Model;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 @Controller
@@ -24,6 +21,7 @@ public class HomeController {
     }
     @RequestMapping(method =  RequestMethod.GET)
     public String index(Locale locale, Model model) {
+        //Collection<Stock> stocks = stockMarketRepository.getStocks();
         model.addAttribute("stockTickers", stockMarketRepository.getStocks());
         return "index.html";
     }
