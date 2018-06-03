@@ -1,11 +1,12 @@
 package harborview.dto.html;
 
 public class SelectItem {
-    private String t;
-    private String v;
+    private final String t;
+    private final String v;
+
     public SelectItem(String t, String v) {
-        this.setT(t);
-        this.setV(v);
+        this.t = t;
+        this.v = v;
     }
 
     public String getT() {
@@ -14,13 +15,5 @@ public class SelectItem {
 
     public String getV() {
         return v;
-    }
-
-    public void setT(String t) {
-        this.t = t;
-    }
-
-    public void setV(String v) {
-        this.v = v;
     }
 }

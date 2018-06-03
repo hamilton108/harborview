@@ -1,0 +1,7 @@
+.maingrid {
+  grid-template-columns: 1fr 10fr 1fr;
+  grid-template-rows: 200px auto;
+  grid-template-areas:
+    "head-1 head-2 head-3"
+    "main main main"
+}

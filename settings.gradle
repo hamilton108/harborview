@@ -1,3 +1,4 @@
 includeFlat 'netfonds-repos'
 includeFlat 'critter-repos'
 includeFlat 'oahu'
+includeFlat 'vega'

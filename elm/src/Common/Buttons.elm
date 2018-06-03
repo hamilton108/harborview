@@ -5,6 +5,7 @@ import Html as H
 import Html.Attributes as A
 import Html.Events as E
 
+
 button :
     String
     -> String
@@ -12,5 +13,5 @@ button :
     -> VD.Node a
 button clazz caption clickEvent =
     H.div [ A.class clazz ]
-        [ H.button [ A.class "btn btn-default", E.onClick clickEvent ] [ H.text caption ]
+        [ H.button [ A.class "btn btn-outline-success", E.onClick clickEvent ] [ H.text caption ]
         ]

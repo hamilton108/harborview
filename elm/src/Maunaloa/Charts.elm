@@ -183,6 +183,28 @@ view : Model -> H.Html Msg
 view model =
     let
         row =
+            [ H.div [ A.class "form-group gc-2" ]
+                [ CB.makeSelect "Tickers: " FetchCharts model.tickers model.selectedTicker
+                ]
+            , H.div [ A.class "form-group gc-3" ]
+                [ button_ "Risc Lines" FetchRiscLines ]
+            , H.div [ A.class "form-group gc-4" ]
+                [ button_ "Spot" FetchSpot ]
+
+            -- , H.div [ A.class "form-group gc-3" ]
+            --     [ button_ "Risc Lines" FetchRiscLines
+            --     , button_ "Spot" FetchSpot
+            --     ]
+            ]
+    in
+        H.div [ A.class "maingrid" ]
+            row
+
+
+xview : Model -> H.Html Msg
+xview model =
+    let
+        row =
             case model.flags.chartResolution of
                 1 ->
                     [ H.div [ A.class "col-sm-4" ] [ CB.makeSelect "Tickers: " FetchCharts model.tickers model.selectedTicker ]

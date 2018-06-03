@@ -29,6 +29,7 @@ dependencies {
     compile project(':netfonds-repos')
     compile project(':critter-repos')
     compile project(':oahu')
+    compile project(':vega')
     //------------------- Database -------------------
     runtime "org.mybatis:mybatis:$mybatisVersion"
     runtime "org.postgresql:postgresql:$postgresVersion"
