@@ -13,3 +13,4 @@ out/
 tmp/
 elm/elm-charts.js
 elm/elm-stuff/
+*.map

@@ -1,16 +1,27 @@
 body {
   color: #014156;
   background-color: #FEF2D4;
-  font-size: 1.3em; }
+  font-size: 1.0em; }
 
 .maingrid {
-  margin: 3em;
+  margin: 3rem;
   display: grid;
   grid-template-columns: 1fr 2fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 100px auto;
   grid-template-areas: "head-1 head-2 head-3 head-4 head-5 head-6"
                        "main main main main main main"; }
 
+.grid-elm {
+  display: flex;
+  margin-top: 1rem;
+  margin-left: 3rem;
+  margin-right: 3rem;
+}
+
+.form-group--elm {
+    align-self: flex-end;
+    margin-right: 1rem;
+}
 /*#my-app {
   grid-area: head-2;
 }*/
@@ -26,6 +37,10 @@ body {
   align-self: end;
 }
 .gc-4 {
+  grid-area: head-4;
+  align-self: end;
+}
+.gc-5 {
   grid-area: head-4;
   align-self: end;
 }
