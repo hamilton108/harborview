@@ -1,0 +1,9 @@
+#!/bin/bash
+
+HV=0.9
+
+gradle build 
+
+cp build/libs/harborview-$HV.jar dist/
+
+exit 0
