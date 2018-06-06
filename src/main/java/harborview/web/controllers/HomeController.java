@@ -1,6 +1,6 @@
 package harborview.web.controllers;
 
-import oahu.financial.repository.StockMarketRepository;
+import harborview.dao.MaunaloaDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,17 +13,16 @@ import java.util.Locale;
 @RequestMapping("/")
 public class HomeController {
 
-    private final StockMarketRepository stockMarketRepository;
+    private final MaunaloaDAO maunaloaDAO;
 
     @Autowired
-    HomeController(StockMarketRepository stockMarketRepository) {
-        this.stockMarketRepository = stockMarketRepository;
+    public HomeController(MaunaloaDAO maunaloaDAO) {
+        this.maunaloaDAO = maunaloaDAO;
     }
 
     @RequestMapping(method =  RequestMethod.GET)
     public String index(Locale locale, Model model) {
-        //Collection<Stock> stocks = stockMarketRepository.getStocks();
-        model.addAttribute("stockTickers", stockMarketRepository.getStocks());
+        model.addAttribute("getStockTickers", maunaloaDAO.getStocks());
         return "index.html";
     }
 
