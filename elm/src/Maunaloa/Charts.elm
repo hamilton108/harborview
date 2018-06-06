@@ -171,10 +171,6 @@ type Msg
 -------------------- VIEW ---------------------
 
 
-button_ =
-    BTN.button "col-sm-2"
-
-
 optionTabs =
     3
 
@@ -183,13 +179,12 @@ view : Model -> H.Html Msg
 view model =
     let
         row =
-            [ H.div [ A.class "form-group gc-2" ]
+            [ H.div [ A.class "form-group form-group--elm" ]
                 [ CB.makeSelect "Tickers: " FetchCharts model.tickers model.selectedTicker
                 ]
-            , H.div [ A.class "form-group gc-3" ]
-                [ button_ "Risc Lines" FetchRiscLines ]
-            , H.div [ A.class "form-group gc-4" ]
-                [ button_ "Spot" FetchSpot ]
+            , BTN.button "Risc Lines" FetchRiscLines
+            , BTN.button "Spot" FetchSpot
+            , M.checkbox "elm-cb-1" "Reset Cache" False ToggleResetCache
 
             -- , H.div [ A.class "form-group gc-3" ]
             --     [ button_ "Risc Lines" FetchRiscLines
@@ -197,44 +192,44 @@ view model =
             --     ]
             ]
     in
-        H.div [ A.class "maingrid" ]
+        H.div [ A.class "grid-elm" ]
             row
 
 
-xview : Model -> H.Html Msg
-xview model =
-    let
-        row =
-            case model.flags.chartResolution of
-                1 ->
-                    [ H.div [ A.class "col-sm-4" ] [ CB.makeSelect "Tickers: " FetchCharts model.tickers model.selectedTicker ]
-                    , button_ "Risc Lines" FetchRiscLines
-                    , button_ "Spot" FetchSpot
-                    , M.checkbox "Reset Cache" "col-sm-2 checkbox" False ToggleResetCache
-                    ]
 
-                2 ->
-                    [ H.div [ A.class "col-sm-8" ] [ CB.makeSelect "Tickers: " FetchCharts model.tickers model.selectedTicker ]
-                    , button_ "Risc Lines" FetchRiscLines
-                    ]
+{-
+   xview : Model -> H.Html Msg
+   xview model =
+       let
+           row =
+               case model.flags.chartResolution of
+                   1 ->
+                       [ H.div [ A.class "col-sm-4" ] [ CB.makeSelect "Tickers: " FetchCharts model.tickers model.selectedTicker ]
+                       , button_ "Risc Lines" FetchRiscLines
+                       , button_ "Spot" FetchSpot
+                       , M.checkbox "Reset Cache" "col-sm-2 checkbox" False ToggleResetCache
+                       ]
 
-                _ ->
-                    [ H.div [ A.class "col-sm-8" ] [ CB.makeSelect "Tickers: " FetchCharts model.tickers model.selectedTicker ]
-                    , button_ "Risc Lines" FetchRiscLines
-                    ]
-    in
-        H.div [ A.class "container" ]
-            [ H.div [ A.class "row" ]
-                row
-            , DLG.modalDialog "Optionpurchases"
-                model.dlgOptions
-                OptionsDlgOk
-                OptionsDlgCancel
-                []
-            ]
+                   2 ->
+                       [ H.div [ A.class "col-sm-8" ] [ CB.makeSelect "Tickers: " FetchCharts model.tickers model.selectedTicker ]
+                       , button_ "Risc Lines" FetchRiscLines
+                       ]
 
-
-
+                   _ ->
+                       [ H.div [ A.class "col-sm-8" ] [ CB.makeSelect "Tickers: " FetchCharts model.tickers model.selectedTicker ]
+                       , button_ "Risc Lines" FetchRiscLines
+                       ]
+       in
+           H.div [ A.class "container" ]
+               [ H.div [ A.class "row" ]
+                   row
+               , DLG.modalDialog "Optionpurchases"
+                   model.dlgOptions
+                   OptionsDlgOk
+                   OptionsDlgCancel
+                   []
+               ]
+-}
 ------------------- UPDATE --------------------
 
 

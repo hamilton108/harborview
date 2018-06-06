@@ -8,10 +8,9 @@ import Html.Events as E
 
 button :
     String
-    -> String
     -> a
     -> VD.Node a
-button clazz caption clickEvent =
-    H.div [ A.class clazz ]
+button caption clickEvent =
+    H.div [ A.class "form-group form-group--elm" ]
         [ H.button [ A.class "btn btn-outline-success", E.onClick clickEvent ] [ H.text caption ]
         ]

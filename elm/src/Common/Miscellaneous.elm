@@ -269,12 +269,8 @@ lastElem =
 
 
 checkbox : String -> String -> Bool -> msg -> H.Html msg
-checkbox name clazz selected msg =
-    -- H.div [ A.class "col-sm-4 checkbox" ]
-    H.div [ A.class clazz ]
-        [ H.label []
-            [ H.input [ A.checked selected, A.type_ "checkbox", E.onClick msg ] []
-            , H.span [ A.class "cr" ] []
-            , H.text name
-            ]
+checkbox cbId txt selected msg =
+    H.div [ A.class "form-check form-group--elm" ]
+        [ H.input [ A.id cbId, A.class "filled-in form-check-input", A.checked selected, A.type_ "checkbox", E.onClick msg ] []
+        , H.label [ A.for cbId, A.class "form-check-label" ] [ H.text txt ]
         ]
