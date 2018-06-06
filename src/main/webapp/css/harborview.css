@@ -12,15 +12,6 @@ body {
   height: 159px;
   z-index: 9999;
 }
-
-.maingrid {
-  margin: 3rem;
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 100px auto;
-  grid-template-areas: "head-1 head-2 head-3 head-4 head-5 head-6"
-                       "main main main main main main"; }
-
 .grid-elm {
   display: flex;
   margin-top: 1rem;
@@ -32,36 +23,54 @@ body {
     align-self: flex-end;
     margin-right: 1rem;
 }
-/*#my-app {
-  grid-area: head-2;
-}*/
-
-
-.gc-2 {
-  grid-area: head-2;
-  align-self: end;
+.form-check {
+    padding-bottom: 1rem;
 }
 
-.gc-3 {
-  grid-area: head-3;
-  align-self: end;
+.grid-main {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: 1fr 12fr 1fr;
+  grid-template-rows: 500px 110px 200px;
 }
-.gc-4 {
-  grid-area: head-4;
-  align-self: end;
+
+.main-chart {
+  grid-row: 1;
+  grid-column: 2;
 }
-.gc-5 {
-  grid-area: head-4;
-  align-self: end;
+.sub-chart-1 {
+  grid-row: 2;
+  grid-column: 2;
+}
+.sub-chart-2 {
+  grid-row: 3;
+  grid-column: 2;
+}
+canvas.c1, canvas.c2, canvas.c3 {
+  border-style: solid;
+  border-width: 1px;
+  border-color: #000000;
 }
 /*
-.form-group--stacked, .form-group--stacked-btm {
-    float: left;
-    margin-right: .5rem;
+.custom-control-label::before,
+.custom-control-label::after {
+    top: .8rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 0;
+    border: 1px;
 }
-
-.form-group--stacked-btm {
-    align-self: flex-end;
+.custom-control-label:before{
+  background-color:red;
+}
+.custom-checkbox .custom-control-input:checked~.custom-control-label::before{
+  background-color:black;
 }
 */
+/*
+.custom-checkbox .custom-control-input:checked~.custom-control-label::after{
+  background-image:url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='red' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3E%3C/svg%3E");
+}
+*/
+
 /*# sourceMappingURL=harborview.css.map */
