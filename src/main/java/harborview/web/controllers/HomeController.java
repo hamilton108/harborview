@@ -22,7 +22,7 @@ public class HomeController {
 
     @RequestMapping(method =  RequestMethod.GET)
     public String index(Locale locale, Model model) {
-        model.addAttribute("getStockTickers", maunaloaDAO.getStocks());
+        model.addAttribute("stockTickers", maunaloaDAO.getStocks());
         return "index.html";
     }
 
