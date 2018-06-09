@@ -6,11 +6,11 @@
     <bean id="stockMarketRepos" class="critterrepos.models.impl.CachedStockMarketReposImpl">
         <property name="mybatisConfigFile" value="critters-mybatis.conf.xml" />
     </bean>
-    <!--
-    <bean id="maunaloaDao" class="harborview.dao.impl.MockMaunaloaDAO">
-    </bean>
-    -->
-    <bean id="maunaloaCommon" class="harborview.maunaloa.MaunaloaCommon">
+    <bean id="ehlersDay" class="harborview.maunaloa.impl.EhlersDay">
         <property name="stockMarketRepository" ref="stockMarketRepos" />
+    </bean>
+    <bean id="maunaloaModel" class="harborview.maunaloa.MaunaloaModel">
+        <property name="stockMarketRepository" ref="stockMarketRepos" />
+        <property name="ehlersDay" ref="ehlersDay" />
     </bean>
 </beans>

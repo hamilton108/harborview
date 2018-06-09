@@ -554,8 +554,8 @@ fetchCharts ticker chartResolution resetCache =
         --   resetCacheJson resetCache
         myDecoder =
             JP.decode C.ChartInfo
-                |> JP.required "min-dx" M.stringToDateDecoder
-                |> JP.required "x-axis" (Json.list Json.float)
+                |> JP.required "minDx" M.stringToDateDecoder
+                |> JP.required "xAxis" (Json.list Json.float)
                 |> JP.required "chart" (chartDecoder 10)
                 |> JP.required "chart2" (Json.nullable (chartDecoder 5))
                 |> JP.required "chart3" (Json.nullable (chartDecoder 5))

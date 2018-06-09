@@ -1,6 +1,6 @@
 package harborview.web.controllers;
 
-import harborview.maunaloa.MaunaloaCommon;
+import harborview.maunaloa.MaunaloaModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,10 +13,10 @@ import java.util.Locale;
 @RequestMapping("/")
 public class HomeController {
 
-    private final MaunaloaCommon maunaloaCommon;
+    private final MaunaloaModel maunaloaCommon;
 
     @Autowired
-    public HomeController(MaunaloaCommon maunaloaCommon) {
+    public HomeController(MaunaloaModel maunaloaCommon) {
         this.maunaloaCommon = maunaloaCommon;
     }
 

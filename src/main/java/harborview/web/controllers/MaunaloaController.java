@@ -1,7 +1,8 @@
 package harborview.web.controllers;
 
+import harborview.dto.html.ElmCharts;
 import harborview.dto.html.SelectItem;
-import harborview.maunaloa.MaunaloaCommon;
+import harborview.maunaloa.MaunaloaModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -19,30 +20,30 @@ import java.util.Locale;
 public class MaunaloaController {
 
     // private final StockMarketRepository stockMarketRepository;
-    private final MaunaloaCommon maunaloaCommon;
+    private final MaunaloaModel maunaloaModel;
 
     @Autowired
-    public MaunaloaController(MaunaloaCommon maunaloaCommon) {
-        this.maunaloaCommon = maunaloaCommon;
+    public MaunaloaController(MaunaloaModel maunaloaModel) {
+        this.maunaloaModel = maunaloaModel;
     }
 
     @RequestMapping(value = "charts", method =  RequestMethod.GET)
     public String charts(Locale locale, Model model) {
-        model.addAttribute("stockTickers", maunaloaCommon.getStocks());
+        model.addAttribute("stockTickers", maunaloaModel.getStocks());
         return "maunaloa/charts.html";
     }
 
     @ResponseBody
     @RequestMapping(value = "tickers", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Collection<SelectItem> tickers() {
-        return maunaloaCommon.getStockTickers();
+        return maunaloaModel.getStockTickers();
     }
 
     @ResponseBody
     @RequestMapping(value = "ticker", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Collection<SelectItem> ticker(@RequestParam("oid") int oid,
-                                         @RequestParam("rc") int rc) {
-        return null;
+    public ElmCharts ticker(@RequestParam("oid") int oid,
+                            @RequestParam("rc") int rc) {
+        return maunaloaModel.elmChartsDay();
     }
 
 }
