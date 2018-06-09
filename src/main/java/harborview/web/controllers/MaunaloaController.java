@@ -1,7 +1,7 @@
 package harborview.web.controllers;
 
-import harborview.dao.MaunaloaDAO;
 import harborview.dto.html.SelectItem;
+import harborview.maunaloa.MaunaloaCommon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -19,23 +19,23 @@ import java.util.Locale;
 public class MaunaloaController {
 
     // private final StockMarketRepository stockMarketRepository;
-    private final MaunaloaDAO maunaloaDAO;
+    private final MaunaloaCommon maunaloaCommon;
 
     @Autowired
-    public MaunaloaController(MaunaloaDAO maunaloaDAO) {
-        this.maunaloaDAO = maunaloaDAO;
+    public MaunaloaController(MaunaloaCommon maunaloaCommon) {
+        this.maunaloaCommon = maunaloaCommon;
     }
 
     @RequestMapping(value = "charts", method =  RequestMethod.GET)
     public String charts(Locale locale, Model model) {
-        model.addAttribute("stockTickers", maunaloaDAO.getStocks());
+        model.addAttribute("stockTickers", maunaloaCommon.getStocks());
         return "maunaloa/charts.html";
     }
 
     @ResponseBody
     @RequestMapping(value = "tickers", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Collection<SelectItem> tickers() {
-        return maunaloaDAO.getStockTickers();
+        return maunaloaCommon.getStockTickers();
     }
 
     @ResponseBody

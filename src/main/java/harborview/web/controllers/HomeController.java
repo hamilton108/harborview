@@ -1,6 +1,6 @@
 package harborview.web.controllers;
 
-import harborview.dao.MaunaloaDAO;
+import harborview.maunaloa.MaunaloaCommon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,16 +13,16 @@ import java.util.Locale;
 @RequestMapping("/")
 public class HomeController {
 
-    private final MaunaloaDAO maunaloaDAO;
+    private final MaunaloaCommon maunaloaCommon;
 
     @Autowired
-    public HomeController(MaunaloaDAO maunaloaDAO) {
-        this.maunaloaDAO = maunaloaDAO;
+    public HomeController(MaunaloaCommon maunaloaCommon) {
+        this.maunaloaCommon = maunaloaCommon;
     }
 
     @RequestMapping(method =  RequestMethod.GET)
     public String index(Locale locale, Model model) {
-        model.addAttribute("stockTickers", maunaloaDAO.getStocks());
+        model.addAttribute("stockTickers", maunaloaCommon.getStocks());
         return "index.html";
     }
 

@@ -10,7 +10,7 @@
     <bean id="maunaloaDao" class="harborview.dao.impl.MockMaunaloaDAO">
     </bean>
     -->
-    <bean id="maunaloaDao" class="harborview.dao.impl.DefaultMaunaloaDAO">
+    <bean id="maunaloaCommon" class="harborview.maunaloa.MaunaloaCommon">
         <property name="stockMarketRepository" ref="stockMarketRepos" />
     </bean>
 </beans>
