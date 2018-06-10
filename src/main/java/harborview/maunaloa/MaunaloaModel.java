@@ -15,7 +15,6 @@ import vega.filters.ehlers.RoofingFilter;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -68,10 +67,13 @@ public class MaunaloaModel {
         List<StockPrice> winSpots = prices.stream().skip(skipNum).collect(Collectors.toList());
         List<Double> spots = winSpots.stream().map(x -> x.getCls()).collect(Collectors.toList());
         Filter calcItrend10 = new Itrend(10);
+        Filter calcItrend50 = new Itrend(50);
         Filter calcCyberCycle10 = new CyberCycle(10);
         Filter roofingFilter = new RoofingFilter();
         List<Double> itrend10 = calcItrend10.calculate(spots).stream()
                                 .map(x -> roundToNumDecimals(x)).collect(Collectors.toList());
+        List<Double> itrend50 = calcItrend50.calculate(spots).stream()
+                .map(x -> roundToNumDecimals(x)).collect(Collectors.toList());
 
         List<LocalDate> dx = winSpots.stream().map(StockPrice::getLocalDx).collect(Collectors.toList());
 
@@ -82,6 +84,7 @@ public class MaunaloaModel {
         List<Long> xAxis = dx.stream().map(this::hRuler).collect(Collectors.toList());
         Chart chart = new Chart();
         chart.addLine(Lists.reverse(itrend10));
+        chart.addLine(Lists.reverse(itrend50));
         chart.setCandlesticks(Lists.reverse(candlesticks));
         result.setChart(chart);
         result.setxAxis(Lists.reverse(xAxis));
