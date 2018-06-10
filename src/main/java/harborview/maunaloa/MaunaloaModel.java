@@ -1,6 +1,7 @@
 package harborview.maunaloa;
 
 import com.google.common.collect.Lists;
+import harborview.dto.html.Candlestick;
 import harborview.dto.html.Chart;
 import harborview.dto.html.ElmCharts;
 import harborview.dto.html.SelectItem;
@@ -14,6 +15,7 @@ import vega.filters.ehlers.RoofingFilter;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,12 +75,14 @@ public class MaunaloaModel {
 
         List<LocalDate> dx = winSpots.stream().map(StockPrice::getLocalDx).collect(Collectors.toList());
 
+        List<Candlestick> candlesticks = winSpots.stream().map(x -> new Candlestick(x)).collect(Collectors.toList());
         //List<Double> cc10 = calcCyberCycle10.calculate(spots);
         //:List<Double> cc10rf = roofingFilter.calculate(cc10);
 
         List<Long> xAxis = dx.stream().map(this::hRuler).collect(Collectors.toList());
         Chart chart = new Chart();
         chart.addLine(Lists.reverse(itrend10));
+        chart.setCandlesticks(Lists.reverse(candlesticks));
         result.setChart(chart);
         result.setxAxis(Lists.reverse(xAxis));
         return result;

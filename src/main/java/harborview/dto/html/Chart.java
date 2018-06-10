@@ -1,5 +1,7 @@
 package harborview.dto.html;
 
+import oahu.financial.StockPrice;
+
 import java.util.ArrayList;
 import java.util.List;
 
