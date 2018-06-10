@@ -10603,7 +10603,7 @@ var _user$project$Maunaloa_Charts$candlestickDecoder = A5(
 var _user$project$Maunaloa_Charts$chartDecoder = function (numVlines) {
 	var candlesticks = A2(
 		_elm_lang$core$Json_Decode$field,
-		'cndl',
+		'candlesticks',
 		_elm_lang$core$Json_Decode$maybe(
 			_elm_lang$core$Json_Decode$list(_user$project$Maunaloa_Charts$candlestickDecoder)));
 	var bars = A2(
@@ -11086,11 +11086,11 @@ var _user$project$Maunaloa_Charts$fetchCharts = F3(
 					_user$project$Maunaloa_Charts$chartDecoder(10),
 					A3(
 						_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-						'x-axis',
+						'xAxis',
 						_elm_lang$core$Json_Decode$list(_elm_lang$core$Json_Decode$float),
 						A3(
 							_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-							'min-dx',
+							'minDx',
 							_user$project$Common_Miscellaneous$stringToDateDecoder,
 							_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$ChartCommon$ChartInfo))))));
 		return A2(

@@ -7,7 +7,7 @@ public class ElmCharts {
     private Chart chart2;
     private Chart chart3;
     private String minDx;
-    private List<Double> xAxis;
+    private List<Long> xAxis;
 
     public Chart getChart() {
         return chart;
@@ -41,11 +41,11 @@ public class ElmCharts {
         this.minDx = minDx;
     }
 
-    public List<Double> getxAxis() {
+    public List<Long> getxAxis() {
         return xAxis;
     }
 
-    public void setxAxis(List<Double> xAxis) {
+    public void setxAxis(List<Long> xAxis) {
         this.xAxis = xAxis;
     }
 }

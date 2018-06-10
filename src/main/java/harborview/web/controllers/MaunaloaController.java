@@ -43,7 +43,7 @@ public class MaunaloaController {
     @RequestMapping(value = "ticker", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ElmCharts ticker(@RequestParam("oid") int oid,
                             @RequestParam("rc") int rc) {
-        return maunaloaModel.elmChartsDay();
+        return maunaloaModel.elmChartsDay(oid);
     }
 
 }

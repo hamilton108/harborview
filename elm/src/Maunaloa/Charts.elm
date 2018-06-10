@@ -542,7 +542,7 @@ chartDecoder numVlines =
             (Json.field "bars" (Json.maybe (Json.list (Json.list Json.float))))
 
         candlesticks =
-            (Json.field "cndl" (Json.maybe (Json.list candlestickDecoder)))
+            (Json.field "candlesticks" (Json.maybe (Json.list candlestickDecoder)))
     in
         Json.map5 C.Chart lines bars candlesticks (Json.succeed ( 0, 0 )) (Json.succeed numVlines)
 

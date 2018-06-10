@@ -17,7 +17,7 @@ public class EhlersDay implements Ehlers {
     }
 
     @Override
-    public List<Double> itrend(String ticker, int period) {
+    public List<Double> itrend(int stockId, int period) {
         return null;
     }
 }
