@@ -17,6 +17,8 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class MaunaloaModel {
@@ -24,6 +26,7 @@ public class MaunaloaModel {
     private Collection<Stock> stocks;
     private Ehlers ehlersDay;
     private LocalDate startDate = LocalDate.of(2014,1,1);
+    private Map<Integer,String> tixMap;
 
     public Collection<SelectItem> getStockTickers() {
         return getStocks().stream().map(x -> new SelectItem(x.getTicker(),String.valueOf(x.getOid()))).collect(Collectors.toList());
@@ -35,7 +38,14 @@ public class MaunaloaModel {
         return stocks;
     }
     private String getTickerFor(int stockId) {
-        return "YAR";
+        if (tixMap == null) {
+            Collection<Stock> sx = getStocks();
+            tixMap = new HashMap<>();
+            for (Stock s : sx) {
+               tixMap.put(s.getOid(),s.getTicker());
+            }
+        }
+        return tixMap.get(stockId);
     }
     private String toIso8601(LocalDate d) {
         int year = d.getYear();
