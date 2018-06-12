@@ -35,12 +35,15 @@ body {
   grid-template-rows: 500px 110px 200px;
 }
 .grid-scrapbook {
-  grid-column: 3; 
+  grid-column: 3;
   display: grid;
   grid-gap: 2px;
   grid-template-rows: 50px 100px 50px 50px 100px 50px 50px;
 }
-
+.scrap-2 {
+    border: 1px solid black;
+    padding: 1rem;
+}
 .main-chart {
   grid-row: 1;
   grid-column: 2;
@@ -63,7 +66,7 @@ body {
   grid-row: 3;
 }
 .scrap-btn {
-  font-size: 2rem; 
+  font-size: 2rem;
   margin-right: 1rem;
   float: left;
 }

@@ -193,11 +193,11 @@ document.addEventListener("DOMContentLoaded", function() {
   };
 
   //------------- Level line ---------------->
-    /*
   const levelLineBtn1 = document.getElementById("btn-levelline-1");
   levelLineBtn1.onclick = function() {
     repos1.addLevelLine(100, true);
   };
+    /*
   const levelLineBtn2 = document.getElementById("btn-levelline-2");
   levelLineBtn2.onclick = function() {
     repos2.addLevelLine(100, true);
