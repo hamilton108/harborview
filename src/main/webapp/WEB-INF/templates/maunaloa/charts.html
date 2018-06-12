@@ -9,41 +9,15 @@
     <div class="logo"></div>
 
     <div id="my-app"></div>
-    <!--
-    <div id="my-app">
-        <div  class="grid-elm">
-           <div class="form-group form-group--elm">
-               <label>Select me</label>
-               <select clasS="form-control">
-                   <option>1</option>
-                   <option>2</option>
-                   <option>3</option>
-                   <option>4</option>
-               </select>
-           </div>
-            <div class="form-group form-group--elm">
-                <button type="button" class="btn btn-outline-success">Risc lines</button>
-            </div>
-            <div class="form-group form-group--elm">
-                <button type="button" class="btn btn-outline-success">Risc lines</button>
-            </div>
-            <div class="form-check form-group--elm">
-                <input type="checkbox" class="filled-in form-check-input" id="checkbox101" checked="checked">
-                <label class="form-check-label" for="checkbox101">Filled-in checkbox</label>
-            </div>
-            <div class="custom-control form-control-lg custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="customCheck1">
-                <label class="custom-control-label" for="customCheck1">Check this custom checkbox</label>
-            </div>
-        </div>
-    </div>
-    -->
     <div class="grid-main">
         <div class="main-chart">
             <canvas id="canvas1" class="c1"></canvas>
         </div>
-        <div class="main-chart">
+        <div class="main-chart" id="div-1scrap">
             <canvas id="canvas1-scrap" class="c1"></canvas>
+        </div>
+        <div class="main-chart" id="div-1x">
+            <canvas class="c1" id="canvas1x"></canvas>
         </div>
         <div class="sub-chart-1">
             <canvas id="canvas1c" class="c3"></canvas>
@@ -51,6 +25,7 @@
         <div class="sub-chart-2">
             <canvas id="canvas1b" class="c2"></canvas>
         </div>
+        <!--
         <div class="grid-scrapbook">
             <div class="scrap-1">
                 <label class="checkbox-inline scrap-cb">
@@ -79,10 +54,10 @@
                       <i id="btn-scrapbook1-horiz" class="fas fa-minus"></i>
                 </div>
                 <div class="scrap-btn">
-                      <i id="btn-scrapbook1-arrow" class="fas fa-font"></i>
+                      <i id="btn-scrapbook1-arrow" class="fab fa-envira"></i>
                 </div>
                 <div class="scrap-btn">
-                      <i id="btn-scrapbook1-text" class="fab fa-envira"></i>
+                      <i id="btn-scrapbook1-text" class="fas fa-font"></i>
                 </div>
             </div>
             <div class="scrap-4">
@@ -108,6 +83,8 @@
                 <button class="btn btn-outline-success" id="btn-levelline-1" type="button">Level line</button>
             </div>
         </div>
+        -->
+        <div th:replace="scrapbook.html :: scrapbook"></div>
     </div>
 
     <div th:replace="head.html :: scripts"></div>
