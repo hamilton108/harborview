@@ -5,42 +5,42 @@
     <title>Scrapbook</title>
 </head>
 <body>
-    <div th:fragment="scrapbook" class="grid-scrapbook">
+    <div th:fragment="scrapbook(n)" class="grid-scrapbook">
         <div class="scrap-1">
             <label class="checkbox-inline scrap-cb">
-                <input type="checkbox" id="scrapbook1" value="scrapbook">Scrapbook</input>
+                <input type="checkbox" th:id="|scrapbook${n}|" value="scrapbook">Scrapbook</input>
             </label>
-            <input type="color" value="#72a30f" id="color1">Color</input>
+            <input type="color" value="#72a30f" th:id="|color${n}|"> Color</input>
         </div>
         <div class="scrap-2">
             <label>Line size</label>
             <br/>
             <label class="radio-inline">
-                <input type="radio" name="rg-line1" value="1">Small</input>
+                <input type="radio" th:name="|rg-line${n}|" checked="checked" value="1">Small</input>
             </label>
             <label class="radio-inline">
-                <input type="radio" name="rg-line1" value="2" checked="checked">Normal</input>
+                <input type="radio" th:name="|rg-line${n}|" value="2">Normal</input>
             </label>
             <label class="radio-inline">
-                <input type="radio" name="rg-line1" value="3">Large</input>
+                <input type="radio" th:name="|rg-line${n}|" value="3">Large</input>
             </label>
         </div>
         <div class="scrap-3">
             <div class="scrap-btn">
-                    <i id="btn-scrapbook1-line" class="fas fa-pen-square"></i>
+                    <i th:id="|btn-scrapbook${n}-line|" class="fas fa-pen-square"></i>
             </div>
             <div class="scrap-btn">
-                    <i id="btn-scrapbook1-horiz" class="fas fa-minus"></i>
+                    <i th:id="|btn-scrapbook${n}-horiz|" class="fas fa-minus"></i>
             </div>
             <div class="scrap-btn">
-                    <i id="btn-scrapbook1-arrow" class="fab fa-envira"></i>
+                    <i th:id="|btn-scrapbook${n}-arrow|" class="fab fa-envira"></i>
             </div>
             <div class="scrap-btn">
-                    <i id="btn-scrapbook1-text" class="fas fa-font"></i>
+                    <i th:id="|btn-scrapbook${n}-text|" class="fas fa-font"></i>
             </div>
         </div>
         <div class="scrap-4">
-            <select class="form-control" id="arrow1-orient">
+            <select class="form-control" th:id="|arrow${n}-orient|">
                 <option>NW</option>
                 <option>NE</option>
                 <option>SE</option>
@@ -48,18 +48,18 @@
             </select>
         </div>
         <div class="scrap-5">
-            <textarea rows="3" cols="20" id="comment1"></textarea>
+            <textarea rows="3" cols="20" th:id="|comment${n}|"></textarea>
         </div>
         <div class="scrap-6">
             <div class="scrap-btn">
-                    <i id="btn-scrapbook1-clear" class="fas fa-trash"></i>
+                    <i th:id="|btn-scrapbook${n}-clear|" class="fas fa-trash"></i>
             </div>
             <div class="scrap-btn">
-                    <i id="btn-scrapbook1-save" class="fas fa-download"></i>
+                    <i th:id="|btn-scrapbook${n}-save|" class="fas fa-download"></i>
             </div>
         </div>
         <div class="scrap-7">
-            <button class="btn btn-outline-success" id="btn-levelline-1" type="button">Level line</button>
+            <button class="btn btn-outline-success" th:id="|btn-levelline-${n}|" type="button">Level line</button>
         </div>
     </div>
 </body>
