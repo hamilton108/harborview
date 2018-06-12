@@ -71,7 +71,6 @@ public class MaunaloaModel {
 
     private ElmCharts elmCharts(Collection<StockPrice> prices) {
         ElmCharts result = new ElmCharts();
-        result.setMinDx(toIso8601(startDate));
         int totalNum = prices.size();
         int skipNum = totalNum - 400;
         List<StockPrice> winSpots = prices.stream().skip(skipNum).collect(Collectors.toList());
@@ -81,23 +80,36 @@ public class MaunaloaModel {
         Filter calcCyberCycle10 = new CyberCycle(10);
         Filter roofingFilter = new RoofingFilter();
         List<Double> itrend10 = calcItrend10.calculate(spots).stream()
-                                .map(x -> roundToNumDecimals(x)).collect(Collectors.toList());
+                                .map(this::roundToNumDecimals).collect(Collectors.toList());
         List<Double> itrend50 = calcItrend50.calculate(spots).stream()
-                .map(x -> roundToNumDecimals(x)).collect(Collectors.toList());
+                .map(this::roundToNumDecimals).collect(Collectors.toList());
 
         List<LocalDate> dx = winSpots.stream().map(StockPrice::getLocalDx).collect(Collectors.toList());
 
         List<Candlestick> candlesticks = winSpots.stream().map(x -> new Candlestick(x)).collect(Collectors.toList());
-        //List<Double> cc10 = calcCyberCycle10.calculate(spots);
-        //:List<Double> cc10rf = roofingFilter.calculate(cc10);
+        List<Double> cc10 = calcCyberCycle10.calculate(spots).stream()
+                .map(this::roundToNumDecimals).collect(Collectors.toList());
+        List<Double> cc10rf = roofingFilter.calculate(cc10).stream()
+                .map(this::roundToNumDecimals).collect(Collectors.toList());
 
         List<Long> xAxis = dx.stream().map(this::hRuler).collect(Collectors.toList());
+
+        //-------------------------------- Chart ---------------------------
         Chart chart = new Chart();
         chart.addLine(Lists.reverse(itrend10));
         chart.addLine(Lists.reverse(itrend50));
         chart.setCandlesticks(Lists.reverse(candlesticks));
         result.setChart(chart);
+
+        //-------------------------------- Chart 2---------------------------
+        Chart chart2 = new Chart();
+        chart2.addLine(Lists.reverse(cc10));
+        chart2.addLine(Lists.reverse(cc10rf));
+        result.setChart2(chart2);
+
+
         result.setxAxis(Lists.reverse(xAxis));
+        result.setMinDx(toIso8601(startDate));
         return result;
     }
     public ElmCharts elmChartsDay(int stockId) {
