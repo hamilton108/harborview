@@ -48,27 +48,44 @@
         <div class="sub-chart-2">
             <canvas id="canvas1b" class="c2"></canvas>
         </div>
+        <div class="grid-scrapbook">
+            <div class="scrap-1">
+                <label class="checkbox-inline scrap-cb">
+                    <input type="checkbox" id="scrapbook" value="scrapbook">Scrapbook</input>
+                </label>
+                <input type="color" value="#72a30f" id="colorn"></input>
+            </div>
+            <div class="scrap-2" style="border:1px solid black; padding: 1rem;">
+                <label>Line size</label>
+                <br/>
+                <label class="radio-inline">
+                    <input type="radio" name="rg-line" value="1">Small</input>
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="rg-line" value="2" checked="checked">Normal</input>
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="rg-line" value="3">Large</input>
+                </label>
+            </div>
+            <div class="scrap-3">
+                <div class="scrap-btn">
+                      <i id="btn-scrapbook-line" class="fas fa-pen-square"></i>
+                </div>
+                <div class="scrap-btn">
+                      <i id="btn-scrapbook-horiz" class="fas fa-minus"></i>
+                </div>
+            </div>
+            <div class="scrap-4">
+                <select class="form-control" id="arrow-orient">
+                    <option>NW</option>
+                    <option>NE</option>
+                    <option>SE</option>
+                    <option selected="selected">SW</option>
+                </select>
+            </div>
+        </div>
     </div>
-
-    <!--
-    <div class="col-sm-9">
-        <div class="c1">
-            <canvas id="canvas2" class="c1"></canvas>
-        </div>
-        <div class="c1" id="div-2x">
-            <canvas id="canvas2x" class="c1"></canvas>
-        </div>
-        <div class="c1" id="div-2scrap">
-            <canvas class="c1" id="canvas2-scrap"></canvas>
-        </div>
-        <div class="c3">
-            <canvas id="canvas2c" class="c3"></canvas>
-        </div>
-        <div class="c2">
-            <canvas id="canvas2b" class="c2"></canvas>
-        </div>
-    </div>
-    -->
 
     <div th:replace="head.html :: scripts"></div>
 

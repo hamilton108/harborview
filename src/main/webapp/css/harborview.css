@@ -31,13 +31,14 @@ body {
 .grid-main {
   display: grid;
   grid-gap: 20px;
-  grid-template-columns: 1fr 12fr 1fr;
+  grid-template-columns: 1fr 10fr 2fr 1fr;
   grid-template-rows: 500px 110px 200px;
 }
 .grid-scrapbook {
+  grid-column: 3; 
   display: grid;
   grid-gap: 2px;
-  grid-template-rows: repeat(7, 50px);
+  grid-template-rows: 50px 100px repeat(5, 50px);
 }
 
 .main-chart {
@@ -51,6 +52,23 @@ body {
 .sub-chart-2 {
   grid-row: 3;
   grid-column: 2;
+}
+.scrap-1 {
+  grid-row: 1;
+}
+.scrap-2 {
+  grid-row: 2;
+}
+.scrap-3 {
+  grid-row: 3;
+}
+.scrap-btn {
+  font-size: 2rem; 
+  margin-right: 1rem;
+  float: left;
+}
+.scrap-cb {
+  margin-right: 1rem;
 }
 canvas.c1, canvas.c2, canvas.c3 {
   border-style: solid;
