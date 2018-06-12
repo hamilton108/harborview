@@ -31,7 +31,7 @@ body {
 .grid-main {
   display: grid;
   grid-gap: 20px;
-  grid-template-columns: 1fr 10fr 2fr 1fr;
+  grid-template-columns: 1fr 1320px 2fr 1fr;
   grid-template-rows: 500px 110px 200px;
 }
 .grid-scrapbook {
@@ -71,6 +71,9 @@ body {
   float: left;
 }
 .scrap-cb {
+  margin-right: 1rem;
+}
+.radio-inline {
   margin-right: 1rem;
 }
 canvas.c1, canvas.c2, canvas.c3 {
