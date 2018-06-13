@@ -33,6 +33,11 @@ public class MaunaloaController {
         return "maunaloa/charts.html";
     }
 
+    @RequestMapping(value = "optiontickers", method =  RequestMethod.GET)
+    public String options(Locale locale, Model model) {
+        return "maunaloa/options.html";
+    }
+
     @ResponseBody
     @RequestMapping(value = "tickers", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Collection<SelectItem> tickers() {

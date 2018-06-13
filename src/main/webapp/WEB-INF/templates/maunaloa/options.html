@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="head.html :: head('Maunaloa')">
+    <title>Maunaloa</title>
+</head>
+<body>
+    <div th:replace="navbar.html :: navbar"></div>
+
+    <div class="logo"></div>
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="navitem"><a class="nav-link active" data-toggle="tab" role="tab" ref="#calls">Calls</a></li>
+    <li class="navitem"><a class="nav-link active" data-toggle="tab" role="tab" ref="#puts">Puts</a></li>
+  </ul>
+
+  <div class="container">
+    <div class="tab-content">
+      <div id="calls" class="tab-pane active">
+        <div class="container">
+          <div id="my-app"></div>
+        </div>
+      </div>
+      <div id="puts" class="tab-pane">
+        <div class="container">
+          <div id="my-app2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div th:replace="head.html :: scripts"></div>
+  <script type="text/javascript">
+    /*
+    var node1 = document.getElementById('my-app');
+    var app1 = Elm.Maunaloa.Options.embed(node1, {
+      isCalls: true
+    });
+    var node2 = document.getElementById('my-app2');
+    var app2 = Elm.Maunaloa.Options.embed(node2, {
+      isCalls: false
+    });
+    */
+  </script>
+</body>
+
+</html>
