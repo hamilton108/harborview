@@ -7,38 +7,30 @@
     <div th:replace="navbar.html :: navbar"></div>
 
     <div class="logo"></div>
-  <ul class="nav nav-tabs" role="tablist">
-    <li class="navitem"><a class="nav-link active" data-toggle="tab" role="tab" ref="#calls">Calls</a></li>
-    <li class="navitem"><a class="nav-link active" data-toggle="tab" role="tab" ref="#puts">Puts</a></li>
-  </ul>
-
-  <div class="container">
-    <div class="tab-content">
-      <div id="calls" class="tab-pane active">
-        <div class="container">
-          <div id="my-app"></div>
+    <div role="tabpanel" style="margin-bottom: 1rem">
+        <ul class="nav nav-tabs" id="myTab" role="tablist" style="margin-bottom: 1rem">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" data-height="true" href="#calls" role="tab" aria-controls="home" aria-expanded="true">Calls</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" data-height="true" href="#puts" role="tab" aria-controls="profile" aria-expanded="false">Puts</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="calls" aria-expanded="true">
+                <div class="grid-options">
+                    <div class="grid-options-main"><p>CALLS</p></div>
+                </div>
+            </div>
+            <div class="tab-pane" id="puts" role="tabpanel" aria-expanded="false">
+                <div class="grid-options">
+                    <div class="grid-options-main"><p>PUTS</p></div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div id="puts" class="tab-pane">
-        <div class="container">
-          <div id="my-app2"></div>
-        </div>
-      </div>
     </div>
-  </div>
+
   <div th:replace="head.html :: scripts"></div>
-  <script type="text/javascript">
-    /*
-    var node1 = document.getElementById('my-app');
-    var app1 = Elm.Maunaloa.Options.embed(node1, {
-      isCalls: true
-    });
-    var node2 = document.getElementById('my-app2');
-    var app2 = Elm.Maunaloa.Options.embed(node2, {
-      isCalls: false
-    });
-    */
-  </script>
 </body>
 
 </html>
