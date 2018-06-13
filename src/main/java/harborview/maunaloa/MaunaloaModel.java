@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.List;
+import java.util.OptionalDouble;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -27,6 +28,11 @@ public class MaunaloaModel {
     private Ehlers ehlersDay;
     private LocalDate startDate = LocalDate.of(2014,1,1);
     private Map<Integer,String> tixMap;
+
+    private Filter calcItrend10 = new Itrend(10);
+    private Filter calcItrend50 = new Itrend(50);
+    private Filter calcCyberCycle10 = new CyberCycle(10);
+    private Filter roofingFilter = new RoofingFilter();
 
     public Collection<SelectItem> getStockTickers() {
         return getStocks().stream().map(x -> new SelectItem(x.getTicker(),String.valueOf(x.getOid()))).collect(Collectors.toList());
@@ -69,45 +75,53 @@ public class MaunaloaModel {
         return ChronoUnit.DAYS.between(startDate,d);
     }
 
+
+    private Chart mainChart(List<Double> spots, List<StockPrice> winSpots) {
+        List<Double> itrend10 = calcItrend10.calculate(spots).stream()
+                                .map(this::roundToNumDecimals).collect(Collectors.toList());
+        List<Double> itrend50 = calcItrend50.calculate(spots).stream()
+                .map(this::roundToNumDecimals).collect(Collectors.toList());
+        List<Candlestick> candlesticks = winSpots.stream().map(x -> new Candlestick(x)).collect(Collectors.toList());
+        Chart chart = new Chart();
+        chart.addLine(Lists.reverse(itrend10));
+        chart.addLine(Lists.reverse(itrend50));
+        chart.setCandlesticks(Lists.reverse(candlesticks));
+        return chart;
+    }
+    private Chart cyberCycleChart(List<Double> spots) {
+        Chart chart = new Chart();
+        List<Double> cc10 = calcCyberCycle10.calculate(spots).stream()
+                .map(this::roundToNumDecimals).collect(Collectors.toList());
+        List<Double> cc10rf = roofingFilter.calculate(cc10).stream()
+                .map(this::roundToNumDecimals).collect(Collectors.toList());
+        chart.addLine(Lists.reverse(cc10));
+        chart.addLine(Lists.reverse(cc10rf));
+        return chart;
+    }
+    private Chart volumeChart(List<StockPrice> spots) {
+        Chart chart = new Chart();
+        List<Integer> vol = spots.stream().map(x -> x.getVolume()).collect(Collectors.toList());
+        OptionalDouble maxVol = vol.stream().mapToDouble(v -> v).max();
+        maxVol.ifPresent(v -> {
+           List<Double> normalized = vol.stream().map(x -> x/v).collect(Collectors.toList()); 
+           chart.addBar(Lists.reverse(normalized));
+           //chart.addLine(Lists.reverse(calcItrend10.calculate(normalized)));
+        });
+        return chart;
+    }
     private ElmCharts elmCharts(Collection<StockPrice> prices) {
         ElmCharts result = new ElmCharts();
         int totalNum = prices.size();
         int skipNum = totalNum - 400;
         List<StockPrice> winSpots = prices.stream().skip(skipNum).collect(Collectors.toList());
         List<Double> spots = winSpots.stream().map(x -> x.getCls()).collect(Collectors.toList());
-        Filter calcItrend10 = new Itrend(10);
-        Filter calcItrend50 = new Itrend(50);
-        Filter calcCyberCycle10 = new CyberCycle(10);
-        Filter roofingFilter = new RoofingFilter();
-        List<Double> itrend10 = calcItrend10.calculate(spots).stream()
-                                .map(this::roundToNumDecimals).collect(Collectors.toList());
-        List<Double> itrend50 = calcItrend50.calculate(spots).stream()
-                .map(this::roundToNumDecimals).collect(Collectors.toList());
+
+        result.setChart(mainChart(spots,winSpots));
+        result.setChart2(cyberCycleChart(spots));
+        result.setChart3(volumeChart(winSpots));
 
         List<LocalDate> dx = winSpots.stream().map(StockPrice::getLocalDx).collect(Collectors.toList());
-
-        List<Candlestick> candlesticks = winSpots.stream().map(x -> new Candlestick(x)).collect(Collectors.toList());
-        List<Double> cc10 = calcCyberCycle10.calculate(spots).stream()
-                .map(this::roundToNumDecimals).collect(Collectors.toList());
-        List<Double> cc10rf = roofingFilter.calculate(cc10).stream()
-                .map(this::roundToNumDecimals).collect(Collectors.toList());
-
         List<Long> xAxis = dx.stream().map(this::hRuler).collect(Collectors.toList());
-
-        //-------------------------------- Chart ---------------------------
-        Chart chart = new Chart();
-        chart.addLine(Lists.reverse(itrend10));
-        chart.addLine(Lists.reverse(itrend50));
-        chart.setCandlesticks(Lists.reverse(candlesticks));
-        result.setChart(chart);
-
-        //-------------------------------- Chart 2---------------------------
-        Chart chart2 = new Chart();
-        chart2.addLine(Lists.reverse(cc10));
-        chart2.addLine(Lists.reverse(cc10rf));
-        result.setChart2(chart2);
-
-
         result.setxAxis(Lists.reverse(xAxis));
         result.setMinDx(toIso8601(startDate));
         return result;
