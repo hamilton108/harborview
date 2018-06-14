@@ -61,7 +61,7 @@ makeSelect caption msg payload selected =
                 Nothing ->
                     []
     in
-        H.span []
+        H.span [ A.class "form-group form-group--elm" ]
             [ H.label [] [ H.text caption ]
             , H.select
                 [ onChange msg

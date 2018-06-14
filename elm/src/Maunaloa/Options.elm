@@ -189,10 +189,6 @@ initModel flags =
 -- #region VIEW
 
 
-button_ =
-    BTN.button "col-sm-2"
-
-
 view : Model -> H.Html Msg
 view model =
     let
@@ -215,17 +211,15 @@ view model =
                 Just sp ->
                     "Option Purchase " ++ sp.ticker
     in
-        H.div [ A.class "container" ]
-            [ H.div [ A.class "row" ]
-                [ H.div [ A.class "col-sm-3" ]
-                    [ H.text stockInfo ]
-                , button_ "Calc Risc" CalcRisc
-                , H.div [ A.class "col-sm-2" ]
-                    [ H.input [ A.placeholder "Risc", E.onInput RiscChange ] [] ]
-                , button_ "Reset Cache" ResetCache
-                , H.div [ A.class "col-sm-3" ]
-                    [ CMB.makeSelect "Tickers: " FetchOptions model.tickers model.selectedTicker ]
-                ]
+        H.div [ A.class "grid-elm" ]
+            [ H.div [ A.class "form-group form-group--elm" ]
+                [ H.text stockInfo ]
+            , BTN.button "Calc Risc" CalcRisc
+            , H.div [ A.class "form-group form-group--elm" ]
+                [ H.input [ A.placeholder "Risc", E.onInput RiscChange ] [] ]
+            , BTN.button "Reset Cache" ResetCache
+            , H.div [ A.class "form-group form-group--elm" ]
+                [ CMB.makeSelect "Tickers: " FetchOptions model.tickers model.selectedTicker ]
             , H.div [ A.class "row" ]
                 [ Table.view config model.tableState opx
                 ]
