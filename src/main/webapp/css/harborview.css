@@ -28,14 +28,6 @@ body {
     padding-bottom: 1rem;
 }
 
-.grid-options {
-  display: grid;
-  grid-template-columns: 1fr 10fr 1fr;
-}
-.grid-options-main {
-  grid-column: 2;
-}
-
 .grid-main {
   display: grid;
   grid-gap: 20px;
