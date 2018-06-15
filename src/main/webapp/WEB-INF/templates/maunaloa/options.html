@@ -19,6 +19,7 @@
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="calls" aria-expanded="true">
                 <div id="my-app">
+                    <!--
                     <div class="grid-elm">
                         <div class="form-group form-group--elm">
                             <p>Stockinfo:</p>
@@ -44,6 +45,8 @@
                             <button class="btn btn-outline-success">Reset Cache</button>
                         </div>
                     </div>
+                  -->
+                  <div id="my-app2"></div>
                 </div>
             </div>
             <div class="tab-pane" id="puts" role="tabpanel" aria-expanded="false">
@@ -55,7 +58,6 @@
     <div th:replace="head.html :: scripts"></div>
     <script type="text/javascript" src="/js/maunaloa/elm-options.js"></script>
     <script type="text/javascript" src="/js/common.js"></script>
-    <!--
     <script type="text/javascript">
         var node1 = document.getElementById('my-app');
         var app1 = Elm.Maunaloa.Options.embed(node1, {
@@ -66,7 +68,6 @@
             isCalls: false
         });
     </script>
-    -->
 </body>
 
 </html>

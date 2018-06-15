@@ -10155,7 +10155,11 @@ var _user$project$Common_ComboBox$makeSelect = F4(
 		}();
 		return A2(
 			_elm_lang$html$Html$span,
-			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('form-group form-group--elm'),
+				_1: {ctor: '[]'}
+			},
 			{
 				ctor: '::',
 				_0: A2(
@@ -10622,6 +10626,11 @@ var _user$project$Maunaloa_Options$toRowAttrs = function (opt) {
 			}),
 		_1: {ctor: '[]'}
 	};
+};
+var _user$project$Maunaloa_Options$toTableAttrs = {
+	ctor: '::',
+	_0: _elm_lang$html$Html_Attributes$class('table'),
+	_1: {ctor: '[]'}
 };
 var _user$project$Maunaloa_Options$initModel = function (flags) {
 	return {
@@ -11122,7 +11131,7 @@ var _user$project$Maunaloa_Options$config = _evancz$elm_sortable_table$Table$cus
 		},
 		customizations: _elm_lang$core$Native_Utils.update(
 			_evancz$elm_sortable_table$Table$defaultCustomizations,
-			{rowAttrs: _user$project$Maunaloa_Options$toRowAttrs})
+			{tableAttrs: _user$project$Maunaloa_Options$toTableAttrs, rowAttrs: _user$project$Maunaloa_Options$toRowAttrs})
 	});
 var _user$project$Maunaloa_Options$OptionsFetched = function (a) {
 	return {ctor: 'OptionsFetched', _0: a};
@@ -11497,18 +11506,14 @@ var _user$project$Maunaloa_Options$view = function (model) {
 		model.options);
 	return A2(
 		_elm_lang$html$Html$div,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('container'),
-			_1: {ctor: '[]'}
-		},
+		{ctor: '[]'},
 		{
 			ctor: '::',
 			_0: A2(
 				_elm_lang$html$Html$div,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('row'),
+					_0: _elm_lang$html$Html_Attributes$class('grid-elm'),
 					_1: {ctor: '[]'}
 				},
 				{
@@ -11517,7 +11522,7 @@ var _user$project$Maunaloa_Options$view = function (model) {
 						_elm_lang$html$Html$div,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('col-sm-3'),
+							_0: _elm_lang$html$Html_Attributes$class('form-group form-group--elm'),
 							_1: {ctor: '[]'}
 						},
 						{
@@ -11534,7 +11539,7 @@ var _user$project$Maunaloa_Options$view = function (model) {
 								_elm_lang$html$Html$div,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('col-sm-2'),
+									_0: _elm_lang$html$Html_Attributes$class('form-group form-group--elm'),
 									_1: {ctor: '[]'}
 								},
 								{
@@ -11558,18 +11563,7 @@ var _user$project$Maunaloa_Options$view = function (model) {
 								_0: A2(_user$project$Common_Buttons$button, 'Reset Cache', _user$project$Maunaloa_Options$ResetCache),
 								_1: {
 									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$div,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('col-sm-3'),
-											_1: {ctor: '[]'}
-										},
-										{
-											ctor: '::',
-											_0: A4(_user$project$Common_ComboBox$makeSelect, 'Tickers: ', _user$project$Maunaloa_Options$FetchOptions, model.tickers, model.selectedTicker),
-											_1: {ctor: '[]'}
-										}),
+									_0: A4(_user$project$Common_ComboBox$makeSelect, 'Tickers: ', _user$project$Maunaloa_Options$FetchOptions, model.tickers, model.selectedTicker),
 									_1: {ctor: '[]'}
 								}
 							}
@@ -11582,7 +11576,7 @@ var _user$project$Maunaloa_Options$view = function (model) {
 					_elm_lang$html$Html$div,
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('row'),
+						_0: _elm_lang$html$Html_Attributes$class('grid-elm'),
 						_1: {ctor: '[]'}
 					},
 					{
