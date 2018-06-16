@@ -2,6 +2,7 @@ package harborview.web.controllers;
 
 import harborview.dto.html.ElmCharts;
 import harborview.dto.html.SelectItem;
+import harborview.dto.html.options.StockAndOptions;
 import harborview.maunaloa.MaunaloaModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -49,6 +50,12 @@ public class MaunaloaController {
     public ElmCharts ticker(@RequestParam("oid") int oid,
                             @RequestParam("rc") int rc) {
         return maunaloaModel.elmChartsDay(oid);
+    }
+    @ResponseBody
+    @RequestMapping(value = "calls", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public StockAndOptions calls(@RequestParam("ticker") int oid) {
+                                //@RequestParam("rc") int rc) {
+        return maunaloaModel.calls(oid);
     }
 
 }

@@ -211,34 +211,34 @@ view model =
                 Just sp ->
                     "Option Purchase " ++ sp.ticker
     in
-    H.div []
-        [ H.div [ A.class "grid-elm" ]
-            [ H.div [ A.class "form-group form-group--elm" ]
-                [ H.text stockInfo ]
-            , BTN.button "Calc Risc" CalcRisc
-            , H.div [ A.class "form-group form-group--elm" ]
-                [ H.input [ A.placeholder "Risc", E.onInput RiscChange ] [] ]
-            , BTN.button "Reset Cache" ResetCache
-            , CMB.makeSelect "Tickers: " FetchOptions model.tickers model.selectedTicker
-            ]
-        , H.div [ A.class "grid-elm" ]
-            [ Table.view config model.tableState opx ]
-        , DLG.modalDialog dlgHeader
-            model.dlgPurchase
-            PurchaseDlgOk
-            PurchaseDlgCancel
-            [ H.div [ A.class "form-group row" ]
-                [ H.input [ A.class "form-control", A.checked True, A.type_ "checkbox", E.onClick ToggleRealTimePurchase ]
-                    []
-                , H.text "Real-time purchase"
+        H.div []
+            [ H.div [ A.class "grid-elm" ]
+                [ H.div [ A.class "form-group form-group--elm" ]
+                    [ H.text stockInfo ]
+                , BTN.button "Calc Risc" CalcRisc
+                , H.div [ A.class "form-group form-group--elm" ]
+                    [ H.input [ A.placeholder "Risc", E.onInput RiscChange ] [] ]
+                , BTN.button "Reset Cache" ResetCache
+                , CMB.makeSelect "Tickers: " FetchOptions model.tickers model.selectedTicker
                 ]
-            , M.makeFGRInput AskChange "id1" "Ask:" "number" M.CX39 model.ask
-            , M.makeFGRInput BidChange "id2" "Bid:" "number" M.CX39 model.bid
-            , M.makeFGRInput VolumeChange "id3" "Volume:" "number" M.CX39 model.volume
-            , M.makeFGRInput SpotChange "id4" "Spot:" "number" M.CX39 model.spot
+            , H.div [ A.class "grid-elm" ]
+                [ Table.view config model.tableState opx ]
+            , DLG.modalDialog dlgHeader
+                model.dlgPurchase
+                PurchaseDlgOk
+                PurchaseDlgCancel
+                [ H.div [ A.class "form-group row" ]
+                    [ H.input [ A.class "form-control", A.checked True, A.type_ "checkbox", E.onClick ToggleRealTimePurchase ]
+                        []
+                    , H.text "Real-time purchase"
+                    ]
+                , M.makeFGRInput AskChange "id1" "Ask:" "number" M.CX39 model.ask
+                , M.makeFGRInput BidChange "id2" "Bid:" "number" M.CX39 model.bid
+                , M.makeFGRInput VolumeChange "id3" "Volume:" "number" M.CX39 model.volume
+                , M.makeFGRInput SpotChange "id4" "Spot:" "number" M.CX39 model.spot
+                ]
+            , DLG.alert model.dlgAlert AlertOk
             ]
-        , DLG.alert model.dlgAlert AlertOk
-        ]
 
 
 
@@ -389,7 +389,7 @@ update msg model =
                         curRisc =
                             Result.withDefault 0 (String.toFloat model.risc)
                     in
-                    ( { model | options = Just (List.map (setRisc curRisc s) optionx) }, Cmd.none )
+                        ( { model | options = Just (List.map (setRisc curRisc s) optionx) }, Cmd.none )
 
         RiscCalculated (Err s) ->
             ( errorAlert "RiscCalculated" "RiscCalculated Error: " s model, Cmd.none )
@@ -415,16 +415,16 @@ update msg model =
 
                 -- Maybe.withDefault 0 <| Maybe.map .c model.stock
             in
-            ( { model
-                | dlgPurchase = DLG.DialogVisible
-                , selectedPurchase = Just opt
-                , ask = toString opt.sell
-                , bid = toString opt.buy
-                , volume = "10"
-                , spot = toString curSpot
-              }
-            , Cmd.none
-            )
+                ( { model
+                    | dlgPurchase = DLG.DialogVisible
+                    , selectedPurchase = Just opt
+                    , ask = toString opt.sell
+                    , bid = toString opt.buy
+                    , volume = "10"
+                    , spot = toString curSpot
+                  }
+                , Cmd.none
+                )
 
         PurchaseDlgOk ->
             case model.selectedPurchase of
@@ -445,9 +445,9 @@ update msg model =
                         curSpot =
                             Result.withDefault -1 (String.toFloat model.spot)
                     in
-                    ( { model | dlgPurchase = DLG.DialogHidden }
-                    , purchaseOption soid opx.ticker curAsk curBid curVol curSpot model.isRealTimePurchase
-                    )
+                        ( { model | dlgPurchase = DLG.DialogHidden }
+                        , purchaseOption soid opx.ticker curAsk curBid curVol curSpot model.isRealTimePurchase
+                        )
 
                 Nothing ->
                     ( { model | dlgPurchase = DLG.DialogHidden }, Cmd.none )
@@ -465,7 +465,7 @@ update msg model =
                         False ->
                             DLG.Error
             in
-            ( { model | dlgAlert = DLG.DialogVisibleAlert "Option purchase" s.msg alertCat }, Cmd.none )
+                ( { model | dlgAlert = DLG.DialogVisibleAlert "Option purchase" s.msg alertCat }, Cmd.none )
 
         OptionPurchased (Err s) ->
             Debug.log "OptionPurchased ERR"
@@ -476,7 +476,7 @@ update msg model =
                 checked =
                     not model.isRealTimePurchase
             in
-            ( { model | isRealTimePurchase = checked }, Cmd.none )
+                ( { model | isRealTimePurchase = checked }, Cmd.none )
 
         AskChange s ->
             ( { model | ask = s }, Cmd.none )
@@ -520,8 +520,8 @@ purchaseOption stockId ticker ask bid volume spot isRealTime =
                 |> JP.required "ok" Json.bool
                 |> JP.required "msg" Json.string
     in
-    Http.send OptionPurchased <|
-        Http.post url jbody myDecoder
+        Http.send OptionPurchased <|
+            Http.post url jbody myDecoder
 
 
 toggle : String -> Option -> Option
@@ -541,16 +541,16 @@ setRisc curRisc riscItems opt =
         curRiscItem =
             M.findInList predicate riscItems
     in
-    case curRiscItem of
-        Nothing ->
-            opt
+        case curRiscItem of
+            Nothing ->
+                opt
 
-        Just curRiscItem_ ->
-            { opt
-                | stockPriceAtRisc = M.toDecimal curRiscItem_.risc 100
-                , optionPriceAtRisc = opt.sell - curRisc
-                , risc = curRisc
-            }
+            Just curRiscItem_ ->
+                { opt
+                    | stockPriceAtRisc = M.toDecimal curRiscItem_.risc 100
+                    , optionPriceAtRisc = opt.sell - curRisc
+                    , risc = curRisc
+                }
 
 
 calcRisc : String -> Maybe Options -> Cmd Msg
@@ -577,8 +577,8 @@ calcRisc riscStr options =
                 |> JP.required "ticker" Json.string
                 |> JP.required "risc" Json.float
     in
-    Http.send RiscCalculated <|
-        Http.post url jbody (Json.list myDecoder)
+        Http.send RiscCalculated <|
+            Http.post url jbody (Json.list myDecoder)
 
 
 buildOption :
@@ -616,9 +616,9 @@ optionDecoder =
         |> JP.required "days" Json.float
         |> JP.required "buy" Json.float
         |> JP.required "sell" Json.float
-        |> JP.required "iv-buy" Json.float
-        |> JP.required "iv-sell" Json.float
-        |> JP.required "br-even" Json.float
+        |> JP.required "ivBuy" Json.float
+        |> JP.required "ivSell" Json.float
+        |> JP.required "brEven" Json.float
 
 
 stockDecoder : Json.Decoder Stock
@@ -640,7 +640,7 @@ fetchOptions model s resetCache =
                 True ->
                     case resetCache of
                         True ->
-                            mainUrl ++ "/resetcalls?ticker=" ++ s
+                            mainUrl ++ "/calls?ticker=" ++ s
 
                         False ->
                             mainUrl ++ "/calls?ticker=" ++ s
@@ -659,8 +659,8 @@ fetchOptions model s resetCache =
                 |> JP.required "stock" stockDecoder
                 |> JP.required "options" (Json.list optionDecoder)
     in
-    Http.send OptionsFetched <|
-        Http.get url myDecoder
+        Http.send OptionsFetched <|
+            Http.get url myDecoder
 
 
 fetchTickers : Cmd Msg
@@ -669,8 +669,8 @@ fetchTickers =
         url =
             mainUrl ++ "/tickers"
     in
-    Http.send TickersFetched <|
-        Http.get url CMB.comboBoxItemListDecoder
+        Http.send TickersFetched <|
+            Http.get url CMB.comboBoxItemListDecoder
 
 
 

@@ -10718,15 +10718,15 @@ var _user$project$Maunaloa_Options$buildOption = F8(
 	});
 var _user$project$Maunaloa_Options$optionDecoder = A3(
 	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-	'br-even',
+	'brEven',
 	_elm_lang$core$Json_Decode$float,
 	A3(
 		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-		'iv-sell',
+		'ivSell',
 		_elm_lang$core$Json_Decode$float,
 		A3(
 			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-			'iv-buy',
+			'ivBuy',
 			_elm_lang$core$Json_Decode$float,
 			A3(
 				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
@@ -11155,7 +11155,7 @@ var _user$project$Maunaloa_Options$fetchOptions = F3(
 					return A2(
 						_elm_lang$core$Basics_ops['++'],
 						_user$project$Maunaloa_Options$mainUrl,
-						A2(_elm_lang$core$Basics_ops['++'], '/resetcalls?ticker=', s));
+						A2(_elm_lang$core$Basics_ops['++'], '/calls?ticker=', s));
 				} else {
 					return A2(
 						_elm_lang$core$Basics_ops['++'],
