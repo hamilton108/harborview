@@ -2,16 +2,15 @@ package harborview.web.controllers;
 
 import harborview.dto.html.ElmCharts;
 import harborview.dto.html.SelectItem;
+import harborview.dto.html.options.OptionPurchaseDTO;
 import harborview.dto.html.options.StockAndOptions;
 import harborview.maunaloa.MaunaloaModel;
+import harborview.web.controllers.web.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -58,4 +57,10 @@ public class MaunaloaController {
         return maunaloaModel.calls(oid);
     }
 
+    @ResponseBody
+    @RequestMapping(value = "purchaseoption", method =  RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public JsonResult purchaseoption(@RequestBody OptionPurchaseDTO dto) {
+        System.out.println(dto);
+        return new JsonResult(true, "Test");
+    }
 }

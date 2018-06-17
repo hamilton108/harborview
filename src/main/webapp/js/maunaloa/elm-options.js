@@ -10824,53 +10824,45 @@ var _user$project$Maunaloa_Options$purchaseOption = F7(
 			ctor: '::',
 			_0: {
 				ctor: '_Tuple2',
-				_0: 'soid',
+				_0: 'ticker',
 				_1: _elm_lang$core$Json_Encode$string(ticker)
 			},
 			_1: {
 				ctor: '::',
 				_0: {
 					ctor: '_Tuple2',
-					_0: 'ticker',
-					_1: _elm_lang$core$Json_Encode$string(ticker)
+					_0: 'ask',
+					_1: _elm_lang$core$Json_Encode$float(ask)
 				},
 				_1: {
 					ctor: '::',
 					_0: {
 						ctor: '_Tuple2',
-						_0: 'ask',
-						_1: _elm_lang$core$Json_Encode$float(ask)
+						_0: 'bid',
+						_1: _elm_lang$core$Json_Encode$float(bid)
 					},
 					_1: {
 						ctor: '::',
 						_0: {
 							ctor: '_Tuple2',
-							_0: 'bid',
-							_1: _elm_lang$core$Json_Encode$float(bid)
+							_0: 'vol',
+							_1: _elm_lang$core$Json_Encode$int(volume)
 						},
 						_1: {
 							ctor: '::',
 							_0: {
 								ctor: '_Tuple2',
-								_0: 'vol',
-								_1: _elm_lang$core$Json_Encode$int(volume)
+								_0: 'spot',
+								_1: _elm_lang$core$Json_Encode$float(spot)
 							},
 							_1: {
 								ctor: '::',
 								_0: {
 									ctor: '_Tuple2',
-									_0: 'spot',
-									_1: _elm_lang$core$Json_Encode$float(spot)
+									_0: 'rt',
+									_1: _elm_lang$core$Json_Encode$bool(isRealTime)
 								},
-								_1: {
-									ctor: '::',
-									_0: {
-										ctor: '_Tuple2',
-										_0: 'rt',
-										_1: _elm_lang$core$Json_Encode$bool(isRealTime)
-									},
-									_1: {ctor: '[]'}
-								}
+								_1: {ctor: '[]'}
 							}
 						}
 					}

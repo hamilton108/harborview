@@ -503,8 +503,7 @@ purchaseOption stockId ticker ask bid volume spot isRealTime =
             mainUrl ++ "/purchaseoption"
 
         params =
-            [ ( "soid", JE.string ticker )
-            , ( "ticker", JE.string ticker )
+            [ ( "ticker", JE.string ticker )
             , ( "ask", JE.float ask )
             , ( "bid", JE.float bid )
             , ( "vol", JE.int volume )
