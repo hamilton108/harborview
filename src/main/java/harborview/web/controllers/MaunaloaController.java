@@ -6,6 +6,8 @@ import harborview.dto.html.options.OptionPurchaseDTO;
 import harborview.dto.html.options.StockAndOptions;
 import harborview.maunaloa.MaunaloaModel;
 import harborview.web.controllers.web.JsonResult;
+import oahu.exceptions.FinancialException;
+import oahu.financial.OptionPurchase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -60,7 +62,12 @@ public class MaunaloaController {
     @ResponseBody
     @RequestMapping(value = "purchaseoption", method =  RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public JsonResult purchaseoption(@RequestBody OptionPurchaseDTO dto) {
-        System.out.println(dto);
-        return new JsonResult(true, "Test");
+        try {
+            OptionPurchase purchase = maunaloaModel.purchaseOption(dto);
+            return new JsonResult(true, String.format("Option purchase oid: %d",  purchase.getOid()));
+        }
+        catch (FinancialException fx) {
+            return new JsonResult(false, fx.getMessage());
+        }
     }
 }

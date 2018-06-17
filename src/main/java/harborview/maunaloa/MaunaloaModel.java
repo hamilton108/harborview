@@ -6,11 +6,14 @@ import harborview.dto.html.Chart;
 import harborview.dto.html.ElmCharts;
 import harborview.dto.html.SelectItem;
 import harborview.dto.html.options.OptionDTO;
+import harborview.dto.html.options.OptionPurchaseDTO;
 import harborview.dto.html.options.StockAndOptions;
 import harborview.dto.html.options.StockPriceDTO;
 import oahu.dto.Tuple;
 import oahu.dto.Tuple3;
+import oahu.exceptions.FinancialException;
 import oahu.financial.DerivativePrice;
+import oahu.financial.OptionPurchase;
 import oahu.financial.Stock;
 import oahu.financial.StockPrice;
 import oahu.financial.repository.EtradeRepository;
@@ -175,6 +178,15 @@ public class MaunaloaModel {
     }
     public StockAndOptions puts(int oid) {
         return callsOrPuts(oid, false);
+    }
+
+    private int findOptionOid(String ticker) {
+        return 3;
+    }
+    public OptionPurchase purchaseOption(OptionPurchaseDTO dto)
+    throws FinancialException {
+        int purchaseType = dto.isRt() ? 3 : 11;
+        return stockMarketRepository.registerOptionPurchase(purchaseType, dto.getTicker(), dto.getAsk(), dto.getVolume(), dto.getSpot(), dto.getBid());
     }
 
     public void setStockMarketRepository(StockMarketRepository stockMarketRepository) {
