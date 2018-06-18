@@ -101,6 +101,7 @@ body {
   float: left;
 }
 .scrap-cb {
+    float: left;
   margin-right: 1rem;
 }
 .radio-inline {

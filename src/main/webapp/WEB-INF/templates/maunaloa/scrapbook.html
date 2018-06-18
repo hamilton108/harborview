@@ -7,9 +7,15 @@
 <body>
     <div th:fragment="scrapbook(n)" class="grid-scrapbook">
         <div class="scrap-1">
+            <div class="form-check abc-checkbox abc-checkbox-success scrap-cb">
+                <input class="form-check-input" th:id="|scrapbook${n}|" type="checkbox">
+                <label class="form-check-label" th:for="|scrapbook${n}|">Scrapbook</label>
+            </div>
+            <!--
             <label class="checkbox-inline scrap-cb">
                 <input type="checkbox" th:id="|scrapbook${n}|" value="scrapbook">Scrapbook</input>
             </label>
+            -->
             <input type="color" value="#72a30f" th:id="|color${n}|"> Color</input>
         </div>
         <div class="scrap-2">
