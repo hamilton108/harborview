@@ -1,5 +1,6 @@
 package harborview.service;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
@@ -7,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
+import java.util.Properties;
 
 public class EmbeddedJetty {
     private static final Boolean DEBUG = true;
@@ -37,6 +39,7 @@ public class EmbeddedJetty {
     }
 
     private static void startJetty(int port) throws Exception {
+        initLog4j();
         Server server = new Server(port);
 
         WebAppContext context = new WebAppContext();
@@ -59,6 +62,17 @@ public class EmbeddedJetty {
             server.dump(System.err);
         }
         server.join();
+    }
+
+    private static void initLog4j() {
+        Properties props = new Properties();
+        try {
+
+            props.load(EmbeddedJetty.class.getResourceAsStream("/log4j.xml"));
+            PropertyConfigurator.configure(props);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 //    private void startJetty2(int port) throws Exception {

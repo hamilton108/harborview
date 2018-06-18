@@ -59,11 +59,15 @@ dependencies {
 
 
 
-
     //------------------- Aspectj -------------------
     compile "org.aspectj:aspectjrt:$aspectjVersion"
     aspectjTask "org.aspectj:aspectjweaver:$aspectjVersion"
     aspectjTask "org.aspectj:aspectjtools:$aspectjVersion"
+
+    //------------------- Logging -------------------
+    compile "log4j:log4j:$log4jVersion"
+    compile "org.slf4j:slf4j-log4j12:1.7.10"
+
 }
 
 task copydeps(type: Copy) {
