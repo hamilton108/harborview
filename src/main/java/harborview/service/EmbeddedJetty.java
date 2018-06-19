@@ -19,8 +19,6 @@ public class EmbeddedJetty {
     
     private static final int PORT = 8084;
     
-    private static final String CONTEXT_PATH = "/";
-    private static final String MAPPING_URL = "/";
     private static final String WEBAPP_DIRECTORY = "/";
     
     public static void main(String[] args) throws Exception {
