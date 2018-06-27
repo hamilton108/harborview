@@ -2,12 +2,13 @@ package harborview.web.controllers.web;
 
 public class JsonResult {
     private final boolean ok;
-    //private final int status;
+    private final int statusCode;
     private final String msg;
 
-    public JsonResult(boolean ok, String msg) {
+    public JsonResult(boolean ok, String msg, int statusCode) {
         this.ok = ok;
         this.msg = msg;
+        this.statusCode = statusCode;
     }
 
 
@@ -17,5 +18,9 @@ public class JsonResult {
 
     public boolean isOk() {
         return ok;
+    }
+
+    public int getStatusCode() {
+        return statusCode;
     }
 }

@@ -63,10 +63,13 @@ public class MaunaloaController {
     public JsonResult purchaseoption(@RequestBody OptionPurchaseDTO dto) {
         try {
             OptionPurchase purchase = maunaloaModel.purchaseOption(dto);
-            return new JsonResult(true, String.format("Option purchase oid: %d",  purchase.getOid()));
+            return new JsonResult(true, String.format("Option purchase oid: %d",  purchase.getOid()), 0);
         }
         catch (FinancialException fx) {
-            return new JsonResult(false, fx.getMessage());
+            return new JsonResult(false, fx.getMessage(), 0);
+        }
+        catch (Exception ex) {
+            return new JsonResult(false, ex.getMessage(), 0);
         }
     }
 }
