@@ -1,5 +1,17 @@
-module Maunaloa.Options.Tables exposing (..)
+module Maunaloa.Options.Tables exposing (config)
 
+import Common.ComboBox as CMB
+import Common.Miscellaneous as M
+import Html as H
+import Html.Attributes as A
+import Html.Events as E
+import Maunaloa.Options.Types
+    exposing
+        ( Msg(..)
+        , Option
+        , OptionMsg(..)
+        , PurchaseMsg(..)
+        )
 import Table exposing (defaultCustomizations)
 
 
@@ -77,5 +89,5 @@ buttonColumn =
 tableButton : Option -> Table.HtmlDetails Msg
 tableButton opt =
     Table.HtmlDetails []
-        [ H.button [ A.class "btn btn-success", E.onClick (PurchaseClick opt) ] [ H.text "Buy" ]
+        [ H.button [ A.class "btn btn-success", E.onClick (PurchaseMsgFor (PurchaseClick opt)) ] [ H.text "Buy" ]
         ]

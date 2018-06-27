@@ -1,5 +1,30 @@
 module Maunaloa.Options.Commands exposing (..)
 
+import Common.ComboBox as CMB
+import Common.Miscellaneous as M
+import Http
+import Json.Decode as Json
+import Json.Decode.Pipeline as JP
+import Json.Encode as JE
+import Maunaloa.Options.Types
+    exposing
+        ( Model
+        , Msg(..)
+        , Option
+        , OptionMsg(..)
+        , Options
+        , PurchaseMsg(..)
+        , PurchaseStatus
+        , RiscItem
+        , RiscItems
+        , Stock
+        , StockAndOptions
+        )
+
+
+mainUrl =
+    "/maunaloa"
+
 
 purchaseOption : Int -> String -> Float -> Float -> Int -> Float -> Bool -> Cmd Msg
 purchaseOption stockId ticker ask bid volume spot isRealTime =
@@ -24,8 +49,8 @@ purchaseOption stockId ticker ask bid volume spot isRealTime =
                 |> JP.required "ok" Json.bool
                 |> JP.required "msg" Json.string
     in
-        Http.send OptionPurchased <|
-            Http.post url jbody myDecoder
+    Http.send (PurchaseMsgFor << OptionPurchased) <|
+        Http.post url jbody myDecoder
 
 
 toggle : String -> Option -> Option
@@ -45,16 +70,16 @@ setRisc curRisc riscItems opt =
         curRiscItem =
             M.findInList predicate riscItems
     in
-        case curRiscItem of
-            Nothing ->
-                opt
+    case curRiscItem of
+        Nothing ->
+            opt
 
-            Just curRiscItem_ ->
-                { opt
-                    | stockPriceAtRisc = M.toDecimal curRiscItem_.risc 100
-                    , optionPriceAtRisc = opt.sell - curRisc
-                    , risc = curRisc
-                }
+        Just curRiscItem_ ->
+            { opt
+                | stockPriceAtRisc = M.toDecimal curRiscItem_.risc 100
+                , optionPriceAtRisc = opt.sell - curRisc
+                , risc = curRisc
+            }
 
 
 calcRisc : String -> Maybe Options -> Cmd Msg
@@ -81,8 +106,8 @@ calcRisc riscStr options =
                 |> JP.required "ticker" Json.string
                 |> JP.required "risc" Json.float
     in
-        Http.send RiscCalculated <|
-            Http.post url jbody (Json.list myDecoder)
+    Http.send RiscCalculated <|
+        Http.post url jbody (Json.list myDecoder)
 
 
 buildOption :
@@ -163,8 +188,8 @@ fetchOptions model s resetCache =
                 |> JP.required "stock" stockDecoder
                 |> JP.required "options" (Json.list optionDecoder)
     in
-        Http.send OptionsFetched <|
-            Http.get url myDecoder
+    Http.send (OptionMsgFor << OptionsFetched) <|
+        Http.get url myDecoder
 
 
 fetchTickers : Cmd Msg
@@ -173,5 +198,5 @@ fetchTickers =
         url =
             mainUrl ++ "/tickers"
     in
-        Http.send TickersFetched <|
-            Http.get url CMB.comboBoxItemListDecoder
+    Http.send TickersFetched <|
+        Http.get url CMB.comboBoxItemListDecoder

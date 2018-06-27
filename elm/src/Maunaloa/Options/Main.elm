@@ -12,6 +12,7 @@ import Http
 import Json.Decode as Json
 import Json.Decode.Pipeline as JP
 import Json.Encode as JE
+import Maunaloa.Options.Commands as C
 import Maunaloa.Options.Types
     exposing
         ( Flags
@@ -25,11 +26,9 @@ import Maunaloa.Options.Types
         , Stock
         , StockAndOptions
         )
+import Maunaloa.Options.Update exposing (update)
+import Maunaloa.Options.Views exposing (view)
 import Table exposing (defaultCustomizations)
-
-
-mainUrl =
-    "/maunaloa"
 
 
 main : Program Flags Model Msg
@@ -44,7 +43,7 @@ main =
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
-    ( initModel flags, fetchTickers )
+    ( initModel flags, C.fetchTickers )
 
 
 

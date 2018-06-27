@@ -1,11 +1,22 @@
-module Maunaloa.Options.Update exposing (..)
+module Maunaloa.Options.Update exposing (update)
+
+import Common.Miscellaneous as M
+import Common.ModalDialog as DLG exposing (errorAlert)
+import Maunaloa.Options.Commands as C
+import Maunaloa.Options.Types
+    exposing
+        ( Model
+        , Msg(..)
+        , OptionMsg(..)
+        , PurchaseMsg(..)
+        )
 
 
 updateOption : OptionMsg -> Model -> ( Model, Cmd Msg )
 updateOption msg model =
     case msg of
         FetchOptions s ->
-            ( { model | selectedTicker = s }, fetchOptions model s False )
+            ( { model | selectedTicker = s }, C.fetchOptions model s False )
 
         OptionsFetched (Ok s) ->
             ( { model | stock = Just s.stock, options = Just s.opx }, Cmd.none )
@@ -55,7 +66,7 @@ updatePurchase msg model =
                             Result.withDefault -1 (String.toFloat model.spot)
                     in
                     ( { model | dlgPurchase = DLG.DialogHidden }
-                    , purchaseOption soid opx.ticker curAsk curBid curVol curSpot model.isRealTimePurchase
+                    , C.purchaseOption soid opx.ticker curAsk curBid curVol curSpot model.isRealTimePurchase
                     )
 
                 Nothing ->
@@ -85,10 +96,10 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         OptionMsgFor optMsg ->
-            updateOption optMsg
+            updateOption optMsg model
 
         PurchaseMsgFor purchaseMsg ->
-            updatePurchase purchaseMsg
+            updatePurchase purchaseMsg model
 
         AlertOk ->
             ( { model | dlgAlert = DLG.DialogHidden }, Cmd.none )
@@ -109,10 +120,10 @@ update msg model =
             )
 
         ResetCache ->
-            ( model, fetchOptions model model.selectedTicker True )
+            ( model, C.fetchOptions model model.selectedTicker True )
 
         CalcRisc ->
-            ( model, calcRisc model.risc model.options )
+            ( model, C.calcRisc model.risc model.options )
 
         RiscCalculated (Ok s) ->
             case model.options of
@@ -124,7 +135,7 @@ update msg model =
                         curRisc =
                             Result.withDefault 0 (String.toFloat model.risc)
                     in
-                    ( { model | options = Just (List.map (setRisc curRisc s) optionx) }, Cmd.none )
+                    ( { model | options = Just (List.map (C.setRisc curRisc s) optionx) }, Cmd.none )
 
         RiscCalculated (Err s) ->
             ( errorAlert "RiscCalculated" "RiscCalculated Error: " s model, Cmd.none )
@@ -139,7 +150,7 @@ update msg model =
                     ( model, Cmd.none )
 
                 Just optionx ->
-                    ( { model | options = Just (List.map (toggle ticker) optionx) }
+                    ( { model | options = Just (List.map (C.toggle ticker) optionx) }
                     , Cmd.none
                     )
 
