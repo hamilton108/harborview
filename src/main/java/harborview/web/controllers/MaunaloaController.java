@@ -53,10 +53,9 @@ public class MaunaloaController {
         return maunaloaModel.elmChartsDay(oid);
     }
     @ResponseBody
-    @RequestMapping(value = "calls", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public StockAndOptions calls(@RequestParam("ticker") int oid) {
-                                //@RequestParam("rc") int rc) {
-        return maunaloaModel.calls(oid);
+    @RequestMapping(value = "calls/{ticker}/{rc}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public StockAndOptions calls(@PathVariable("ticker") int ticker, @PathVariable("rc") boolean resetCache) {
+        return maunaloaModel.calls(ticker);
     }
 
     @ResponseBody

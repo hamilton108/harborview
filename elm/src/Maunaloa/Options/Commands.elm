@@ -161,29 +161,28 @@ stockDecoder =
         |> JP.required "c" Json.float
 
 
+bool2json : Bool -> String
+bool2json v =
+    case v of
+        True ->
+            "true"
+
+        False ->
+            "false"
+
+
 fetchOptions : Model -> String -> Bool -> Cmd Msg
 fetchOptions model s resetCache =
     let
         url =
             case model.flags.isCalls of
                 True ->
-                    case resetCache of
-                        True ->
-                            mainUrl ++ "/calls?ticker=" ++ s
-
-                        False ->
-                            mainUrl ++ "/calls?ticker=" ++ s
+                    mainUrl ++ "/calls/" ++ s ++ "/" ++ bool2json resetCache
 
                 False ->
-                    case resetCache of
-                        True ->
-                            mainUrl ++ "/resetputs?ticker=" ++ s
-
-                        False ->
-                            mainUrl ++ "/puts?ticker=" ++ s
+                    mainUrl ++ "/puts/" ++ s ++ "/" ++ bool2json resetCache
 
         myDecoder =
-            -- Json.list optionDecoder
             JP.decode StockAndOptions
                 |> JP.required "stock" stockDecoder
                 |> JP.required "options" (Json.list optionDecoder)
