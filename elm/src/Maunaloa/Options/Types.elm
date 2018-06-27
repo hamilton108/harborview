@@ -1,5 +1,15 @@
 module Maunaloa.Options.Types exposing (..)
 
+import Common.ComboBox as CMB
+import Common.ModalDialog as DLG exposing (errorAlert)
+import Http
+import Table
+
+
+type alias Flags =
+    { isCalls : Bool
+    }
+
 
 type alias Stock =
     { date : String
@@ -56,26 +66,40 @@ type alias PurchaseStatus =
     { ok : Bool, msg : String }
 
 
+type OptionMsg
+    = FetchOptions String
+    | OptionsFetched (Result Http.Error StockAndOptions)
+
+
+type PurchaseMsg
+    = PurchaseClick Option
+    | PurchaseDlgOk
+    | PurchaseDlgCancel
+    | OptionPurchased (Result Http.Error PurchaseStatus)
+
+
 type Msg
     = AlertOk
     | TickersFetched (Result Http.Error CMB.SelectItems)
-    | FetchOptions String
-    | OptionsFetched (Result Http.Error StockAndOptions)
+      -- | FetchOptions String
+      -- | OptionsFetched (Result Http.Error StockAndOptions)
     | SetTableState Table.State
     | ResetCache
     | CalcRisc
     | RiscCalculated (Result Http.Error RiscItems)
     | RiscChange String
     | ToggleSelected String
-    | PurchaseClick Option
-    | PurchaseDlgOk
-    | PurchaseDlgCancel
-    | OptionPurchased (Result Http.Error PurchaseStatus)
+      --| PurchaseClick Option
+      --| PurchaseDlgOk
+      --| PurchaseDlgCancel
+      -- | OptionPurchased (Result Http.Error PurchaseStatus)
     | ToggleRealTimePurchase
     | AskChange String
     | BidChange String
     | VolumeChange String
     | SpotChange String
+    | OptionMsgFor OptionMsg
+    | PurchaseMsgFor PurchaseMsg
 
 
 type alias Model =

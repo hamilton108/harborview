@@ -1,5 +1,7 @@
 module Maunaloa.Options.Tables exposing (..)
 
+import Table exposing (defaultCustomizations)
+
 
 config : Table.Config Option Msg
 config =

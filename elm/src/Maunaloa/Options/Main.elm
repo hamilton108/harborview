@@ -12,28 +12,24 @@ import Http
 import Json.Decode as Json
 import Json.Decode.Pipeline as JP
 import Json.Encode as JE
-import Table exposing (defaultCustomizations)
 import Maunaloa.Options.Types
     exposing
-        ( Stock
+        ( Flags
+        , Model
+        , Msg(..)
         , Option
         , Options
-        , StockAndOptions
+        , PurchaseStatus
         , RiscItem
         , RiscItems
-        , PurchaseStatus
-        , Msg(..)
-        , Model
+        , Stock
+        , StockAndOptions
         )
+import Table exposing (defaultCustomizations)
 
 
 mainUrl =
     "/maunaloa"
-
-
-type alias Flags =
-    { isCalls : Bool
-    }
 
 
 main : Program Flags Model Msg

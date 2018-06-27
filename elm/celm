@@ -16,7 +16,7 @@ case "$1" in
        TODIR="maunaloa"
         ;;
 
-    3) ELM="src/Maunaloa/Options.elm"
+    3) ELM="src/Maunaloa/Options/Main.elm"
        JS="elm-options.js"
        TODIR="maunaloa"
         ;;
