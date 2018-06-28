@@ -48,6 +48,7 @@ purchaseOption stockId ticker ask bid volume spot isRealTime =
             JP.decode PurchaseStatus
                 |> JP.required "ok" Json.bool
                 |> JP.required "msg" Json.string
+                |> JP.required "statusCode" Json.int
     in
     Http.send (PurchaseMsgFor << OptionPurchased) <|
         Http.post url jbody myDecoder

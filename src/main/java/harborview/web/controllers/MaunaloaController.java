@@ -3,6 +3,7 @@ package harborview.web.controllers;
 import harborview.dto.html.ElmCharts;
 import harborview.dto.html.SelectItem;
 import harborview.dto.html.options.OptionPurchaseDTO;
+import harborview.dto.html.options.OptionRegPurDTO;
 import harborview.dto.html.options.StockAndOptions;
 import harborview.maunaloa.MaunaloaModel;
 import harborview.web.controllers.web.JsonResult;
@@ -60,13 +61,26 @@ public class MaunaloaController {
 
     @ResponseBody
     @RequestMapping(value = "purchaseoption", method =  RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public JsonResult purchaseoption(@RequestBody OptionPurchaseDTO dto) {
+    public JsonResult purchaseOption(@RequestBody OptionPurchaseDTO dto) {
         try {
             OptionPurchase purchase = maunaloaModel.purchaseOption(dto);
             return new JsonResult(true, String.format("Option purchase oid: %d",  purchase.getOid()), 0);
         }
         catch (FinancialException fx) {
-            return new JsonResult(false, fx.getMessage(), 0);
+            return new JsonResult(false, fx.getMessage(), 1);
+        }
+        catch (Exception ex) {
+            return new JsonResult(false, ex.getMessage(), 0);
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "regpuroption", method =  RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public JsonResult registerAndPurchaseOption(@RequestBody OptionRegPurDTO dto) {
+        try {
+
+            return null; //new JsonResult(true, String.format("Option purchase oid: %d",  purchase.getOid()), 0);
+
         }
         catch (Exception ex) {
             return new JsonResult(false, ex.getMessage(), 0);

@@ -63,7 +63,7 @@ type alias OptionSale =
 
 
 type alias PurchaseStatus =
-    { ok : Bool, msg : String }
+    { ok : Bool, msg : String, statusCode : Int }
 
 
 type OptionMsg
