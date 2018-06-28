@@ -1,0 +1,28 @@
+div.c1 {
+  z-index: 0;
+  position: absolute;
+  top: 20px;
+  left: 200px;
+}
+
+svg.c2 {
+  z-index: 0;
+  position: absolute;
+  /*
+  top: 320px;
+  */
+  top: 20px;
+  left: 200px;
+}
+
+.draggable {
+  cursor: move;
+}
+
+/*
+canvas.c1 {
+  border-style: solid;
+  border-width: 1px;
+  border-color: #000000;
+}
+*/
