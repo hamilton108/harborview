@@ -12,8 +12,8 @@ public class StockPriceDTO {
     private final double c;
 
     public StockPriceDTO(StockPrice stockPrice) {
-        this.dx = DateUtils.ldToStr(stockPrice.getLocalDx());
-        this.tm = DateUtils.tmToStr(stockPrice.getTm());
+        this.dx = DateUtils.localDateToStr(stockPrice.getLocalDx());
+        this.tm = DateUtils.localTimeToStr(stockPrice.getTm());
         this.o = stockPrice.getOpn();
         this.h = stockPrice.getHi();
         this.l = stockPrice.getLo();

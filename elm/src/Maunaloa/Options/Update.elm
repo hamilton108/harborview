@@ -35,16 +35,16 @@ updatePurchase msg model =
 
                 -- Maybe.withDefault 0 <| Maybe.map .c model.stock
             in
-            ( { model
-                | dlgPurchase = DLG.DialogVisible
-                , selectedPurchase = Just opt
-                , ask = toString opt.sell
-                , bid = toString opt.buy
-                , volume = "10"
-                , spot = toString curSpot
-              }
-            , Cmd.none
-            )
+                ( { model
+                    | dlgPurchase = DLG.DialogVisible
+                    , selectedPurchase = Just opt
+                    , ask = toString opt.sell
+                    , bid = toString opt.buy
+                    , volume = "10"
+                    , spot = toString curSpot
+                  }
+                , Cmd.none
+                )
 
         PurchaseDlgOk ->
             case model.selectedPurchase of
@@ -65,9 +65,9 @@ updatePurchase msg model =
                         curSpot =
                             Result.withDefault -1 (String.toFloat model.spot)
                     in
-                    ( { model | dlgPurchase = DLG.DialogHidden }
-                    , C.purchaseOption soid opx.ticker curAsk curBid curVol curSpot model.isRealTimePurchase
-                    )
+                        ( { model | dlgPurchase = DLG.DialogHidden }
+                        , C.purchaseOption soid opx.ticker curAsk curBid curVol curSpot model.isRealTimePurchase
+                        )
 
                 Nothing ->
                     ( { model | dlgPurchase = DLG.DialogHidden }, Cmd.none )
@@ -76,16 +76,21 @@ updatePurchase msg model =
             ( { model | dlgPurchase = DLG.DialogHidden }, Cmd.none )
 
         OptionPurchased (Ok s) ->
-            let
-                alertCat =
-                    case s.ok of
-                        True ->
-                            DLG.Info
+            if s.statusCode == 1 then
+                ( { model | dlgPurchase = DLG.DialogHidden }
+                , C.registerAndPurchaseOption model
+                )
+            else
+                let
+                    alertCat =
+                        case s.ok of
+                            True ->
+                                DLG.Info
 
-                        False ->
-                            DLG.Error
-            in
-            ( { model | dlgAlert = DLG.DialogVisibleAlert "Option purchase" s.msg alertCat }, Cmd.none )
+                            False ->
+                                DLG.Error
+                in
+                    ( { model | dlgAlert = DLG.DialogVisibleAlert "Option purchase" s.msg alertCat }, Cmd.none )
 
         OptionPurchased (Err s) ->
             Debug.log "OptionPurchased ERR"
@@ -135,7 +140,7 @@ update msg model =
                         curRisc =
                             Result.withDefault 0 (String.toFloat model.risc)
                     in
-                    ( { model | options = Just (List.map (C.setRisc curRisc s) optionx) }, Cmd.none )
+                        ( { model | options = Just (List.map (C.setRisc curRisc s) optionx) }, Cmd.none )
 
         RiscCalculated (Err s) ->
             ( errorAlert "RiscCalculated" "RiscCalculated Error: " s model, Cmd.none )
@@ -159,7 +164,7 @@ update msg model =
                 checked =
                     not model.isRealTimePurchase
             in
-            ( { model | isRealTimePurchase = checked }, Cmd.none )
+                ( { model | isRealTimePurchase = checked }, Cmd.none )
 
         AskChange s ->
             ( { model | ask = s }, Cmd.none )

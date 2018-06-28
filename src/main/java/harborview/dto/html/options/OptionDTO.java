@@ -1,7 +1,9 @@
 package harborview.dto.html.options;
 
+import harborview.service.DateUtils;
 import oahu.financial.DerivativePrice;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 public class OptionDTO {
@@ -29,6 +31,11 @@ public class OptionDTO {
 
     public double getSell() {
         return price.getSell();
+    }
+
+    public String getExpiry() {
+        LocalDate ld = price.getDerivative().getExpiry();
+        return DateUtils.localDateToStr(ld);
     }
 
 

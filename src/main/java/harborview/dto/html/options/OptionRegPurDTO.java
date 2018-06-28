@@ -7,6 +7,7 @@ import oahu.financial.Stock;
 
 public class OptionRegPurDTO extends OptionPurchaseDTO {
 
+  private int stockId;
   private String opType;
   private String expiry;
   private double x;
@@ -42,5 +43,13 @@ public class OptionRegPurDTO extends OptionPurchaseDTO {
   }
   public void setX(double value) {
     x = value;
+  }
+
+  public int getStockId() {
+    return stockId;
+  }
+
+  public void setStockId(int stockId) {
+    this.stockId = stockId;
   }
 }

@@ -30,6 +30,7 @@ type alias Option =
     , ivBuy : Float
     , ivSell : Float
     , breakEven : Float
+    , expiry : String
     , spread : Float
     , risc : Float
     , optionPriceAtRisc : Float

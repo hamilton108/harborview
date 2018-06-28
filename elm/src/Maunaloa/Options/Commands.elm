@@ -20,6 +20,7 @@ import Maunaloa.Options.Types
         , Stock
         , StockAndOptions
         )
+import Maunaloa.Options.Decoders as D
 
 
 mainUrl =
@@ -43,15 +44,66 @@ purchaseOption stockId ticker ask bid volume spot isRealTime =
 
         jbody =
             M.asHttpBody params
-
-        myDecoder =
-            JP.decode PurchaseStatus
-                |> JP.required "ok" Json.bool
-                |> JP.required "msg" Json.string
-                |> JP.required "statusCode" Json.int
     in
-    Http.send (PurchaseMsgFor << OptionPurchased) <|
-        Http.post url jbody myDecoder
+        Http.send (PurchaseMsgFor << OptionPurchased) <|
+            Http.post url jbody D.purchaseStatusDecoder
+
+
+registerAndPurchaseOption_ : Model -> Option -> Cmd Msg
+registerAndPurchaseOption_ model opx =
+    let
+        url =
+            mainUrl ++ "/regpuroption"
+
+        soid =
+            Result.withDefault -1 (String.toInt model.selectedTicker)
+
+        curAsk =
+            Result.withDefault -1 (String.toFloat model.ask)
+
+        curBid =
+            Result.withDefault -1 (String.toFloat model.bid)
+
+        curVol =
+            Result.withDefault -1 (String.toInt model.volume)
+
+        curSpot =
+            Result.withDefault -1 (String.toFloat model.spot)
+
+        opType =
+            if model.flags.isCalls == True then
+                "c"
+            else
+                "p"
+
+        params =
+            [ ( "ticker", JE.string opx.ticker )
+            , ( "ask", JE.float curAsk )
+            , ( "bid", JE.float curBid )
+            , ( "vol", JE.int curVol )
+            , ( "spot", JE.float curSpot )
+            , ( "rt", JE.bool model.isRealTimePurchase )
+            , ( "stockId", JE.int soid )
+            , ( "opType", JE.string opType )
+            , ( "expiry", JE.string opx.expiry )
+            , ( "x", JE.float opx.x )
+            ]
+
+        jbody =
+            M.asHttpBody params
+    in
+        Http.send (PurchaseMsgFor << OptionPurchased) <|
+            Http.post url jbody D.purchaseStatusDecoder
+
+
+registerAndPurchaseOption : Model -> Cmd Msg
+registerAndPurchaseOption model =
+    case model.selectedPurchase of
+        Nothing ->
+            Cmd.none
+
+        Just opx ->
+            registerAndPurchaseOption_ model opx
 
 
 toggle : String -> Option -> Option
@@ -71,16 +123,16 @@ setRisc curRisc riscItems opt =
         curRiscItem =
             M.findInList predicate riscItems
     in
-    case curRiscItem of
-        Nothing ->
-            opt
+        case curRiscItem of
+            Nothing ->
+                opt
 
-        Just curRiscItem_ ->
-            { opt
-                | stockPriceAtRisc = M.toDecimal curRiscItem_.risc 100
-                , optionPriceAtRisc = opt.sell - curRisc
-                , risc = curRisc
-            }
+            Just curRiscItem_ ->
+                { opt
+                    | stockPriceAtRisc = M.toDecimal curRiscItem_.risc 100
+                    , optionPriceAtRisc = opt.sell - curRisc
+                    , risc = curRisc
+                }
 
 
 calcRisc : String -> Maybe Options -> Cmd Msg
@@ -107,8 +159,8 @@ calcRisc riscStr options =
                 |> JP.required "ticker" Json.string
                 |> JP.required "risc" Json.float
     in
-    Http.send RiscCalculated <|
-        Http.post url jbody (Json.list myDecoder)
+        Http.send RiscCalculated <|
+            Http.post url jbody (Json.list myDecoder)
 
 
 buildOption :
@@ -120,8 +172,9 @@ buildOption :
     -> Float
     -> Float
     -> Float
+    -> String
     -> Option
-buildOption t x d b s ib is be =
+buildOption t x d b s ib is be ex =
     Option
         t
         x
@@ -131,6 +184,7 @@ buildOption t x d b s ib is be =
         ib
         is
         be
+        ex
         (M.toDecimal (100 * ((s / b) - 1.0)) 10.0)
         0
         0
@@ -149,6 +203,7 @@ optionDecoder =
         |> JP.required "ivBuy" Json.float
         |> JP.required "ivSell" Json.float
         |> JP.required "brEven" Json.float
+        |> JP.required "expiry" Json.string
 
 
 stockDecoder : Json.Decoder Stock
@@ -188,8 +243,8 @@ fetchOptions model s resetCache =
                 |> JP.required "stock" stockDecoder
                 |> JP.required "options" (Json.list optionDecoder)
     in
-    Http.send (OptionMsgFor << OptionsFetched) <|
-        Http.get url myDecoder
+        Http.send (OptionMsgFor << OptionsFetched) <|
+            Http.get url myDecoder
 
 
 fetchTickers : Cmd Msg
@@ -198,5 +253,5 @@ fetchTickers =
         url =
             mainUrl ++ "/tickers"
     in
-    Http.send TickersFetched <|
-        Http.get url CMB.comboBoxItemListDecoder
+        Http.send TickersFetched <|
+            Http.get url CMB.comboBoxItemListDecoder

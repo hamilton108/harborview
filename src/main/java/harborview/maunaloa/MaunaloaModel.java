@@ -2,17 +2,11 @@ package harborview.maunaloa;
 
 import harborview.dto.html.ElmCharts;
 import harborview.dto.html.SelectItem;
-import harborview.dto.html.options.OptionDTO;
-import harborview.dto.html.options.OptionPurchaseDTO;
-import harborview.dto.html.options.StockAndOptions;
-import harborview.dto.html.options.StockPriceDTO;
+import harborview.dto.html.options.*;
 import oahu.dto.Tuple;
 import oahu.dto.Tuple3;
 import oahu.exceptions.FinancialException;
-import oahu.financial.DerivativePrice;
-import oahu.financial.OptionPurchase;
-import oahu.financial.Stock;
-import oahu.financial.StockPrice;
+import oahu.financial.*;
 import oahu.financial.repository.EtradeRepository;
 import oahu.financial.repository.StockMarketRepository;
 
@@ -100,12 +94,31 @@ public class MaunaloaModel {
     }
 
     private int findOptionOid(String ticker) {
-        return 3;
+        return 3; //getStocks().stream().filter(x -> x.getTicker().equals(ticker)).findFirst();
     }
+    private Optional<Stock> findStock(int stockId) {
+        return getStocks().stream().filter(x -> x.getOid() == stockId).findFirst();
+    }
+
     public OptionPurchase purchaseOption(OptionPurchaseDTO dto)
     throws FinancialException {
         int purchaseType = dto.isRt() ? 3 : 11;
         return stockMarketRepository.registerOptionPurchase(purchaseType, dto.getTicker(), dto.getAsk(), dto.getVolume(), dto.getSpot(), dto.getBid());
+    }
+
+    public OptionPurchase registerAndPurchaseOption(OptionRegPurDTO dto)
+            throws FinancialException {
+        Optional<Stock> stock = findStock(dto.getStockId());
+
+        if (!stock.isPresent()) {
+            throw new FinancialException(String.format("Stock with oid %d not present!", dto.getStockId()));
+        }
+
+        Derivative derivative = dto.createDerivative(stock.get());
+
+        stockMarketRepository.insertDerivative(derivative, null);
+
+        return purchaseOption(dto);
     }
 
     public void setStockMarketRepository(StockMarketRepository stockMarketRepository) {
