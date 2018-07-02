@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
   let repos1 = null;
   let repos2 = null;
   let repos3 = null;
+  const draggable1 = new MAUNALOA.svg.draggable("svg-1"); //Draggable("svg-1");
   const node = document.getElementById('my-app');
   const app = Elm.Maunaloa.Charts.embed(node, {
     chartResolution: 1
@@ -203,6 +204,12 @@ document.addEventListener("DOMContentLoaded", function() {
     repos2.addLevelLine(100, true);
   };
   */
+    //------------- Draggable ---------------->
+    const draggableBtn1 = document.getElementById("btn-draggable-1");
+    draggableBtn1.onclick = function() {
+        draggable1.addLine();
+    };
+
   //------------- drawRiscLines ---------------->
 
   const drawRiscLines1 = function(riscLinesInfo) {

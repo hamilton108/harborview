@@ -5,8 +5,8 @@ MAUNALOA.levelLine = {
   lineWidth: 1,
   draggable: true,
   draw: function() {
-    var y = this.y1;
-    var ctx = this.parent.ctx;
+    const y = this.y1;
+    const ctx = this.parent.ctx;
     ctx.lineWidth = this.lineWidth;
     ctx.beginPath();
     ctx.moveTo(this.x1, y);
@@ -253,13 +253,13 @@ MAUNALOA.repos = {
     }
   },
   create: function(canvasId, hruler, vruler) {
-    var F = function() {
+    const F = function() {
       this.lines = [];
       this.spot = null;
-    }
+    };
     F.prototype = MAUNALOA.repos;
     F.constructor.prototype = F;
-    var result = new F();
+    const result = new F();
     result.init(canvasId, hruler, vruler);
     return result;
   },
@@ -268,9 +268,9 @@ MAUNALOA.repos = {
     this.draw();
   },
   addLevelLine: function(levelPix, doDraw) {
-    var levelValue = this.vruler.pixToValue(levelPix);
-    var myDoDraw = doDraw || true;
-    var result = MAUNALOA.levelLine.create(this,
+    const levelValue = this.vruler.pixToValue(levelPix);
+    const myDoDraw = doDraw || true;
+    const result = MAUNALOA.levelLine.create(this,
       levelValue,
       300,
       this.canvas.width,
@@ -282,7 +282,7 @@ MAUNALOA.repos = {
   },
   //addRiscLines : function(option,risc,riscLevel,breakEven,doDraw) {
   addRiscLines: function(cfg, doDraw) {
-    var riscLine = MAUNALOA.levelLine.create(this,
+    const riscLine = MAUNALOA.levelLine.create(this,
       cfg.stockPrice,
       100,
       this.canvas.width,
@@ -297,7 +297,7 @@ MAUNALOA.repos = {
         },
         onMouseUp: function() {
           this.risc = "-";
-          var self = this;
+          const self = this;
           //HARBORVIEW.Utils.jsonGET("https://andromeda/maunaloa/optionprice",
           HARBORVIEW.Utils.jsonGET("http://localhost:8082/maunaloa/optionprice", {
               "ticker": cfg.ticker,
@@ -311,8 +311,8 @@ MAUNALOA.repos = {
         }
       });
     this.lines.push(riscLine);
-    var breakEven = cfg.be;
-    var breakEvenLine = MAUNALOA.levelLine.create(this, breakEven, 100, this.canvas.width,
+    const breakEven = cfg.be;
+    const breakEvenLine = MAUNALOA.levelLine.create(this, breakEven, 100, this.canvas.width,
       this.vruler.valueToPix(breakEven), {
         draggable: false,
         color: "green",
@@ -326,4 +326,4 @@ MAUNALOA.repos = {
       this.draw();
     }
   }
-}
+};

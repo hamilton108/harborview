@@ -10586,105 +10586,14 @@ var _user$project$Common_ModalDialog$errorAlert = F4(
 var _user$project$Common_ModalDialog$DialogVisible = {ctor: 'DialogVisible'};
 var _user$project$Common_ModalDialog$DialogHidden = {ctor: 'DialogHidden'};
 
-var _user$project$Maunaloa_Options$setRisc = F3(
-	function (curRisc, riscItems, opt) {
-		var predicate = function (x) {
-			return _elm_lang$core$Native_Utils.eq(x.ticker, opt.ticker);
-		};
-		var curRiscItem = A2(_user$project$Common_Miscellaneous$findInList, predicate, riscItems);
-		var _p0 = curRiscItem;
-		if (_p0.ctor === 'Nothing') {
-			return opt;
-		} else {
-			return _elm_lang$core$Native_Utils.update(
-				opt,
-				{
-					stockPriceAtRisc: A2(_user$project$Common_Miscellaneous$toDecimal, _p0._0.risc, 100),
-					optionPriceAtRisc: opt.sell - curRisc,
-					risc: curRisc
-				});
-		}
-	});
-var _user$project$Maunaloa_Options$toggle = F2(
-	function (ticker, opt) {
-		return _elm_lang$core$Native_Utils.eq(opt.ticker, ticker) ? _elm_lang$core$Native_Utils.update(
-			opt,
-			{selected: !opt.selected}) : opt;
-	});
-var _user$project$Maunaloa_Options$toRowAttrs = function (opt) {
-	return {
-		ctor: '::',
-		_0: _elm_lang$html$Html_Attributes$style(
-			{
-				ctor: '::',
-				_0: {
-					ctor: '_Tuple2',
-					_0: 'background',
-					_1: opt.selected ? '#FFCC99' : 'white'
-				},
-				_1: {ctor: '[]'}
-			}),
-		_1: {ctor: '[]'}
-	};
-};
-var _user$project$Maunaloa_Options$toTableAttrs = {
-	ctor: '::',
-	_0: _elm_lang$html$Html_Attributes$class('table'),
-	_1: {ctor: '[]'}
-};
-var _user$project$Maunaloa_Options$initModel = function (flags) {
-	return {
-		tickers: _elm_lang$core$Maybe$Nothing,
-		selectedTicker: '-1',
-		stock: _elm_lang$core$Maybe$Nothing,
-		options: _elm_lang$core$Maybe$Nothing,
-		risc: '0.0',
-		flags: flags,
-		tableState: _evancz$elm_sortable_table$Table$initialSort('Ticker'),
-		dlgPurchase: _user$project$Common_ModalDialog$DialogHidden,
-		dlgAlert: _user$project$Common_ModalDialog$DialogHidden,
-		selectedPurchase: _elm_lang$core$Maybe$Nothing,
-		isRealTimePurchase: true,
-		ask: '0.0',
-		bid: '0.0',
-		volume: '10',
-		spot: '0.0'
-	};
-};
-var _user$project$Maunaloa_Options$mainUrl = '/maunaloa';
-var _user$project$Maunaloa_Options$Flags = function (a) {
+var _user$project$Maunaloa_Options_Types$Flags = function (a) {
 	return {isCalls: a};
 };
-var _user$project$Maunaloa_Options$Stock = F6(
+var _user$project$Maunaloa_Options_Types$Stock = F6(
 	function (a, b, c, d, e, f) {
 		return {date: a, time: b, o: c, h: d, l: e, c: f};
 	});
-var _user$project$Maunaloa_Options$stockDecoder = A3(
-	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-	'c',
-	_elm_lang$core$Json_Decode$float,
-	A3(
-		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-		'l',
-		_elm_lang$core$Json_Decode$float,
-		A3(
-			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-			'h',
-			_elm_lang$core$Json_Decode$float,
-			A3(
-				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-				'o',
-				_elm_lang$core$Json_Decode$float,
-				A3(
-					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-					'tm',
-					_elm_lang$core$Json_Decode$string,
-					A3(
-						_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-						'dx',
-						_elm_lang$core$Json_Decode$string,
-						_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Maunaloa_Options$Stock)))))));
-var _user$project$Maunaloa_Options$Option = function (a) {
+var _user$project$Maunaloa_Options_Types$Option = function (a) {
 	return function (b) {
 		return function (c) {
 			return function (d) {
@@ -10697,7 +10606,9 @@ var _user$project$Maunaloa_Options$Option = function (a) {
 										return function (k) {
 											return function (l) {
 												return function (m) {
-													return {ticker: a, x: b, days: c, buy: d, sell: e, ivBuy: f, ivSell: g, breakEven: h, spread: i, risc: j, optionPriceAtRisc: k, stockPriceAtRisc: l, selected: m};
+													return function (n) {
+														return {ticker: a, x: b, days: c, buy: d, sell: e, ivBuy: f, ivSell: g, breakEven: h, expiry: i, spread: j, risc: k, optionPriceAtRisc: l, stockPriceAtRisc: m, selected: n};
+													};
 												};
 											};
 										};
@@ -10711,58 +10622,20 @@ var _user$project$Maunaloa_Options$Option = function (a) {
 		};
 	};
 };
-var _user$project$Maunaloa_Options$buildOption = F8(
-	function (t, x, d, b, s, ib, is, be) {
-		return _user$project$Maunaloa_Options$Option(t)(x)(d)(b)(s)(ib)(is)(be)(
-			A2(_user$project$Common_Miscellaneous$toDecimal, 100 * ((s / b) - 1.0), 10.0))(0)(0)(0)(false);
-	});
-var _user$project$Maunaloa_Options$optionDecoder = A3(
-	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-	'brEven',
-	_elm_lang$core$Json_Decode$float,
-	A3(
-		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-		'ivSell',
-		_elm_lang$core$Json_Decode$float,
-		A3(
-			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-			'ivBuy',
-			_elm_lang$core$Json_Decode$float,
-			A3(
-				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-				'sell',
-				_elm_lang$core$Json_Decode$float,
-				A3(
-					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-					'buy',
-					_elm_lang$core$Json_Decode$float,
-					A3(
-						_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-						'days',
-						_elm_lang$core$Json_Decode$float,
-						A3(
-							_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-							'x',
-							_elm_lang$core$Json_Decode$float,
-							A3(
-								_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-								'ticker',
-								_elm_lang$core$Json_Decode$string,
-								_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Maunaloa_Options$buildOption)))))))));
-var _user$project$Maunaloa_Options$StockAndOptions = F2(
+var _user$project$Maunaloa_Options_Types$StockAndOptions = F2(
 	function (a, b) {
 		return {stock: a, opx: b};
 	});
-var _user$project$Maunaloa_Options$RiscItem = F2(
+var _user$project$Maunaloa_Options_Types$RiscItem = F2(
 	function (a, b) {
 		return {ticker: a, risc: b};
 	});
-var _user$project$Maunaloa_Options$OptionSale = {};
-var _user$project$Maunaloa_Options$PurchaseStatus = F2(
-	function (a, b) {
-		return {ok: a, msg: b};
+var _user$project$Maunaloa_Options_Types$OptionSale = {};
+var _user$project$Maunaloa_Options_Types$PurchaseStatus = F3(
+	function (a, b, c) {
+		return {ok: a, msg: b, statusCode: c};
 	});
-var _user$project$Maunaloa_Options$Model = function (a) {
+var _user$project$Maunaloa_Options_Types$Model = function (a) {
 	return function (b) {
 		return function (c) {
 			return function (d) {
@@ -10793,33 +10666,175 @@ var _user$project$Maunaloa_Options$Model = function (a) {
 		};
 	};
 };
-var _user$project$Maunaloa_Options$SpotChange = function (a) {
-	return {ctor: 'SpotChange', _0: a};
+var _user$project$Maunaloa_Options_Types$OptionsFetched = function (a) {
+	return {ctor: 'OptionsFetched', _0: a};
 };
-var _user$project$Maunaloa_Options$VolumeChange = function (a) {
-	return {ctor: 'VolumeChange', _0: a};
+var _user$project$Maunaloa_Options_Types$FetchOptions = function (a) {
+	return {ctor: 'FetchOptions', _0: a};
 };
-var _user$project$Maunaloa_Options$BidChange = function (a) {
-	return {ctor: 'BidChange', _0: a};
-};
-var _user$project$Maunaloa_Options$AskChange = function (a) {
-	return {ctor: 'AskChange', _0: a};
-};
-var _user$project$Maunaloa_Options$ToggleRealTimePurchase = {ctor: 'ToggleRealTimePurchase'};
-var _user$project$Maunaloa_Options$OptionPurchased = function (a) {
+var _user$project$Maunaloa_Options_Types$OptionPurchased = function (a) {
 	return {ctor: 'OptionPurchased', _0: a};
 };
-var _user$project$Maunaloa_Options$purchaseOption = F7(
-	function (stockId, ticker, ask, bid, volume, spot, isRealTime) {
-		var myDecoder = A3(
+var _user$project$Maunaloa_Options_Types$PurchaseDlgCancel = {ctor: 'PurchaseDlgCancel'};
+var _user$project$Maunaloa_Options_Types$PurchaseDlgOk = {ctor: 'PurchaseDlgOk'};
+var _user$project$Maunaloa_Options_Types$PurchaseClick = function (a) {
+	return {ctor: 'PurchaseClick', _0: a};
+};
+var _user$project$Maunaloa_Options_Types$PurchaseMsgFor = function (a) {
+	return {ctor: 'PurchaseMsgFor', _0: a};
+};
+var _user$project$Maunaloa_Options_Types$OptionMsgFor = function (a) {
+	return {ctor: 'OptionMsgFor', _0: a};
+};
+var _user$project$Maunaloa_Options_Types$SpotChange = function (a) {
+	return {ctor: 'SpotChange', _0: a};
+};
+var _user$project$Maunaloa_Options_Types$VolumeChange = function (a) {
+	return {ctor: 'VolumeChange', _0: a};
+};
+var _user$project$Maunaloa_Options_Types$BidChange = function (a) {
+	return {ctor: 'BidChange', _0: a};
+};
+var _user$project$Maunaloa_Options_Types$AskChange = function (a) {
+	return {ctor: 'AskChange', _0: a};
+};
+var _user$project$Maunaloa_Options_Types$ToggleRealTimePurchase = {ctor: 'ToggleRealTimePurchase'};
+var _user$project$Maunaloa_Options_Types$ToggleSelected = function (a) {
+	return {ctor: 'ToggleSelected', _0: a};
+};
+var _user$project$Maunaloa_Options_Types$RiscChange = function (a) {
+	return {ctor: 'RiscChange', _0: a};
+};
+var _user$project$Maunaloa_Options_Types$RiscCalculated = function (a) {
+	return {ctor: 'RiscCalculated', _0: a};
+};
+var _user$project$Maunaloa_Options_Types$CalcRisc = {ctor: 'CalcRisc'};
+var _user$project$Maunaloa_Options_Types$ResetCache = {ctor: 'ResetCache'};
+var _user$project$Maunaloa_Options_Types$SetTableState = function (a) {
+	return {ctor: 'SetTableState', _0: a};
+};
+var _user$project$Maunaloa_Options_Types$TickersFetched = function (a) {
+	return {ctor: 'TickersFetched', _0: a};
+};
+var _user$project$Maunaloa_Options_Types$AlertOk = {ctor: 'AlertOk'};
+
+var _user$project$Maunaloa_Options_Decoders$purchaseStatusDecoder = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'statusCode',
+	_elm_lang$core$Json_Decode$int,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'msg',
+		_elm_lang$core$Json_Decode$string,
+		A3(
 			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-			'msg',
-			_elm_lang$core$Json_Decode$string,
+			'ok',
+			_elm_lang$core$Json_Decode$bool,
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Maunaloa_Options_Types$PurchaseStatus))));
+
+var _user$project$Maunaloa_Options_Commands$bool2json = function (v) {
+	var _p0 = v;
+	if (_p0 === true) {
+		return 'true';
+	} else {
+		return 'false';
+	}
+};
+var _user$project$Maunaloa_Options_Commands$stockDecoder = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'c',
+	_elm_lang$core$Json_Decode$float,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'l',
+		_elm_lang$core$Json_Decode$float,
+		A3(
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+			'h',
+			_elm_lang$core$Json_Decode$float,
 			A3(
 				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-				'ok',
-				_elm_lang$core$Json_Decode$bool,
-				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Maunaloa_Options$PurchaseStatus)));
+				'o',
+				_elm_lang$core$Json_Decode$float,
+				A3(
+					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+					'tm',
+					_elm_lang$core$Json_Decode$string,
+					A3(
+						_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+						'dx',
+						_elm_lang$core$Json_Decode$string,
+						_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Maunaloa_Options_Types$Stock)))))));
+var _user$project$Maunaloa_Options_Commands$buildOption = F9(
+	function (t, x, d, b, s, ib, is, be, ex) {
+		return _user$project$Maunaloa_Options_Types$Option(t)(x)(d)(b)(s)(ib)(is)(be)(ex)(
+			A2(_user$project$Common_Miscellaneous$toDecimal, 100 * ((s / b) - 1.0), 10.0))(0)(0)(0)(false);
+	});
+var _user$project$Maunaloa_Options_Commands$optionDecoder = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'expiry',
+	_elm_lang$core$Json_Decode$string,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'brEven',
+		_elm_lang$core$Json_Decode$float,
+		A3(
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+			'ivSell',
+			_elm_lang$core$Json_Decode$float,
+			A3(
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+				'ivBuy',
+				_elm_lang$core$Json_Decode$float,
+				A3(
+					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+					'sell',
+					_elm_lang$core$Json_Decode$float,
+					A3(
+						_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+						'buy',
+						_elm_lang$core$Json_Decode$float,
+						A3(
+							_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+							'days',
+							_elm_lang$core$Json_Decode$float,
+							A3(
+								_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+								'x',
+								_elm_lang$core$Json_Decode$float,
+								A3(
+									_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+									'ticker',
+									_elm_lang$core$Json_Decode$string,
+									_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Maunaloa_Options_Commands$buildOption))))))))));
+var _user$project$Maunaloa_Options_Commands$setRisc = F3(
+	function (curRisc, riscItems, opt) {
+		var predicate = function (x) {
+			return _elm_lang$core$Native_Utils.eq(x.ticker, opt.ticker);
+		};
+		var curRiscItem = A2(_user$project$Common_Miscellaneous$findInList, predicate, riscItems);
+		var _p1 = curRiscItem;
+		if (_p1.ctor === 'Nothing') {
+			return opt;
+		} else {
+			return _elm_lang$core$Native_Utils.update(
+				opt,
+				{
+					stockPriceAtRisc: A2(_user$project$Common_Miscellaneous$toDecimal, _p1._0.risc, 100),
+					optionPriceAtRisc: opt.sell - curRisc,
+					risc: curRisc
+				});
+		}
+	});
+var _user$project$Maunaloa_Options_Commands$toggle = F2(
+	function (ticker, opt) {
+		return _elm_lang$core$Native_Utils.eq(opt.ticker, ticker) ? _elm_lang$core$Native_Utils.update(
+			opt,
+			{selected: !opt.selected}) : opt;
+	});
+var _user$project$Maunaloa_Options_Commands$mainUrl = '/maunaloa';
+var _user$project$Maunaloa_Options_Commands$purchaseOption = F7(
+	function (stockId, ticker, ask, bid, volume, spot, isRealTime) {
 		var params = {
 			ctor: '::',
 			_0: {
@@ -10870,84 +10885,138 @@ var _user$project$Maunaloa_Options$purchaseOption = F7(
 			}
 		};
 		var jbody = _user$project$Common_Miscellaneous$asHttpBody(params);
-		var url = A2(_elm_lang$core$Basics_ops['++'], _user$project$Maunaloa_Options$mainUrl, '/purchaseoption');
+		var url = A2(_elm_lang$core$Basics_ops['++'], _user$project$Maunaloa_Options_Commands$mainUrl, '/purchaseoption');
 		return A2(
 			_elm_lang$http$Http$send,
-			_user$project$Maunaloa_Options$OptionPurchased,
-			A3(_elm_lang$http$Http$post, url, jbody, myDecoder));
+			function (_p2) {
+				return _user$project$Maunaloa_Options_Types$PurchaseMsgFor(
+					_user$project$Maunaloa_Options_Types$OptionPurchased(_p2));
+			},
+			A3(_elm_lang$http$Http$post, url, jbody, _user$project$Maunaloa_Options_Decoders$purchaseStatusDecoder));
 	});
-var _user$project$Maunaloa_Options$PurchaseDlgCancel = {ctor: 'PurchaseDlgCancel'};
-var _user$project$Maunaloa_Options$PurchaseDlgOk = {ctor: 'PurchaseDlgOk'};
-var _user$project$Maunaloa_Options$PurchaseClick = function (a) {
-	return {ctor: 'PurchaseClick', _0: a};
-};
-var _user$project$Maunaloa_Options$tableButton = function (opt) {
-	return A2(
-		_evancz$elm_sortable_table$Table$HtmlDetails,
-		{ctor: '[]'},
-		{
+var _user$project$Maunaloa_Options_Commands$registerAndPurchaseOption_ = F2(
+	function (model, opx) {
+		var opType = _elm_lang$core$Native_Utils.eq(model.flags.isCalls, true) ? 'c' : 'p';
+		var curSpot = A2(
+			_elm_lang$core$Result$withDefault,
+			-1,
+			_elm_lang$core$String$toFloat(model.spot));
+		var curVol = A2(
+			_elm_lang$core$Result$withDefault,
+			-1,
+			_elm_lang$core$String$toInt(model.volume));
+		var curBid = A2(
+			_elm_lang$core$Result$withDefault,
+			-1,
+			_elm_lang$core$String$toFloat(model.bid));
+		var curAsk = A2(
+			_elm_lang$core$Result$withDefault,
+			-1,
+			_elm_lang$core$String$toFloat(model.ask));
+		var soid = A2(
+			_elm_lang$core$Result$withDefault,
+			-1,
+			_elm_lang$core$String$toInt(model.selectedTicker));
+		var params = {
 			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$button,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('btn btn-success'),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Events$onClick(
-							_user$project$Maunaloa_Options$PurchaseClick(opt)),
-						_1: {ctor: '[]'}
-					}
+			_0: {
+				ctor: '_Tuple2',
+				_0: 'ticker',
+				_1: _elm_lang$core$Json_Encode$string(opx.ticker)
+			},
+			_1: {
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'ask',
+					_1: _elm_lang$core$Json_Encode$float(curAsk)
 				},
-				{
+				_1: {
 					ctor: '::',
-					_0: _elm_lang$html$Html$text('Buy'),
-					_1: {ctor: '[]'}
-				}),
-			_1: {ctor: '[]'}
-		});
-};
-var _user$project$Maunaloa_Options$buttonColumn = _evancz$elm_sortable_table$Table$veryCustomColumn(
-	{name: 'Purchase', viewData: _user$project$Maunaloa_Options$tableButton, sorter: _evancz$elm_sortable_table$Table$unsortable});
-var _user$project$Maunaloa_Options$ToggleSelected = function (a) {
-	return {ctor: 'ToggleSelected', _0: a};
-};
-var _user$project$Maunaloa_Options$viewCheckbox = function (_p1) {
-	var _p2 = _p1;
-	return A2(
-		_evancz$elm_sortable_table$Table$HtmlDetails,
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$input,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'bid',
+						_1: _elm_lang$core$Json_Encode$float(curBid)
+					},
 					_1: {
 						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$checked(_p2.selected),
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'vol',
+							_1: _elm_lang$core$Json_Encode$int(curVol)
+						},
 						_1: {
 							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(
-								_user$project$Maunaloa_Options$ToggleSelected(_p2.ticker)),
-							_1: {ctor: '[]'}
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'spot',
+								_1: _elm_lang$core$Json_Encode$float(curSpot)
+							},
+							_1: {
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'rt',
+									_1: _elm_lang$core$Json_Encode$bool(model.isRealTimePurchase)
+								},
+								_1: {
+									ctor: '::',
+									_0: {
+										ctor: '_Tuple2',
+										_0: 'stockId',
+										_1: _elm_lang$core$Json_Encode$int(soid)
+									},
+									_1: {
+										ctor: '::',
+										_0: {
+											ctor: '_Tuple2',
+											_0: 'opType',
+											_1: _elm_lang$core$Json_Encode$string(opType)
+										},
+										_1: {
+											ctor: '::',
+											_0: {
+												ctor: '_Tuple2',
+												_0: 'expiry',
+												_1: _elm_lang$core$Json_Encode$string(opx.expiry)
+											},
+											_1: {
+												ctor: '::',
+												_0: {
+													ctor: '_Tuple2',
+													_0: 'x',
+													_1: _elm_lang$core$Json_Encode$float(opx.x)
+												},
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
 						}
 					}
-				},
-				{ctor: '[]'}),
-			_1: {ctor: '[]'}
-		});
+				}
+			}
+		};
+		var jbody = _user$project$Common_Miscellaneous$asHttpBody(params);
+		var url = A2(_elm_lang$core$Basics_ops['++'], _user$project$Maunaloa_Options_Commands$mainUrl, '/regpuroption');
+		return A2(
+			_elm_lang$http$Http$send,
+			function (_p3) {
+				return _user$project$Maunaloa_Options_Types$PurchaseMsgFor(
+					_user$project$Maunaloa_Options_Types$OptionPurchased(_p3));
+			},
+			A3(_elm_lang$http$Http$post, url, jbody, _user$project$Maunaloa_Options_Decoders$purchaseStatusDecoder));
+	});
+var _user$project$Maunaloa_Options_Commands$registerAndPurchaseOption = function (model) {
+	var _p4 = model.selectedPurchase;
+	if (_p4.ctor === 'Nothing') {
+		return _elm_lang$core$Platform_Cmd$none;
+	} else {
+		return A2(_user$project$Maunaloa_Options_Commands$registerAndPurchaseOption_, model, _p4._0);
+	}
 };
-var _user$project$Maunaloa_Options$checkboxColumn = _evancz$elm_sortable_table$Table$veryCustomColumn(
-	{name: '', viewData: _user$project$Maunaloa_Options$viewCheckbox, sorter: _evancz$elm_sortable_table$Table$unsortable});
-var _user$project$Maunaloa_Options$RiscChange = function (a) {
-	return {ctor: 'RiscChange', _0: a};
-};
-var _user$project$Maunaloa_Options$RiscCalculated = function (a) {
-	return {ctor: 'RiscCalculated', _0: a};
-};
-var _user$project$Maunaloa_Options$calcRisc = F2(
+var _user$project$Maunaloa_Options_Commands$calcRisc = F2(
 	function (riscStr, options) {
 		var myDecoder = A3(
 			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
@@ -10957,7 +11026,7 @@ var _user$project$Maunaloa_Options$calcRisc = F2(
 				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
 				'ticker',
 				_elm_lang$core$Json_Decode$string,
-				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Maunaloa_Options$RiscItem)));
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Maunaloa_Options_Types$RiscItem)));
 		var opx = A2(
 			_elm_lang$core$Maybe$withDefault,
 			{ctor: '[]'},
@@ -10968,7 +11037,7 @@ var _user$project$Maunaloa_Options$calcRisc = F2(
 				return _elm_lang$core$Native_Utils.eq(x.selected, true);
 			},
 			opx);
-		var url = A2(_elm_lang$core$Basics_ops['++'], _user$project$Maunaloa_Options$mainUrl, '/calc-risc-stockprices');
+		var url = A2(_elm_lang$core$Basics_ops['++'], _user$project$Maunaloa_Options_Commands$mainUrl, '/calc-risc-stockprices');
 		var risc = A2(
 			_elm_lang$core$Result$withDefault,
 			0,
@@ -10986,30 +11055,469 @@ var _user$project$Maunaloa_Options$calcRisc = F2(
 				checked));
 		return A2(
 			_elm_lang$http$Http$send,
-			_user$project$Maunaloa_Options$RiscCalculated,
+			_user$project$Maunaloa_Options_Types$RiscCalculated,
 			A3(
 				_elm_lang$http$Http$post,
 				url,
 				jbody,
 				_elm_lang$core$Json_Decode$list(myDecoder)));
 	});
-var _user$project$Maunaloa_Options$CalcRisc = {ctor: 'CalcRisc'};
-var _user$project$Maunaloa_Options$ResetCache = {ctor: 'ResetCache'};
-var _user$project$Maunaloa_Options$SetTableState = function (a) {
-	return {ctor: 'SetTableState', _0: a};
+var _user$project$Maunaloa_Options_Commands$fetchOptions = F3(
+	function (model, s, resetCache) {
+		var myDecoder = A3(
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+			'options',
+			_elm_lang$core$Json_Decode$list(_user$project$Maunaloa_Options_Commands$optionDecoder),
+			A3(
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+				'stock',
+				_user$project$Maunaloa_Options_Commands$stockDecoder,
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Maunaloa_Options_Types$StockAndOptions)));
+		var url = function () {
+			var _p5 = model.flags.isCalls;
+			if (_p5 === true) {
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					_user$project$Maunaloa_Options_Commands$mainUrl,
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'/calls/',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							s,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'/',
+								_user$project$Maunaloa_Options_Commands$bool2json(resetCache)))));
+			} else {
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					_user$project$Maunaloa_Options_Commands$mainUrl,
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'/puts/',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							s,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'/',
+								_user$project$Maunaloa_Options_Commands$bool2json(resetCache)))));
+			}
+		}();
+		return A2(
+			_elm_lang$http$Http$send,
+			function (_p6) {
+				return _user$project$Maunaloa_Options_Types$OptionMsgFor(
+					_user$project$Maunaloa_Options_Types$OptionsFetched(_p6));
+			},
+			A2(_elm_lang$http$Http$get, url, myDecoder));
+	});
+var _user$project$Maunaloa_Options_Commands$fetchTickers = function () {
+	var url = A2(_elm_lang$core$Basics_ops['++'], _user$project$Maunaloa_Options_Commands$mainUrl, '/tickers');
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$Maunaloa_Options_Types$TickersFetched,
+		A2(_elm_lang$http$Http$get, url, _user$project$Common_ComboBox$comboBoxItemListDecoder));
+}();
+
+var _user$project$Maunaloa_Options_Update$updatePurchase = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'PurchaseClick':
+				var _p1 = _p0._0;
+				var curSpot = A3(
+					_user$project$Common_Miscellaneous$unpackMaybe,
+					model.stock,
+					function (_) {
+						return _.c;
+					},
+					0);
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							dlgPurchase: _user$project$Common_ModalDialog$DialogVisible,
+							selectedPurchase: _elm_lang$core$Maybe$Just(_p1),
+							ask: _elm_lang$core$Basics$toString(_p1.sell),
+							bid: _elm_lang$core$Basics$toString(_p1.buy),
+							volume: '10',
+							spot: _elm_lang$core$Basics$toString(curSpot)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'PurchaseDlgOk':
+				var _p2 = model.selectedPurchase;
+				if (_p2.ctor === 'Just') {
+					var curSpot = A2(
+						_elm_lang$core$Result$withDefault,
+						-1,
+						_elm_lang$core$String$toFloat(model.spot));
+					var curVol = A2(
+						_elm_lang$core$Result$withDefault,
+						-1,
+						_elm_lang$core$String$toInt(model.volume));
+					var curBid = A2(
+						_elm_lang$core$Result$withDefault,
+						-1,
+						_elm_lang$core$String$toFloat(model.bid));
+					var curAsk = A2(
+						_elm_lang$core$Result$withDefault,
+						-1,
+						_elm_lang$core$String$toFloat(model.ask));
+					var soid = A2(
+						_elm_lang$core$Result$withDefault,
+						-1,
+						_elm_lang$core$String$toInt(model.selectedTicker));
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{dlgPurchase: _user$project$Common_ModalDialog$DialogHidden}),
+						_1: A7(_user$project$Maunaloa_Options_Commands$purchaseOption, soid, _p2._0.ticker, curAsk, curBid, curVol, curSpot, model.isRealTimePurchase)
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{dlgPurchase: _user$project$Common_ModalDialog$DialogHidden}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'PurchaseDlgCancel':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{dlgPurchase: _user$project$Common_ModalDialog$DialogHidden}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				if (_p0._0.ctor === 'Ok') {
+					var _p4 = _p0._0._0;
+					if (_elm_lang$core$Native_Utils.eq(_p4.statusCode, 1)) {
+						return {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$Native_Utils.update(
+								model,
+								{dlgPurchase: _user$project$Common_ModalDialog$DialogHidden}),
+							_1: _user$project$Maunaloa_Options_Commands$registerAndPurchaseOption(model)
+						};
+					} else {
+						var alertCat = function () {
+							var _p3 = _p4.ok;
+							if (_p3 === true) {
+								return _user$project$Common_ModalDialog$Info;
+							} else {
+								return _user$project$Common_ModalDialog$Error;
+							}
+						}();
+						return {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$Native_Utils.update(
+								model,
+								{
+									dlgAlert: A3(_user$project$Common_ModalDialog$DialogVisibleAlert, 'Option purchase', _p4.msg, alertCat)
+								}),
+							_1: _elm_lang$core$Platform_Cmd$none
+						};
+					}
+				} else {
+					return A2(
+						_elm_lang$core$Debug$log,
+						'OptionPurchased ERR',
+						{
+							ctor: '_Tuple2',
+							_0: A4(_user$project$Common_ModalDialog$errorAlert, 'Purchase Sale ERROR!', 'SaleOk Error: ', _p0._0._0, model),
+							_1: _elm_lang$core$Platform_Cmd$none
+						});
+				}
+		}
+	});
+var _user$project$Maunaloa_Options_Update$updateOption = F2(
+	function (msg, model) {
+		var _p5 = msg;
+		if (_p5.ctor === 'FetchOptions') {
+			var _p6 = _p5._0;
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_Utils.update(
+					model,
+					{selectedTicker: _p6}),
+				_1: A3(_user$project$Maunaloa_Options_Commands$fetchOptions, model, _p6, false)
+			};
+		} else {
+			if (_p5._0.ctor === 'Ok') {
+				var _p7 = _p5._0._0;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							stock: _elm_lang$core$Maybe$Just(_p7.stock),
+							options: _elm_lang$core$Maybe$Just(_p7.opx)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			} else {
+				return {
+					ctor: '_Tuple2',
+					_0: A4(_user$project$Common_ModalDialog$errorAlert, 'Error', 'OptionsFetched Error: ', _p5._0._0, model),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			}
+		}
+	});
+var _user$project$Maunaloa_Options_Update$update = F2(
+	function (msg, model) {
+		var _p8 = msg;
+		switch (_p8.ctor) {
+			case 'OptionMsgFor':
+				return A2(_user$project$Maunaloa_Options_Update$updateOption, _p8._0, model);
+			case 'PurchaseMsgFor':
+				return A2(_user$project$Maunaloa_Options_Update$updatePurchase, _p8._0, model);
+			case 'AlertOk':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{dlgAlert: _user$project$Common_ModalDialog$DialogHidden}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'TickersFetched':
+				if (_p8._0.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								tickers: _elm_lang$core$Maybe$Just(_p8._0._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: A4(_user$project$Common_ModalDialog$errorAlert, 'Error', 'TickersFetched Error: ', _p8._0._0, model),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'SetTableState':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{tableState: _p8._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'ResetCache':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: A3(_user$project$Maunaloa_Options_Commands$fetchOptions, model, model.selectedTicker, true)
+				};
+			case 'CalcRisc':
+				return {
+					ctor: '_Tuple2',
+					_0: model,
+					_1: A2(_user$project$Maunaloa_Options_Commands$calcRisc, model.risc, model.options)
+				};
+			case 'RiscCalculated':
+				if (_p8._0.ctor === 'Ok') {
+					var _p9 = model.options;
+					if (_p9.ctor === 'Nothing') {
+						return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+					} else {
+						var curRisc = A2(
+							_elm_lang$core$Result$withDefault,
+							0,
+							_elm_lang$core$String$toFloat(model.risc));
+						return {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$Native_Utils.update(
+								model,
+								{
+									options: _elm_lang$core$Maybe$Just(
+										A2(
+											_elm_lang$core$List$map,
+											A2(_user$project$Maunaloa_Options_Commands$setRisc, curRisc, _p8._0._0),
+											_p9._0))
+								}),
+							_1: _elm_lang$core$Platform_Cmd$none
+						};
+					}
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: A4(_user$project$Common_ModalDialog$errorAlert, 'RiscCalculated', 'RiscCalculated Error: ', _p8._0._0, model),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'RiscChange':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{risc: _p8._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'ToggleSelected':
+				var _p10 = model.options;
+				if (_p10.ctor === 'Nothing') {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								options: _elm_lang$core$Maybe$Just(
+									A2(
+										_elm_lang$core$List$map,
+										_user$project$Maunaloa_Options_Commands$toggle(_p8._0),
+										_p10._0))
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'ToggleRealTimePurchase':
+				var checked = !model.isRealTimePurchase;
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{isRealTimePurchase: checked}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'AskChange':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{ask: _p8._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'BidChange':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{bid: _p8._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'VolumeChange':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{volume: _p8._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{spot: _p8._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
+
+var _user$project$Maunaloa_Options_Tables$tableButton = function (opt) {
+	return A2(
+		_evancz$elm_sortable_table$Table$HtmlDetails,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$button,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('btn btn-success'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onClick(
+							_user$project$Maunaloa_Options_Types$PurchaseMsgFor(
+								_user$project$Maunaloa_Options_Types$PurchaseClick(opt))),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Buy'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		});
 };
-var _user$project$Maunaloa_Options$config = _evancz$elm_sortable_table$Table$customConfig(
+var _user$project$Maunaloa_Options_Tables$buttonColumn = _evancz$elm_sortable_table$Table$veryCustomColumn(
+	{name: 'Purchase', viewData: _user$project$Maunaloa_Options_Tables$tableButton, sorter: _evancz$elm_sortable_table$Table$unsortable});
+var _user$project$Maunaloa_Options_Tables$viewCheckbox = function (_p0) {
+	var _p1 = _p0;
+	return A2(
+		_evancz$elm_sortable_table$Table$HtmlDetails,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$input,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$checked(_p1.selected),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(
+								_user$project$Maunaloa_Options_Types$ToggleSelected(_p1.ticker)),
+							_1: {ctor: '[]'}
+						}
+					}
+				},
+				{ctor: '[]'}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Maunaloa_Options_Tables$checkboxColumn = _evancz$elm_sortable_table$Table$veryCustomColumn(
+	{name: '', viewData: _user$project$Maunaloa_Options_Tables$viewCheckbox, sorter: _evancz$elm_sortable_table$Table$unsortable});
+var _user$project$Maunaloa_Options_Tables$toRowAttrs = function (opt) {
+	return {
+		ctor: '::',
+		_0: _elm_lang$html$Html_Attributes$style(
+			{
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'background',
+					_1: opt.selected ? '#FFCC99' : 'white'
+				},
+				_1: {ctor: '[]'}
+			}),
+		_1: {ctor: '[]'}
+	};
+};
+var _user$project$Maunaloa_Options_Tables$toTableAttrs = {
+	ctor: '::',
+	_0: _elm_lang$html$Html_Attributes$class('table'),
+	_1: {ctor: '[]'}
+};
+var _user$project$Maunaloa_Options_Tables$config = _evancz$elm_sortable_table$Table$customConfig(
 	{
 		toId: function (_) {
 			return _.ticker;
 		},
-		toMsg: _user$project$Maunaloa_Options$SetTableState,
+		toMsg: _user$project$Maunaloa_Options_Types$SetTableState,
 		columns: {
 			ctor: '::',
-			_0: _user$project$Maunaloa_Options$checkboxColumn,
+			_0: _user$project$Maunaloa_Options_Tables$checkboxColumn,
 			_1: {
 				ctor: '::',
-				_0: _user$project$Maunaloa_Options$buttonColumn,
+				_0: _user$project$Maunaloa_Options_Tables$buttonColumn,
 				_1: {
 					ctor: '::',
 					_0: A2(
@@ -11123,373 +11631,24 @@ var _user$project$Maunaloa_Options$config = _evancz$elm_sortable_table$Table$cus
 		},
 		customizations: _elm_lang$core$Native_Utils.update(
 			_evancz$elm_sortable_table$Table$defaultCustomizations,
-			{tableAttrs: _user$project$Maunaloa_Options$toTableAttrs, rowAttrs: _user$project$Maunaloa_Options$toRowAttrs})
+			{tableAttrs: _user$project$Maunaloa_Options_Tables$toTableAttrs, rowAttrs: _user$project$Maunaloa_Options_Tables$toRowAttrs})
 	});
-var _user$project$Maunaloa_Options$OptionsFetched = function (a) {
-	return {ctor: 'OptionsFetched', _0: a};
-};
-var _user$project$Maunaloa_Options$fetchOptions = F3(
-	function (model, s, resetCache) {
-		var myDecoder = A3(
-			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-			'options',
-			_elm_lang$core$Json_Decode$list(_user$project$Maunaloa_Options$optionDecoder),
-			A3(
-				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-				'stock',
-				_user$project$Maunaloa_Options$stockDecoder,
-				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Maunaloa_Options$StockAndOptions)));
-		var url = function () {
-			var _p3 = model.flags.isCalls;
-			if (_p3 === true) {
-				var _p4 = resetCache;
-				if (_p4 === true) {
-					return A2(
-						_elm_lang$core$Basics_ops['++'],
-						_user$project$Maunaloa_Options$mainUrl,
-						A2(_elm_lang$core$Basics_ops['++'], '/calls?ticker=', s));
-				} else {
-					return A2(
-						_elm_lang$core$Basics_ops['++'],
-						_user$project$Maunaloa_Options$mainUrl,
-						A2(_elm_lang$core$Basics_ops['++'], '/calls?ticker=', s));
-				}
-			} else {
-				var _p5 = resetCache;
-				if (_p5 === true) {
-					return A2(
-						_elm_lang$core$Basics_ops['++'],
-						_user$project$Maunaloa_Options$mainUrl,
-						A2(_elm_lang$core$Basics_ops['++'], '/resetputs?ticker=', s));
-				} else {
-					return A2(
-						_elm_lang$core$Basics_ops['++'],
-						_user$project$Maunaloa_Options$mainUrl,
-						A2(_elm_lang$core$Basics_ops['++'], '/puts?ticker=', s));
-				}
-			}
-		}();
-		return A2(
-			_elm_lang$http$Http$send,
-			_user$project$Maunaloa_Options$OptionsFetched,
-			A2(_elm_lang$http$Http$get, url, myDecoder));
-	});
-var _user$project$Maunaloa_Options$update = F2(
-	function (msg, model) {
-		var _p6 = msg;
-		switch (_p6.ctor) {
-			case 'AlertOk':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{dlgAlert: _user$project$Common_ModalDialog$DialogHidden}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'TickersFetched':
-				if (_p6._0.ctor === 'Ok') {
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{
-								tickers: _elm_lang$core$Maybe$Just(_p6._0._0)
-							}),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				} else {
-					return {
-						ctor: '_Tuple2',
-						_0: A4(_user$project$Common_ModalDialog$errorAlert, 'Error', 'TickersFetched Error: ', _p6._0._0, model),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				}
-			case 'FetchOptions':
-				var _p7 = _p6._0;
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{selectedTicker: _p7}),
-					_1: A3(_user$project$Maunaloa_Options$fetchOptions, model, _p7, false)
-				};
-			case 'OptionsFetched':
-				if (_p6._0.ctor === 'Ok') {
-					var _p8 = _p6._0._0;
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{
-								stock: _elm_lang$core$Maybe$Just(_p8.stock),
-								options: _elm_lang$core$Maybe$Just(_p8.opx)
-							}),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				} else {
-					return {
-						ctor: '_Tuple2',
-						_0: A4(_user$project$Common_ModalDialog$errorAlert, 'Error', 'OptionsFetched Error: ', _p6._0._0, model),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				}
-			case 'SetTableState':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{tableState: _p6._0}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'ResetCache':
-				return {
-					ctor: '_Tuple2',
-					_0: model,
-					_1: A3(_user$project$Maunaloa_Options$fetchOptions, model, model.selectedTicker, true)
-				};
-			case 'CalcRisc':
-				return {
-					ctor: '_Tuple2',
-					_0: model,
-					_1: A2(_user$project$Maunaloa_Options$calcRisc, model.risc, model.options)
-				};
-			case 'RiscCalculated':
-				if (_p6._0.ctor === 'Ok') {
-					var _p9 = model.options;
-					if (_p9.ctor === 'Nothing') {
-						return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-					} else {
-						var curRisc = A2(
-							_elm_lang$core$Result$withDefault,
-							0,
-							_elm_lang$core$String$toFloat(model.risc));
-						return {
-							ctor: '_Tuple2',
-							_0: _elm_lang$core$Native_Utils.update(
-								model,
-								{
-									options: _elm_lang$core$Maybe$Just(
-										A2(
-											_elm_lang$core$List$map,
-											A2(_user$project$Maunaloa_Options$setRisc, curRisc, _p6._0._0),
-											_p9._0))
-								}),
-							_1: _elm_lang$core$Platform_Cmd$none
-						};
-					}
-				} else {
-					return {
-						ctor: '_Tuple2',
-						_0: A4(_user$project$Common_ModalDialog$errorAlert, 'RiscCalculated', 'RiscCalculated Error: ', _p6._0._0, model),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				}
-			case 'RiscChange':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{risc: _p6._0}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'ToggleSelected':
-				var _p10 = model.options;
-				if (_p10.ctor === 'Nothing') {
-					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
-				} else {
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{
-								options: _elm_lang$core$Maybe$Just(
-									A2(
-										_elm_lang$core$List$map,
-										_user$project$Maunaloa_Options$toggle(_p6._0),
-										_p10._0))
-							}),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				}
-			case 'PurchaseClick':
-				var _p11 = _p6._0;
-				var curSpot = A3(
-					_user$project$Common_Miscellaneous$unpackMaybe,
-					model.stock,
-					function (_) {
-						return _.c;
-					},
-					0);
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							dlgPurchase: _user$project$Common_ModalDialog$DialogVisible,
-							selectedPurchase: _elm_lang$core$Maybe$Just(_p11),
-							ask: _elm_lang$core$Basics$toString(_p11.sell),
-							bid: _elm_lang$core$Basics$toString(_p11.buy),
-							volume: '10',
-							spot: _elm_lang$core$Basics$toString(curSpot)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'PurchaseDlgOk':
-				var _p12 = model.selectedPurchase;
-				if (_p12.ctor === 'Just') {
-					var curSpot = A2(
-						_elm_lang$core$Result$withDefault,
-						-1,
-						_elm_lang$core$String$toFloat(model.spot));
-					var curVol = A2(
-						_elm_lang$core$Result$withDefault,
-						-1,
-						_elm_lang$core$String$toInt(model.volume));
-					var curBid = A2(
-						_elm_lang$core$Result$withDefault,
-						-1,
-						_elm_lang$core$String$toFloat(model.bid));
-					var curAsk = A2(
-						_elm_lang$core$Result$withDefault,
-						-1,
-						_elm_lang$core$String$toFloat(model.ask));
-					var soid = A2(
-						_elm_lang$core$Result$withDefault,
-						-1,
-						_elm_lang$core$String$toInt(model.selectedTicker));
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{dlgPurchase: _user$project$Common_ModalDialog$DialogHidden}),
-						_1: A7(_user$project$Maunaloa_Options$purchaseOption, soid, _p12._0.ticker, curAsk, curBid, curVol, curSpot, model.isRealTimePurchase)
-					};
-				} else {
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{dlgPurchase: _user$project$Common_ModalDialog$DialogHidden}),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				}
-			case 'PurchaseDlgCancel':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{dlgPurchase: _user$project$Common_ModalDialog$DialogHidden}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'OptionPurchased':
-				if (_p6._0.ctor === 'Ok') {
-					var _p14 = _p6._0._0;
-					var alertCat = function () {
-						var _p13 = _p14.ok;
-						if (_p13 === true) {
-							return _user$project$Common_ModalDialog$Info;
-						} else {
-							return _user$project$Common_ModalDialog$Error;
-						}
-					}();
-					return {
-						ctor: '_Tuple2',
-						_0: _elm_lang$core$Native_Utils.update(
-							model,
-							{
-								dlgAlert: A3(_user$project$Common_ModalDialog$DialogVisibleAlert, 'Option purchase', _p14.msg, alertCat)
-							}),
-						_1: _elm_lang$core$Platform_Cmd$none
-					};
-				} else {
-					return A2(
-						_elm_lang$core$Debug$log,
-						'OptionPurchased ERR',
-						{
-							ctor: '_Tuple2',
-							_0: A4(_user$project$Common_ModalDialog$errorAlert, 'Purchase Sale ERROR!', 'SaleOk Error: ', _p6._0._0, model),
-							_1: _elm_lang$core$Platform_Cmd$none
-						});
-				}
-			case 'ToggleRealTimePurchase':
-				var checked = !model.isRealTimePurchase;
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{isRealTimePurchase: checked}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'AskChange':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{ask: _p6._0}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'BidChange':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{bid: _p6._0}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			case 'VolumeChange':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{volume: _p6._0}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			default:
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{spot: _p6._0}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-		}
-	});
-var _user$project$Maunaloa_Options$FetchOptions = function (a) {
-	return {ctor: 'FetchOptions', _0: a};
-};
-var _user$project$Maunaloa_Options$TickersFetched = function (a) {
-	return {ctor: 'TickersFetched', _0: a};
-};
-var _user$project$Maunaloa_Options$fetchTickers = function () {
-	var url = A2(_elm_lang$core$Basics_ops['++'], _user$project$Maunaloa_Options$mainUrl, '/tickers');
-	return A2(
-		_elm_lang$http$Http$send,
-		_user$project$Maunaloa_Options$TickersFetched,
-		A2(_elm_lang$http$Http$get, url, _user$project$Common_ComboBox$comboBoxItemListDecoder));
-}();
-var _user$project$Maunaloa_Options$init = function (flags) {
-	return {
-		ctor: '_Tuple2',
-		_0: _user$project$Maunaloa_Options$initModel(flags),
-		_1: _user$project$Maunaloa_Options$fetchTickers
-	};
-};
-var _user$project$Maunaloa_Options$AlertOk = {ctor: 'AlertOk'};
-var _user$project$Maunaloa_Options$view = function (model) {
+
+var _user$project$Maunaloa_Options_Views$view = function (model) {
 	var dlgHeader = function () {
-		var _p15 = model.selectedPurchase;
-		if (_p15.ctor === 'Nothing') {
+		var _p0 = model.selectedPurchase;
+		if (_p0.ctor === 'Nothing') {
 			return 'Option Purchase';
 		} else {
-			return A2(_elm_lang$core$Basics_ops['++'], 'Option Purchase ', _p15._0.ticker);
+			return A2(_elm_lang$core$Basics_ops['++'], 'Option Purchase ', _p0._0.ticker);
 		}
 	}();
 	var stockInfo = function () {
-		var _p16 = model.stock;
-		if (_p16.ctor === 'Nothing') {
+		var _p1 = model.stock;
+		if (_p1.ctor === 'Nothing') {
 			return '';
 		} else {
-			return _elm_lang$core$Basics$toString(_p16._0);
+			return _elm_lang$core$Basics$toString(_p1._0);
 		}
 	}();
 	var opx = A2(
@@ -11524,7 +11683,7 @@ var _user$project$Maunaloa_Options$view = function (model) {
 						}),
 					_1: {
 						ctor: '::',
-						_0: A2(_user$project$Common_Buttons$button, 'Calc Risc', _user$project$Maunaloa_Options$CalcRisc),
+						_0: A2(_user$project$Common_Buttons$button, 'Calc Risc', _user$project$Maunaloa_Options_Types$CalcRisc),
 						_1: {
 							ctor: '::',
 							_0: A2(
@@ -11543,7 +11702,7 @@ var _user$project$Maunaloa_Options$view = function (model) {
 											_0: _elm_lang$html$Html_Attributes$placeholder('Risc'),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html_Events$onInput(_user$project$Maunaloa_Options$RiscChange),
+												_0: _elm_lang$html$Html_Events$onInput(_user$project$Maunaloa_Options_Types$RiscChange),
 												_1: {ctor: '[]'}
 											}
 										},
@@ -11552,10 +11711,18 @@ var _user$project$Maunaloa_Options$view = function (model) {
 								}),
 							_1: {
 								ctor: '::',
-								_0: A2(_user$project$Common_Buttons$button, 'Reset Cache', _user$project$Maunaloa_Options$ResetCache),
+								_0: A2(_user$project$Common_Buttons$button, 'Reset Cache', _user$project$Maunaloa_Options_Types$ResetCache),
 								_1: {
 									ctor: '::',
-									_0: A4(_user$project$Common_ComboBox$makeSelect, 'Tickers: ', _user$project$Maunaloa_Options$FetchOptions, model.tickers, model.selectedTicker),
+									_0: A4(
+										_user$project$Common_ComboBox$makeSelect,
+										'Tickers: ',
+										function (_p2) {
+											return _user$project$Maunaloa_Options_Types$OptionMsgFor(
+												_user$project$Maunaloa_Options_Types$FetchOptions(_p2));
+										},
+										model.tickers,
+										model.selectedTicker),
 									_1: {ctor: '[]'}
 								}
 							}
@@ -11573,7 +11740,7 @@ var _user$project$Maunaloa_Options$view = function (model) {
 					},
 					{
 						ctor: '::',
-						_0: A3(_evancz$elm_sortable_table$Table$view, _user$project$Maunaloa_Options$config, model.tableState, opx),
+						_0: A3(_evancz$elm_sortable_table$Table$view, _user$project$Maunaloa_Options_Tables$config, model.tableState, opx),
 						_1: {ctor: '[]'}
 					}),
 				_1: {
@@ -11582,8 +11749,8 @@ var _user$project$Maunaloa_Options$view = function (model) {
 						_user$project$Common_ModalDialog$modalDialog,
 						dlgHeader,
 						model.dlgPurchase,
-						_user$project$Maunaloa_Options$PurchaseDlgOk,
-						_user$project$Maunaloa_Options$PurchaseDlgCancel,
+						_user$project$Maunaloa_Options_Types$PurchaseMsgFor(_user$project$Maunaloa_Options_Types$PurchaseDlgOk),
+						_user$project$Maunaloa_Options_Types$PurchaseMsgFor(_user$project$Maunaloa_Options_Types$PurchaseDlgCancel),
 						{
 							ctor: '::',
 							_0: A2(
@@ -11608,7 +11775,7 @@ var _user$project$Maunaloa_Options$view = function (model) {
 													_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$html$Html_Events$onClick(_user$project$Maunaloa_Options$ToggleRealTimePurchase),
+														_0: _elm_lang$html$Html_Events$onClick(_user$project$Maunaloa_Options_Types$ToggleRealTimePurchase),
 														_1: {ctor: '[]'}
 													}
 												}
@@ -11623,16 +11790,16 @@ var _user$project$Maunaloa_Options$view = function (model) {
 								}),
 							_1: {
 								ctor: '::',
-								_0: A6(_user$project$Common_Miscellaneous$makeFGRInput, _user$project$Maunaloa_Options$AskChange, 'id1', 'Ask:', 'number', _user$project$Common_Miscellaneous$CX39, model.ask),
+								_0: A6(_user$project$Common_Miscellaneous$makeFGRInput, _user$project$Maunaloa_Options_Types$AskChange, 'id1', 'Ask:', 'number', _user$project$Common_Miscellaneous$CX39, model.ask),
 								_1: {
 									ctor: '::',
-									_0: A6(_user$project$Common_Miscellaneous$makeFGRInput, _user$project$Maunaloa_Options$BidChange, 'id2', 'Bid:', 'number', _user$project$Common_Miscellaneous$CX39, model.bid),
+									_0: A6(_user$project$Common_Miscellaneous$makeFGRInput, _user$project$Maunaloa_Options_Types$BidChange, 'id2', 'Bid:', 'number', _user$project$Common_Miscellaneous$CX39, model.bid),
 									_1: {
 										ctor: '::',
-										_0: A6(_user$project$Common_Miscellaneous$makeFGRInput, _user$project$Maunaloa_Options$VolumeChange, 'id3', 'Volume:', 'number', _user$project$Common_Miscellaneous$CX39, model.volume),
+										_0: A6(_user$project$Common_Miscellaneous$makeFGRInput, _user$project$Maunaloa_Options_Types$VolumeChange, 'id3', 'Volume:', 'number', _user$project$Common_Miscellaneous$CX39, model.volume),
 										_1: {
 											ctor: '::',
-											_0: A6(_user$project$Common_Miscellaneous$makeFGRInput, _user$project$Maunaloa_Options$SpotChange, 'id4', 'Spot:', 'number', _user$project$Common_Miscellaneous$CX39, model.spot),
+											_0: A6(_user$project$Common_Miscellaneous$makeFGRInput, _user$project$Maunaloa_Options_Types$SpotChange, 'id4', 'Spot:', 'number', _user$project$Common_Miscellaneous$CX39, model.spot),
 											_1: {ctor: '[]'}
 										}
 									}
@@ -11641,19 +11808,46 @@ var _user$project$Maunaloa_Options$view = function (model) {
 						}),
 					_1: {
 						ctor: '::',
-						_0: A2(_user$project$Common_ModalDialog$alert, model.dlgAlert, _user$project$Maunaloa_Options$AlertOk),
+						_0: A2(_user$project$Common_ModalDialog$alert, model.dlgAlert, _user$project$Maunaloa_Options_Types$AlertOk),
 						_1: {ctor: '[]'}
 					}
 				}
 			}
 		});
 };
-var _user$project$Maunaloa_Options$main = _elm_lang$html$Html$programWithFlags(
+
+var _user$project$Maunaloa_Options_Main$initModel = function (flags) {
+	return {
+		tickers: _elm_lang$core$Maybe$Nothing,
+		selectedTicker: '-1',
+		stock: _elm_lang$core$Maybe$Nothing,
+		options: _elm_lang$core$Maybe$Nothing,
+		risc: '0.0',
+		flags: flags,
+		tableState: _evancz$elm_sortable_table$Table$initialSort('Ticker'),
+		dlgPurchase: _user$project$Common_ModalDialog$DialogHidden,
+		dlgAlert: _user$project$Common_ModalDialog$DialogHidden,
+		selectedPurchase: _elm_lang$core$Maybe$Nothing,
+		isRealTimePurchase: true,
+		ask: '0.0',
+		bid: '0.0',
+		volume: '10',
+		spot: '0.0'
+	};
+};
+var _user$project$Maunaloa_Options_Main$init = function (flags) {
+	return {
+		ctor: '_Tuple2',
+		_0: _user$project$Maunaloa_Options_Main$initModel(flags),
+		_1: _user$project$Maunaloa_Options_Commands$fetchTickers
+	};
+};
+var _user$project$Maunaloa_Options_Main$main = _elm_lang$html$Html$programWithFlags(
 	{
-		init: _user$project$Maunaloa_Options$init,
-		view: _user$project$Maunaloa_Options$view,
-		update: _user$project$Maunaloa_Options$update,
-		subscriptions: function (_p17) {
+		init: _user$project$Maunaloa_Options_Main$init,
+		view: _user$project$Maunaloa_Options_Views$view,
+		update: _user$project$Maunaloa_Options_Update$update,
+		subscriptions: function (_p0) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})(
@@ -11668,8 +11862,9 @@ var _user$project$Maunaloa_Options$main = _elm_lang$html$Html$programWithFlags(
 var Elm = {};
 Elm['Maunaloa'] = Elm['Maunaloa'] || {};
 Elm['Maunaloa']['Options'] = Elm['Maunaloa']['Options'] || {};
-if (typeof _user$project$Maunaloa_Options$main !== 'undefined') {
-    _user$project$Maunaloa_Options$main(Elm['Maunaloa']['Options'], 'Maunaloa.Options', undefined);
+Elm['Maunaloa']['Options']['Main'] = Elm['Maunaloa']['Options']['Main'] || {};
+if (typeof _user$project$Maunaloa_Options_Main$main !== 'undefined') {
+    _user$project$Maunaloa_Options_Main$main(Elm['Maunaloa']['Options']['Main'], 'Maunaloa.Options.Main', undefined);
 }
 
 if (typeof define === "function" && define['amd'])
