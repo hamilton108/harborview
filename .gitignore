@@ -13,4 +13,5 @@ out/
 tmp/
 elm/elm-charts.js
 elm/elm-stuff/
+elm/elm-optins.js
 *.map
