@@ -2,11 +2,13 @@ var MAUNALOA = MAUNALOA || {};
 
 MAUNALOA.svg = {
     draggable : class Draggable {
+        /*
         constructor(svgId){
             this.svgId = svgId;
         }
-        addLine() {
-            const svg = document.getElementById(this.svgId);
+        */
+        static addLine(svgId) {
+            const svg = document.getElementById(svgId);
             if (svg === null) {
                 return;
             }

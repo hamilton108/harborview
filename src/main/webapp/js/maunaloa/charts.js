@@ -2,16 +2,17 @@ var MAUNALOA = MAUNALOA || {};
 
 
 document.addEventListener("DOMContentLoaded", function() {
-  let repos1 = null;
-  let repos2 = null;
-  let repos3 = null;
-  const draggable1 = new MAUNALOA.svg.draggable("svg-1"); //Draggable("svg-1");
+  var repos1 = null;
+  var repos2 = null;
+  var repos3 = null;
   const node = document.getElementById('my-app');
   const app = Elm.Maunaloa.Charts.embed(node, {
     chartResolution: 1
   });
   const scrapbook1 = MAUNALOA.scrapbook.create({
-    id_checkbox: "scrapbook1",
+    //id_checkbox: "scrapbook1",
+      id_layer: "rg-layer1",
+      id_svg: "svg-1",
     id_div1: "div-1x",
     id_divScrap: "div-1scrap",
     id_clear: "btn-scrapbook1-clear",
@@ -30,7 +31,9 @@ document.addEventListener("DOMContentLoaded", function() {
     id_rgLine: "rg-line1"
   });
   const scrapbook2 = MAUNALOA.scrapbook.create({
-    id_checkbox: "scrapbook2",
+    //id_checkbox: "scrapbook2",
+      id_layer: "rg-layer2",
+      id_svg: "svg-2",
     id_div1: "div-2x",
     id_divScrap: "div-2scrap",
     id_clear: "btn-scrapbook2-clear",
@@ -205,9 +208,11 @@ document.addEventListener("DOMContentLoaded", function() {
   };
   */
     //------------- Draggable ---------------->
+    //const draggable1 = new MAUNALOA.svg.draggable("svg-1"); //Draggable("svg-1");
     const draggableBtn1 = document.getElementById("btn-draggable-1");
     draggableBtn1.onclick = function() {
-        draggable1.addLine();
+        //draggable1.addLine();
+        MAUNALOA.svg.draggable.addLine("svg-1");
     };
 
   //------------- drawRiscLines ---------------->

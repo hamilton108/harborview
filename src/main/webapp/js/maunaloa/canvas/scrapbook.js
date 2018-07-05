@@ -22,7 +22,7 @@ MAUNALOA.scrapbook = {
   obj_comment: null,
   obj_color: null,
   create: function(param) {
-    var SCRAPBOOK = function() {}
+    var SCRAPBOOK = function() {};
     SCRAPBOOK.prototype = MAUNALOA.scrapbook;
     SCRAPBOOK.constructor.prototype = SCRAPBOOK;
     var result = new SCRAPBOOK();
@@ -30,12 +30,50 @@ MAUNALOA.scrapbook = {
     return result;
   },
   init: function(param) {
+    this.id_rgLine = param.id_rgLine;
     this.mode = this.MODE_NONE;
     this.id_canvas_0 = param.id_canvas_0;
     this.obj_color = document.getElementById(param.id_color);
     this.obj_comment = document.getElementById(param.id_comment);
     this.obj_arrow_orient = document.getElementById(param.id_arrow_orient);
-    this.id_rgLine = param.id_rgLine;
+      const rgQry = `input[name="${param.id_layer}"]`;
+
+      const rgs = document.querySelectorAll(rgQry);
+      const rgClick = (event) => {
+          var div_1x = document.getElementById(param.id_div1);
+          var div_1scrap = document.getElementById(param.id_divScrap);
+          var div_svg = document.getElementById(param.id_svg);
+          const v = event.target.value;
+          switch (v) {
+              case "1":
+                  div_1scrap.style.zIndex = "10";
+                  div_1x.style.zIndex = "0";
+                  div_svg.style.zIndex = "0";
+               break;
+              case "2":
+                  div_1scrap.style.zIndex = "0";
+                  div_1x.style.zIndex = "10";
+                  div_svg.style.zIndex = "0";
+                  break;
+              case "3":
+                  div_1scrap.style.zIndex = "0";
+                  div_1x.style.zIndex = "0";
+                  div_svg.style.zIndex = "10";
+                  break;
+          }
+      };
+      rgs.forEach(rg => {
+          rg.onclick = rgClick;
+      });
+      var c_scrap = document.getElementById(param.id_canvas);
+      if (c_scrap !== null) {
+          c_scrap.addEventListener('mousedown', this.handleMouseDown(this), false);
+          c_scrap.addEventListener('mousemove', this.handleMouseMove(this), false);
+          c_scrap.addEventListener('mouseup', this.handleMouseDone(this), false);
+          c_scrap.addEventListener('mouseleave', this.handleMouseDone(this), false);
+          this.ctx = c_scrap.getContext("2d");
+      }
+    /*
     var scrapbook = document.getElementById(param.id_checkbox);
     if (scrapbook !== null) {
 
@@ -58,27 +96,28 @@ MAUNALOA.scrapbook = {
         }
       }
     }
-    var saveBtn = document.getElementById(param.id_save);
+    */
+    const saveBtn = document.getElementById(param.id_save);
     if (saveBtn !== null) {
       saveBtn.onclick = this.saveCanvas(this);
     }
-    var clearBtn = document.getElementById(param.id_clear);
+    const clearBtn = document.getElementById(param.id_clear);
     if (clearBtn !== null) {
       clearBtn.onclick = this.clearCanvas(this);
     }
-    var textBtn = document.getElementById(param.id_text);
+    const textBtn = document.getElementById(param.id_text);
     if (textBtn !== null) {
       textBtn.onclick = this.placeText(this);
     }
-    var lineBtn = document.getElementById(param.id_line);
+    const lineBtn = document.getElementById(param.id_line);
     if (lineBtn !== null) {
       lineBtn.onclick = this.drawLine(this);
     }
-    var arrowBtn = document.getElementById(param.id_arrow);
+    const arrowBtn = document.getElementById(param.id_arrow);
     if (arrowBtn !== null) {
       arrowBtn.onclick = this.drawArrowLine(this);
     }
-    var horizBtn = document.getElementById(param.id_horiz);
+    const horizBtn = document.getElementById(param.id_horiz);
     if (horizBtn !== null) {
       horizBtn.onclick = this.drawHorizLine(this);
     }
@@ -89,16 +128,16 @@ MAUNALOA.scrapbook = {
     }
   },
   drawArrowLine_: function(ctx, x, y, comment, orientation) {
-    var x1 = x - 140;
-    var y1 = y + 50;
-    var x2 = x - 105;
-    var y2 = y + 120;
-    var x3 = x - 20;
-    var y3 = y + 5;
-    var x4 = x + 5;
-    var y4 = y + 15;
-    var x5 = x - 160;
-    var y5 = y + 40;
+    let x1 = x - 140;
+    let y1 = y + 50;
+    let x2 = x - 105;
+    let y2 = y + 120;
+    let x3 = x - 20;
+    let y3 = y + 5;
+    let x4 = x + 5;
+    let y4 = y + 15;
+    let x5 = x - 160;
+    let y5 = y + 40;
     switch (orientation) {
       case "NW":
         var ty = 2 * y;
@@ -109,8 +148,8 @@ MAUNALOA.scrapbook = {
         y5 = ty - y5 + 10;
         break;
       case "NE":
-        var tx = 2 * x;
-        var ty = 2 * y;
+        let tx = 2 * x;
+        let ty = 2 * y;
         x1 = tx - x1;
         y1 = ty - y1;
         x2 = tx - x2;
@@ -163,11 +202,11 @@ MAUNALOA.scrapbook = {
   },
   saveCanvas: function(self) {
     return function() {
-      var canvas = self.ctx.canvas; //document.getElementById('canvas');
-      var newCanvas = document.createElement('canvas');
+      const canvas = self.ctx.canvas; //document.getElementById('canvas');
+      const newCanvas = document.createElement('canvas');
       newCanvas.width = canvas.width;
       newCanvas.height = canvas.height;
-      var newCtx = newCanvas.getContext("2d");
+      const newCtx = newCanvas.getContext("2d");
       newCtx.fillStyle = "FloralWhite";
       newCtx.fillRect(0, 0, canvas.width, canvas.height);
       newCtx.drawImage(canvas, 0, 0);
@@ -177,17 +216,17 @@ MAUNALOA.scrapbook = {
         newCtx.drawImage(canvas_0, 0, 0);
       }
       */
-      var c0s = self.id_canvas_0;
+      const c0s = self.id_canvas_0;
       if (c0s !== null) {
-        for (var i=0; i<c0s.length; ++i) {
-            var canvas_0 = document.getElementById(c0s[i]);
+        for (let i=0; i<c0s.length; ++i) {
+            const canvas_0 = document.getElementById(c0s[i]);
             newCtx.drawImage(canvas_0, 0, 0);
         }
       }
       newCanvas.toBlob(function(blob) {
-        var newImg = document.createElement('img');
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement("a");
+        //const newImg = document.createElement('img');
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
         a.href = url;
         a.download = "scrap.png";
         document.body.appendChild(a);
@@ -205,23 +244,22 @@ MAUNALOA.scrapbook = {
     this.clickY.push(y);
   },
   redraw: function() {
-    var context = this.ctx;
-    var canvas = this.ctx.canvas;
+    const context = this.ctx;
     context.strokeStyle = this.lineColor;
     context.lineJoin = "round";
     context.lineWidth = this.lineSize;
-    var cx = this.clickX;
-    var cy = this.clickY;
+    const cx = this.clickX;
+    const cy = this.clickY;
     context.beginPath();
     context.moveTo(cx[0], cy[0]);
-    for (var i = 1; i < cx.length; ++i) {
+    for (let i = 1; i < cx.length; ++i) {
       context.lineTo(cx[i], cy[i]);
     }
     context.stroke();
   },
   getLineSize: function() {
-    var qry = 'input[name="' + this.id_rgLine + '"]:checked';
-    var rgLine = document.querySelector(qry).value;
+    const qry = 'input[name="' + this.id_rgLine + '"]:checked';
+    const rgLine = document.querySelector(qry).value;
     switch (rgLine) {
       case "1":
         return 1;
@@ -243,19 +281,18 @@ MAUNALOA.scrapbook = {
           self.p0 = {
             x: e.offsetX,
             y: e.offsetY
-          }
+          };
           self.mode = self.MODE_LINE_2;
           break;
         case self.MODE_LINE_2:
-          var context = self.ctx;
-          var canvas = self.ctx.canvas;
-          context.strokeStyle = self.lineColor;
-          context.lineJoin = "round";
-          context.lineWidth = self.lineSize;
-          context.beginPath();
-          context.moveTo(self.p0.x, self.p0.y);
-          context.lineTo(e.offsetX, e.offsetY);
-          context.stroke();
+          const context2 = self.ctx;
+          context2.strokeStyle = self.lineColor;
+          context2.lineJoin = "round";
+          context2.lineWidth = self.lineSize;
+          context2.beginPath();
+          context2.moveTo(self.p0.x, self.p0.y);
+          context2.lineTo(e.offsetX, e.offsetY);
+          context2.stroke();
           self.p0 = null;
           self.mode = self.MODE_NONE;
           break;
@@ -263,7 +300,7 @@ MAUNALOA.scrapbook = {
           self.mode = self.MODE_NONE;
           self.ctx.fillStyle = "#000";
           self.ctx.font = "16px Arial";
-          var comment = self.obj_comment.value; //document.getElementById(self.id_comment).value;
+          const comment = self.obj_comment.value; //document.getElementById(self.id_comment).value;
           self.ctx.fillText(comment, e.offsetX, e.offsetY);
           break;
         case self.MODE_ARROW:
@@ -278,19 +315,18 @@ MAUNALOA.scrapbook = {
           self.p0 = {
             x: e.offsetX,
             y: e.offsetY
-          }
+          };
           self.mode = self.MODE_HORIZ_2;
           break;
         case self.MODE_HORIZ_2:
-          var context = self.ctx;
-          var canvas = self.ctx.canvas;
-          context.strokeStyle = self.lineColor;
-          context.lineJoin = "round";
-          context.lineWidth = self.lineSize;
-          context.beginPath();
-          context.moveTo(self.p0.x, self.p0.y);
-          context.lineTo(e.offsetX, self.p0.y);
-          context.stroke();
+          const context3 = self.ctx;
+          context3.strokeStyle = self.lineColor;
+          context3.lineJoin = "round";
+          context3.lineWidth = self.lineSize;
+          context3.beginPath();
+          context3.moveTo(self.p0.x, self.p0.y);
+          context3.lineTo(e.offsetX, self.p0.y);
+          context3.stroke();
           self.p0 = null;
           self.mode = self.MODE_NONE;
           break;
@@ -324,4 +360,4 @@ MAUNALOA.scrapbook = {
       }
     }
   }
-}
+};
