@@ -79,7 +79,7 @@ export default class Draggable {
                                l.setAttribute("stroke-width", 1);
                                return l;
                                };
-    static removeElements() {
+    static removeElements(svgId) {
         const svg = document.getElementById(svgId);
         if (svg === null) {
             return;

@@ -54,11 +54,6 @@ document.addEventListener("DOMContentLoaded", function() {
     //---------------------- Elm.Maunaloa.Charts ---------------------------
 
     const elmApp = (appId, chartRes, myCanvases) => {
-        /*
-        const drawCanvas = function (chartInfo) {
-            Chart.drawCanvas(chartInfo);
-        };
-        */
         const myChart = new Chart(myCanvases);
         const node = document.getElementById(appId);
         const app = Elm.Maunaloa.Charts.embed(node, {

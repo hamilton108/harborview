@@ -4,16 +4,16 @@ export default class Chart {
         this.myCanvases = myCanvases;
     }
     drawCanvases(cfg) {
-        this.drawCanvas(cfg,cfg.chart,this.myCanvases.LINES,true);
-        this.drawCanvas(cfg,cfg.chart2,this.myCanvases.OSC,true);
-        this.drawCanvas(cfg,cfg.chart3,this.myCanvases.VOLUME,false);
+        Chart.drawCanvas(cfg,cfg.chart,this.myCanvases.LINES,true);
+        Chart.drawCanvas(cfg,cfg.chart2,this.myCanvases.OSC,true);
+        Chart.drawCanvas(cfg,cfg.chart3,this.myCanvases.VOLUME,false);
     }
-    drawCanvas(cfg,curChart,curCanvas,drawLegend) {
+    static drawCanvas(cfg, curChart, curCanvas, drawLegend) {
         if (curChart === null) {
             return;
         }
         let ctx, canvas;
-        [ctx, canvas] = this.clearCanvas(curCanvas);
+        [ctx, canvas] = Chart.clearCanvas(curCanvas);
         const offsets = cfg.xaxis;
         const myHruler = MAUNALOA.hruler(1300, cfg.startdate, offsets, drawLegend, 5);
         myHruler.lines(ctx, canvas.height, cfg.numIncMonths);
@@ -39,7 +39,7 @@ export default class Chart {
             lineChart.drawCandlesticks(curChart.candlesticks);
         }
     }
-    clearCanvas(canvasId) {
+    static clearCanvas(canvasId) {
         const canvas = document.getElementById(canvasId);
         const ctx = canvas.getContext("2d");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
