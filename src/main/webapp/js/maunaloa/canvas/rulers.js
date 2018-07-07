@@ -1,24 +1,23 @@
 var MAUNALOA = MAUNALOA || {};
 
-
 MAUNALOA.vruler = function(chartHeight, valueRange) {
-  var double2decimal = function(x, roundingFactor) {
-    var rf = roundingFactor || 100;
+  const double2decimal = function(x, roundingFactor) {
+    const rf = roundingFactor || 100;
     return (Math.round(x * rf)) / rf;
-  }
-  var minVal = valueRange[0];
-  var maxVal = valueRange[1];
-  var ppy = chartHeight / (maxVal - minVal);
+  };
+  const minVal = valueRange[0];
+  const maxVal = valueRange[1];
+  const ppy = chartHeight / (maxVal - minVal);
 
-  var lines = function(ctx, chartWidth, numVlines) {
+  const lines = function(ctx, chartWidth, numVlines) {
     ctx.fillStyle = "black";
     ctx.font = "16px Arial";
     ctx.strokeStyle = "#bbb";
     ctx.lineWidth = 0.25;
-    var step = chartHeight / (numVlines - 1);
-    for (var i = 0; i < numVlines; ++i) {
-      var curStep = step * i;
-      var curVal = double2decimal(maxVal - (curStep / ppy));
+    const step = chartHeight / (numVlines - 1);
+    for (let i = 0; i < numVlines; ++i) {
+      const curStep = step * i;
+      const curVal = double2decimal(maxVal - (curStep / ppy));
       ctx.beginPath();
       ctx.moveTo(0, curStep);
       ctx.lineTo(chartWidth, curStep);
@@ -29,15 +28,15 @@ MAUNALOA.vruler = function(chartHeight, valueRange) {
       }
       ctx.stroke();
     }
-  }
-  var pixToValue = function(pix) {
+  };
+  const pixToValue = function(pix) {
     return double2decimal(maxVal - (pix / ppy));
-  }
-  var valueToPix = function(v) {
+  };
+  const valueToPix = function(v) {
     return Math.round((maxVal - v) * ppy);
-  }
+  };
   /*
-  var bottom = function() {
+  const bottom = function() {
     return chartHeight;
   }
   */
@@ -47,54 +46,56 @@ MAUNALOA.vruler = function(chartHeight, valueRange) {
     lines: lines,
     bottom: chartHeight
   }
-}
+};
 
 
 MAUNALOA.hruler = function(width, startDateAsMillis, offsets, drawLegend, buffer) {
-  var x0 = offsets[offsets.length - 1];
-  var x1 = offsets[0] + buffer;
-  var diffDays = x1 - x0;
-  var ppx = width / diffDays;
+  const x0 = offsets[offsets.length - 1];
+  const x1 = offsets[0] + buffer;
+  const curDiffDays = x1 - x0;
+  const ppx = width / curDiffDays;
 
-  var startDate = new Date(startDateAsMillis);
+  const startDate = new Date(startDateAsMillis);
 
-  var date2string = function(d) {
+  const date2string = function(d) {
     return (d.getMonth() + 1) + "." + d.getFullYear();
-  }
-  var calcPix = function(x) {
-    var curDiffDays = x - x0;
+  };
+  const calcPix = function(x) {
+    const curDiffDays = x - x0;
     return ppx * curDiffDays;
-  }
-  var day_millis = 86400000;
-  var dateToPix = function(d) {
-    var curOffset = x0 + ((d - startDate) / day_millis);
+  };
+  const day_millis = 86400000;
+  const dateToPix = function(d) {
+    const curOffset = x0 + ((d - startDate) / day_millis);
     return calcPix(curOffset);
-  }
-  var timeStampToPix = function(tm) {
-    var d = new Date(tm);
+  };
+  const timeStampToPix = function(tm) {
+    const d = new Date(tm);
     return dateToPix(d);
-  }
-  var incMonths = function(origDate, numMonths) {
+  };
+  const incMonths = function(origDate, numMonths) {
     return new Date(origDate.getFullYear(), origDate.getMonth() + numMonths, 1);
-  }
-  var diffDays = function(d0, d1) {
+  };
+  /*
+  const diffDays = function(d0, d1) {
     return (d1 - d0) / day_millis;
-  }
-  var offsetsToPix = function() {
-    var result = [];
-    for (var i = 0; i < offsets.length; ++i) {
+  };
+  */
+  const offsetsToPix = function() {
+    const result = [];
+    for (let i = 0; i < offsets.length; ++i) {
       result[i] = calcPix(offsets[i]);
     }
     return result;
-  }
-  var lines = function(ctx, chartHeight, numIncMonths) {
+  };
+  const lines = function(ctx, chartHeight, numIncMonths) {
     ctx.fillStyle = "black";
     ctx.font = "16px Arial";
     ctx.strokeStyle = "#bbb";
     ctx.lineWidth = 0.25;
-    var d0x = incMonths(startDate, numIncMonths);
-    var txtY = chartHeight - 5;
-    var curX = 0;
+    let d0x = incMonths(startDate, numIncMonths);
+    const txtY = chartHeight - 5;
+    let curX = 0;
     while (curX < width) {
       curX = dateToPix(d0x);
       // console.log("Canvas width: " + canvas.width + ", curX: " + curX);
@@ -102,13 +103,13 @@ MAUNALOA.hruler = function(width, startDateAsMillis, offsets, drawLegend, buffer
       ctx.moveTo(curX, 0);
       ctx.lineTo(curX, chartHeight);
       ctx.stroke();
-      if (drawLegend == true) {
+      if (drawLegend === true) {
         ctx.fillText(date2string(d0x), curX + 5, txtY);
       }
       d0x = incMonths(d0x, numIncMonths);
     }
-  }
-  var xaxis = offsetsToPix();
+  };
+  const xaxis = offsetsToPix();
   return {
     dateToPix: dateToPix,
     timeStampToPix: timeStampToPix,
@@ -116,4 +117,4 @@ MAUNALOA.hruler = function(width, startDateAsMillis, offsets, drawLegend, buffer
     startDate: startDate,
     lines: lines
   }
-}
+};
