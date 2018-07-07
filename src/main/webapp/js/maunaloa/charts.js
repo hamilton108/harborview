@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const app = Elm.Maunaloa.Charts.embed(node, {
             chartResolution: chartRes
         });
-        app.ports.drawCanvas.subscribe(cfg => myChart.drawCanvas(cfg));
+        app.ports.drawCanvas.subscribe(cfg => myChart.drawCanvases(cfg));
     };
     elmApp("my-app", 1, canvases.DAY);
 });
