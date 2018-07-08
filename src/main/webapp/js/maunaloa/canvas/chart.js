@@ -4,7 +4,7 @@ export default class Chart {
         this.myCanvases = myCanvases;
     }
     drawCanvases(cfg) {
-        Chart.drawCanvas(cfg,cfg.chart,this.myCanvases.LINES,true);
+        Chart.drawCanvas(cfg,cfg.chart,this.myCanvases.MAIN_CHART,true);
         Chart.drawCanvas(cfg,cfg.chart2,this.myCanvases.OSC,true);
         Chart.drawCanvas(cfg,cfg.chart3,this.myCanvases.VOLUME,false);
     }

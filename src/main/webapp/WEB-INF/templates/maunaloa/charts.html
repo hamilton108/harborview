@@ -12,25 +12,25 @@
 
     <div class="grid-main">
         <div class="main-chart">
-            <canvas id="canvas1" class="c1"></canvas>
+            <canvas id="day-chart" class="c1"></canvas>
         </div>
         <div class="main-chart" id="div-1scrap">
-            <canvas id="canvas1-scrap" class="c1"></canvas>
+            <canvas id="day-doodle" class="c1"></canvas>
         </div>
         <div class="main-chart" id="div-1x">
-            <canvas class="c1" id="canvas1x"></canvas>
+            <canvas id="day-levelline" class="c1"></canvas>
         </div>
-        <svg class="main-chart" id="svg-1" width="1310" height="500" viewbox="0 0 1310 500">
+        <svg class="main-chart" id="day-svg" width="1310" height="500" viewbox="0 0 1310 500">
             <line x1="10" y1="10" x2="1300" y2="10" style="stroke:rgb(0,0,120);stroke-width:1" />
             <line x1="1300" y1="10" x2="1300" y2="490" style="stroke:rgb(0,0,120);stroke-width:1" />
             <line x1="1300" y1="490" x2="10" y2="490" style="stroke:rgb(0,0,120);stroke-width:1" />
             <line x1="10" y1="490" x2="10" y2="10" style="stroke:rgb(0,0,120);stroke-width:1" />
         </svg>
         <div class="sub-chart-1">
-            <canvas id="canvas1c" class="c3"></canvas>
+            <canvas id="day-vol" class="c3"></canvas>
         </div>
         <div class="sub-chart-2">
-            <canvas id="canvas1b" class="c2"></canvas>
+            <canvas id="day-osc" class="c2"></canvas>
         </div>
         <div th:replace="maunaloa/scrapbook.html :: scrapbook(1)"></div>
     </div>

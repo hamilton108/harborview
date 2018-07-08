@@ -4,29 +4,21 @@ import Chart from "./canvas/chart.js";
 document.addEventListener("DOMContentLoaded", function() {
     const canvases = {
         DAY : {
-            LINES: 'canvas1',
-            LINES_OVERLAY: 'canvas1x',
-            LINES_OVERLAY_2: 'canvas1-scrap',
-            VOLUME: 'canvas1c',
-            OSC: 'canvas1b',
+            SVG: 'day-svg',
+            MAIN_CHART: 'day-chart',
+            DOODLE: 'day-doodle',
+            LEVEL_LINES: 'day-levellines',
+            VOLUME: 'day-vol',
+            OSC: 'day-osc',
         },
         WEEK : {
-            LINES: 'canvas2',
-            LINES_OVERLAY: 'canvas2x',
-            LINES_OVERLAY_2: 'canvas2-scrap',
-            VOLUME: 'canvas2c',
-            OSC: 'canvas2b',
         },
         MONTH : {
-            LINES: 'canvas3',
-            LINES_OVERLAY: 'canvas3x',
-            LINES_OVERLAY_2: null,
-            VOLUME: 'canvas3c',
-            OSC: 'canvas3b',
         }
     };
     const scrapbooks = {
         DAY : {
+            RG_LAYER: "rg_layer1",
 
         },
         WEEK : {
