@@ -10,10 +10,10 @@
     "plates": "^0.4.11",
     "popper.js": "^1.14.3",
     "st": "^1.2.2",
+    "uglify-es": "^3.3.9",
     "union": "^0.4.6"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "scripts": {
     "start": "node app.js"
   },

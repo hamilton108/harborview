@@ -1,15 +1,22 @@
 #!/bin/bash
 
-HOME="/home/rcs/opt/java/harborview"
+# HOME="/home/rcs/opt/java/harborview"
 
-JS="$HOME/src/resources/public/js/maunaloa"
+JS="src/main/webapp/js/maunaloa"
 
-# ELM="$HOME/elm/src"
+JSC="$JS/canvas"
+SVG="$JS/svg"
 
-FILES="/js/charts.js /js/canvas/rulers.js /js/canvas/linechart.js /js/canvas/levelline.js /js/canvas/scrapbook.js"
+# FILES="/js/charts.js /js/canvas/rulers.js /js/canvas/linechart.js /js/canvas/levelline.js /js/canvas/scrapbook.js"
 
-# docker run -it --rm -v $JS:/js --name uglify rcs/node uglifyjs "$@"
+JS_FILES="$JS/charts.js $JSC/linechart.js $JSC/rulers.js"
 
-docker run -it --rm -v $JS:/js --name uglify rcs/uglify-es uglifyjs $FILES -o /js/maunaloa.min.js --compress
+JS_MODULES="$JSC/chart.js $SVG/draggable.js"
+
+UGLIFY="node/node_modules/uglify-es/bin/uglifyjs"
+
+$UGLIFY $JS_FILES -o $JS/maunaloa.min.js --compress --ecma 6 -b
+
+$UGLIFY $JS_MODULES -o $JS/modules.min.js --compress --ecma 6 -b
 
 exit 0

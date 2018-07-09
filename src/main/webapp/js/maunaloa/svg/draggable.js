@@ -1,4 +1,4 @@
-export default class Draggable {
+export class Draggable {
     /*
     constructor(svgId){
         this.svgId = svgId;

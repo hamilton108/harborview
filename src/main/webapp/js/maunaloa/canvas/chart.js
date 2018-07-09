@@ -1,5 +1,6 @@
+// import {Hruler,Vruler} from "./rulers.js";
 
-export default class Chart {
+export class Chart {
     constructor(myCanvases) {
         this.myCanvases = myCanvases;
     }
@@ -16,9 +17,11 @@ export default class Chart {
         [ctx, canvas] = Chart.clearCanvas(curCanvas);
         const offsets = cfg.xaxis;
         const myHruler = MAUNALOA.hruler(1300, cfg.startdate, offsets, drawLegend, 5);
+        // const myHruler = new Hruler(1300, cfg.startdate, offsets, drawLegend, 5);
         myHruler.lines(ctx, canvas.height, cfg.numIncMonths);
 
         const myVruler = MAUNALOA.vruler(canvas.height, curChart.valueRange);
+        //const myVruler = new Vruler(canvas.height, curChart.valueRange);
         myVruler.lines(ctx, canvas.width, curChart.numVlines);
 
         const lineChart = MAUNALOA.lineChart(myHruler, myVruler, ctx);

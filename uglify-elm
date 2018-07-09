@@ -1,0 +1,13 @@
+#!/bin/bash
+
+ELM="charts"
+
+JS="src/main/webapp/js/maunaloa"
+
+JS_FILES="$JS/elm-$ELM.js"
+
+UGLIFY="node/node_modules/uglify-es/bin/uglifyjs"
+
+$UGLIFY $JS_FILES -o $JS/elm-$ELM.min.js --compress
+
+exit 0

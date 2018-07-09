@@ -1,5 +1,6 @@
-import Draggable from "./svg/draggable.js";
-import Chart from "./canvas/chart.js";
+import {Draggable} from "./svg/draggable.js";
+import {Chart} from "./canvas/chart.js";
+//import Scrapbook from "./canvas/scrapbook.js";
 
 document.addEventListener("DOMContentLoaded", function() {
     const canvases = {
@@ -54,4 +55,5 @@ document.addEventListener("DOMContentLoaded", function() {
         app.ports.drawCanvas.subscribe(cfg => myChart.drawCanvases(cfg));
     };
     elmApp("my-app", 1, canvases.DAY);
+    //---------------------- Scrapbooks ---------------------------
 });

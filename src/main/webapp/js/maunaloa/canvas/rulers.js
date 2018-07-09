@@ -1,4 +1,4 @@
-var MAUNALOA = MAUNALOA || {};
+ var MAUNALOA = MAUNALOA || {};
 
 MAUNALOA.vruler = function(chartHeight, valueRange) {
   const double2decimal = function(x, roundingFactor) {
