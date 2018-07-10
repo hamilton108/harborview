@@ -1,11 +1,10 @@
 import {Draggable} from "./svg/draggable.js";
 import {Chart} from "./canvas/chart.js";
-//import Scrapbook from "./canvas/scrapbook.js";
+import {Scrapbook} from "./canvas/scrapbook.js";
 
 document.addEventListener("DOMContentLoaded", function() {
     const canvases = {
         DAY : {
-            SVG: 'day-svg',
             MAIN_CHART: 'day-chart',
             DOODLE: 'day-doodle',
             LEVEL_LINES: 'day-levellines',
@@ -19,7 +18,22 @@ document.addEventListener("DOMContentLoaded", function() {
     };
     const scrapbooks = {
         DAY : {
-            RG_LAYER: "rg_layer1",
+            SVG: 'day-svg',
+            DOODLE: 'div-day-doodle',
+            LEVEL_LINES: 'div-day-levelline',
+            RG_LAYER: "rg-layer1",
+            COLOR: "color1",
+            RG_LINE_SIZE: "rg-line1",
+            BTN_LINE: "btn-scrapbook1-line",
+            BTN_HORIZ: "btn-scrapbook1-horiz",
+            BTN_ARROW: "btn-scrapbook1-arrow",
+            BTN_TEXT: "btn-scrapbook1-text",
+            BTN_CLEAR: "btn-scrapbook1-clear",
+            BTN_SAVE: "btn-scrapbook1-save",
+            BTN_LEVELLINE: "btn-levelline-1",
+            BTN_DRAGGABLE: "btn-draggable-1",
+            ARROW_ORIENT: "arrow1-orient",
+            COMMENT: "comment1",
 
         },
         WEEK : {
@@ -56,4 +70,5 @@ document.addEventListener("DOMContentLoaded", function() {
     };
     elmApp("my-app", 1, canvases.DAY);
     //---------------------- Scrapbooks ---------------------------
+    const scrap1 = new Scrapbook(scrapbooks.DAY);
 });
