@@ -17,3 +17,4 @@ elm/elm-optins.js
 *.map
 *.orig*
 node_modules/
+*.min.*

@@ -1,4 +1,3 @@
-import {Draggable} from "./svg/draggable.js";
 import {Chart} from "./canvas/chart.js";
 import {Scrapbook} from "./canvas/scrapbook.js";
 
@@ -6,8 +5,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const canvases = {
         DAY : {
             MAIN_CHART: 'day-chart',
-            DOODLE: 'day-doodle',
-            LEVEL_LINES: 'day-levellines',
             VOLUME: 'day-vol',
             OSC: 'day-osc',
         },
@@ -19,8 +16,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const scrapbooks = {
         DAY : {
             SVG: 'day-svg',
-            DOODLE: 'div-day-doodle',
-            LEVEL_LINES: 'div-day-levelline',
+            DIV_DOODLE: 'div-day-doodle',
+            DIV_LEVEL_LINES: 'div-day-levelline',
+            DOODLE: 'day-doodle',
+            LEVEL_LINES: 'day-levellines',
             RG_LAYER: "rg-layer1",
             COLOR: "color1",
             RG_LINE_SIZE: "rg-line1",
@@ -54,10 +53,12 @@ document.addEventListener("DOMContentLoaded", function() {
         setCanvasSize('canvas.c3', 1310, 110);
     };
     setCanvasSizes();
+    /*
     const draggableBtn1 = document.getElementById("btn-draggable-1");
     draggableBtn1.onclick = function() {
         Draggable.addLine("svg-1");
     };
+    */
     //---------------------- Elm.Maunaloa.Charts ---------------------------
 
     const elmApp = (appId, chartRes, myCanvases) => {

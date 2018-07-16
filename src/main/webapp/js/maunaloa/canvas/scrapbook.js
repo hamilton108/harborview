@@ -1,17 +1,20 @@
+import {Draggable} from "./../svg/draggable.js";
+import {Doodle} from "./doodle.js";
 
 export class Scrapbook {
     constructor(config) {
-        this.config = config;
         Scrapbook.initLayers(config);
+        Scrapbook.initDraggable(config);
+        Scrapbook.initDoodle(config);
     }
     static initLayers(cfg) {
         const rgQry = `input[name="${cfg.RG_LAYER}"]`;
 
         const rgs = document.querySelectorAll(rgQry);
         const rgClick = (event) => {
-            var div_doodle = document.getElementById(cfg.DOODLE);
-            var div_level = document.getElementById(cfg.LEVEL_LINES);
-            var div_svg = document.getElementById(cfg.SVG);
+            const div_doodle = document.getElementById(cfg.DIV_DOODLE);
+            const div_level = document.getElementById(cfg.DIV_LEVEL_LINES);
+            const div_svg = document.getElementById(cfg.SVG);
             const v = event.target.value;
             switch (v) {
                 case "1":
@@ -34,8 +37,17 @@ export class Scrapbook {
         rgs.forEach(rg => {
             rg.onclick = rgClick;
         });
-        document.getElementById(cfg.DOODLE).style.zIndex = "10";
-        document.getElementById(cfg.LEVEL_LINES).style.zIndex = "0";
+        document.getElementById(cfg.DIV_DOODLE).style.zIndex = "10";
+        document.getElementById(cfg.DIV_LEVEL_LINES).style.zIndex = "0";
         document.getElementById(cfg.SVG).style.zIndex = "0";
+    }
+    static initDraggable(cfg) {
+        const draggableBtn1 = document.getElementById(cfg.BTN_DRAGGABLE);
+        draggableBtn1.onclick = function() {
+            Draggable.addLine(cfg.SVG);
+        };
+    }
+    static initDoodle(cfg) {
+        const doodle =  new Doodle(cfg);
     }
 }
