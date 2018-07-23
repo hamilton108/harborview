@@ -95,6 +95,8 @@ export class Doodle {
                 this.MODE = Doodle.MODE_NONE;
                 break;
         }
+        e.preventDefault();
+        e.stopPropagation();
     }
     static drawArrowLine(ctx, x, y, comment, orientation) {
         let x1 = x - 140;

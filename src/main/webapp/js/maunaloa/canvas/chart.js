@@ -1,15 +1,18 @@
 // import {Hruler,Vruler} from "./rulers.js";
 
 export class Chart {
-    constructor(myCanvases) {
+    constructor(myCanvases,myLevelLines) {
         this.myCanvases = myCanvases;
+        //this.myHruler = null;
+        //this.myVruler = null;
+        this.myLevelLines = myLevelLines;
     }
     drawCanvases(cfg) {
-        Chart.drawCanvas(cfg,cfg.chart,this.myCanvases.MAIN_CHART,true);
-        Chart.drawCanvas(cfg,cfg.chart2,this.myCanvases.OSC,true);
-        Chart.drawCanvas(cfg,cfg.chart3,this.myCanvases.VOLUME,false);
+        Chart.drawCanvas(cfg,cfg.chart,this.myCanvases.MAIN_CHART,true, this.myLevelLines);
+        Chart.drawCanvas(cfg,cfg.chart2,this.myCanvases.OSC,true, null);
+        Chart.drawCanvas(cfg,cfg.chart3,this.myCanvases.VOLUME,false, null);
     }
-    static drawCanvas(cfg, curChart, curCanvas, drawLegend) {
+    static drawCanvas(cfg, curChart, curCanvas, drawLegend, levelLines) {
         if (curChart === null) {
             return;
         }
@@ -40,6 +43,9 @@ export class Chart {
         }
         if (curChart.candlesticks !== null) {
             lineChart.drawCandlesticks(curChart.candlesticks);
+        }
+        if (levelLines !== null) {
+            levelLines.reset(myVruler);
         }
     }
     static clearCanvas(canvasId) {

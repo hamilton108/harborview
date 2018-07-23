@@ -1,11 +1,13 @@
 import {Draggable} from "./../svg/draggable.js";
 import {Doodle} from "./doodle.js";
+//import {LevelLine} from "./levelline.js";
 
 export class Scrapbook {
     constructor(config) {
         Scrapbook.initLayers(config);
         Scrapbook.initDraggable(config);
         Scrapbook.initDoodle(config);
+        //Scrapbook.initLevelLine(config);
     }
     static initLayers(cfg) {
         const rgQry = `input[name="${cfg.RG_LAYER}"]`;
@@ -50,4 +52,14 @@ export class Scrapbook {
     static initDoodle(cfg) {
         const doodle =  new Doodle(cfg);
     }
+    /*
+    static initLevelLine(cfg) {
+        const levelLineBtn1 = document.getElementById(cfg.BTN_LEVELLINE);
+        levelLineBtn1.onclick = function() {
+            const config = {
+                canvas: null
+            };
+        };
+    }
+    */
 }

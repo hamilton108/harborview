@@ -1,5 +1,6 @@
 import {Chart} from "./canvas/chart.js";
 import {Scrapbook} from "./canvas/scrapbook.js";
+import {LevelLines} from "./canvas/levelline.js";
 
 document.addEventListener("DOMContentLoaded", function() {
     const canvases = {
@@ -61,15 +62,19 @@ document.addEventListener("DOMContentLoaded", function() {
     */
     //---------------------- Elm.Maunaloa.Charts ---------------------------
 
-    const elmApp = (appId, chartRes, myCanvases) => {
-        const myChart = new Chart(myCanvases);
+    const elmApp = (appId, chartRes, myCanvases, config) => {
+        const levelLines = new LevelLines(config);
+        const myChart = new Chart(myCanvases,levelLines);
         const node = document.getElementById(appId);
         const app = Elm.Maunaloa.Charts.embed(node, {
             chartResolution: chartRes
         });
-        app.ports.drawCanvas.subscribe(cfg => myChart.drawCanvases(cfg));
+        app.ports.drawCanvas.subscribe(cfg => {
+            myChart.drawCanvases(cfg);
+        });
+        const scrap = new Scrapbook(config);
     };
-    elmApp("my-app", 1, canvases.DAY);
+    elmApp("my-app", 1, canvases.DAY, scrapbooks.DAY);
     //---------------------- Scrapbooks ---------------------------
-    const scrap1 = new Scrapbook(scrapbooks.DAY);
+    //const scrap1 = new Scrapbook(scrapbooks.DAY);
 });
