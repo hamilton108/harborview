@@ -7,7 +7,8 @@ class LevelLine {
         this.color = "grey";
         this.x1 = x1;
         this.x2 = x2;
-        this.y = y;
+        this.y1 = y;
+        this.y2 = y;
         this.legend = conf.legendFn || function() {
             return this.levelValue;
         };
@@ -21,17 +22,16 @@ class LevelLine {
         this.levelValue = this.parent.vruler.pixToValue(this.y2);
     }
     draw() {
-        const y = this.y;
         const ctx = this.parent.ctx;
         ctx.lineWidth = this.lineWidth;
         ctx.beginPath();
-        ctx.moveTo(this.x1, y);
-        ctx.lineTo(this.x2, y);
+        ctx.moveTo(this.x1, this.y1);
+        ctx.lineTo(this.x2, this.y2);
         ctx.strokeStyle = this.color;
         ctx.stroke();
         ctx.font = "16px Arial";
         ctx.fillStyle = "crimson";
-        ctx.fillText(this.legend(), this.x1, y - 10);
+        ctx.fillText(this.legend(), this.x1, this.y1 - 10);
     }
 }
 
@@ -44,6 +44,9 @@ export class LevelLines {
         this.mdo = LevelLines.handleMouseDown(this);
         this.mmo = LevelLines.handleMouseMove(this);
         this.mup = LevelLines.handleMouseUp(this);
+        this.canvas.addEventListener('mouseup', this.mup, false);
+        this.canvas.addEventListener('mousedown', this.mdo, false);
+        this.canvas.addEventListener('mousemove', this.mmo, false);
         this.lines = [];
         this.nearest = null;
         const btn = document.getElementById(cfg.BTN_LEVELLINE);
@@ -54,6 +57,9 @@ export class LevelLines {
     reset(vruler) {
         this.vruler = vruler;
         this.lines = [];
+        if (this.ctx !== null) {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        }
     }
     levelValue(pix) {
         return this.vruler.pixToValue(pix);
