@@ -73,6 +73,11 @@ document.addEventListener("DOMContentLoaded", function() {
             myChart.drawCanvases(cfg);
         });
         const scrap = new Scrapbook(config);
+        const btnClear = document.getElementById(config.BTN_CLEAR);
+        btnClear.onclick = () => { 
+            scrap.clear();
+            levelLines.clearCanvas();
+        };
     };
     elmApp("my-app", 1, canvases.DAY, scrapbooks.DAY);
     //---------------------- Scrapbooks ---------------------------

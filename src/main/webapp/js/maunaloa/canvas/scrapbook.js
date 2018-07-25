@@ -6,8 +6,18 @@ export class Scrapbook {
     constructor(config) {
         Scrapbook.initLayers(config);
         Scrapbook.initDraggable(config);
-        Scrapbook.initDoodle(config);
+        this.doodle = Scrapbook.initDoodle(config);
         //Scrapbook.initLevelLine(config);
+        this.clearSvg = Scrapbook.clearSvgFn(config);
+    }
+    clear() {
+        this.doodle.clearCanvas();
+        this.clearSvg();
+    }
+    static clearSvgFn(cfg) {
+        return function () {
+            Draggable.removeElements(cfg.SVG);
+        }
     }
     static initLayers(cfg) {
         const rgQry = `input[name="${cfg.RG_LAYER}"]`;
@@ -50,7 +60,7 @@ export class Scrapbook {
         };
     }
     static initDoodle(cfg) {
-        const doodle =  new Doodle(cfg);
+        return new Doodle(cfg);
     }
     /*
     static initLevelLine(cfg) {

@@ -56,6 +56,9 @@ export class LevelLines {
     }
     reset(vruler) {
         this.vruler = vruler;
+        this.clearCanvas();
+    }
+    clearCanvas() {
         this.lines = [];
         if (this.ctx !== null) {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);

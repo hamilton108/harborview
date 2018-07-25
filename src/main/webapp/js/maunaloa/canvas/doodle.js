@@ -31,6 +31,10 @@ export class Doodle {
             obj.onclick = fn.bind(this);
         }
     }
+    clearCanvas() {
+        const canvas = this.canvas;
+        this.curContext.clearRect(0, 0, canvas.width, canvas.height)
+    }
     getLineSizeFn(lineSizeId) {
         return function() {
             const qry = `input[name="${lineSizeId}"]:checked`;

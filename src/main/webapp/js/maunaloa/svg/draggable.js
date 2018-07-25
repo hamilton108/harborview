@@ -84,6 +84,9 @@ export class Draggable {
         if (svg === null) {
             return;
         }
+        while (svg.lastChild) {
+            svg.removeChild(svg.lastChild);
+        }
     }
 }
 
