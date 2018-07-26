@@ -73,17 +73,6 @@ document.addEventListener("DOMContentLoaded", function() {
         canvases.forEach(cx => {
             newCtx.drawImage(cx, 0, 0);
         });
-        /*
-        newCtx.drawImage(canvas, 0, 0);
-        const c0s = self.id_canvas_0;
-        if (c0s !== null) {
-            for (let i = 0; i < c0s.length; ++i) {
-                const canvas_0 = document.getElementById(c0s[i]);
-                newCtx.drawImage(canvas_0, 0, 0);
-            }
-        }
-        */
-
         newCanvas.toBlob(function (blob) {
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
@@ -101,14 +90,15 @@ document.addEventListener("DOMContentLoaded", function() {
     const elmApp = (appId, chartRes, myCanvases, config) => {
         const levelLines = new LevelLines(config);
         const myChart = new Chart(myCanvases,levelLines);
+        const scrap = new Scrapbook(config);
         const node = document.getElementById(appId);
         const app = Elm.Maunaloa.Charts.embed(node, {
             chartResolution: chartRes
         });
         app.ports.drawCanvas.subscribe(cfg => {
+            scrap.clear();
             myChart.drawCanvases(cfg);
         });
-        const scrap = new Scrapbook(config);
         const btnClear = document.getElementById(config.BTN_CLEAR);
         btnClear.onclick = () => { 
             scrap.clear();

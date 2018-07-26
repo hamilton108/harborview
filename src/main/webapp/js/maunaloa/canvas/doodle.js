@@ -16,6 +16,7 @@ export class Doodle {
         this.guiEvent(cfg.BTN_LINE, () => { this.MODE = Doodle.MODE_LINE_BEGIN; });
         this.guiEvent(cfg.BTN_HORIZ, () => { this.MODE = Doodle.MODE_HORIZ_BEGIN; });
         this.guiEvent(cfg.BTN_ARROW, () => { this.MODE = Doodle.MODE_ARROW; });
+        this.guiEvent(cfg.BTN_TEXT, () => { this.MODE = Doodle.MODE_TEXT; });
         this.getLineSize = this.getLineSizeFn(cfg.RG_LINE_SIZE);
 
         this.color = document.getElementById(cfg.COLOR);
@@ -98,6 +99,13 @@ export class Doodle {
                 Doodle.drawArrowLine(ctx2, e.offsetX, e.offsetY, this.comment.value, this.arrowOrient.value);
                 this.MODE = Doodle.MODE_NONE;
                 break;
+            case Doodle.MODE_TEXT:
+                const ctx4 = this.curContext;
+                ctx4.fillStyle = this.color.value;
+                ctx4.font = "16px Arial";
+                ctx4.fillText(this.comment.value, e.offsetX, e.offsetY);
+                this.MODE = Doodle.MODE_NONE;
+                break;
         }
         e.preventDefault();
         e.stopPropagation();
@@ -162,5 +170,6 @@ Doodle.MODE_LINE_END = 2;
 Doodle.MODE_HORIZ_BEGIN = 3;
 Doodle.MODE_HORIZ_END = 4;
 Doodle.MODE_ARROW = 5;
+Doodle.MODE_TEXT = 6;
 
 
