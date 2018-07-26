@@ -1,16 +1,16 @@
 // import {Hruler,Vruler} from "./rulers.js";
 
 export class Chart {
-    constructor(myCanvases,myLevelLines) {
-        this.myCanvases = myCanvases;
+    constructor(myCanvasIds,myLevelLines) {
+        this.myCanvasIds = myCanvasIds;
         //this.myHruler = null;
         //this.myVruler = null;
         this.myLevelLines = myLevelLines;
     }
     drawCanvases(cfg) {
-        Chart.drawCanvas(cfg,cfg.chart,this.myCanvases.MAIN_CHART,true, this.myLevelLines);
-        Chart.drawCanvas(cfg,cfg.chart2,this.myCanvases.OSC,true, null);
-        Chart.drawCanvas(cfg,cfg.chart3,this.myCanvases.VOLUME,false, null);
+        Chart.drawCanvas(cfg,cfg.chart,this.myCanvasIds.MAIN_CHART,true, this.myLevelLines);
+        Chart.drawCanvas(cfg,cfg.chart2,this.myCanvasIds.OSC,true, null);
+        Chart.drawCanvas(cfg,cfg.chart3,this.myCanvasIds.VOLUME,false, null);
     }
     static drawCanvas(cfg, curChart, curCanvas, drawLegend, levelLines) {
         if (curChart === null) {
@@ -53,5 +53,14 @@ export class Chart {
         const ctx = canvas.getContext("2d");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         return [ctx, canvas];
-    };
+    }
+    /*
+    get myCanvases() {
+        const result = [];
+        result.push(document.getElementById(this.myCanvasIds.MAIN_CHART));
+        result.push(document.getElementById(this.myCanvasIds.OSC));
+        result.push(document.getElementById(this.myCanvasIds.VOLUME));
+        return result;
+    }
+    */
 }
