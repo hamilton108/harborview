@@ -17,7 +17,7 @@ public class EmbeddedJetty {
     // https://wiki.eclipse.org/Jetty/Tutorial/Embedding_Jetty
     private static final Logger LOGGER = LoggerFactory.getLogger(EmbeddedJetty.class);
     
-    private static final int PORT = 8084;
+    private static final int PORT = 6346;
     
     private static final String WEBAPP_DIRECTORY = "/";
     
