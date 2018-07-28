@@ -4,52 +4,82 @@
     <title>Maunaloa</title>
 </head>
 <body>
-    <div th:replace="navbar.html :: navbar"></div>
+<div th:replace="navbar.html :: navbar"></div>
+<div class="logo"></div>
 
-    <div class="logo"></div>
-
-    <div id="my-app"></div>
-
-    <div class="grid-main">
-        <div class="main-chart">
-            <canvas id="day-chart" class="c1"></canvas>
+<div role="tabpanel" style="margin-bottom: 1rem">
+    <ul class="nav nav-tabs" role="tablist" style="margin-bottom: 1rem">
+        <li class="nav-item">
+            <a class="nav-link active" id="chart1-tab" data-toggle="tab" data-height="true" href="#chart1" role="tab" aria-controls="home" aria-expanded="true">Days</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="chart2-tab" data-toggle="tab" data-height="true" href="#chart2" role="tab" aria-controls="profile" aria-expanded="false">Weeks</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="chart3-tab" data-toggle="tab" data-height="true" href="#chart3" role="tab" aria-controls="profile" aria-expanded="false">Years</a>
+        </li>
+        <!--
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-persist="true" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+            <div class="dropdown-menu" aria-expanded="false">
+                <a class="dropdown-item" id="dropdown1-tab" href="#dropdown1" role="tab" data-toggle="tab" data-duration="350" data-height="true" aria-controls="dropdown1">@fat</a>
+                <a class="dropdown-item" id="dropdown2-tab" href="#dropdown2" role="tab" data-toggle="tab" data-duration="350" data-height="true" aria-controls="dropdown2">@mdo</a>
+            </div>
+        </li>
+        -->
+    </ul>
+    <div class="tab-content" id="chart1" style="">
+        <div role="tabpanel" class="tab-pane active show" id="home" aria-labelledby="chart1-tab" aria-expanded="true" style="">
+            <div id="my-app"></div>
+            <div class="grid-main">
+                <div class="main-chart">
+                    <canvas id="day-chart" class="c1"></canvas>
+                </div>
+                <div class="main-chart" id="div-day-doodle">
+                    <canvas id="day-doodle" class="c1"></canvas>
+                </div>
+                <div class="main-chart" id="div-day-levelline">
+                    <canvas id="day-levellines" class="c1"></canvas>
+                </div>
+                <svg class="main-chart" id="day-svg" width="1310" height="500" viewbox="0 0 1310 500">
+                </svg>
+                <div class="sub-chart-1">
+                    <canvas id="day-vol" class="c3"></canvas>
+                </div>
+                <div class="sub-chart-2">
+                    <canvas id="day-osc" class="c2"></canvas>
+                </div>
+                <div th:replace="maunaloa/scrapbook.html :: scrapbook(1)"></div>
+            </div>
         </div>
-        <div class="main-chart" id="div-day-doodle">
-            <canvas id="day-doodle" class="c1"></canvas>
+        <div class="tab-pane" id="chart2" role="tabpanel" aria-labelledby="chart2-tab" aria-expanded="false" style="">
+            <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
         </div>
-        <div class="main-chart" id="div-day-levelline">
-            <canvas id="day-levellines" class="c1"></canvas>
+        <div class="tab-pane" id="chart3" role="tabpanel" aria-labelledby="chart3-tab" aria-expanded="false" style="">
+            <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
         </div>
-        <svg class="main-chart" id="day-svg" width="1310" height="500" viewbox="0 0 1310 500">
-            <line x1="10" y1="10" x2="1300" y2="10" style="stroke:rgb(0,0,120);stroke-width:1" />
-            <line x1="1300" y1="10" x2="1300" y2="490" style="stroke:rgb(0,0,120);stroke-width:1" />
-            <line x1="1300" y1="490" x2="10" y2="490" style="stroke:rgb(0,0,120);stroke-width:1" />
-            <line x1="10" y1="490" x2="10" y2="10" style="stroke:rgb(0,0,120);stroke-width:1" />
-        </svg>
-        <div class="sub-chart-1">
-            <canvas id="day-vol" class="c3"></canvas>
+        <!--
+        <div class="tab-pane" id="dropdown1" role="tabpanel" aria-labelledby="dropdown1-tab">
+            <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
         </div>
-        <div class="sub-chart-2">
-            <canvas id="day-osc" class="c2"></canvas>
+        <div class="tab-pane" id="dropdown2" role="tabpanel" aria-labelledby="dropdown2-tab">
+            <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater. Lomo wolf viral, mustache readymade thundercats keffiyeh craft beer marfa ethical. Wolf salvia freegan, sartorial keffiyeh echo park vegan.</p>
         </div>
-        <div th:replace="maunaloa/scrapbook.html :: scrapbook(1)"></div>
+        -->
     </div>
+</div>
 
-    <div th:replace="head.html :: scripts"></div>
+<div th:replace="head.html :: scripts"></div>
 
-    <script type="text/javascript" src="/js/maunaloa/elm-charts.min.js"></script>
-    <!--
-    <script type="module" src="/js/maunaloa/maunaloa.min.js"></script>
-    <script type="module" src="/js/maunaloa/modules.min.js"></script>
-    -->
-    <script type="module" src="/js/maunaloa/charts.js"></script>
-    <script type="module" src="/js/maunaloa/canvas/chart.js"></script>
-    <script type="module" src="/js/maunaloa/svg/draggable.js"></script>
-    <script type="text/javascript" src="/js/maunaloa/canvas/linechart.js"></script>
-    <script type="text/javascript" src="/js/maunaloa/canvas/rulers.js"></script>
-    <!--
-    <script type="text/javascript" src="/js/maunaloa/canvas/levelline.js"></script>
-    <script type="text/javascript" src="/js/maunaloa/canvas/scrapbook.js"></script>
-    -->
+<!--
+<script type="module" src="/js/maunaloa/maunaloa.min.js"></script>
+<script type="module" src="/js/maunaloa/modules.min.js"></script>
+-->
+<script type="text/javascript" src="/js/maunaloa/elm-charts.min.js"></script>
+<script type="module" src="/js/maunaloa/charts.js"></script>
+<script type="module" src="/js/maunaloa/canvas/chart.js"></script>
+<script type="module" src="/js/maunaloa/svg/draggable.js"></script>
+<script type="text/javascript" src="/js/maunaloa/canvas/linechart.js"></script>
+<script type="text/javascript" src="/js/maunaloa/canvas/rulers.js"></script>
 </body>
 </html>
