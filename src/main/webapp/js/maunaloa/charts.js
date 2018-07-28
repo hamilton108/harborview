@@ -5,9 +5,9 @@ import {LevelLines} from "./canvas/levelline.js";
 document.addEventListener("DOMContentLoaded", function() {
     const canvases = {
         DAY : {
-            MAIN_CHART: 'day-chart',
-            VOLUME: 'day-vol',
-            OSC: 'day-osc',
+            MAIN_CHART: 'chart-1',
+            VOLUME: 'vol-1',
+            OSC: 'osc-1',
         },
         WEEK : {
         },
@@ -16,11 +16,11 @@ document.addEventListener("DOMContentLoaded", function() {
     };
     const scrapbooks = {
         DAY : {
-            SVG: 'day-svg',
-            DIV_DOODLE: 'div-day-doodle',
-            DIV_LEVEL_LINES: 'div-day-levelline',
-            DOODLE: 'day-doodle',
-            LEVEL_LINES: 'day-levellines',
+            SVG: 'svg-1',
+            DIV_DOODLE: 'div-1-doodle',
+            DIV_LEVEL_LINES: 'div-1-levelline',
+            DOODLE: 'doodle-1',
+            LEVEL_LINES: 'levellines-1',
             RG_LAYER: "rg-layer1",
             COLOR: "color1",
             RG_LINE_SIZE: "rg-line1",

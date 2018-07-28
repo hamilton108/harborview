@@ -22,6 +22,8 @@
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active show" id="chart1" aria-labelledby="chart1-tab" aria-expanded="true" style="">
             <div id="my-app"></div>
+            <div th:replace="maunaloa/chart.html :: chart(1)"></div>
+            <!--
             <div class="grid-main">
                 <div class="main-chart">
                     <canvas id="day-chart" class="c1"></canvas>
@@ -42,6 +44,7 @@
                 </div>
                 <div th:replace="maunaloa/scrapbook.html :: scrapbook(1)"></div>
             </div>
+            -->
         </div>
         <div role="tabpanel" class="tab-pane" id="chart2" aria-labelledby="chart2-tab" aria-expanded="false">
             <p>Weeks</p>
