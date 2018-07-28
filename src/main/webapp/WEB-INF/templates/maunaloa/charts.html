@@ -23,31 +23,10 @@
         <div role="tabpanel" class="tab-pane active show" id="chart1" aria-labelledby="chart1-tab" aria-expanded="true" style="">
             <div id="my-app"></div>
             <div th:replace="maunaloa/chart.html :: chart(1)"></div>
-            <!--
-            <div class="grid-main">
-                <div class="main-chart">
-                    <canvas id="day-chart" class="c1"></canvas>
-                </div>
-                <div class="main-chart" id="div-day-doodle">
-                    <canvas id="day-doodle" class="c1"></canvas>
-                </div>
-                <div class="main-chart" id="div-day-levelline">
-                    <canvas id="day-levellines" class="c1"></canvas>
-                </div>
-                <svg class="main-chart" id="day-svg" width="1310" height="500" viewbox="0 0 1310 500">
-                </svg>
-                <div class="sub-chart-1">
-                    <canvas id="day-vol" class="c3"></canvas>
-                </div>
-                <div class="sub-chart-2">
-                    <canvas id="day-osc" class="c2"></canvas>
-                </div>
-                <div th:replace="maunaloa/scrapbook.html :: scrapbook(1)"></div>
-            </div>
-            -->
         </div>
         <div role="tabpanel" class="tab-pane" id="chart2" aria-labelledby="chart2-tab" aria-expanded="false">
-            <p>Weeks</p>
+            <div id="my-app2"></div>
+            <div th:replace="maunaloa/chart.html :: chart(2)"></div>
         </div>
         <div role="tabpanel" class="tab-pane" id="chart3" aria-labelledby="chart3-tab" aria-expanded="false">
             <p>Years</p>
