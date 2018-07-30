@@ -48,10 +48,16 @@ public class MaunaloaController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "ticker", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ElmCharts ticker(@RequestParam("oid") int oid,
-                            @RequestParam("rc") int rc) {
+    @RequestMapping(value = "ticker/{oid}/{rc}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ElmCharts ticker(@PathVariable("oid") int oid,
+                            @PathVariable("rc") boolean resetCache) {
         return maunaloaModel.elmChartsDay(oid);
+    }
+    @ResponseBody
+    @RequestMapping(value = "tickerweek/{oid}/{rc}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ElmCharts tickerWeek(@PathVariable("oid") int oid,
+                            @PathVariable("rc") boolean resetCache) {
+        return maunaloaModel.elmChartsWeek(oid);
     }
     @ResponseBody
     @RequestMapping(value = "calls/{ticker}/{rc}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
