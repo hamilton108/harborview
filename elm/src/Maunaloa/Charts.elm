@@ -463,23 +463,33 @@ update msg model =
 
 
 ------------------ COMMANDS -------------------
+{-
+   resetCacheJson : Bool -> String
+   resetCacheJson resetCache =
+       case resetCache of
+           True ->
+               "&rc=1"
+
+           False ->
+               "&rc=0"
+-}
 
 
-resetCacheJson : Bool -> String
-resetCacheJson resetCache =
-    case resetCache of
+bool2json : Bool -> String
+bool2json v =
+    case v of
         True ->
-            "&rc=1"
+            "true"
 
         False ->
-            "&rc=0"
+            "false"
 
 
 fetchSpot : String -> Bool -> Cmd Msg
 fetchSpot selectedTicker resetCache =
     let
         url =
-            mainUrl ++ "/spot?ticker=" ++ selectedTicker ++ (resetCacheJson resetCache)
+            mainUrl ++ "/spot/" ++ selectedTicker ++ "/" ++ (bool2json resetCache)
 
         spotDecoder =
             JP.decode Spot
@@ -498,7 +508,7 @@ fetchRiscLines : Model -> Cmd Msg
 fetchRiscLines model =
     let
         url =
-            mainUrl ++ "/risclines?ticker=" ++ model.selectedTicker
+            mainUrl ++ "/risclines/" ++ model.selectedTicker
 
         riscDecoder =
             JP.decode RiscLine
@@ -563,13 +573,13 @@ fetchCharts ticker chartResolution resetCache =
         url =
             case chartResolution of
                 1 ->
-                    mainUrl ++ "/ticker?oid=" ++ ticker ++ (resetCacheJson resetCache)
+                    mainUrl ++ "/ticker/" ++ ticker ++ "/" ++ (bool2json resetCache)
 
                 2 ->
-                    mainUrl ++ "/tickerweek?oid=" ++ ticker ++ (resetCacheJson resetCache)
+                    mainUrl ++ "/tickerweek/" ++ ticker ++ "/" ++ (bool2json resetCache)
 
                 _ ->
-                    mainUrl ++ "/tickermonth?oid=" ++ ticker ++ (resetCacheJson resetCache)
+                    mainUrl ++ "/tickermonth/" ++ ticker ++ "/" ++ (bool2json resetCache)
     in
         Http.send ChartsFetched <| Http.get url myDecoder
 
