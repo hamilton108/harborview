@@ -20,7 +20,7 @@ public class MaunaloaModel {
     etrade;
     //private EtradeRepository etrade;
     private Collection<Stock> stocks;
-    private LocalDate startDate = LocalDate.of(2014,1,1);
+    private LocalDate startDate = LocalDate.of(2010,1,1);
     private Map<Integer,String> tixMap;
 
     //private Map<Integer, StockAndOptions> stockAndOptionsMap = new HashMap<>();
