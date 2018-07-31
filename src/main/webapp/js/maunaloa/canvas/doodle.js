@@ -3,7 +3,10 @@ export class Doodle {
     constructor(cfg) {
         this.canvas = document.getElementById(cfg.DOODLE);
         if (this.canvas !== null) {
-            this.canvas.addEventListener('mousedown', this.handleMouseDown.bind(this), false);
+            this.canvas.addEventListener("mousedown", this.handleMouseDown.bind(this), false);
+            this.canvas.addEventListener("mousemove", this.handleMouseMove.bind(this), false);
+            this.canvas.addEventListener("mouseup", this.handleMouseDone.bind(this), false);
+            this.canvas.addEventListener("mouseleave", this.handleMouseDone.bind(this), false);
             /*
             c_scrap.addEventListener('mousemove', this.handleMouseMove(this), false);
             c_scrap.addEventListener('mouseup', this.handleMouseDone(this), false);
@@ -106,9 +109,51 @@ export class Doodle {
                 ctx4.fillText(this.comment.value, e.offsetX, e.offsetY);
                 this.MODE = Doodle.MODE_NONE;
                 break;
+            default:
+                this.MODE = Doodle.MODE_PAINT;
+                this.clickX = [];
+                this.clickY = [];
+                this.addClick(e.offsetX, e.offsetY);
+                break;
+
         }
         e.preventDefault();
         e.stopPropagation();
+    }
+    handleMouseMove(e) {
+        if (this.MODE === Doodle.MODE_PAINT) {
+            this.addClick(e.offsetX, e.offsetY);
+            this.redraw();
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }
+    handleMouseDone(e) {
+        if (this.MODE === Doodle.MODE_PAINT) {
+            this.clickX = null;
+            this.clickY = null;
+            this.MODE = self.MODE_NONE;
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    }
+    addClick(x, y) {
+        this.clickX.push(x);
+        this.clickY.push(y);
+    }
+    redraw() {
+        const context = this.curContext;
+        context.strokeStyle = this.color.value;
+        context.lineJoin = "round";
+        context.lineWidth = this.getLineSize();
+        const cx = this.clickX;
+        const cy = this.clickY;
+        context.beginPath();
+        context.moveTo(cx[0], cy[0]);
+        for (let i = 1; i < cx.length; ++i) {
+            context.lineTo(cx[i], cy[i]);
+        }
+        context.stroke();
     }
     static drawArrowLine(ctx, x, y, comment, orientation) {
         let x1 = x - 140;
@@ -171,5 +216,6 @@ Doodle.MODE_HORIZ_BEGIN = 3;
 Doodle.MODE_HORIZ_END = 4;
 Doodle.MODE_ARROW = 5;
 Doodle.MODE_TEXT = 6;
+Doodle.MODE_PAINT = 7;
 
 
