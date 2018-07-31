@@ -65,8 +65,19 @@ public class MaunaloaModel {
         return null; // elmCharts(prices);
     }
 
+    private Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>
+    stockAndOptions(int oid) {
+        Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>
+                tmp = stockAndOptionsMap.get(oid);
+        if (tmp == null) {
+            String ticker = getTickerFor(oid);
+            tmp = etrade.parseHtmlFor(ticker,null);
+            stockAndOptionsMap.put(oid,tmp);
+        }
+        return tmp;
+    }
     private StockAndOptions callsOrPuts(int oid, boolean isCalls) {
-
+        /*
         Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>
         tmp = stockAndOptionsMap.get(oid);
 
@@ -75,6 +86,10 @@ public class MaunaloaModel {
             tmp = etrade.parseHtmlFor(ticker,null);
             stockAndOptionsMap.put(oid,tmp);
         }
+        */
+
+        Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>
+                tmp = stockAndOptions(oid);
         StockPriceDTO stockPrice = null;
         if (tmp.first().isPresent()) {
             stockPrice = new StockPriceDTO(tmp.first().get());
@@ -91,6 +106,15 @@ public class MaunaloaModel {
     }
     public StockAndOptions puts(int oid) {
         return callsOrPuts(oid, false);
+    }
+    public StockPriceDTO spot(int oid) {
+        Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>
+                tmp = stockAndOptions(oid);
+        StockPriceDTO sp = null;
+        if (tmp.first().isPresent()) {
+            sp = new StockPriceDTO(tmp.first().get());
+        }
+        return sp;
     }
 
     private int findOptionOid(String ticker) {

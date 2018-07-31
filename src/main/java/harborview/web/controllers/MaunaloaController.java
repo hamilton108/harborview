@@ -5,6 +5,7 @@ import harborview.dto.html.SelectItem;
 import harborview.dto.html.options.OptionPurchaseDTO;
 import harborview.dto.html.options.OptionRegPurDTO;
 import harborview.dto.html.options.StockAndOptions;
+import harborview.dto.html.options.StockPriceDTO;
 import harborview.maunaloa.MaunaloaModel;
 import harborview.web.controllers.web.JsonResult;
 import oahu.exceptions.FinancialException;
@@ -32,7 +33,7 @@ public class MaunaloaController {
 
     @RequestMapping(value = "charts", method =  RequestMethod.GET)
     public String charts(Locale locale, Model model) {
-        model.addAttribute("stockTickers", maunaloaModel.getStocks());
+        //model.addAttribute("stockTickers", maunaloaModel.getStocks());
         return "maunaloa/charts.html";
     }
 
@@ -63,6 +64,11 @@ public class MaunaloaController {
     @RequestMapping(value = "calls/{ticker}/{rc}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public StockAndOptions calls(@PathVariable("ticker") int ticker, @PathVariable("rc") boolean resetCache) {
         return maunaloaModel.calls(ticker);
+    }
+    @ResponseBody
+    @RequestMapping(value = "spot/{ticker}/{rc}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public StockPriceDTO spot(@PathVariable("ticker") int ticker, @PathVariable("rc") boolean resetCache) {
+        return maunaloaModel.spot(ticker);
     }
 
     @ResponseBody
