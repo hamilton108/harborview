@@ -57,7 +57,7 @@ public class ElmChartsWeekFactory extends ElmChartsFactory {
         double hi = spHi.map(StockPrice::getCls).orElseGet(() -> Double.max(open, close));
         double lo = spLo.map(StockPrice::getCls).orElseGet(() -> Double.min(open, close));
 
-        int sumTotal = weeklyPrices.stream().mapToInt(x -> x.getVolume()).sum();
+        int sumTotal = weeklyPrices.stream().mapToInt(StockPrice::getVolume).sum();
         return new StockPriceBean(monday,open,hi,lo,close,sumTotal);
     }
     private int extractWeek(StockPrice price) {

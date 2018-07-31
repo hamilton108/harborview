@@ -16,8 +16,10 @@ export class Draggable {
         const curMarkerUp = function() {
             curMarker = null;
         };
-        const l = Draggable.svgLine("200", "20", "20", "200");
-        const l50 = Draggable.svgLine("110", "110", "1200", "110");
+        const l = Draggable.svgLine("200", "50", "200", "450");
+        const l50 = Draggable.svgLine("200", "250", "1300", "250");
+        const lPhi = Draggable.svgLine("200", "298", "1300", "298");
+        const lPhi2 = Draggable.svgLine("200", "202", "1300", "202");
         const c1 = Draggable.draggableMarker("1", l.getAttribute("x1"), l.getAttribute("y1"), curMarkerDown, curMarkerUp);
         const c2 = Draggable.draggableMarker("2", l.getAttribute("x2"), l.getAttribute("y2"), curMarkerDown, curMarkerUp);
         svg.addEventListener("mousemove", function(e) {
@@ -47,10 +49,18 @@ export class Draggable {
                 l50.setAttribute("x1", x50);
                 l50.setAttribute("y1", y50);
                 l50.setAttribute("y2", y50);
+                const yPhi = (Math.abs(y - y0) * Draggable.PHI) + Math.min(y, y0);
+                const yPhi2 = (Math.abs(y - y0) * Draggable.PHI * Draggable.PHI) + Math.min(y, y0);
+                lPhi.setAttribute("y1", yPhi);
+                lPhi.setAttribute("y2", yPhi);
+                lPhi2.setAttribute("y1", yPhi2);
+                lPhi2.setAttribute("y2", yPhi2);
             }
         });
         svg.appendChild(l);
         svg.appendChild(l50);
+        svg.appendChild(lPhi);
+        svg.appendChild(lPhi2);
         svg.appendChild(c1);
         svg.appendChild(c2);
     }
@@ -89,4 +99,5 @@ export class Draggable {
         }
     }
 }
-
+Draggable.PHI = 0.618034;
+Draggable.PHI_EXT = 1.272;
