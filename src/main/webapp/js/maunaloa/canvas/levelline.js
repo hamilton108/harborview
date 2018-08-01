@@ -90,7 +90,7 @@ export class LevelLines {
           lineChart.drawCandlestick(this._spot);
           ctx.font = "16px Arial";
           ctx.fillStyle = "crimson";
-          ctx.fillText("Spot: " + this.spot.tm, 1000, 50);
+          ctx.fillText("Spot: " + this._spot.tm, 1000, 50);
         }
     }
     closestLine(mx, my) {
