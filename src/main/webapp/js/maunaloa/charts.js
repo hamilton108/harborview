@@ -118,6 +118,11 @@ document.addEventListener("DOMContentLoaded", function() {
             scrap.clear();
             myChart.drawCanvases(cfg);
         });
+        const drawSpot = function(spot) {
+          levelLines.spot = spot;
+        }
+        app.ports.drawSpot.subscribe(drawSpot);
+
         const btnClear = document.getElementById(config.BTN_CLEAR);
         btnClear.onclick = () => { 
             scrap.clear();

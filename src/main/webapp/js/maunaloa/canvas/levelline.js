@@ -49,6 +49,7 @@ export class LevelLines {
         this.canvas.addEventListener('mousemove', this.mmo, false);
         this.lines = [];
         this.nearest = null;
+        this._spot = null;
         const btn = document.getElementById(cfg.BTN_LEVELLINE);
         btn.onclick = () => {
             this.addLine();
@@ -60,6 +61,7 @@ export class LevelLines {
     }
     clearCanvas() {
         this.lines = [];
+        this._spot = null;
         if (this.ctx !== null) {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         }
@@ -81,6 +83,13 @@ export class LevelLines {
             ctx.arc(this.nearest.pt.x, this.nearest.pt.y, 5, 0, Math.PI * 2);
             ctx.strokeStyle = 'red';
             ctx.stroke();
+        }
+        if (this._spot) {
+          const lineChart = MAUNALOA.lineChart(this.hruler, this.vruler, ctx);
+          lineChart.drawCandlestick(this._spot);
+          ctx.font = "16px Arial";
+          ctx.fillStyle = "crimson";
+          ctx.fillText("Spot: " + this.spot.tm, 1000, 50);
         }
     }
     closestLine(mx, my) {
@@ -200,6 +209,10 @@ export class LevelLines {
         const levelValue = this.vruler.pixToValue(levelPix);
         const line = new LevelLine(this,levelValue,300,this.canvas.width,levelPix,{});
         this.lines.push(line);
+        this.draw();
+    }
+    set spot(value) {
+        this._spot = value;
         this.draw();
     }
 }
