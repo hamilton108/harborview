@@ -11,10 +11,10 @@ feed/
 *.iml
 out/
 tmp/
-elm/elm-charts.js
+elm-charts.js
+elm-options.js
 elm/elm-stuff/
 elm/elm-optins.js
 *.map
 *.orig*
 node_modules/
-*.min.*
