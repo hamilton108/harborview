@@ -55,7 +55,8 @@ export class LevelLines {
             this.addLine();
         };
     }
-    reset(vruler) {
+    reset(hruler,vruler) {
+        this.hruler = hruler;
         this.vruler = vruler;
         this.clearCanvas();
     }

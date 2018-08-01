@@ -45,7 +45,7 @@ export class Chart {
             lineChart.drawCandlesticks(curChart.candlesticks);
         }
         if (levelLines !== null) {
-            levelLines.reset(myVruler);
+            levelLines.reset(myHruler,myVruler);
         }
     }
     static clearCanvas(canvasId) {

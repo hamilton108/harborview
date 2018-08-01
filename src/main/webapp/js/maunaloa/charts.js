@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
         const drawSpot = function(spot) {
           levelLines.spot = spot;
-        }
+        };
         app.ports.drawSpot.subscribe(drawSpot);
 
         const btnClear = document.getElementById(config.BTN_CLEAR);
