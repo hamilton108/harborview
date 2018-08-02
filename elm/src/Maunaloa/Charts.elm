@@ -162,6 +162,7 @@ type Msg
     | RiscLinesFetched (Result Http.Error RiscLines)
     | FetchSpot
     | SpotFetched (Result Http.Error Spot)
+    | ResetCache
     | ToggleResetCache
     | OptionsDlgOk
     | OptionsDlgCancel
@@ -182,9 +183,10 @@ view model =
             [ H.div [ A.class "form-group form-group--elm" ]
                 [ CB.makeSelect "Tickers: " FetchCharts model.tickers model.selectedTicker
                 ]
+            , BTN.button "Reset Cache" ResetCache
             , BTN.button "Risc Lines" FetchRiscLines
             , BTN.button "Spot" FetchSpot
-            , M.checkbox "elm-cb-1" "Reset Cache" False ToggleResetCache
+            , M.checkbox "elm-cb-1" "Spot no cache" False ToggleResetCache
 
             -- , H.div [ A.class "form-group gc-3" ]
             --     [ button_ "Risc Lines" FetchRiscLines
@@ -397,7 +399,10 @@ update msg model =
             Debug.log ("TickersFetched Error: " ++ (M.httpErr2str s)) ( model, Cmd.none )
 
         FetchCharts s ->
-            ( { model | selectedTicker = s }, fetchCharts s model.flags.chartResolution model.isResetCache )
+            if s == "-1" then
+                ( model, Cmd.none )
+            else
+                ( { model | selectedTicker = s }, fetchCharts s model.flags.chartResolution False )
 
         ChartsFetched (Ok s) ->
             let
@@ -445,13 +450,14 @@ update msg model =
         SpotFetched (Err s) ->
             Debug.log ("SpotFetched Error: " ++ (M.httpErr2str s)) ( model, Cmd.none )
 
-        --ResetCache ->
-        --   ( model, fetchCharts model.selectedTicker model True )
         OptionsDlgOk ->
             ( { model | dlgOptions = DLG.DialogHidden }, Cmd.none )
 
         OptionsDlgCancel ->
             ( { model | dlgOptions = DLG.DialogHidden }, Cmd.none )
+
+        ResetCache ->
+            ( model, fetchCharts model.selectedTicker model.flags.chartResolution True )
 
         ToggleResetCache ->
             let
