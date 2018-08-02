@@ -70,8 +70,20 @@ public class MaunaloaController {
     @ResponseBody
     @RequestMapping(value = "calls/{ticker}/{rc}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public StockAndOptions calls(@PathVariable("ticker") int ticker, @PathVariable("rc") boolean resetCache) {
+        if (resetCache) {
+            maunaloaModel.resetSpotAndOptions();
+        }
         return maunaloaModel.calls(ticker);
     }
+    @ResponseBody
+    @RequestMapping(value = "puts/{ticker}/{rc}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public StockAndOptions puts(@PathVariable("ticker") int ticker, @PathVariable("rc") boolean resetCache) {
+        if (resetCache) {
+            maunaloaModel.resetSpotAndOptions();
+        }
+        return maunaloaModel.puts(ticker);
+    }
+
     @ResponseBody
     @RequestMapping(value = "spot/{ticker}/{rc}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public StockPriceDTO spot(@PathVariable("ticker") int ticker, @PathVariable("rc") boolean resetCache) {
