@@ -17,13 +17,6 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <!--
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle"
                        href="#" id="navbarDropdownCalls"
@@ -32,9 +25,6 @@
                        aria-expanded="false">Calls</a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownCalls">
                         <a th:each="d : ${stockTickers}" class="dropdown-item" th:href="|/opx/calls/${d.oid}|" th:text="${d.ticker}">YAR</a>
-                        <!--
-                        <div class="dropdown-divider"></div>
-                        -->
                     </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -45,6 +35,18 @@
                        aria-expanded="false">Puts</a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownPuts">
                         <a th:each="d : ${stockTickers}" class="dropdown-item" th:href="|/opx/puts/${d.oid}|" th:text="${d.ticker}">YAR</a>
+                    </div>
+                </li>
+                -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
+                       href="#" id="navbarDropdownCritters"
+                       role="button" data-toggle="dropdown"
+                       aria-haspopup="true"
+                       aria-expanded="false">Critters</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownCritters">
+                        <a class="dropdown-item" href="/critters/overlook/3">[4] Money Critters</a>
+                        <a class="dropdown-item" href="/critters/overlook/11">[11] Paper Critters</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
