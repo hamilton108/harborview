@@ -28,6 +28,24 @@ public class MaunaloaModel {
     private Map<Integer,Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>>
     stockAndOptionsMap = new HashMap<>();
 
+    private Map<Integer,ElmCharts> elmChartsDayMap = new HashMap<>();
+    private Map<Integer,ElmCharts> elmChartsWeekMap = new HashMap<>();
+
+    public enum ElmChartType { DAY, WEEK, MONTH };
+
+    public void resetElmChartsCache(ElmChartType elmChartType) {
+        switch (elmChartType) {
+            case DAY:
+                elmChartsDayMap = new HashMap<>();
+                break;
+            case WEEK:
+                elmChartsWeekMap = new HashMap<>();
+                break;
+            case MONTH:
+                break;
+        }
+    }
+
     public Collection<SelectItem> getStockTickers() {
         return getStocks().stream().map(x -> new SelectItem(x.getTicker(),String.valueOf(x.getOid()))).collect(Collectors.toList());
     }
@@ -49,15 +67,25 @@ public class MaunaloaModel {
     }
 
     public ElmCharts elmChartsDay(int stockId) {
-        Collection<StockPrice> prices = stockMarketRepository.findStockPrices(getTickerFor(stockId),startDate);
-        ElmChartsFactory factory = new ElmChartsFactory();
-        return factory.elmCharts(prices);
+        ElmCharts result = elmChartsDayMap.get(stockId);
+        if (result == null) {
+            Collection<StockPrice> prices = stockMarketRepository.findStockPrices(getTickerFor(stockId),startDate);
+            ElmChartsFactory factory = new ElmChartsFactory();
+            result = factory.elmCharts(prices);
+            elmChartsDayMap.put(stockId,result);
+        }
+        return result;
     }
 
     public ElmCharts elmChartsWeek(int stockId) {
-        Collection<StockPrice> prices = stockMarketRepository.findStockPrices(getTickerFor(stockId),startDate);
-        ElmChartsFactory factory = new ElmChartsWeekFactory();
-        return factory.elmCharts(prices);
+        ElmCharts result = elmChartsWeekMap.get(stockId);
+        if (result == null) {
+            Collection<StockPrice> prices = stockMarketRepository.findStockPrices(getTickerFor(stockId),startDate);
+            ElmChartsFactory factory = new ElmChartsWeekFactory();
+            result = factory.elmCharts(prices);
+            elmChartsWeekMap.put(stockId,result);
+        }
+        return result;
     }
 
     public ElmCharts elmChartsMonth(int stockId) {
@@ -65,6 +93,9 @@ public class MaunaloaModel {
         return null; // elmCharts(prices);
     }
 
+    public void resetSpotAndOptions() {
+        stockAndOptionsMap = new HashMap<>();
+    }
     private Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>
     stockAndOptions(int oid) {
         Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>
@@ -77,17 +108,6 @@ public class MaunaloaModel {
         return tmp;
     }
     private StockAndOptions callsOrPuts(int oid, boolean isCalls) {
-        /*
-        Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>
-        tmp = stockAndOptionsMap.get(oid);
-
-        if (tmp == null) {
-            String ticker = getTickerFor(oid);
-            tmp = etrade.parseHtmlFor(ticker,null);
-            stockAndOptionsMap.put(oid,tmp);
-        }
-        */
-
         Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>
                 tmp = stockAndOptions(oid);
         StockPriceDTO stockPrice = null;

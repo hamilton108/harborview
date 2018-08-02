@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.Locale;
+import static harborview.maunaloa.MaunaloaModel.ElmChartType;
 
 @Controller
 @RequestMapping("/maunaloa")
@@ -52,12 +53,18 @@ public class MaunaloaController {
     @RequestMapping(value = "ticker/{oid}/{rc}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ElmCharts ticker(@PathVariable("oid") int oid,
                             @PathVariable("rc") boolean resetCache) {
+        if (resetCache){
+            maunaloaModel.resetElmChartsCache(ElmChartType.DAY);
+        }
         return maunaloaModel.elmChartsDay(oid);
     }
     @ResponseBody
     @RequestMapping(value = "tickerweek/{oid}/{rc}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ElmCharts tickerWeek(@PathVariable("oid") int oid,
                             @PathVariable("rc") boolean resetCache) {
+        if (resetCache){
+            maunaloaModel.resetElmChartsCache(ElmChartType.WEEK);
+        }
         return maunaloaModel.elmChartsWeek(oid);
     }
     @ResponseBody
@@ -68,6 +75,9 @@ public class MaunaloaController {
     @ResponseBody
     @RequestMapping(value = "spot/{ticker}/{rc}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public StockPriceDTO spot(@PathVariable("ticker") int ticker, @PathVariable("rc") boolean resetCache) {
+        if (resetCache) {
+            maunaloaModel.resetSpotAndOptions();
+        }
         return maunaloaModel.spot(ticker);
     }
 
