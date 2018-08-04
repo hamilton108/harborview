@@ -12,7 +12,8 @@ class LevelLine {
         this.legend = conf.legendFn || function() {
             return this.levelValue;
         };
-        this.draggable = conf.hasOwnProperty('draggable') === true ? conf.draggable : true;
+        this.draggable = conf.hasOwnProperty("draggable") === true ? conf.draggable : true;
+        this.onMouseUp = conf.onMouseUp || null;
     }
     move(dx, dy) {
         this.x1 += dx;
@@ -54,6 +55,15 @@ export class LevelLines {
         btn.onclick = () => {
             this.addLine();
         };
+        /*
+        const btnRisc = document.getElementById(cfg.BTN_RISCLINES);
+        const riscLinesFn = cfg.hasOwnProperty("riscLinesFn") === true ? cfg.riscLinesFn : null;
+        btnRisc.onclick = () =>  {
+            if (riscLinesFn === null) {
+                alert("No Risc Lines function set!");
+            }
+        };
+        //*/
     }
     reset(hruler,vruler) {
         this.hruler = hruler;
@@ -214,6 +224,12 @@ export class LevelLines {
     }
     set spot(value) {
         this._spot = value;
+        this.draw();
+    }
+    //addRiscLines(ticker,stockPrice,optionPrice,risc,breakEven) {
+    addRiscLines(param) {
+        const line = new LevelLine(this,breakEven,300,this.canvas.width,this.levelValue(breakEven),{draggable: false});
+        this.lines.push(line);
         this.draw();
     }
 }

@@ -122,6 +122,10 @@ document.addEventListener("DOMContentLoaded", function() {
           levelLines.spot = spot;
         };
         app.ports.drawSpot.subscribe(drawSpot);
+        const drawRiscLines = function(riscLines) {
+
+        };
+        app.ports.drawRiscLines.subscribe(drawRiscLines);
 
         const btnClear = document.getElementById(config.BTN_CLEAR);
         btnClear.onclick = () => { 
