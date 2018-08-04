@@ -29,8 +29,11 @@
         <property name="contentHandler" ref="contenthandler"/>
     </bean>
 
+    <bean id="optionRepos" class="harborview.maunaloa.repos.OptionRepository">
+    </bean>
     <bean id="maunaloaModel" class="harborview.maunaloa.MaunaloaModel">
         <property name="stockMarketRepository" ref="stockMarketRepos" />
         <property name="etrade" ref="etrade" />
+        <property name="optionRepos" ref="optionRepos" />
     </bean>
 </beans>
