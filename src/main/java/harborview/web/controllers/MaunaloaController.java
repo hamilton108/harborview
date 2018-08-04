@@ -1,6 +1,7 @@
 package harborview.web.controllers;
 
 import harborview.dto.html.ElmCharts;
+import harborview.dto.html.RiscLinesDTO;
 import harborview.dto.html.SelectItem;
 import harborview.dto.html.options.OptionPurchaseDTO;
 import harborview.dto.html.options.OptionRegPurDTO;
@@ -114,6 +115,20 @@ public class MaunaloaController {
         try {
             OptionPurchase purchase = maunaloaModel.registerAndPurchaseOption(dto);
             return new JsonResult(true, String.format("Option purchase oid: %d",  purchase.getOid()), 0);
+        }
+        catch (Exception ex) {
+            return new JsonResult(false, ex.getMessage(), 0);
+        }
+    }
+    @ResponseBody
+    @RequestMapping(value = "risclines", method =  RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public JsonResult riscLines(@RequestBody RiscLinesDTO dto) {
+        try {
+            /*
+            OptionPurchase purchase = maunaloaModel.fetchRiscLines(dto);
+            return new JsonResult(true, String.format("Option purchase oid: %d",  purchase.getOid()), 0);
+            */
+            return new JsonResult(true, "Ok", 0);
         }
         catch (Exception ex) {
             return new JsonResult(false, ex.getMessage(), 0);
