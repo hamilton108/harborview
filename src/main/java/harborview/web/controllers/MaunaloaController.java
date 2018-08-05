@@ -43,6 +43,10 @@ public class MaunaloaController {
     public String options(Locale locale, Model model) {
         return "maunaloa/options.html";
     }
+    @RequestMapping(value = "optionpurchases", method =  RequestMethod.GET)
+    public String optionpurchases(Locale locale, Model model) {
+        return "maunaloa/optionpurchases.html";
+    }
 
     @ResponseBody
     @RequestMapping(value = "tickers", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

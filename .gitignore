@@ -14,7 +14,7 @@ tmp/
 elm-charts.js
 elm-options.js
 elm/elm-stuff/
-elm/elm-optins.js
+elm-optionpurchases.js
 *.map
 *.orig*
 node_modules/

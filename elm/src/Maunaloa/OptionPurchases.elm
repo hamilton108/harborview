@@ -345,8 +345,8 @@ view model =
         H.div [ A.class "container" ]
             [ H.div [ A.class "row" ]
                 [ M.checkbox "Real-time purchase" "col-sm-2 checkbox" True ToggleRealTimePurchase
-                , BTN.button "col-sm-2" "Reset Cache" ResetCache
-                , BTN.button "col-sm-2" "Fetch all purchases" FetchPurchases
+                , BTN.button "Reset Cache" ResetCache
+                , BTN.button "Fetch all purchases" FetchPurchases
                 ]
             , purchaseTable
             , DLG.modalDialog dlgHeader
@@ -406,7 +406,7 @@ fetchPurchases isRealTime resetCache =
                     "false"
 
         url =
-            mainUrl ++ "/fetchpurchases?ptype=" ++ purchaseType ++ "&resetcache=" ++ resetCacheJson
+            mainUrl ++ "/fetchpurchases/" ++ purchaseType ++ "/" ++ resetCacheJson
 
         purchaseDecoder =
             JP.decode PurchaseWithSales
@@ -424,9 +424,9 @@ fetchPurchases isRealTime resetCache =
                 |> JP.required "pvol" Json.int
                 |> JP.required "svol" Json.int
                 |> JP.required "iv" Json.float
-                |> JP.required "cur-ask" Json.float
-                |> JP.required "cur-bid" Json.float
-                |> JP.required "cur-iv" Json.float
+                |> JP.required "curAsk" Json.float
+                |> JP.required "curBid" Json.float
+                |> JP.required "curIv" Json.float
     in
         Http.send PurchasesFetched <|
             Http.get url (Json.list purchaseDecoder)
