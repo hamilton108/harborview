@@ -1,6 +1,7 @@
 package harborview.maunaloa;
 
 import harborview.dto.html.ElmCharts;
+import harborview.dto.html.RiscLinesDTO;
 import harborview.dto.html.SelectItem;
 import harborview.dto.html.options.OptionPurchaseDTO;
 import harborview.dto.html.options.OptionRegPurDTO;
@@ -13,10 +14,7 @@ import oahu.financial.*;
 import oahu.financial.repository.StockMarketRepository;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MaunaloaModel {
@@ -123,6 +121,10 @@ public class MaunaloaModel {
         stockMarketRepository.insertDerivative(derivative, null);
 
         return purchaseOption(dto);
+    }
+
+    public List<RiscLinesDTO> fetchRiscLines(int oid) {
+        return optionRepos.fetchRiscLines(oid);
     }
 
     public void setStockMarketRepository(StockMarketRepository stockMarketRepository) {

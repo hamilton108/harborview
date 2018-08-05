@@ -1,5 +1,6 @@
 package harborview.maunaloa.repos;
 
+import harborview.dto.html.RiscLinesDTO;
 import harborview.dto.html.options.*;
 import oahu.dto.Tuple;
 import oahu.dto.Tuple3;
@@ -29,6 +30,19 @@ public class OptionRepository {
         }
         return tmp;
     }
+
+    private Collection<DerivativePrice> allOptions() {
+        /*
+        for (Map.Entry<Integer,Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>> entry :
+            stockAndOptionsMap.entrySet()) {
+        }
+        */
+        for (Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>> vals : stockAndOptionsMap.values()) {
+
+        }
+        return null;
+    }
+
     private StockAndOptions callsOrPuts(int oid, boolean isCalls) {
         Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>
                 tmp = stockAndOptions(oid);
@@ -63,6 +77,9 @@ public class OptionRepository {
         stockAndOptionsMap = new HashMap<>();
     }
 
+    public List<RiscLinesDTO> fetchRiscLines(int oid) {
+        return null;
+    }
     public void setStockMarketRepository(StockMarketRepository stockMarketRepository) {
         this.stockMarketRepository = stockMarketRepository;
     }

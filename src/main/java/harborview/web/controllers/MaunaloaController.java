@@ -17,7 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 import static harborview.maunaloa.MaunaloaModel.ElmChartType;
 
@@ -125,17 +127,8 @@ public class MaunaloaController {
         }
     }
     @ResponseBody
-    @RequestMapping(value = "risclines", method =  RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public JsonResult riscLines(@RequestBody RiscLinesDTO dto) {
-        try {
-            /*
-            OptionPurchase purchase = maunaloaModel.fetchRiscLines(dto);
-            return new JsonResult(true, String.format("Option purchase oid: %d",  purchase.getOid()), 0);
-            */
-            return new JsonResult(true, "Ok", 0);
-        }
-        catch (Exception ex) {
-            return new JsonResult(false, ex.getMessage(), 0);
-        }
+    @RequestMapping(value = "risclines/{ticker}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<RiscLinesDTO> riscLines(@PathVariable("ticker") int ticker) {
+        return maunaloaModel.fetchRiscLines(ticker);
     }
 }
