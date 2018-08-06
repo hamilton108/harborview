@@ -37,10 +37,12 @@ public class OptionRepository {
             stockAndOptionsMap.entrySet()) {
         }
         */
+        List<DerivativePrice> result = new ArrayList<>();
         for (Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>> vals : stockAndOptionsMap.values()) {
-
+            result.addAll(vals.second().stream().filter(x -> x.getCurrentRiscStockPrice().isPresent()).collect(Collectors.toList()));
+            result.addAll(vals.third().stream().filter(x -> x.getCurrentRiscStockPrice().isPresent()).collect(Collectors.toList()));
         }
-        return null;
+        return result;
     }
 
     private StockAndOptions callsOrPuts(int oid, boolean isCalls) {
