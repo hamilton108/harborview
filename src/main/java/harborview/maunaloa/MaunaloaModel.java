@@ -1,5 +1,6 @@
 package harborview.maunaloa;
 
+import critterrepos.models.impl.CachedStockMarketReposImpl;
 import harborview.dto.html.ElmCharts;
 import harborview.dto.html.RiscLinesDTO;
 import harborview.dto.html.SelectItem;
@@ -32,6 +33,9 @@ public class MaunaloaModel {
     public enum ElmChartType { DAY, WEEK, MONTH }
 
     public void resetElmChartsCache(ElmChartType elmChartType) {
+        if (stockMarketRepository instanceof CachedStockMarketReposImpl) {
+            ((CachedStockMarketReposImpl)stockMarketRepository).emptyCache();
+        }
         switch (elmChartType) {
             case DAY:
                 elmChartsDayMap = new HashMap<>();

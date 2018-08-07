@@ -31,16 +31,11 @@ public class OptionRepository {
         return tmp;
     }
 
-    private Collection<DerivativePrice> allOptions() {
-        /*
-        for (Map.Entry<Integer,Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>> entry :
-            stockAndOptionsMap.entrySet()) {
-        }
-        */
+    private Collection<DerivativePrice> optionsWithRisc(int oid) {
         List<DerivativePrice> result = new ArrayList<>();
         for (Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>> vals : stockAndOptionsMap.values()) {
-            result.addAll(vals.second().stream().filter(x -> x.getCurrentRiscStockPrice().isPresent()).collect(Collectors.toList()));
-            result.addAll(vals.third().stream().filter(x -> x.getCurrentRiscStockPrice().isPresent()).collect(Collectors.toList()));
+            result.addAll(vals.second().stream().filter(x -> x.getCurrentRiscStockPrice().isPresent() && x.getOid() == oid).collect(Collectors.toList()));
+            result.addAll(vals.third().stream().filter(x -> x.getCurrentRiscStockPrice().isPresent() && x.getOid() == oid).collect(Collectors.toList()));
         }
         return result;
     }
@@ -80,7 +75,8 @@ public class OptionRepository {
     }
 
     public List<RiscLinesDTO> fetchRiscLines(int oid) {
-        return null;
+        Collection<DerivativePrice> riscs = optionsWithRisc(oid);
+        return riscs.stream().map(RiscLinesDTO::new).collect(Collectors.toList());
     }
     public void setStockMarketRepository(StockMarketRepository stockMarketRepository) {
         this.stockMarketRepository = stockMarketRepository;
