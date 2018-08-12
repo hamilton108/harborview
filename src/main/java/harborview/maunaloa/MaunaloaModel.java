@@ -49,7 +49,8 @@ public class MaunaloaModel {
     }
 
     public Collection<SelectItem> getStockTickers() {
-        return stockMarketRepository.getStocks().stream().map(x -> new SelectItem(x.getTicker(),String.valueOf(x.getOid()))).collect(Collectors.toList());
+        return stockMarketRepository.getStocks().stream().map(
+                x -> new SelectItem(String.format("%s - %s",x.getTicker(),x.getCompanyName()),String.valueOf(x.getOid()))).collect(Collectors.toList());
     }
 
     public void resetSpotAndOptions() {
