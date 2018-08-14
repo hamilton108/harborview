@@ -7,6 +7,7 @@ import harborview.dto.html.options.OptionPurchaseDTO;
 import harborview.dto.html.options.OptionRegPurDTO;
 import harborview.dto.html.options.StockAndOptions;
 import harborview.dto.html.options.StockPriceDTO;
+import harborview.dto.html.options.OptionRiscDTO;
 import harborview.maunaloa.MaunaloaModel;
 import harborview.web.controllers.web.JsonResult;
 import oahu.exceptions.FinancialException;
@@ -130,5 +131,12 @@ public class MaunaloaController {
     @RequestMapping(value = "risclines/{ticker}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<RiscLinesDTO> riscLines(@PathVariable("ticker") int ticker) {
         return maunaloaModel.fetchRiscLines(ticker);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "calc-risc-stockprices", method =  RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public JsonResult calcRiscStockprices(@RequestBody List<OptionRiscDTO> riscs) {
+      System.out.println(riscs);
+      return new JsonResult(true, "Ok", 0);
     }
 }
