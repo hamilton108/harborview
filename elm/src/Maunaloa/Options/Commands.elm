@@ -45,7 +45,10 @@ purchaseOption stockId ticker ask bid volume spot isRealTime =
         jbody =
             M.asHttpBody params
     in
-        Http.send (PurchaseMsgFor << OptionPurchased) <|
+        Debug.log (toString jbody)
+            Http.send
+            (PurchaseMsgFor << OptionPurchased)
+        <|
             Http.post url jbody D.purchaseStatusDecoder
 
 
@@ -142,7 +145,7 @@ calcRisc riscStr options =
             Result.withDefault 0 (String.toFloat riscStr)
 
         url =
-            mainUrl ++ "/calc-risc-stockprices"
+            mainUrl ++ "/calcriscstockprices"
 
         opx =
             Maybe.withDefault [] options
@@ -159,7 +162,10 @@ calcRisc riscStr options =
                 |> JP.required "ticker" Json.string
                 |> JP.required "risc" Json.float
     in
-        Http.send RiscCalculated <|
+        Debug.log (toString jbody)
+            Http.send
+            RiscCalculated
+        <|
             Http.post url jbody (Json.list myDecoder)
 
 

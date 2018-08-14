@@ -19,6 +19,8 @@ public class OptionRepository {
     private EtradeRepository<Tuple<String>,Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>>
             etrade;
 
+    private Map<String,DerivativePrice> optionsMap = new HashMap<>();
+
     public Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>
     stockAndOptions(int oid) {
         Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>
@@ -27,6 +29,8 @@ public class OptionRepository {
             String ticker = stockMarketRepository.getTickerFor(oid);
             tmp = etrade.parseHtmlFor(ticker,null);
             stockAndOptionsMap.put(oid,tmp);
+            tmp.second().forEach(x -> optionsMap.put(x.getTicker(), x));
+            tmp.third().forEach(x -> optionsMap.put(x.getTicker(), x));
         }
         return tmp;
     }
@@ -72,12 +76,16 @@ public class OptionRepository {
 
     public void resetSpotAndOptions() {
         stockAndOptionsMap = new HashMap<>();
+        optionsMap = new HashMap<>();
     }
-
+    public DerivativePrice getOptionFor(String ticker) {
+        return optionsMap.get(ticker);
+    }
     public List<RiscLinesDTO> fetchRiscLines(int oid) {
         Collection<DerivativePrice> riscs = optionsWithRisc(oid);
         return riscs.stream().map(RiscLinesDTO::new).collect(Collectors.toList());
     }
+
     public void setStockMarketRepository(StockMarketRepository stockMarketRepository) {
         this.stockMarketRepository = stockMarketRepository;
     }

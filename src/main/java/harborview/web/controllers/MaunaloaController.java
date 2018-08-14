@@ -104,6 +104,8 @@ public class MaunaloaController {
     @ResponseBody
     @RequestMapping(value = "purchaseoption", method =  RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public JsonResult purchaseOption(@RequestBody OptionPurchaseDTO dto) {
+        return new JsonResult(true, String.format("Option purchase oid: %d",  12), 0);
+        /*
         try {
             OptionPurchase purchase = maunaloaModel.purchaseOption(dto);
             return new JsonResult(true, String.format("Option purchase oid: %d",  purchase.getOid()), 0);
@@ -114,6 +116,7 @@ public class MaunaloaController {
         catch (Exception ex) {
             return new JsonResult(false, ex.getMessage(), 0);
         }
+        */
     }
 
     @ResponseBody
@@ -134,9 +137,9 @@ public class MaunaloaController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "calc-risc-stockprices", method =  RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public JsonResult calcRiscStockprices(@RequestBody List<OptionRiscDTO> riscs) {
-      System.out.println(riscs);
-      return new JsonResult(true, "Ok", 0);
+    @RequestMapping(value = "calcriscstockprices", method =  RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<OptionRiscDTO> calcRiscStockprices(@RequestBody List<OptionRiscDTO> riscs) {
+        List<OptionRiscDTO> result = maunaloaModel.calcStockPricesFor(riscs);
+        return result;
     }
 }

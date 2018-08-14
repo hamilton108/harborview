@@ -4,10 +4,7 @@ import critterrepos.models.impl.CachedStockMarketReposImpl;
 import harborview.dto.html.ElmCharts;
 import harborview.dto.html.RiscLinesDTO;
 import harborview.dto.html.SelectItem;
-import harborview.dto.html.options.OptionPurchaseDTO;
-import harborview.dto.html.options.OptionRegPurDTO;
-import harborview.dto.html.options.StockAndOptions;
-import harborview.dto.html.options.StockPriceDTO;
+import harborview.dto.html.options.*;
 import harborview.maunaloa.repos.OptionRepository;
 import oahu.dto.Tuple3;
 import oahu.exceptions.FinancialException;
@@ -130,6 +127,17 @@ public class MaunaloaModel {
 
     public List<RiscLinesDTO> fetchRiscLines(int oid) {
         return optionRepos.fetchRiscLines(oid);
+    }
+
+    public List<OptionRiscDTO> calcStockPricesFor(List<OptionRiscDTO> riscs) {
+        List<OptionRiscDTO> result = new ArrayList<>();
+        riscs.forEach(x -> {
+            DerivativePrice price = optionRepos.getOptionFor(x.getTicker());
+            double curOptionPrice = price.getSell() - x.getRisc();
+            Optional<Double> stockPrice = price.stockPriceFor(curOptionPrice);
+            stockPrice.ifPresent(s -> result.add(new OptionRiscDTO(x.getTicker(), s)));
+        });
+        return result;
     }
 
     public void setStockMarketRepository(StockMarketRepository stockMarketRepository) {
