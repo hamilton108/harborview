@@ -154,8 +154,8 @@ calcRisc riscStr options =
             List.filter (\x -> x.selected == True) opx
 
         jbody =
-            M.asHttpBody
-                (List.map (\x -> ( x.ticker, JE.float risc )) checked)
+            M.listAsHttpBody
+                (List.map (\x -> [ ( "ticker", JE.string x.ticker ), ( "risc", JE.float risc ) ]) checked)
 
         myDecoder =
             JP.decode RiscItem

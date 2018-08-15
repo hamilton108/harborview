@@ -40,6 +40,15 @@ asHttpBody lx =
         Http.stringBody "application/json" (JE.encode 0 x)
 
 
+listAsHttpBody : List (List ( String, JE.Value )) -> Http.Body
+listAsHttpBody lx =
+    let
+        xx =
+            JE.list (List.map (\x -> JE.object x) lx)
+    in
+        Http.stringBody "application/json" (JE.encode 0 xx)
+
+
 findInList : (a -> Bool) -> List a -> Maybe a
 findInList predicate list =
     case list of
