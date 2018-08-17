@@ -45,8 +45,7 @@ purchaseOption stockId ticker ask bid volume spot isRealTime =
         jbody =
             M.asHttpBody params
     in
-        Debug.log (toString jbody)
-            Http.send
+        Http.send
             (PurchaseMsgFor << OptionPurchased)
         <|
             Http.post url jbody D.purchaseStatusDecoder
@@ -162,8 +161,7 @@ calcRisc riscStr options =
                 |> JP.required "ticker" Json.string
                 |> JP.required "risc" Json.float
     in
-        Debug.log (toString jbody)
-            Http.send
+        Http.send
             RiscCalculated
         <|
             Http.post url jbody (Json.list myDecoder)

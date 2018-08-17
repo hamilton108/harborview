@@ -228,7 +228,10 @@ export class LevelLines {
     }
     //addRiscLines(ticker,stockPrice,optionPrice,risc,breakEven) {
     addRiscLines(param) {
-        const line = new LevelLine(this,breakEven,300,this.canvas.width,this.levelValue(breakEven),{draggable: false});
+        const line0 = param.riscLines[0];
+        const breakEven = line0.be;
+        const y = this.vruler.valueToPix(breakEven);
+        const line = new LevelLine(this,breakEven,300,this.canvas.width,y,{draggable: false});
         this.lines.push(line);
         this.draw();
     }

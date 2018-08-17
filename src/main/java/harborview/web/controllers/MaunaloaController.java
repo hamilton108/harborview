@@ -130,6 +130,7 @@ public class MaunaloaController {
             return new JsonResult(false, ex.getMessage(), 0);
         }
     }
+
     @ResponseBody
     @RequestMapping(value = "risclines/{ticker}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<RiscLinesDTO> riscLines(@PathVariable("ticker") int ticker) {

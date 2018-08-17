@@ -123,7 +123,8 @@ document.addEventListener("DOMContentLoaded", function() {
         };
         app.ports.drawSpot.subscribe(drawSpot);
         const drawRiscLines = function(riscLines) {
-
+            console.log(riscLines);
+            levelLines.addRiscLines(riscLines);
         };
         app.ports.drawRiscLines.subscribe(drawRiscLines);
 

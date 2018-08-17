@@ -38,8 +38,14 @@ public class OptionRepository {
     private Collection<DerivativePrice> optionsWithRisc(int oid) {
         List<DerivativePrice> result = new ArrayList<>();
         for (Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>> vals : stockAndOptionsMap.values()) {
-            result.addAll(vals.second().stream().filter(x -> x.getCurrentRiscStockPrice().isPresent() && x.getOid() == oid).collect(Collectors.toList()));
-            result.addAll(vals.third().stream().filter(x -> x.getCurrentRiscStockPrice().isPresent() && x.getOid() == oid).collect(Collectors.toList()));
+            //List<DerivativePrice> yar =
+            //        vals.second().stream().filter(x -> x.getTicker().equals("YAR9C360")).collect(Collectors.toList());
+            List<DerivativePrice> callsWithSpRisc =
+                    vals.second().stream().filter(x -> x.getCurrentRiscStockPrice().isPresent() && x.getStockId() == oid).collect(Collectors.toList());
+            List<DerivativePrice> putsWithSpRisc =
+                    vals.third().stream().filter(x -> x.getCurrentRiscStockPrice().isPresent() && x.getStockId() == oid).collect(Collectors.toList());
+            result.addAll(callsWithSpRisc);
+            result.addAll(putsWithSpRisc);
         }
         return result;
     }
