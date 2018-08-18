@@ -3,11 +3,7 @@ package harborview.web.controllers;
 import harborview.dto.html.ElmCharts;
 import harborview.dto.html.RiscLinesDTO;
 import harborview.dto.html.SelectItem;
-import harborview.dto.html.options.OptionPurchaseDTO;
-import harborview.dto.html.options.OptionRegPurDTO;
-import harborview.dto.html.options.StockAndOptions;
-import harborview.dto.html.options.StockPriceDTO;
-import harborview.dto.html.options.OptionRiscDTO;
+import harborview.dto.html.options.*;
 import harborview.maunaloa.MaunaloaModel;
 import harborview.web.controllers.web.JsonResult;
 import oahu.exceptions.FinancialException;
@@ -22,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
+
 import static harborview.maunaloa.MaunaloaModel.ElmChartType;
 
 @Controller
@@ -30,6 +28,8 @@ public class MaunaloaController {
 
     // private final StockMarketRepository stockMarketRepository;
     private final MaunaloaModel maunaloaModel;
+
+    static boolean DEBUG = true;
 
     @Autowired
     public MaunaloaController(MaunaloaModel maunaloaModel) {
@@ -81,7 +81,16 @@ public class MaunaloaController {
         if (resetCache) {
             maunaloaModel.resetSpotAndOptions();
         }
-        return maunaloaModel.calls(ticker);
+        if (DEBUG) {
+            StockAndOptions calls = maunaloaModel.calls(ticker);
+            List<OptionDTO> debugCalls = calls.getOptions().stream().
+                    filter(x -> x.getTicker().equals("YAR9C360")).collect(Collectors.toList());
+            StockAndOptions debugResult = new StockAndOptions(calls.getStock(), debugCalls);
+            return debugResult;
+        }
+        else {
+            return maunaloaModel.calls(ticker);
+        }
     }
     @ResponseBody
     @RequestMapping(value = "puts/{ticker}/{rc}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
