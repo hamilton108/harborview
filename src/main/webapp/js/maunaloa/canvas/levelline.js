@@ -226,20 +226,26 @@ export class LevelLines {
     }
     //addRiscLines(ticker,stockPrice,optionPrice,risc,breakEven) {
     addRiscLines(cfg) {
-        const line0 = cfg.riscLines[0];
-        const breakEven = line0.be.toFixed(1);
+        cfg.riscLines.forEach( line => {
+            this.addRiscLine(line);
+        });
+        this.draw();
+    }
+    addRiscLine(line) {
+        const breakEven = line.be.toFixed(1);
         const y = this.vruler.valueToPix(breakEven);
         const breakEvenLine = new LevelLine(this,breakEven,300,this.canvas.width,y,
             {   draggable: false,
                 legendFn: function() {
-                    return "[" + line0.ticker + "] Ask: " + line0.ask + ", Break-even: " + breakEven;
+                    console.log(this);
+                    return "[" + line.ticker + "] Ask: " + line.ask + ", Break-even: " + breakEven;
                 }
             });
         this.lines.push(breakEvenLine);
 
-        const stockPrice = line0.stockPrice.toFixed(1);
-        const optionPrice = line0.optionPrice.toFixed(1);
+        const stockPrice = line.stockPrice.toFixed(1);
+        const optionPrice = line.optionPrice.toFixed(1);
 
-        this.draw();
+
     }
 }
