@@ -204,12 +204,10 @@ export class LevelLines {
             // tell the browser we're handling this event
             e.preventDefault();
             e.stopPropagation();
-            /*
             const line = self.nearest.line;
-            if (line.onMouseUp != null) {
+            if (line.onMouseUp !== null) {
                 line.onMouseUp();
             }
-            */
             self.isDown = false;
             self.nearest = null;
             self.draw();
@@ -227,12 +225,21 @@ export class LevelLines {
         this.draw();
     }
     //addRiscLines(ticker,stockPrice,optionPrice,risc,breakEven) {
-    addRiscLines(param) {
-        const line0 = param.riscLines[0];
-        const breakEven = line0.be;
+    addRiscLines(cfg) {
+        const line0 = cfg.riscLines[0];
+        const breakEven = line0.be.toFixed(1);
         const y = this.vruler.valueToPix(breakEven);
-        const line = new LevelLine(this,breakEven,300,this.canvas.width,y,{draggable: false});
-        this.lines.push(line);
+        const breakEvenLine = new LevelLine(this,breakEven,300,this.canvas.width,y,
+            {   draggable: false,
+                legendFn: function() {
+                    return "[" + line0.ticker + "] Ask: " + line0.ask + ", Break-even: " + breakEven;
+                }
+            });
+        this.lines.push(breakEvenLine);
+
+        const stockPrice = line0.stockPrice.toFixed(1);
+        const optionPrice = line0.optionPrice.toFixed(1);
+
         this.draw();
     }
 }
