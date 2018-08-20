@@ -1,4 +1,6 @@
 
+const riscUrl = "http://localhost:6346/maunaloa/optionprice";
+
 class LevelLine {
     constructor(parent,levelValue,x1,x2,y,conf) {
         this.parent = parent;
@@ -255,6 +257,27 @@ export class LevelLines {
                     const curRisc = this.risc || line.risc;
                     const curOptionPrice = this.optionPrice || line.optionPrice.toFixed(1);
                     return `[${line.ticker}] Price: ${curOptionPrice}, Risc: ${curRisc} => ${this.levelValue}`;
+                },
+                onMouseUp: function() {
+                    this.risc = "-";
+                    /*
+                    HARBORVIEW.Utils.jsonGET("http://localhost:8082/maunaloa/optionprice", {
+                            "ticker": cfg.ticker,
+                            "stockprice": this.levelValue
+                        },
+                        function(result) {
+                            self.risc = parseFloat(result.risc);
+                            self.optionPrice = parseFloat(result.optionprice);
+                            self.parent.draw();
+                        });
+                        */
+                    const curUrl = `${riscUrl}/${line.ticker}/${this.levelValue}`;
+                    fetch(curUrl)
+                        .then(data => {
+                            return data.json();
+                        }).then(result => {
+                            console.log(result);
+                    });
                 }
             });
         this.lines.push(riscLine);
