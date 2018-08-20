@@ -5,6 +5,7 @@ class LevelLine {
         this.levelValue = levelValue;
         this.lineWidth = 1;
         this.color = "grey";
+        this.fontColor = conf.fontColor || "crimson";
         this.x1 = x1;
         this.x2 = x2;
         this.y1 = y;
@@ -31,7 +32,7 @@ class LevelLine {
         ctx.strokeStyle = this.color;
         ctx.stroke();
         ctx.font = "16px Arial";
-        ctx.fillStyle = "crimson";
+        ctx.fillStyle = this.fontColor;
         ctx.fillText(this.legend(), this.x1, this.y1 - 10);
     }
 }
@@ -234,18 +235,28 @@ export class LevelLines {
     addRiscLine(line) {
         const breakEven = line.be.toFixed(1);
         const y = this.vruler.valueToPix(breakEven);
-        const breakEvenLine = new LevelLine(this,breakEven,300,this.canvas.width,y,
+        const x0 = 300;
+        const x1 = this.canvas.width;
+        const breakEvenLine = new LevelLine(this,breakEven,x0,x1,y,
             {   draggable: false,
+                fontColor: "green",
                 legendFn: function() {
-                    console.log(this);
                     return "[" + line.ticker + "] Ask: " + line.ask + ", Break-even: " + breakEven;
                 }
             });
         this.lines.push(breakEvenLine);
 
         const stockPrice = line.stockPrice.toFixed(1);
-        const optionPrice = line.optionPrice.toFixed(1);
+        const y2 = this.vruler.valueToPix(stockPrice);
 
-
+        const riscLine = new LevelLine(this,stockPrice,x0,x1,y2,
+            {   draggable: true,
+                legendFn: function() {
+                    const curRisc = this.risc || line.risc;
+                    const curOptionPrice = this.optionPrice || line.optionPrice.toFixed(1);
+                    return `[${line.ticker}] Price: ${curOptionPrice}, Risc: ${curRisc} => ${this.levelValue}`;
+                }
+            });
+        this.lines.push(riscLine);
     }
 }
