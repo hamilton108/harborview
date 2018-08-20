@@ -241,7 +241,7 @@ export class LevelLines {
             {   draggable: false,
                 fontColor: "green",
                 legendFn: function() {
-                    return "[" + line.ticker + "] Ask: " + line.ask + ", Break-even: " + breakEven;
+                    return `[${line.ticker}] Ask: ${line.ask}, Break-even: ${breakEven}`;
                 }
             });
         this.lines.push(breakEvenLine);
