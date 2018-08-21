@@ -1,5 +1,6 @@
 
-const riscUrl = "http://localhost:6346/maunaloa/optionprice";
+const host = "andromeda";
+const riscUrl = `http://${host}:6346/maunaloa/optionprice`;
 
 class LevelLine {
     constructor(parent,levelValue,x1,x2,y,conf) {

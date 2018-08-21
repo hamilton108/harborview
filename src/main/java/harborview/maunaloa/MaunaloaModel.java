@@ -146,5 +146,7 @@ public class MaunaloaModel {
     public void setOptionRepos(OptionRepository optionRepos) {
         this.optionRepos = optionRepos;
     }
-
+    public OptionPriceForDTO optionPriceFor(String optionTicker, double levelValue) {
+        
+    }
 }

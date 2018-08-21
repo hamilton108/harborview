@@ -154,7 +154,8 @@ public class MaunaloaController {
     public OptionPriceForDTO optionPrice(
             @PathVariable("optionticker") String ticker,
             @PathVariable("levelvalue") double levelValue) {
-        return new OptionPriceForDTO(18, 7);
+        //return new OptionPriceForDTO(18, 7);
+        return maunaloaModel.optionPriceFor(ticker,levelValue);
     }
 
     @ResponseBody
