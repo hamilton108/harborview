@@ -140,13 +140,16 @@ public class MaunaloaModel {
         return result;
     }
 
+    public OptionPriceForDTO optionPriceFor(String optionTicker, double levelValue) {
+        DerivativePrice option = optionRepos.getOptionFor(optionTicker);
+        double curOptionPrice = option.optionPriceFor(levelValue);
+        return new OptionPriceForDTO(curOptionPrice,option.getCurrentRisc());
+    }
+
     public void setStockMarketRepository(StockMarketRepository stockMarketRepository) {
         this.stockMarketRepository = stockMarketRepository;
     }
     public void setOptionRepos(OptionRepository optionRepos) {
         this.optionRepos = optionRepos;
-    }
-    public OptionPriceForDTO optionPriceFor(String optionTicker, double levelValue) {
-        
     }
 }

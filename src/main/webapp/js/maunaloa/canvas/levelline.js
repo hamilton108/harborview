@@ -1,5 +1,6 @@
 
-const host = "andromeda";
+//const host = "andromeda";
+const host = "localhost";
 const riscUrl = `http://${host}:6346/maunaloa/optionprice`;
 
 class LevelLine {
@@ -214,7 +215,7 @@ export class LevelLines {
             }
             self.isDown = false;
             self.nearest = null;
-            self.draw();
+            //self.draw();
         }
     }
     addLine() {
@@ -251,7 +252,7 @@ export class LevelLines {
 
         const stockPrice = line.stockPrice.toFixed(1);
         const y2 = this.vruler.valueToPix(stockPrice);
-
+        const self = this;
         const riscLine = new LevelLine(this,stockPrice,x0,x1,y2,
             {   draggable: true,
                 legendFn: function() {
@@ -261,23 +262,14 @@ export class LevelLines {
                 },
                 onMouseUp: function() {
                     this.risc = "-";
-                    /*
-                    HARBORVIEW.Utils.jsonGET("http://localhost:8082/maunaloa/optionprice", {
-                            "ticker": cfg.ticker,
-                            "stockprice": this.levelValue
-                        },
-                        function(result) {
-                            self.risc = parseFloat(result.risc);
-                            self.optionPrice = parseFloat(result.optionprice);
-                            self.parent.draw();
-                        });
-                        */
                     const curUrl = `${riscUrl}/${line.ticker}/${this.levelValue}`;
                     fetch(curUrl)
                         .then(data => {
                             return data.json();
                         }).then(result => {
-                            console.log(result);
+                            this.optionPrice = result.optionPrice.toFixed(1);
+                            this.risc = result.risc.toFixed(1);
+                            self.draw();
                     });
                 }
             });
