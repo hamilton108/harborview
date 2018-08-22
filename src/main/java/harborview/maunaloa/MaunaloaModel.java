@@ -125,6 +125,9 @@ public class MaunaloaModel {
         return purchaseOption(dto);
     }
 
+    public List<PurchaseWithSalesDTO> optionPurchases() {
+        return new ArrayList<>();
+    }
     public List<RiscLinesDTO> fetchRiscLines(int oid) {
         return optionRepos.fetchRiscLines(oid);
     }

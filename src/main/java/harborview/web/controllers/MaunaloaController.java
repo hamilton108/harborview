@@ -46,9 +46,18 @@ public class MaunaloaController {
     public String options(Locale locale, Model model) {
         return "maunaloa/options.html";
     }
+
     @RequestMapping(value = "optionpurchases", method =  RequestMethod.GET)
     public String optionpurchases(Locale locale, Model model) {
         return "maunaloa/optionpurchases.html";
+    }
+
+    @RequestMapping(value = "fetchpurchases/{purchaseType}/{rc}",
+                    method =  RequestMethod.GET,
+                    produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<PurchaseWithSalesDTO> fetchpurchases(@PathVariable("purchaseType") int purchaseType,
+                                                     @PathVariable("rc") boolean resetCache) {
+        return maunaloaModel.optionPurchases();
     }
 
     @ResponseBody
