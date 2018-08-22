@@ -344,7 +344,7 @@ view model =
     in
         H.div [ A.class "container" ]
             [ H.div [ A.class "row" ]
-                [ M.checkbox "Real-time purchase" "col-sm-2 checkbox" True ToggleRealTimePurchase
+                [ M.checkbox "cb-1" "Real-time purchase" True ToggleRealTimePurchase
                 , BTN.button "Reset Cache" ResetCache
                 , BTN.button "Fetch all purchases" FetchPurchases
                 ]
@@ -415,7 +415,7 @@ fetchPurchases isRealTime resetCache =
                 |> JP.required "dx" Json.string
                 |> JP.required "ot" Json.string
                 |> JP.required "ticker" Json.string
-                |> JP.required "dx" Json.string
+                |> JP.required "pdx" Json.string
                 |> JP.required "exp" Json.string
                 |> JP.required "days" Json.int
                 |> JP.required "price" Json.float
