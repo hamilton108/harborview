@@ -125,8 +125,11 @@ public class MaunaloaModel {
         return purchaseOption(dto);
     }
 
-    public List<PurchaseWithSalesDTO> optionPurchases() {
-        return new ArrayList<>();
+    public List<PurchaseWithSalesDTO> optionPurchases(
+        int purchaseType,
+        int status,
+        Derivative.OptionType ot) {
+        return null; //stockMarketRepository.purchasesWithSalesAll(purchaseType,status,null);
     }
     public List<RiscLinesDTO> fetchRiscLines(int oid) {
         return optionRepos.fetchRiscLines(oid);

@@ -29,7 +29,7 @@ public class MaunaloaController {
     // private final StockMarketRepository stockMarketRepository;
     private final MaunaloaModel maunaloaModel;
 
-    static boolean DEBUG = true;
+    static boolean DEBUG = false;
 
     @Autowired
     public MaunaloaController(MaunaloaModel maunaloaModel) {
@@ -57,7 +57,7 @@ public class MaunaloaController {
                     produces = MediaType.APPLICATION_JSON_VALUE)
     public List<PurchaseWithSalesDTO> fetchpurchases(@PathVariable("purchaseType") int purchaseType,
                                                      @PathVariable("rc") boolean resetCache) {
-        return maunaloaModel.optionPurchases();
+        return maunaloaModel.optionPurchases(purchaseType,1,null);
     }
 
     @ResponseBody
