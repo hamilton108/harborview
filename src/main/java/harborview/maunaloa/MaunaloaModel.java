@@ -129,7 +129,8 @@ public class MaunaloaModel {
         int purchaseType,
         int status,
         Derivative.OptionType ot) {
-        return null; //stockMarketRepository.purchasesWithSalesAll(purchaseType,status,null);
+        Collection<OptionPurchase> purchases =  stockMarketRepository.purchasesWithSalesAll(purchaseType,status,null);
+        return purchases.stream().map(PurchaseWithSalesDTO::new).collect(Collectors.toList());
     }
     public List<RiscLinesDTO> fetchRiscLines(int oid) {
         return optionRepos.fetchRiscLines(oid);

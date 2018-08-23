@@ -57,7 +57,8 @@ public class MaunaloaController {
                     produces = MediaType.APPLICATION_JSON_VALUE)
     public List<PurchaseWithSalesDTO> fetchpurchases(@PathVariable("purchaseType") int purchaseType,
                                                      @PathVariable("rc") boolean resetCache) {
-        return maunaloaModel.optionPurchases(purchaseType,1,null);
+        List<PurchaseWithSalesDTO> result = maunaloaModel.optionPurchases(purchaseType,1,null);
+        return result;
     }
 
     @ResponseBody
