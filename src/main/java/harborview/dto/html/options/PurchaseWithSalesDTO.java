@@ -2,6 +2,7 @@ package harborview.dto.html.options;
 
 import critterrepos.beans.options.OptionPurchaseBean;
 import oahu.financial.OptionPurchase;
+import harborview.service.DateUtils;
 
 public class PurchaseWithSalesDTO {
     private int oid;
@@ -90,23 +91,26 @@ public class PurchaseWithSalesDTO {
     }
 
     public String getDx() {
-        return dx;
+        return DateUtils.localDateToStr(p.getLocalDx());
     }
 
     public String getOt() {
-        return ot;
+        return p.getOptionType();
     }
 
     public String getTicker() {
-        return ticker;
+        return p.getOptionName();
     }
 
+    /**
+      purchase date
+    */
     public String getPdx() {
-        return pdx;
+        return getDx();
     }
 
     public String getExp() {
-        return exp;
+        return DateUtils.localDateToStr(p.getExpiry());
     }
 
     public int getDays() {
