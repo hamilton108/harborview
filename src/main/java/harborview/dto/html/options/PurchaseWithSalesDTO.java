@@ -1,10 +1,24 @@
 package harborview.dto.html.options;
 
 import critterrepos.beans.options.OptionPurchaseBean;
+import oahu.dto.Tuple;
+import oahu.dto.Tuple3;
+import oahu.financial.DerivativePrice;
+import oahu.financial.OptionCalculator;
 import oahu.financial.OptionPurchase;
 import harborview.service.DateUtils;
+import oahu.financial.StockPrice;
+import oahu.financial.repository.EtradeRepository;
+
+import java.time.temporal.ChronoUnit;
+import java.util.Collection;
+import java.util.Optional;
 
 public class PurchaseWithSalesDTO {
+    private final OptionCalculator calculator;
+    private EtradeRepository<Tuple<String>,Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>>
+        etradeRepository;
+
     private int oid;
     private String stock;
     private String dx;
@@ -78,8 +92,13 @@ public class PurchaseWithSalesDTO {
 
     */
 
-    public PurchaseWithSalesDTO(OptionPurchase purchase) {
+    public PurchaseWithSalesDTO(OptionPurchase purchase,
+                                EtradeRepository<Tuple<String>,Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>>
+                                        etrade,
+                                OptionCalculator calculator) {
         this.p = (OptionPurchaseBean)purchase;
+        this.etradeRepository = etrade;
+        this.calculator = calculator;
     }
 
     public int getOid() {
@@ -113,32 +132,41 @@ public class PurchaseWithSalesDTO {
         return DateUtils.localDateToStr(p.getExpiry());
     }
 
-    public int getDays() {
-        return days;
+    public long getDays() {
+        return ChronoUnit.DAYS.between(p.getLocalDx(),p.getExpiry());
     }
 
     public double getPrice() {
-        return price;
+        return p.getPrice();
     }
 
     public double getBid() {
-        return bid;
+        return p.getBuyAtPurchase();
     }
 
     public double getSpot() {
-        return spot;
+        return p.getSpotAtPurchase();
     }
 
-    public int getPvol() {
-        return pvol;
+    public long getPvol() {
+        return p.getVolume();
     }
 
-    public int getSvol() {
-        return svol;
+    public long getSvol() {
+        return p.volumeSold();
     }
 
     public double getIv() {
-        return iv;
+        /*
+        iv (if (= ot "c")
+        (.ivCall calc spot x t bid)
+        (.ivPut calc spot x t bid))
+        */
+        double exercise = p.getX();
+        double t = getDays() / 365.0;
+        return p.getOptionType().equals("c") ?
+                calculator.ivCall(getSpot(),exercise,t,getBid()) :
+                calculator.ivPut(getSpot(),exercise,t,getBid());
     }
 
     public double getCurAsk() {
@@ -155,5 +183,14 @@ public class PurchaseWithSalesDTO {
 
     public OptionPurchase getPurchase() {
         return p;
+    }
+    private DerivativePrice curOpt;
+    private DerivativePrice getCurOpt() {
+        if (curOpt == null) {
+            //double tmp = p.getOptionType().equals("c") ?
+
+
+        }
+        return null;
     }
 }

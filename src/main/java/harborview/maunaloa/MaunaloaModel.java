@@ -6,9 +6,12 @@ import harborview.dto.html.RiscLinesDTO;
 import harborview.dto.html.SelectItem;
 import harborview.dto.html.options.*;
 import harborview.maunaloa.repos.OptionRepository;
+import netfondsrepos.repos.DefaultEtradeRepository;
+import oahu.dto.Tuple;
 import oahu.dto.Tuple3;
 import oahu.exceptions.FinancialException;
 import oahu.financial.*;
+import oahu.financial.repository.EtradeRepository;
 import oahu.financial.repository.StockMarketRepository;
 
 import java.time.LocalDate;
@@ -17,15 +20,24 @@ import java.util.stream.Collectors;
 
 public class MaunaloaModel {
     private StockMarketRepository stockMarketRepository;
+    private OptionCalculator optionCalculator;
     private LocalDate startDate = LocalDate.of(2010,1,1);
 
     private Map<Integer,ElmCharts> elmChartsDayMap = new HashMap<>();
     private Map<Integer,ElmCharts> elmChartsWeekMap = new HashMap<>();
     private OptionRepository optionRepos;
+    private EtradeRepository<Tuple<String>,Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>>
+        etrade;
 
     public Collection<Stock> getStocks() {
        return stockMarketRepository.getStocks();
     }
+
+    public void setEtrade(EtradeRepository<Tuple<String>,Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>>
+            etrade) {
+        this.etrade = etrade;
+    }
+
 
     public enum ElmChartType { DAY, WEEK, MONTH }
 
@@ -130,7 +142,9 @@ public class MaunaloaModel {
         int status,
         Derivative.OptionType ot) {
         Collection<OptionPurchase> purchases =  stockMarketRepository.purchasesWithSalesAll(purchaseType,status,null);
-        return purchases.stream().map(PurchaseWithSalesDTO::new).collect(Collectors.toList());
+        return purchases.stream()
+                .map(x -> new PurchaseWithSalesDTO(x, etrade, optionCalculator))
+                .collect(Collectors.toList());
     }
     public List<RiscLinesDTO> fetchRiscLines(int oid) {
         return optionRepos.fetchRiscLines(oid);
@@ -153,10 +167,16 @@ public class MaunaloaModel {
         return new OptionPriceForDTO(curOptionPrice,option.getCurrentRisc());
     }
 
+    //region Properties
     public void setStockMarketRepository(StockMarketRepository stockMarketRepository) {
         this.stockMarketRepository = stockMarketRepository;
     }
     public void setOptionRepos(OptionRepository optionRepos) {
         this.optionRepos = optionRepos;
     }
+
+    public void setOptionCalculator(OptionCalculator optionCalculator) {
+        this.optionCalculator = optionCalculator;
+    }
+    //endregion
 }
