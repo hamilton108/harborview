@@ -170,27 +170,32 @@ public class PurchaseWithSalesDTO {
     }
 
     public double getCurAsk() {
-        return curAsk;
+        Optional<DerivativePrice> curOpt = getCurOpt();
+        return curOpt.map(DerivativePrice::getSell).orElse(-1.0);
     }
 
     public double getCurBid() {
-        return curBid;
+        Optional<DerivativePrice> curOpt = getCurOpt();
+        return curOpt.map(DerivativePrice::getBuy).orElse(-1.0);
     }
 
-    public double getCurIv() {
-        return curIv;
+    public Optional<Double> getCurIv() {
+        Optional<DerivativePrice> curOpt = getCurOpt();
+        return curOpt.map(DerivativePrice::getIvBuy).orElse(Optional.empty());
     }
 
     public OptionPurchase getPurchase() {
         return p;
     }
-    private DerivativePrice curOpt;
-    private DerivativePrice getCurOpt() {
+    private Optional<DerivativePrice> curOpt = null;
+    private Optional<DerivativePrice> getCurOpt() {
         if (curOpt == null) {
-            //double tmp = p.getOptionType().equals("c") ?
-
-
+            Collection<DerivativePrice> opts = p.getOptionType().equals("c") ?
+                    etradeRepository.calls(p.getTicker()) :
+                    etradeRepository.puts(p.getTicker());
+            String oname = p.getOptionName();
+            curOpt = opts.stream().filter(x -> x.getTicker().equals(oname)).findFirst();
         }
-        return null;
+        return curOpt;
     }
 }

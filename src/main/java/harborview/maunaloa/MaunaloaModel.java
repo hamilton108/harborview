@@ -6,7 +6,6 @@ import harborview.dto.html.RiscLinesDTO;
 import harborview.dto.html.SelectItem;
 import harborview.dto.html.options.*;
 import harborview.maunaloa.repos.OptionRepository;
-import netfondsrepos.repos.DefaultEtradeRepository;
 import oahu.dto.Tuple;
 import oahu.dto.Tuple3;
 import oahu.exceptions.FinancialException;
@@ -33,10 +32,6 @@ public class MaunaloaModel {
        return stockMarketRepository.getStocks();
     }
 
-    public void setEtrade(EtradeRepository<Tuple<String>,Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>>
-            etrade) {
-        this.etrade = etrade;
-    }
 
 
     public enum ElmChartType { DAY, WEEK, MONTH }
@@ -177,6 +172,10 @@ public class MaunaloaModel {
 
     public void setOptionCalculator(OptionCalculator optionCalculator) {
         this.optionCalculator = optionCalculator;
+    }
+    public void setEtrade(EtradeRepository<Tuple<String>,Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>>
+                                  etrade) {
+        this.etrade = etrade;
     }
     //endregion
 }
