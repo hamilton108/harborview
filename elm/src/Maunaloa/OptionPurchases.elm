@@ -272,68 +272,72 @@ tableHeader =
         ]
 
 
+toRow : PurchaseWithSales -> H.Html Msg
+toRow x =
+    let
+        profit =
+            M.toDecimal (x.curBid - x.price) 100.0
+
+        diffBid =
+            M.toDecimal (x.curBid - x.bid) 100.0
+
+        diffIv =
+            M.toDecimal (100.0 * ((x.curIv / x.iv) - 1.0)) 100.0
+
+        oidStr =
+            toString x.oid
+    in
+        H.tr []
+            [ H.button [ A.class "btn btn-success", E.onClick (SellClick x) ] [ H.text ("Sell " ++ oidStr) ]
+            , H.td [] [ H.text oidStr ]
+            , H.td [] [ H.text x.stock ]
+            , H.td [] [ H.text x.optionType ]
+            , H.td [] [ H.text x.ticker ]
+            , H.td [] [ H.text x.purchaseDate ]
+            , H.td [] [ H.text x.exp ]
+            , H.td [] [ H.text (toString x.days) ]
+            , H.td [] [ H.text (toString x.price) ]
+            , H.td [] [ H.text (toString x.bid) ]
+            , H.td [] [ H.text (toString x.purchaseVolume) ]
+            , H.td [] [ H.text (toString x.volumeSold) ]
+            , H.td [] [ H.text (toString x.spot) ]
+            , H.td [] [ H.text (toString x.iv) ]
+            , H.td [] [ H.text (toString x.curAsk) ]
+            , H.td [] [ H.text (toString x.curBid) ]
+            , H.td [] [ H.text (toString x.curIv) ]
+            , H.td [] [ H.text (toString profit) ]
+            , H.td [] [ H.text (toString diffBid) ]
+            , H.td [] [ H.text (toString diffIv) ]
+            ]
+
+
+purchaseTable : Model -> H.Html Msg
+purchaseTable model =
+    case model.purchases of
+        Nothing ->
+            H.table [ A.class "table table-hoover" ]
+                [ tableHeader
+                , H.tbody [] []
+                ]
+
+        Just purchases ->
+            let
+                rows =
+                    List.map toRow purchases
+            in
+                H.div [ A.class "row" ]
+                    [ -- H.text ("Date: " ++ s.curDx ++ ", Current spot: " ++ toString s.curSpot)
+                      H.table [ A.class "table table-hoover" ]
+                        [ tableHeader
+                        , H.tbody []
+                            rows
+                        ]
+                    ]
+
+
 view : Model -> H.Html Msg
 view model =
     let
-        purchaseTable =
-            case model.purchases of
-                Nothing ->
-                    H.table [ A.class "table table-hoover" ]
-                        [ tableHeader
-                        , H.tbody [] []
-                        ]
-
-                Just purchases ->
-                    let
-                        toRow x =
-                            let
-                                profit =
-                                    M.toDecimal (x.curBid - x.price) 100.0
-
-                                diffBid =
-                                    M.toDecimal (x.curBid - x.bid) 100.0
-
-                                diffIv =
-                                    M.toDecimal (100.0 * ((x.curIv / x.iv) - 1.0)) 100.0
-
-                                oidStr =
-                                    toString x.oid
-                            in
-                                H.tr []
-                                    [ H.button [ A.class "btn btn-success", E.onClick (SellClick x) ] [ H.text ("Sell " ++ oidStr) ]
-                                    , H.td [] [ H.text oidStr ]
-                                    , H.td [] [ H.text x.stock ]
-                                    , H.td [] [ H.text x.optionType ]
-                                    , H.td [] [ H.text x.ticker ]
-                                    , H.td [] [ H.text x.purchaseDate ]
-                                    , H.td [] [ H.text x.exp ]
-                                    , H.td [] [ H.text (toString x.days) ]
-                                    , H.td [] [ H.text (toString x.price) ]
-                                    , H.td [] [ H.text (toString x.bid) ]
-                                    , H.td [] [ H.text (toString x.purchaseVolume) ]
-                                    , H.td [] [ H.text (toString x.volumeSold) ]
-                                    , H.td [] [ H.text (toString x.spot) ]
-                                    , H.td [] [ H.text (toString x.iv) ]
-                                    , H.td [] [ H.text (toString x.curAsk) ]
-                                    , H.td [] [ H.text (toString x.curBid) ]
-                                    , H.td [] [ H.text (toString x.curIv) ]
-                                    , H.td [] [ H.text (toString profit) ]
-                                    , H.td [] [ H.text (toString diffBid) ]
-                                    , H.td [] [ H.text (toString diffIv) ]
-                                    ]
-
-                        rows =
-                            List.map toRow purchases
-                    in
-                        H.div [ A.class "row" ]
-                            [ -- H.text ("Date: " ++ s.curDx ++ ", Current spot: " ++ toString s.curSpot)
-                              H.table [ A.class "table table-hoover" ]
-                                [ tableHeader
-                                , H.tbody []
-                                    rows
-                                ]
-                            ]
-
         dlgHeader =
             case model.selectedPurchase of
                 Nothing ->
@@ -342,13 +346,16 @@ view model =
                 Just sp ->
                     "Option Sale: " ++ sp.ticker
     in
-        H.div [ A.class "container" ]
-            [ H.div [ A.class "row" ]
-                [ M.checkbox "cb-1" "Real-time purchase" True ToggleRealTimePurchase
-                , BTN.button "Reset Cache" ResetCache
-                , BTN.button "Fetch all purchases" FetchPurchases
+        H.div []
+            [ H.div [ A.class "grid-elm" ]
+                [ H.div [ A.class "form-group form-group--elm" ]
+                    [ M.checkbox "cb-1" "Real-time purchase" True ToggleRealTimePurchase ]
+                , H.div [ A.class "form-group form-group--elm" ]
+                    [ BTN.button "Reset Cache" ResetCache ]
+                , H.div [ A.class "form-group form-group--elm" ]
+                    [ BTN.button "Fetch all purchases" FetchPurchases ]
                 ]
-            , purchaseTable
+            , H.div [ A.class "grid-elm" ] [ purchaseTable model ]
             , DLG.modalDialog dlgHeader
                 model.dlgSell
                 SellDlgOk
@@ -363,6 +370,114 @@ view model =
 
 
 
+{-
+
+       H.div [ A.class "container" ]
+           [ H.div [ A.class "row" ]
+               [ M.checkbox "cb-1" "Real-time purchase" True ToggleRealTimePurchase
+               , BTN.button "Reset Cache" ResetCache
+               , BTN.button "Fetch all purchases" FetchPurchases
+               ]
+           , purchaseTable
+           , DLG.modalDialog dlgHeader
+               model.dlgSell
+               SellDlgOk
+               SellDlgCancel
+               [ M.makeLabel "Sale Price:"
+               , M.makeInput SalePriceChange model.salePrice
+               , M.makeLabel "Sale Volume:"
+               , M.makeInput SaleVolumeChange model.saleVolume
+               ]
+           , DLG.alert model.dlgAlert AlertOk
+           ]
+   let
+       purchaseTable =
+           case model.purchases of
+               Nothing ->
+                   H.table [ A.class "table table-hoover" ]
+                       [ tableHeader
+                       , H.tbody [] []
+                       ]
+
+               Just purchases ->
+                   let
+                       toRow x =
+                           let
+                               profit =
+                                   M.toDecimal (x.curBid - x.price) 100.0
+
+                               diffBid =
+                                   M.toDecimal (x.curBid - x.bid) 100.0
+
+                               diffIv =
+                                   M.toDecimal (100.0 * ((x.curIv / x.iv) - 1.0)) 100.0
+
+                               oidStr =
+                                   toString x.oid
+                           in
+                               H.tr []
+                                   [ H.button [ A.class "btn btn-success", E.onClick (SellClick x) ] [ H.text ("Sell " ++ oidStr) ]
+                                   , H.td [] [ H.text oidStr ]
+                                   , H.td [] [ H.text x.stock ]
+                                   , H.td [] [ H.text x.optionType ]
+                                   , H.td [] [ H.text x.ticker ]
+                                   , H.td [] [ H.text x.purchaseDate ]
+                                   , H.td [] [ H.text x.exp ]
+                                   , H.td [] [ H.text (toString x.days) ]
+                                   , H.td [] [ H.text (toString x.price) ]
+                                   , H.td [] [ H.text (toString x.bid) ]
+                                   , H.td [] [ H.text (toString x.purchaseVolume) ]
+                                   , H.td [] [ H.text (toString x.volumeSold) ]
+                                   , H.td [] [ H.text (toString x.spot) ]
+                                   , H.td [] [ H.text (toString x.iv) ]
+                                   , H.td [] [ H.text (toString x.curAsk) ]
+                                   , H.td [] [ H.text (toString x.curBid) ]
+                                   , H.td [] [ H.text (toString x.curIv) ]
+                                   , H.td [] [ H.text (toString profit) ]
+                                   , H.td [] [ H.text (toString diffBid) ]
+                                   , H.td [] [ H.text (toString diffIv) ]
+                                   ]
+
+                       rows =
+                           List.map toRow purchases
+                   in
+                       H.div [ A.class "row" ]
+                           [ -- H.text ("Date: " ++ s.curDx ++ ", Current spot: " ++ toString s.curSpot)
+                             H.table [ A.class "table table-hoover" ]
+                               [ tableHeader
+                               , H.tbody []
+                                   rows
+                               ]
+                           ]
+
+       dlgHeader =
+           case model.selectedPurchase of
+               Nothing ->
+                   "Option Sale:"
+
+               Just sp ->
+                   "Option Sale: " ++ sp.ticker
+   in
+       H.div [ A.class "container" ]
+           [ H.div [ A.class "row" ]
+               [ M.checkbox "cb-1" "Real-time purchase" True ToggleRealTimePurchase
+               , BTN.button "Reset Cache" ResetCache
+               , BTN.button "Fetch all purchases" FetchPurchases
+               ]
+           , purchaseTable
+           , DLG.modalDialog dlgHeader
+               model.dlgSell
+               SellDlgOk
+               SellDlgCancel
+               [ M.makeLabel "Sale Price:"
+               , M.makeInput SalePriceChange model.salePrice
+               , M.makeLabel "Sale Volume:"
+               , M.makeInput SaleVolumeChange model.saleVolume
+               ]
+           , DLG.alert model.dlgAlert AlertOk
+           ]
+
+-}
 -- endregion
 -- region COMMANDS
 
