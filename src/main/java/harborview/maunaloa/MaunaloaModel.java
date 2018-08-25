@@ -1,15 +1,18 @@
 package harborview.maunaloa;
 
+import critterrepos.beans.options.OptionPurchaseBean;
 import critterrepos.models.impl.CachedStockMarketReposImpl;
 import harborview.dto.html.ElmCharts;
 import harborview.dto.html.RiscLinesDTO;
 import harborview.dto.html.SelectItem;
 import harborview.dto.html.options.*;
 import harborview.maunaloa.repos.OptionRepository;
+import netfondsrepos.repos.ChachedEtradeReposImpl;
 import oahu.dto.Tuple;
 import oahu.dto.Tuple3;
 import oahu.exceptions.FinancialException;
 import oahu.financial.*;
+import oahu.financial.repository.ChachedEtradeRepository;
 import oahu.financial.repository.EtradeRepository;
 import oahu.financial.repository.StockMarketRepository;
 
@@ -27,6 +30,8 @@ public class MaunaloaModel {
     private OptionRepository optionRepos;
     private EtradeRepository<Tuple<String>,Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>>
         etrade;
+
+    private ChachedEtradeRepository<Tuple<String>> cachedEtrade;
 
     public Collection<Stock> getStocks() {
        return stockMarketRepository.getStocks();
@@ -137,9 +142,20 @@ public class MaunaloaModel {
         int status,
         Derivative.OptionType ot) {
         Collection<OptionPurchase> purchases =  stockMarketRepository.purchasesWithSalesAll(purchaseType,status,null);
-        return purchases.stream()
+        List<PurchaseWithSalesDTO> result =
+            purchases.stream()
                 .map(x -> new PurchaseWithSalesDTO(x, etrade, optionCalculator))
                 .collect(Collectors.toList());
+        for (PurchaseWithSalesDTO p : result) {
+            /*
+            OptionPurchaseBean pb = (OptionPurchaseBean)p.getPurchase();
+            pb.setRepository(cachedEtrade);
+            Optional<StockPrice> spot = pb.getSpot();
+            System.out.println(spot);
+            */
+            p.setCachedEtrade(cachedEtrade);
+        }
+        return result;
     }
     public List<RiscLinesDTO> fetchRiscLines(int oid) {
         return optionRepos.fetchRiscLines(oid);
@@ -176,6 +192,9 @@ public class MaunaloaModel {
     public void setEtrade(EtradeRepository<Tuple<String>,Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>>
                                   etrade) {
         this.etrade = etrade;
+    }
+    public void setCachedEtrade(ChachedEtradeRepository<Tuple<String>> cachedEtrade) {
+        this.cachedEtrade = cachedEtrade;
     }
     //endregion
 }

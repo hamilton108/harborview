@@ -28,13 +28,18 @@
         <property name="optionCalculator" ref="calculator"/>
         <property name="contentHandler" ref="contenthandler"/>
     </bean>
-
+    <bean id="cached-etrade" class="netfondsrepos.repos.ChachedEtradeReposImpl">
+        <property name="repos" ref="etrade"/>
+    </bean>
     <bean id="optionRepos" class="harborview.maunaloa.repos.OptionRepository">
         <property name="stockMarketRepository" ref="stockMarketRepos" />
         <property name="etrade" ref="etrade" />
     </bean>
     <bean id="maunaloaModel" class="harborview.maunaloa.MaunaloaModel">
+        <property name="cachedEtrade" ref="cached-etrade" />
+        <property name="etrade" ref="etrade" />
         <property name="stockMarketRepository" ref="stockMarketRepos" />
         <property name="optionRepos" ref="optionRepos" />
+        <property name="optionCalculator" ref="calculator"/>
     </bean>
 </beans>

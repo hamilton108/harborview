@@ -52,6 +52,7 @@ public class MaunaloaController {
         return "maunaloa/optionpurchases.html";
     }
 
+    @ResponseBody
     @RequestMapping(value = "fetchpurchases/{purchaseType}/{rc}",
                     method =  RequestMethod.GET,
                     produces = MediaType.APPLICATION_JSON_VALUE)

@@ -8,6 +8,7 @@ import oahu.financial.OptionCalculator;
 import oahu.financial.OptionPurchase;
 import harborview.service.DateUtils;
 import oahu.financial.StockPrice;
+import oahu.financial.repository.ChachedEtradeRepository;
 import oahu.financial.repository.EtradeRepository;
 
 import java.time.temporal.ChronoUnit;
@@ -18,26 +19,9 @@ public class PurchaseWithSalesDTO {
     private final OptionCalculator calculator;
     private EtradeRepository<Tuple<String>,Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>>
         etradeRepository;
-
-    private int oid;
-    private String stock;
-    private String dx;
-    private String ot;
-    private String ticker;
-    private String pdx;
-    private String exp;
-    private int days;
-    private double price;
-    private double bid;
-    private double spot;
-    private int pvol;
-    private int svol;
-    private double iv;
-    private double curAsk;
-    private double curBid;
-    private double curIv;
     private final OptionPurchaseBean p;
 
+    //region Clojure
     /*
     (defn purchasesales->json [^OptionPurchaseBean p]
             (let [calc (S/get-bean "calculator")
@@ -91,6 +75,7 @@ public class PurchaseWithSalesDTO {
         -1)}))
 
     */
+    //endregion
 
     public PurchaseWithSalesDTO(OptionPurchase purchase,
                                 EtradeRepository<Tuple<String>,Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>>
@@ -162,11 +147,16 @@ public class PurchaseWithSalesDTO {
         (.ivCall calc spot x t bid)
         (.ivPut calc spot x t bid))
         */
-        double exercise = p.getX();
-        double t = getDays() / 365.0;
-        return p.getOptionType().equals("c") ?
-                calculator.ivCall(getSpot(),exercise,t,getBid()) :
-                calculator.ivPut(getSpot(),exercise,t,getBid());
+        try {
+            double exercise = p.getX();
+            double t = getDays() / 365.0;
+            return p.getOptionType().equals("c") ?
+                    calculator.ivCall(getSpot(), exercise, t, getBid()) :
+                    calculator.ivPut(getSpot(), exercise, t, getBid());
+        }
+        catch (Exception ex) {
+            return 0.0;
+        }
     }
 
     public double getCurAsk() {
@@ -179,14 +169,25 @@ public class PurchaseWithSalesDTO {
         return curOpt.map(DerivativePrice::getBuy).orElse(-1.0);
     }
 
-    public Optional<Double> getCurIv() {
+    public double getCurIv() {
         Optional<DerivativePrice> curOpt = getCurOpt();
-        return curOpt.map(DerivativePrice::getIvBuy).orElse(Optional.empty());
+        Optional<Double> result = curOpt.map(DerivativePrice::getIvBuy).orElse(Optional.empty());
+        if (result.isPresent()) {
+            return result.get();
+        }
+        else {
+            return 0.0;
+        }
     }
 
+    public void setCachedEtrade(ChachedEtradeRepository<Tuple<String>> etrade) {
+        p.setRepository(etrade);
+    }
+    /*
     public OptionPurchase getPurchase() {
         return p;
     }
+    */
     private Optional<DerivativePrice> curOpt = null;
     private Optional<DerivativePrice> getCurOpt() {
         if (curOpt == null) {
