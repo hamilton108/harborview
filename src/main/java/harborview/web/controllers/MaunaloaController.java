@@ -1,5 +1,6 @@
 package harborview.web.controllers;
 
+import critterrepos.beans.options.OptionSaleBean;
 import harborview.dto.html.ElmCharts;
 import harborview.dto.html.RiscLinesDTO;
 import harborview.dto.html.SelectItem;
@@ -60,6 +61,21 @@ public class MaunaloaController {
                                                      @PathVariable("rc") boolean resetCache) {
         List<PurchaseWithSalesDTO> result = maunaloaModel.optionPurchases(purchaseType,1,null);
         return result;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "sellpurchase",
+            method =  RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public JsonResult sellPurchase(@RequestBody OptionSaleBean dto) {
+        try {
+            //OptionPurchase purchase = maunaloaModel.registerAndPurchaseOption(dto);
+            //return new JsonResult(true, String.format("Option purchase oid: %d",  purchase.getOid()), 0);
+            return new JsonResult(true, "", 0);
+        }
+        catch (Exception ex) {
+            return new JsonResult(false, ex.getMessage(), 0);
+        }
     }
 
     @ResponseBody

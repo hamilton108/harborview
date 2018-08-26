@@ -1,6 +1,7 @@
 package harborview.maunaloa;
 
 import critterrepos.beans.options.OptionPurchaseBean;
+import critterrepos.beans.options.OptionSaleBean;
 import critterrepos.models.impl.CachedStockMarketReposImpl;
 import harborview.dto.html.ElmCharts;
 import harborview.dto.html.RiscLinesDTO;
@@ -36,8 +37,6 @@ public class MaunaloaModel {
     public Collection<Stock> getStocks() {
        return stockMarketRepository.getStocks();
     }
-
-
 
     public enum ElmChartType { DAY, WEEK, MONTH }
 
@@ -142,17 +141,12 @@ public class MaunaloaModel {
         int status,
         Derivative.OptionType ot) {
         Collection<OptionPurchase> purchases =  stockMarketRepository.purchasesWithSalesAll(purchaseType,status,null);
+        optionRepos.setOptionPurchases(purchases);
         List<PurchaseWithSalesDTO> result =
             purchases.stream()
                 .map(x -> new PurchaseWithSalesDTO(x, etrade, optionCalculator))
                 .collect(Collectors.toList());
         for (PurchaseWithSalesDTO p : result) {
-            /*
-            OptionPurchaseBean pb = (OptionPurchaseBean)p.getPurchase();
-            pb.setRepository(cachedEtrade);
-            Optional<StockPrice> spot = pb.getSpot();
-            System.out.println(spot);
-            */
             p.setCachedEtrade(cachedEtrade);
         }
         return result;
@@ -178,6 +172,11 @@ public class MaunaloaModel {
         return new OptionPriceForDTO(curOptionPrice,option.getCurrentRisc());
     }
 
+    public int sellPurchase(OptionSaleBean dto) {
+        OptionPurchaseBean p = (OptionPurchaseBean)optionRepos.getPurchaseFor(dto.getPurchaseOid());
+        p.addSale(dto);
+        return dto.getOid();
+    }
     //region Properties
     public void setStockMarketRepository(StockMarketRepository stockMarketRepository) {
         this.stockMarketRepository = stockMarketRepository;

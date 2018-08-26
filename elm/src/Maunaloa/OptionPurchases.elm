@@ -1,5 +1,6 @@
 module Maunaloa.OptionPurchases exposing (..)
 
+import Common.Types exposing (JsonStatus, jsonStatusDecoder)
 import Common.Buttons as BTN
 import Common.ComboBox as CMB
 import Common.Miscellaneous as M
@@ -88,7 +89,7 @@ type Msg
     | SellClick PurchaseWithSales
     | SellDlgOk
     | SellDlgCancel
-    | SaleOk (Result Http.Error String)
+    | SaleOk (Result Http.Error JsonStatus)
     | SalePriceChange String
     | SaleVolumeChange String
     | AlertOk
@@ -219,7 +220,7 @@ update msg model =
             ( { model | dlgSell = DLG.DialogHidden }, Cmd.none )
 
         SaleOk (Ok s) ->
-            ( { model | dlgAlert = DLG.DialogVisibleAlert "Purchase Sale" s DLG.Info }, Cmd.none )
+            ( { model | dlgAlert = DLG.DialogVisibleAlert "Purchase Sale" s.msg DLG.Info }, Cmd.none )
 
         SaleOk (Err s) ->
             let
@@ -370,127 +371,19 @@ view model =
 
 
 
-{-
-
-       H.div [ A.class "container" ]
-           [ H.div [ A.class "row" ]
-               [ M.checkbox "cb-1" "Real-time purchase" True ToggleRealTimePurchase
-               , BTN.button "Reset Cache" ResetCache
-               , BTN.button "Fetch all purchases" FetchPurchases
-               ]
-           , purchaseTable
-           , DLG.modalDialog dlgHeader
-               model.dlgSell
-               SellDlgOk
-               SellDlgCancel
-               [ M.makeLabel "Sale Price:"
-               , M.makeInput SalePriceChange model.salePrice
-               , M.makeLabel "Sale Volume:"
-               , M.makeInput SaleVolumeChange model.saleVolume
-               ]
-           , DLG.alert model.dlgAlert AlertOk
-           ]
-   let
-       purchaseTable =
-           case model.purchases of
-               Nothing ->
-                   H.table [ A.class "table table-hoover" ]
-                       [ tableHeader
-                       , H.tbody [] []
-                       ]
-
-               Just purchases ->
-                   let
-                       toRow x =
-                           let
-                               profit =
-                                   M.toDecimal (x.curBid - x.price) 100.0
-
-                               diffBid =
-                                   M.toDecimal (x.curBid - x.bid) 100.0
-
-                               diffIv =
-                                   M.toDecimal (100.0 * ((x.curIv / x.iv) - 1.0)) 100.0
-
-                               oidStr =
-                                   toString x.oid
-                           in
-                               H.tr []
-                                   [ H.button [ A.class "btn btn-success", E.onClick (SellClick x) ] [ H.text ("Sell " ++ oidStr) ]
-                                   , H.td [] [ H.text oidStr ]
-                                   , H.td [] [ H.text x.stock ]
-                                   , H.td [] [ H.text x.optionType ]
-                                   , H.td [] [ H.text x.ticker ]
-                                   , H.td [] [ H.text x.purchaseDate ]
-                                   , H.td [] [ H.text x.exp ]
-                                   , H.td [] [ H.text (toString x.days) ]
-                                   , H.td [] [ H.text (toString x.price) ]
-                                   , H.td [] [ H.text (toString x.bid) ]
-                                   , H.td [] [ H.text (toString x.purchaseVolume) ]
-                                   , H.td [] [ H.text (toString x.volumeSold) ]
-                                   , H.td [] [ H.text (toString x.spot) ]
-                                   , H.td [] [ H.text (toString x.iv) ]
-                                   , H.td [] [ H.text (toString x.curAsk) ]
-                                   , H.td [] [ H.text (toString x.curBid) ]
-                                   , H.td [] [ H.text (toString x.curIv) ]
-                                   , H.td [] [ H.text (toString profit) ]
-                                   , H.td [] [ H.text (toString diffBid) ]
-                                   , H.td [] [ H.text (toString diffIv) ]
-                                   ]
-
-                       rows =
-                           List.map toRow purchases
-                   in
-                       H.div [ A.class "row" ]
-                           [ -- H.text ("Date: " ++ s.curDx ++ ", Current spot: " ++ toString s.curSpot)
-                             H.table [ A.class "table table-hoover" ]
-                               [ tableHeader
-                               , H.tbody []
-                                   rows
-                               ]
-                           ]
-
-       dlgHeader =
-           case model.selectedPurchase of
-               Nothing ->
-                   "Option Sale:"
-
-               Just sp ->
-                   "Option Sale: " ++ sp.ticker
-   in
-       H.div [ A.class "container" ]
-           [ H.div [ A.class "row" ]
-               [ M.checkbox "cb-1" "Real-time purchase" True ToggleRealTimePurchase
-               , BTN.button "Reset Cache" ResetCache
-               , BTN.button "Fetch all purchases" FetchPurchases
-               ]
-           , purchaseTable
-           , DLG.modalDialog dlgHeader
-               model.dlgSell
-               SellDlgOk
-               SellDlgCancel
-               [ M.makeLabel "Sale Price:"
-               , M.makeInput SalePriceChange model.salePrice
-               , M.makeLabel "Sale Volume:"
-               , M.makeInput SaleVolumeChange model.saleVolume
-               ]
-           , DLG.alert model.dlgAlert AlertOk
-           ]
-
--}
 -- endregion
 -- region COMMANDS
 
 
 sellPurchase : Int -> Int -> Float -> Cmd Msg
-sellPurchase oid volume price =
+sellPurchase oid vol price =
     let
         url =
             mainUrl ++ "/sellpurchase"
 
         params =
             [ ( "oid", JE.int oid )
-            , ( "vol", JE.int volume )
+            , ( "volume", JE.int vol )
             , ( "price", JE.float price )
             ]
 
@@ -498,7 +391,7 @@ sellPurchase oid volume price =
             M.asHttpBody params
     in
         Http.send SaleOk <|
-            Http.post url jbody Json.string
+            Http.post url jbody jsonStatusDecoder
 
 
 fetchPurchases : Bool -> Bool -> Cmd Msg

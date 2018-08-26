@@ -37,7 +37,7 @@ public class PurchaseWithSalesDTO {
     d1 (.getExpiry p)
     days (.between ChronoUnit/DAYS d0 d1)
     t (/ days 365.0)
-    pvol (.getVolume p)
+    pvol (.getVol p)
     svol (.volumeSold p)
     iv (if (= ot "c")
             (.ivCall calc spot x t bid)

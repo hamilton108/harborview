@@ -20,6 +20,7 @@ public class OptionRepository {
             etrade;
 
     private Map<String,DerivativePrice> optionsMap = new HashMap<>();
+    private Map<Integer,OptionPurchase> purchasesMap;
 
     public Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>
     stockAndOptions(int oid) {
@@ -33,6 +34,12 @@ public class OptionRepository {
             tmp.third().forEach(x -> optionsMap.put(x.getTicker(), x));
         }
         return tmp;
+    }
+    public void setOptionPurchases(Collection<OptionPurchase> purchases) {
+        purchasesMap = new HashMap<>();
+        for (OptionPurchase p: purchases) {
+            purchasesMap.put(p.getOid(), p);
+        }
     }
 
     private Collection<DerivativePrice> optionsWithRisc(int oid) {
@@ -86,6 +93,9 @@ public class OptionRepository {
     }
     public DerivativePrice getOptionFor(String ticker) {
         return optionsMap.get(ticker);
+    }
+    public OptionPurchase getPurchaseFor(int oid) {
+        return purchasesMap.get(oid);
     }
     public List<RiscLinesDTO> fetchRiscLines(int oid) {
         Collection<DerivativePrice> riscs = optionsWithRisc(oid);

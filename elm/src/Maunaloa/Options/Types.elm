@@ -1,5 +1,6 @@
 module Maunaloa.Options.Types exposing (..)
 
+import Common.Types exposing (JsonStatus)
 import Common.ComboBox as CMB
 import Common.ModalDialog as DLG exposing (errorAlert)
 import Http
@@ -63,8 +64,11 @@ type alias OptionSale =
     {}
 
 
-type alias PurchaseStatus =
-    { ok : Bool, msg : String, statusCode : Int }
+
+{-
+   type alias PurchaseStatus =
+       { ok : Bool, msg : String, statusCode : Int }
+-}
 
 
 type OptionMsg
@@ -76,7 +80,7 @@ type PurchaseMsg
     = PurchaseClick Option
     | PurchaseDlgOk
     | PurchaseDlgCancel
-    | OptionPurchased (Result Http.Error PurchaseStatus)
+    | OptionPurchased (Result Http.Error JsonStatus)
 
 
 type Msg
