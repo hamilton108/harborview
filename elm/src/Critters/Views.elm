@@ -1,5 +1,21 @@
 module Critters.Views exposing (..)
 
+import Html as H
+import Html.Attributes as A
+import Common.Buttons as BTN
+import Common.ComboBox as CB
+import Critters.Types exposing (Model, Msg(..))
 
-tmp =
-    ""
+
+view : Model -> H.Html Msg
+view model =
+    H.div []
+        [ H.div [ A.class "grid-elm" ]
+            [ H.div [ A.class "form-group form-group--elm" ]
+                [ CB.makeSelect "Critters: " FetchCritters model.critters model.selectedCritter
+                ]
+            , H.div [ A.class "form-group form-group--elm" ]
+                [ BTN.button "New Critter" NewCritter ]
+            ]
+        , H.div [ A.class "grid-elm" ] []
+        ]

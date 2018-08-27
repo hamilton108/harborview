@@ -10,9 +10,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/critters")
 public class CritterController {
 
+    @RequestMapping(value = "overlook", method =  RequestMethod.GET)
+    public String critters() {
+        return "critters/overlook.html";
+    }
+    /*
     @RequestMapping(value = "overlook/{ct}", method =  RequestMethod.GET)
     public String critters(@PathVariable("ct") int critterType, Model model) {
         model.addAttribute("demo", "demo");
         return "critters/overlook.html";
     }
+    */
 }
