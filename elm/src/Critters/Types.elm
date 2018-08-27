@@ -4,8 +4,9 @@ import Common.ComboBox as CB
 
 
 type Msg
-    = NewCritter
-    | FetchCritters String
+    = PaperCritters
+    | RealTimeCritters
+    | NewCritter
 
 
 type alias Flags =
@@ -13,6 +14,4 @@ type alias Flags =
 
 
 type alias Model =
-    { critters : Maybe CB.SelectItems
-    , selectedCritter : String
-    }
+    {}

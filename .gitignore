@@ -15,6 +15,7 @@ elm-charts.js
 elm-options.js
 elm/elm-stuff/
 elm-optionpurchases.js
+elm-critters.js
 *.map
 *.orig*
 node_modules/

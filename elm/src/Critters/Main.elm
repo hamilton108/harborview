@@ -24,6 +24,4 @@ init flags =
 
 initModel : Flags -> Model
 initModel flags =
-    { critters = Just [ CB.ComboBoxItem "11" "Paper", CB.ComboBoxItem "4" "Real Time" ]
-    , selectedCritter = "-1"
-    }
+    {}

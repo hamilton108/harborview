@@ -12,8 +12,9 @@ view model =
     H.div []
         [ H.div [ A.class "grid-elm" ]
             [ H.div [ A.class "form-group form-group--elm" ]
-                [ CB.makeSelect "Critters: " FetchCritters model.critters model.selectedCritter
-                ]
+                [ BTN.button "Paper Critters" PaperCritters ]
+            , H.div [ A.class "form-group form-group--elm" ]
+                [ BTN.button "Real Time Critters" RealTimeCritters ]
             , H.div [ A.class "form-group form-group--elm" ]
                 [ BTN.button "New Critter" NewCritter ]
             ]
