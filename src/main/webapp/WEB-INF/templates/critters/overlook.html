@@ -6,8 +6,13 @@
 <body>
 <div th:replace="navbar.html :: navbar"></div>
 <div class="logo"></div>
-
+<div id="my-app"></div>
 <div th:replace="head.html :: scripts"></div>
+<script type="text/javascript" src="/js/critters/elm-critters.js"></script>
+<script type="text/javascript">
+    const node = document.getElementById('my-app');
+    const app = Elm.Critters.Main.embed(node);
+</script>
 <!--
 <div class="logo"></div>
 <div class="container">
