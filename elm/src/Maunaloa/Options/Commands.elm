@@ -6,6 +6,7 @@ import Http
 import Json.Decode as Json
 import Json.Decode.Pipeline as JP
 import Json.Encode as JE
+import Common.Types as T
 import Maunaloa.Options.Types
     exposing
         ( Model
@@ -14,7 +15,6 @@ import Maunaloa.Options.Types
         , OptionMsg(..)
         , Options
         , PurchaseMsg(..)
-        , PurchaseStatus
         , RiscItem
         , RiscItems
         , Stock
@@ -37,7 +37,7 @@ purchaseOption stockId ticker ask bid volume spot isRealTime =
             [ ( "ticker", JE.string ticker )
             , ( "ask", JE.float ask )
             , ( "bid", JE.float bid )
-            , ( "vol", JE.int volume )
+            , ( "volume", JE.int volume )
             , ( "spot", JE.float spot )
             , ( "rt", JE.bool isRealTime )
             ]
@@ -48,7 +48,7 @@ purchaseOption stockId ticker ask bid volume spot isRealTime =
         Http.send
             (PurchaseMsgFor << OptionPurchased)
         <|
-            Http.post url jbody D.purchaseStatusDecoder
+            Http.post url jbody T.jsonStatusDecoder
 
 
 registerAndPurchaseOption_ : Model -> Option -> Cmd Msg
@@ -82,7 +82,7 @@ registerAndPurchaseOption_ model opx =
             [ ( "ticker", JE.string opx.ticker )
             , ( "ask", JE.float curAsk )
             , ( "bid", JE.float curBid )
-            , ( "vol", JE.int curVol )
+            , ( "volume", JE.int curVol )
             , ( "spot", JE.float curSpot )
             , ( "rt", JE.bool model.isRealTimePurchase )
             , ( "stockId", JE.int soid )
@@ -95,7 +95,7 @@ registerAndPurchaseOption_ model opx =
             M.asHttpBody params
     in
         Http.send (PurchaseMsgFor << OptionPurchased) <|
-            Http.post url jbody D.purchaseStatusDecoder
+            Http.post url jbody T.jsonStatusDecoder
 
 
 registerAndPurchaseOption : Model -> Cmd Msg

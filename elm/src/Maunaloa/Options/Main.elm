@@ -20,7 +20,6 @@ import Maunaloa.Options.Types
         , Msg(..)
         , Option
         , Options
-        , PurchaseStatus
         , RiscItem
         , RiscItems
         , Stock
