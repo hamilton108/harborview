@@ -140,8 +140,7 @@ public class MaunaloaController {
     @ResponseBody
     @RequestMapping(value = "purchaseoption", method =  RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public JsonResult purchaseOption(@RequestBody OptionPurchaseDTO dto) {
-        return new JsonResult(true, String.format("Option purchase oid: %d",  12), 0);
-        /*
+        //return new JsonResult(true, String.format("Option purchase oid: %d",  12), 0);
         try {
             OptionPurchase purchase = maunaloaModel.purchaseOption(dto);
             return new JsonResult(true, String.format("Option purchase oid: %d",  purchase.getOid()), 0);
@@ -152,7 +151,6 @@ public class MaunaloaController {
         catch (Exception ex) {
             return new JsonResult(false, ex.getMessage(), 0);
         }
-        */
     }
 
     @ResponseBody
