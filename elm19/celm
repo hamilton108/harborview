@@ -1,0 +1,84 @@
+#!/bin/bash
+
+
+usage()
+{
+cat << EOF
+usage: $0 options
+
+OPTIONS:
+   -h      Show this message
+   -e      Elm version (1: 0.18, 2: 0.19) 
+   -i      Module index (1: Charts, 2: Options, 3: OptionPurchase, 4: Critters)
+EOF
+}
+
+EV="1"
+DOCKER_IMG=
+MODULE=
+while getopts “he:i:” OPTION
+do
+     case $OPTION in
+         h)
+             usage
+             exit 1
+             ;;
+         e)
+             EV=$OPTARG
+             ;;
+         i)
+             MODULE=$OPTARG
+             ;;
+         ?)
+             usage
+             exit
+             ;;
+     esac
+done
+
+if [ $EV -eq "1" ]; then
+    DOCKER_IMG="codesimple/elm:0.18"
+else
+    DOCKER_IMG="rcs/elm:0.19"
+fi
+
+case $MODULE in
+
+    1) ELM="src/Maunaloa/Charts.elm"
+       JS="elm-charts.js"
+       TODIR="maunaloa"
+        ;;
+
+    2) ELM="src/Maunaloa/Options/Main.elm"
+       JS="elm-options.js"
+       TODIR="maunaloa"
+        ;;
+
+    3) ELM="src/Maunaloa/OptionPurchases.elm"
+       JS="elm-optionpurchases.js"
+       TODIR="maunaloa"
+        ;;
+
+    4) ELM="src/Critters/Main.elm"
+       JS="elm-critters.js"
+       TODIR="critters"
+        ;;
+
+    5) ELM="src/Vinapu/Projects.elm"
+       JS="elm-projects.js"
+       TODIR="vinapu"
+        ;;
+esac
+
+
+echo "$ELM"
+echo "$DOCKER_IMG"
+
+
+## docker run -it --rm -v "$(pwd):/code" -w "/code" -e "HOME=/tmp" -u $UID:$GID -p 8000:8000 codesimple/elm:$ELM_VERSION make $ELM --output $JS
+
+docker run -it --rm -v "$(pwd):/code" -w "/code" -e "HOME=/tmp" -u $UID:$GID $DOCKER_IMG make $ELM --output $JS
+
+# cp $JS ../src/main/webapp/js/$TODIR/$JS
+
+exit 0
