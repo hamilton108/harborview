@@ -14,6 +14,7 @@ EOF
 }
 
 EV="1"
+DOCKER_IMG=
 MODULE=
 while getopts “he:i:” OPTION
 do
@@ -36,9 +37,9 @@ do
 done
 
 if [ $EV -eq "1" ]; then
-    ELM_VERSION="0.18"
+    DOCKER_IMG="codesimple/elm:0.18"
 else
-    ELM_VERSION="0.19"
+    DOCKER_IMG="rcs/elm:0.19"
 fi
 
 case $MODULE in
@@ -69,10 +70,14 @@ case $MODULE in
         ;;
 esac
 
-echo "$ELM"
-echo "$ELM_VERSION"
 
-# docker run -it --rm -v "$(pwd):/code" -w "/code" -e "HOME=/tmp" -u $UID:$GID -p 8000:8000 codesimple/elm:$ELM_VERSION make $ELM --output $JS
+echo "$ELM"
+echo "$DOCKER_IMG"
+
+
+## docker run -it --rm -v "$(pwd):/code" -w "/code" -e "HOME=/tmp" -u $UID:$GID -p 8000:8000 codesimple/elm:$ELM_VERSION make $ELM --output $JS
+
+docker run -it --rm -v "$(pwd):/code" -w "/code" -e "HOME=/tmp" -u $UID:$GID $DOCKER_IMG make $ELM --output $JS
 
 # cp $JS ../src/main/webapp/js/$TODIR/$JS
 

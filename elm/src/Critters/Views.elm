@@ -284,9 +284,9 @@ critterAccDeny crit acc dny =
     H.div [] []
 
 
-critterAcc : Maybe Critter -> Maybe AccRule -> H.Html Msg
-critterAcc crit acc =
-    H.div [] []
+critterAccs : Maybe Critter -> List AccRule -> List (H.Html Msg)
+critterAccs crit accs =
+    [ H.tr [] [] ]
 
 
 critterRow : Critter -> H.Html Msg
@@ -296,10 +296,23 @@ critterRow crit =
             H.tr [] (List.concat [ critterPart (Just crit), accPart Nothing, denyPart Nothing ])
 
         Just accs ->
-            H.div [] []
+            let
+                rows =
+                    critterAccs crit accs
+            in
+            H.tr [] rows
 
 
 
+{-
+   case accs of
+       critterAcc crit acc
+       [ acc ] ->
+           -- H.tr [] (List.concat [ critterPart (Just crit), accPart acc, denyPart Nothing ])
+
+       x :: xs ->
+           H.div [] []
+-}
 {-
    let
        c =
@@ -329,7 +342,7 @@ critterArea opx =
 details : OptionPurchase -> H.Html Msg
 details opx =
     H.details []
-        [ H.summary [] [ H.text ("[ " ++ (toString opx.oid) ++ "  ] " ++ opx.ticker) ]
+        [ H.summary [] [ H.text ("[ " ++ toString opx.oid ++ "  ] " ++ opx.ticker) ]
         , H.table [ A.class "table" ]
             [ tableHeader
             , H.tbody []
@@ -350,17 +363,17 @@ view model =
                     []
 
                 Just opxx ->
-                    (List.map details opxx)
+                    List.map details opxx
     in
-        H.div []
-            [ H.div [ A.class "grid-elm" ]
-                [ H.div [ A.class "form-group form-group--elm" ]
-                    [ BTN.button "Paper Critters" PaperCritters ]
-                , H.div [ A.class "form-group form-group--elm" ]
-                    [ BTN.button "Real Time Critters" RealTimeCritters ]
-                , H.div [ A.class "form-group form-group--elm" ]
-                    [ BTN.button "New Critter" NewCritter ]
-                ]
-            , H.div [ A.class "grid-elm" ]
-                ps
+    H.div []
+        [ H.div [ A.class "grid-elm" ]
+            [ H.div [ A.class "form-group form-group--elm" ]
+                [ BTN.button "Paper Critters" PaperCritters ]
+            , H.div [ A.class "form-group form-group--elm" ]
+                [ BTN.button "Real Time Critters" RealTimeCritters ]
+            , H.div [ A.class "form-group form-group--elm" ]
+                [ BTN.button "New Critter" NewCritter ]
             ]
+        , H.div [ A.class "grid-elm" ]
+            ps
+        ]
