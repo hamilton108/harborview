@@ -8,13 +8,11 @@ usage: $0 options
 
 OPTIONS:
    -h      Show this message
-   -e      Elm version (1: 0.18, 2: 0.19) 
    -i      Module index (1: Charts, 2: Options, 3: OptionPurchase, 4: Critters)
 EOF
 }
 
 EV="1"
-DOCKER_IMG=
 MODULE=
 while getopts “he:i:” OPTION
 do
@@ -22,9 +20,6 @@ do
          h)
              usage
              exit 1
-             ;;
-         e)
-             EV=$OPTARG
              ;;
          i)
              MODULE=$OPTARG
@@ -36,11 +31,7 @@ do
      esac
 done
 
-if [ $EV -eq "1" ]; then
-    DOCKER_IMG="codesimple/elm:0.18"
-else
-    DOCKER_IMG="rcs/elm:0.19"
-fi
+DOCKER_IMG="rcs/elm:0.19"
 
 case $MODULE in
 
@@ -70,15 +61,8 @@ case $MODULE in
         ;;
 esac
 
+docker run -it --rm -v "$(pwd):/code" -v "/tmp:/tmp" -w "/code" -e "HOME=/tmp" -u $UID:$GID $DOCKER_IMG make $ELM --output $JS
 
-echo "$ELM"
-echo "$DOCKER_IMG"
-
-
-## docker run -it --rm -v "$(pwd):/code" -w "/code" -e "HOME=/tmp" -u $UID:$GID -p 8000:8000 codesimple/elm:$ELM_VERSION make $ELM --output $JS
-
-docker run -it --rm -v "$(pwd):/code" -w "/code" -e "HOME=/tmp" -u $UID:$GID $DOCKER_IMG make $ELM --output $JS
-
-# cp $JS ../src/main/webapp/js/$TODIR/$JS
+cp $JS ../src/main/webapp/js/$TODIR/$JS
 
 exit 0
