@@ -8,18 +8,23 @@ usage: $0 options
 
 OPTIONS:
    -h      Show this message
+   -o      --optimize flag
    -i      Module index (1: Charts, 2: Options, 3: OptionPurchase, 4: Critters)
 EOF
 }
 
 EV="1"
 MODULE=
-while getopts “he:i:” OPTION
+OPTIMIZE="0"
+while getopts “ho:i:” OPTION
 do
      case $OPTION in
          h)
              usage
              exit 1
+             ;;
+         i)
+             OTPIMIZE="1"
              ;;
          i)
              MODULE=$OPTARG
@@ -61,7 +66,11 @@ case $MODULE in
         ;;
 esac
 
-docker run -it --rm -v "$(pwd):/code" -v "/tmp:/tmp" -w "/code" -e "HOME=/tmp" -u $UID:$GID $DOCKER_IMG make $ELM --output $JS
+if [ "$OPTIMIZE" = "1"]; then
+  docker run -it --rm -v "$(pwd):/code" -v "/tmp:/tmp" -w "/code" -e "HOME=/tmp" -u $UID:$GID $DOCKER_IMG make $ELM --output $JS
+else
+  docker run -it --rm -v "$(pwd):/code" -v "/tmp:/tmp" -w "/code" -e "HOME=/tmp" -u $UID:$GID $DOCKER_IMG make $ELM --output $JS
+fi
 
 cp $JS ../src/main/webapp/js/$TODIR/$JS
 

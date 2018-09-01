@@ -278,28 +278,41 @@ denyPart dny =
             ]
 
 
-critterAccDeny : Maybe Critter -> Maybe AccRule -> Maybe DenyRule -> H.Html Msg
+critterAccDeny : Maybe Critter -> Maybe AccRule -> Maybe DenyRule -> List (H.Html Msg)
 critterAccDeny crit acc dny =
-    H.div [] []
+    List.concat [ critterPart crit, accPart acc, denyPart dny ]
 
 
-critterAccs : Maybe Critter -> List AccRule -> List (H.Html Msg)
-critterAccs crit accs =
-    [ H.tr [] [] ]
+critterAccDenys : Maybe Critter -> Maybe AccRule -> List DenyRule -> List (H.Html Msg) -> List (H.Html Msg)
+critterAccDenys crit acc dnys result =
+    Debug.todo "critterAccDenys"
 
 
-critterRow : Critter -> H.Html Msg
-critterRow crit =
+critterAccs : Maybe Critter -> List AccRule -> List (H.Html Msg) -> List (H.Html Msg)
+critterAccs crit accs result =
+    case accs of
+        [] ->
+            result
+
+        [ acc ] ->
+            result ++ List.concat [ critterPart crit, accPart acc, denyPart Nothing ]
+
+        x :: xs ->
+            let
+                firstRow =
+                    List.concat [ critterPart crit, accPart x, denyPart Nothing ]
+            in
+                firstRow ++ critterAccs crit xs result
+
+
+critterRows : Critter -> List (H.Html Msg)
+critterRows crit =
     case crit.accRules of
         Nothing ->
-            H.tr [] (List.concat [ critterPart (Just crit), accPart Nothing, denyPart Nothing ])
+            List.concat [ critterPart (Just crit), accPart Nothing, denyPart Nothing ]
 
         Just accs ->
-            let
-                rows =
-                    critterAccs crit accs
-            in
-                H.tr [] rows
+            critterAccs crit accs []
 
 
 

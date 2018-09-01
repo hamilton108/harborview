@@ -13,7 +13,7 @@ out/
 tmp/
 elm-charts.js
 elm-options.js
-elm/elm-stuff/
+elm-stuff/
 elm-optionpurchases.js
 elm-critters.js
 *.map
