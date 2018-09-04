@@ -1,14 +1,15 @@
 module Critters.Main exposing (..)
 
-import Html as H
+import Browser
+import Critters.Types as T exposing (Flags, Model, Msg(..))
 import Critters.Update as U
 import Critters.Views as V
-import Critters.Types as T exposing (Model, Flags, Msg(..))
+import Html as H
 
 
 main : Program Flags Model Msg
 main =
-    H.programWithFlags
+    Browser.element
         { init = init
         , view = V.view
         , update = U.update
@@ -39,5 +40,10 @@ initModel flags =
         opx =
             T.OptionPurchase 1 "YAR8L240" (Just [ critter ])
     in
-        { purchases = Just [ opx ]
-        }
+    { purchases = Just [ opx ]
+    }
+
+
+initx : Model
+initx =
+    initModel Flags

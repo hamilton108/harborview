@@ -228,9 +228,9 @@ critterPart crit =
             ]
 
         Just c ->
-            [ H.td [] [ H.text (toString c.oid) ]
-            , H.td [] [ H.text (toString c.sellVolume) ]
-            , H.td [] [ H.text (toString c.status) ]
+            [ H.td [] [ H.text (String.fromInt c.oid) ]
+            , H.td [] [ H.text (String.fromInt c.sellVolume) ]
+            , H.td [] [ H.text (String.fromInt c.status) ]
             ]
 
 
@@ -247,10 +247,10 @@ accPart acc =
             ]
 
         Just a ->
-            [ H.td [] [ H.text (toString a.oid) ]
-            , H.td [] [ H.text (toString a.rtyp) ]
+            [ H.td [] [ H.text (String.fromInt a.oid) ]
+            , H.td [] [ H.text (String.fromInt a.rtyp) ]
             , H.td [] [ H.text (rtypDesc a.rtyp) ]
-            , H.td [] [ H.text (toString a.value) ]
+            , H.td [] [ H.text (String.fromFloat a.value) ]
             , H.td [] [ H.text "Active" ]
             , H.td [] [ H.text "New Deny" ]
             ]
@@ -269,10 +269,10 @@ denyPart dny =
             ]
 
         Just d ->
-            [ H.td [] [ H.text (toString d.oid) ]
-            , H.td [] [ H.text (toString d.rtyp) ]
+            [ H.td [] [ H.text (String.fromInt d.oid) ]
+            , H.td [] [ H.text (String.fromInt d.rtyp) ]
             , H.td [] [ H.text (rtypDesc d.rtyp) ]
-            , H.td [] [ H.text (toString d.value) ]
+            , H.td [] [ H.text (String.fromFloat d.value) ]
             , H.td [] [ H.text "Active" ]
             , H.td [] [ H.text "Memory" ]
             ]
@@ -295,12 +295,12 @@ critterAccs crit accs result =
             result
 
         [ acc ] ->
-            result ++ List.concat [ critterPart crit, accPart acc, denyPart Nothing ]
+            result ++ List.concat [ critterPart crit, accPart (Just acc), denyPart Nothing ]
 
         x :: xs ->
             let
                 firstRow =
-                    List.concat [ critterPart crit, accPart x, denyPart Nothing ]
+                    List.concat [ critterPart crit, accPart (Just x), denyPart Nothing ]
             in
                 firstRow ++ critterAccs crit xs result
 
@@ -312,7 +312,7 @@ critterRows crit =
             List.concat [ critterPart (Just crit), accPart Nothing, denyPart Nothing ]
 
         Just accs ->
-            critterAccs crit accs []
+            critterAccs (Just crit) accs []
 
 
 
@@ -341,6 +341,27 @@ critterRows crit =
 -}
 
 
+ca : Model -> List (H.Html Msg)
+ca model =
+    case model.purchases of
+        Nothing ->
+            []
+
+        Just p ->
+            case List.head p of
+                Nothing ->
+                    []
+
+                Just p0 ->
+                    case p0.critters of
+                        Nothing ->
+                            []
+
+                        Just c ->
+                            -- List.concat (List.map critterRows c)
+                            critterPart (List.head c)
+
+
 critterArea : OptionPurchase -> H.Html Msg
 critterArea opx =
     case opx.critters of
@@ -351,10 +372,14 @@ critterArea opx =
             H.p [] [ H.text "-" ]
 
 
+
+-- H.div [] (List.map critterRows c)
+
+
 details : OptionPurchase -> H.Html Msg
 details opx =
     H.details []
-        [ H.summary [] [ H.text ("[ " ++ toString opx.oid ++ "  ] " ++ opx.ticker) ]
+        [ H.summary [] [ H.text ("[ " ++ String.fromInt opx.oid ++ "  ] " ++ opx.ticker) ]
         , H.table [ A.class "table" ]
             [ tableHeader
             , H.tbody []
