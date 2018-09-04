@@ -369,10 +369,15 @@ critterArea opx =
             H.p [] [ H.text "-" ]
 
         Just c ->
-            H.p [] [ H.text "-" ]
+            let
+                c0 =
+                    List.head c
+            in
+                H.tr [] (List.concat [ critterPart c0, accPart Nothing, denyPart Nothing ])
 
 
 
+-- (List.concat [ critterPart (Just c0), accPart Nothing, denyPart Nothing ])
 -- H.div [] (List.map critterRows c)
 
 

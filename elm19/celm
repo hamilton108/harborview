@@ -16,14 +16,14 @@ EOF
 EV="1"
 MODULE=
 OPTIMIZE="0"
-while getopts “ho:i:” OPTION
+while getopts “hoi:” OPTION
 do
      case $OPTION in
          h)
              usage
              exit 1
              ;;
-         i)
+         o)
              OTPIMIZE="1"
              ;;
          i)
@@ -66,7 +66,7 @@ case $MODULE in
         ;;
 esac
 
-if [ "$OPTIMIZE" = "1"]; then
+if [ "$OPTIMIZE" = "1" ]; then
   docker run -it --rm -v "$(pwd):/code" -v "/tmp:/tmp" -w "/code" -e "HOME=/tmp" -u $UID:$GID $DOCKER_IMG make $ELM --output $JS --optimize
 else
   docker run -it --rm -v "$(pwd):/code" -v "/tmp:/tmp" -w "/code" -e "HOME=/tmp" -u $UID:$GID $DOCKER_IMG make $ELM --output $JS
@@ -75,3 +75,18 @@ fi
 cp $JS ../src/main/webapp/js/$TODIR/$JS
 
 exit 0
+
+# #!/bin/sh
+#
+# set -e
+#
+# js="elm.js"
+# min="elm.min.js"
+#
+# elm make --optimize --output=$js $@
+#
+# uglifyjs $js --compress 'pure_funcs="F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9",pure_getters,keep_fargs=false,unsafe_comps,unsafe' | uglifyjs --mangle --output=$min
+#
+# echo "Initial size: $(cat $js | wc -c) bytes  ($js)"
+# echo "Minified size:$(cat $min | wc -c) bytes  ($min)"
+# echo "Gzipped size: $(cat $min | gzip -c | wc -c) bytes"
