@@ -278,43 +278,6 @@ denyPart dny =
             ]
 
 
-critterAccDeny : Maybe Critter -> Maybe AccRule -> Maybe DenyRule -> List (H.Html Msg)
-critterAccDeny crit acc dny =
-    List.concat [ critterPart crit, accPart acc, denyPart dny ]
-
-
-critterAccDenys : Maybe Critter -> Maybe AccRule -> List DenyRule -> List (H.Html Msg) -> List (H.Html Msg)
-critterAccDenys crit acc dnys result =
-    Debug.todo "critterAccDenys"
-
-
-critterAccs : Maybe Critter -> List AccRule -> List (H.Html Msg) -> List (H.Html Msg)
-critterAccs crit accs result =
-    case accs of
-        [] ->
-            result
-
-        [ acc ] ->
-            result ++ List.concat [ critterPart crit, accPart (Just acc), denyPart Nothing ]
-
-        x :: xs ->
-            let
-                firstRow =
-                    List.concat [ critterPart crit, accPart (Just x), denyPart Nothing ]
-            in
-                firstRow ++ critterAccs crit xs result
-
-
-critterRows : Critter -> List (H.Html Msg)
-critterRows crit =
-    case crit.accRules of
-        Nothing ->
-            List.concat [ critterPart (Just crit), accPart Nothing, denyPart Nothing ]
-
-        Just accs ->
-            critterAccs (Just crit) accs []
-
-
 
 {-
    case accs of
@@ -341,44 +304,89 @@ critterRows crit =
 -}
 
 
-ca : Model -> List (H.Html Msg)
-ca model =
-    case model.purchases of
+{-| Return H.tr [][ H.td [][], .. ]
+-}
+critAccDenyTr : Maybe Critter -> Maybe AccRule -> Maybe DenyRule -> H.Html Msg
+critAccDenyTr crit acc dny =
+    let
+        tdRow =
+            List.concat [ critterPart crit, accPart acc, denyPart dny ]
+    in
+        H.tr [] tdRow
+
+
+critAccTr : Maybe Critter -> AccRule -> H.Html Msg
+critAccTr crit acc =
+    H.tr [] (List.concat [ critterPart crit, accPart (Just acc), denyPart Nothing ])
+
+
+{-| Return a list of H.tr [][ H.td [][], .. ]
+-}
+critterRows : Critter -> List (H.Html Msg)
+critterRows crit =
+    case crit.accRules of
         Nothing ->
-            []
+            let
+                tdRow =
+                    List.concat [ critterPart (Just crit), accPart Nothing, denyPart Nothing ]
+            in
+                [ H.tr [] tdRow ]
 
-        Just p ->
-            case List.head p of
-                Nothing ->
-                    []
+        Just accs ->
+            case accs of
+                [] ->
+                    [ critAccDenyTr (Just crit) Nothing Nothing ]
 
-                Just p0 ->
-                    case p0.critters of
-                        Nothing ->
-                            []
+                [ acc ] ->
+                    [ critAccDenyTr (Just crit) (Just acc) Nothing ]
 
-                        Just c ->
-                            -- List.concat (List.map critterRows c)
-                            critterPart (List.head c)
+                x :: xs ->
+                    let
+                        firstRow =
+                            critAccDenyTr (Just crit) (Just x) Nothing
+                    in
+                        firstRow :: List.map (critAccTr Nothing) xs
 
 
-critterArea : OptionPurchase -> H.Html Msg
+critterArea : OptionPurchase -> List (H.Html Msg)
 critterArea opx =
     case opx.critters of
         Nothing ->
-            H.p [] [ H.text "-" ]
+            [ H.tr [] [] ]
 
         Just c ->
             let
                 c0 =
                     List.head c
             in
-                H.tr [] (List.concat [ critterPart c0, accPart Nothing, denyPart Nothing ])
+                case c0 of
+                    Nothing ->
+                        [ H.tr [] [] ]
+
+                    Just c0x ->
+                        critterRows c0x
 
 
 
--- (List.concat [ critterPart (Just c0), accPart Nothing, denyPart Nothing ])
--- H.div [] (List.map critterRows c)
+{-
+   case c of
+       [] ->
+           [ H.tr [] [] ]
+
+       [ c0 ] ->
+           [ H.tr [] (List.concat [ critterPart (Just c0), accPart Nothing, denyPart Nothing ]) ]
+
+       x :: xs ->
+           [ H.tr [] (List.concat [ critterPart (Just x), accPart Nothing, denyPart Nothing ]) ]
+
+-}
+{-
+   let
+       c0 =
+           List.head c
+   in
+       H.tr [] (List.concat [ critterPart c0, accPart Nothing, denyPart Nothing ])
+-}
 
 
 details : OptionPurchase -> H.Html Msg
@@ -387,9 +395,7 @@ details opx =
         [ H.summary [] [ H.text ("[ " ++ String.fromInt opx.oid ++ "  ] " ++ opx.ticker) ]
         , H.table [ A.class "table" ]
             [ tableHeader
-            , H.tbody []
-                [ critterArea opx
-                ]
+            , H.tbody [] (critterArea opx)
             ]
         ]
 

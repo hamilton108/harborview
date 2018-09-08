@@ -34,14 +34,17 @@ initModel flags =
         acc =
             T.AccRule 1 7 5.5 True (Just [ dny1, dny2 ])
 
+        acc2 =
+            T.AccRule 2 5 5.5 True Nothing
+
         critter =
-            T.Critter 1 10 1 (Just [ acc ])
+            T.Critter 1 10 1 (Just [ acc, acc2 ])
 
         opx =
             T.OptionPurchase 1 "YAR8L240" (Just [ critter ])
     in
-    { purchases = Just [ opx ]
-    }
+        { purchases = Just [ opx ]
+        }
 
 
 initx : Model
