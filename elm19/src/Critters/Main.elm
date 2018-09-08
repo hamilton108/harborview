@@ -35,7 +35,7 @@ initModel flags =
             T.AccRule 1 7 5.5 True (Just [ dny1, dny2 ])
 
         acc2 =
-            T.AccRule 2 5 5.5 True Nothing
+            T.AccRule 2 5 3.5 True Nothing
 
         critter =
             T.Critter 1 10 1 (Just [ acc, acc2 ])
