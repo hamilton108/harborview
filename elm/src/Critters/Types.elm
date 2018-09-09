@@ -1,7 +1,5 @@
 module Critters.Types exposing (..)
 
-import Common.ComboBox as CB
-
 
 rtypDesc : Int -> String
 rtypDesc rtyp =
