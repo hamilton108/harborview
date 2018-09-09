@@ -12,6 +12,7 @@ import Critters.Types
         , OptionPurchases
         , rtypDesc
         )
+import Html.Events as E
 import Html as H
 import Html.Attributes as A
 
@@ -129,15 +130,21 @@ accPart acc =
             , H.td [] [ H.text "-" ]
             ]
 
-        Just a ->
+        Just curAcc ->
             let
                 cbActive =
-                    H.input [ A.checked a.active, A.type_ "checkbox" ] []
+                    H.input
+                        [ A.checked curAcc.active
+                        , A.type_ "checkbox"
+                        , A.attribute "data-oid" (String.fromInt curAcc.oid)
+                        , E.onClick (ToggleAccActive curAcc)
+                        ]
+                        []
             in
-                [ H.td [] [ H.text (String.fromInt a.oid) ]
-                , H.td [] [ H.text (String.fromInt a.rtyp) ]
-                , H.td [] [ H.text (rtypDesc a.rtyp) ]
-                , H.td [] [ H.text (String.fromFloat a.value) ]
+                [ H.td [] [ H.text (String.fromInt curAcc.oid) ]
+                , H.td [] [ H.text (String.fromInt curAcc.rtyp) ]
+                , H.td [] [ H.text (rtypDesc curAcc.rtyp) ]
+                , H.td [] [ H.text (String.fromFloat curAcc.value) ]
                 , H.td [] [ cbActive ]
                 , H.td [] [ H.a [ A.href "#", A.class "newdnyrule href-td" ] [ H.text "New Deny" ] ]
                 ]
@@ -158,7 +165,13 @@ denyPart dny =
         Just d ->
             let
                 cbActive =
-                    H.input [ A.checked d.active, A.type_ "checkbox" ] []
+                    H.input
+                        [ A.checked d.active
+                        , A.type_ "checkbox"
+                        , A.attribute "data-oid" (String.fromInt d.oid)
+                        , E.onClick ToggleDenyActive
+                        ]
+                        []
 
                 cbMemory =
                     H.input [ A.checked d.memory, A.type_ "checkbox" ] []

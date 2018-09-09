@@ -36,6 +36,8 @@ type Msg
     = PaperCritters
     | RealTimeCritters
     | NewCritter
+    | ToggleAccActive AccRule
+    | ToggleDenyActive
 
 
 type alias OptionPurchase =
