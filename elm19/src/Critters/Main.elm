@@ -29,7 +29,7 @@ initModel flags =
             T.DenyRule 1 1 2.0 True False
 
         dny2 =
-            T.DenyRule 2 2 4.0 True True
+            T.DenyRule 2 2 4.0 False True
 
         acc =
             T.AccRule 1 7 5.5 True (Just [ dny1, dny2 ])

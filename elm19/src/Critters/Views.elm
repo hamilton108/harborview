@@ -130,13 +130,17 @@ accPart acc =
             ]
 
         Just a ->
-            [ H.td [] [ H.text (String.fromInt a.oid) ]
-            , H.td [] [ H.text (String.fromInt a.rtyp) ]
-            , H.td [] [ H.text (rtypDesc a.rtyp) ]
-            , H.td [] [ H.text (String.fromFloat a.value) ]
-            , H.td [] [ H.text "Active" ]
-            , H.td [] [ H.a [ A.href "#", A.class "newdnyrule href-td" ] [ H.text "New Deny" ] ]
-            ]
+            let
+                cbActive =
+                    H.input [ A.checked a.active, A.type_ "checkbox" ] []
+            in
+                [ H.td [] [ H.text (String.fromInt a.oid) ]
+                , H.td [] [ H.text (String.fromInt a.rtyp) ]
+                , H.td [] [ H.text (rtypDesc a.rtyp) ]
+                , H.td [] [ H.text (String.fromFloat a.value) ]
+                , H.td [] [ cbActive ]
+                , H.td [] [ H.a [ A.href "#", A.class "newdnyrule href-td" ] [ H.text "New Deny" ] ]
+                ]
 
 
 denyPart : Maybe DenyRule -> List (H.Html Msg)
@@ -152,13 +156,22 @@ denyPart dny =
             ]
 
         Just d ->
-            [ H.td [] [ H.text (String.fromInt d.oid) ]
-            , H.td [] [ H.text (String.fromInt d.rtyp) ]
-            , H.td [] [ H.text (rtypDesc d.rtyp) ]
-            , H.td [] [ H.text (String.fromFloat d.value) ]
-            , H.td [] [ H.text "Active" ]
-            , H.td [] [ H.text "Memory" ]
-            ]
+            let
+                cbActive =
+                    H.input [ A.checked d.active, A.type_ "checkbox" ] []
+
+                cbMemory =
+                    H.input [ A.checked d.memory, A.type_ "checkbox" ] []
+
+                -- , E.onClick ToggleRealTimePurchase ]
+            in
+                [ H.td [] [ H.text (String.fromInt d.oid) ]
+                , H.td [] [ H.text (String.fromInt d.rtyp) ]
+                , H.td [] [ H.text (rtypDesc d.rtyp) ]
+                , H.td [] [ H.text (String.fromFloat d.value) ]
+                , H.td [] [ cbActive ]
+                , H.td [] [ cbMemory ]
+                ]
 
 
 {-| Return H.tr [][ H.td [][], .. ]
