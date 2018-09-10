@@ -6,6 +6,7 @@ import Critters.Types
     exposing
         ( AccRule
         , DenyRule
+        , Activable
         )
 
 
@@ -19,13 +20,6 @@ import Critters.Types
        List.take index lx ++ newVal :: List.drop (index + 1) lx
 
 -}
-
-
-type alias Activable a =
-    { a | oid : Int, active : Bool }
-
-
-
 -- accs =
 --     [ AccRule 1 1 1.0 True Nothing
 --     , AccRule 2 2 2.0 True Nothing

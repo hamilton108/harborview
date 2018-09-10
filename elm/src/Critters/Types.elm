@@ -40,10 +40,18 @@ type Msg
     | ToggleDenyActive
 
 
+type alias Activable a =
+    { a | oid : Int, active : Bool }
+
+
+type alias Oidable a =
+    { a | oid : Int }
+
+
 type alias OptionPurchase =
     { oid : Int
     , ticker : String
-    , critters : Maybe (List Critter)
+    , critters : List Critter
     }
 
 
@@ -55,7 +63,7 @@ type alias Critter =
     { oid : Int
     , sellVolume : Int
     , status : Int
-    , accRules : Maybe (List AccRule)
+    , accRules : List AccRule
     }
 
 
@@ -66,7 +74,7 @@ type alias AccRule =
     , rtyp : Int
     , value : Float
     , active : Bool
-    , denyRules : Maybe (List DenyRule)
+    , denyRules : List DenyRule
     }
 
 
