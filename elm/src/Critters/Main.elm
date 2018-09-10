@@ -32,10 +32,10 @@ initModel flags =
             T.DenyRule 2 2 4.0 False True
 
         acc =
-            T.AccRule 1 7 5.5 True (Just [ dny1, dny2 ])
+            T.AccRule 1 1 1 7 5.5 True (Just [ dny1, dny2 ])
 
         acc2 =
-            T.AccRule 2 5 3.5 True Nothing
+            T.AccRule 1 1 2 5 3.5 True Nothing
 
         critter =
             T.Critter 1 10 1 (Just [ acc, acc2 ])
@@ -43,10 +43,18 @@ initModel flags =
         opx =
             T.OptionPurchase 1 "YAR8L240" (Just [ critter ])
     in
-        { purchases = Just [ opx ]
+        { purchases = [ opx ]
         }
 
 
 initx : Model
 initx =
     initModel Flags
+
+
+mx =
+    let
+        m =
+            initx
+    in
+        m.purchases

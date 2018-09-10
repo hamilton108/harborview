@@ -297,14 +297,7 @@ view : Model -> H.Html Msg
 view model =
     let
         ps =
-            case
-                model.purchases
-            of
-                Nothing ->
-                    []
-
-                Just opxx ->
-                    List.map details opxx
+            List.map details model.purchases
     in
         H.div []
             [ H.div [ A.class "grid-elm" ]

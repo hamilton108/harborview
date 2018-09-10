@@ -25,11 +25,13 @@ type alias Activable a =
     { a | oid : Int, active : Bool }
 
 
-accs =
-    [ AccRule 1 1 1.0 True Nothing
-    , AccRule 2 2 2.0 True Nothing
-    , AccRule 3 3 3.0 True Nothing
-    ]
+
+-- accs =
+--     [ AccRule 1 1 1.0 True Nothing
+--     , AccRule 2 2 2.0 True Nothing
+--     , AccRule 3 3 3.0 True Nothing
+--     ]
+--
 
 
 toggleOid : Int -> Activable a -> Activable a

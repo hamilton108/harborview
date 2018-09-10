@@ -61,6 +61,8 @@ type alias Critter =
 
 type alias AccRule =
     { oid : Int
+    , purchaseId : Int
+    , critId : Int
     , rtyp : Int
     , value : Float
     , active : Bool
@@ -82,5 +84,5 @@ type alias Flags =
 
 
 type alias Model =
-    { purchases : Maybe OptionPurchases
+    { purchases : OptionPurchases
     }
