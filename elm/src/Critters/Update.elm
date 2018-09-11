@@ -1,12 +1,15 @@
 module Critters.Update exposing (..)
 
 import Common.Utils as U
-import Critters.Types exposing (Model, Msg(..))
 import Critters.Types
     exposing
         ( AccRule
-        , DenyRule
         , Activable
+        , DenyRule
+        , Model
+        , Msg(..)
+        , OptionPurchase
+        , OptionPurchases
         )
 
 
@@ -36,6 +39,45 @@ toggleOid oid acc =
         acc
 
 
+toggleAccRule : Model -> AccRule -> Model
+toggleAccRule model curAcc =
+    let
+        pm =
+            U.findInList model.purchases curAcc.purchaseId
+    in
+    case pm of
+        Nothing ->
+            model
+
+        Just p ->
+            let
+                cm =
+                    U.findInList p.critters curAcc.critId
+            in
+            case cm of
+                Nothing ->
+                    model
+
+                Just c ->
+                    let
+                        newAccs =
+                            List.map (toggleOid curAcc.oid) c.accRules
+
+                        newCrit =
+                            { c | accRules = newAccs }
+
+                        newCrits =
+                            List.map (U.replaceWith newCrit) p.critters
+
+                        newPurchase =
+                            { p | critters = newCrits }
+
+                        newPurchases =
+                            List.map (U.replaceWith newPurchase) model.purchases
+                    in
+                    { model | purchases = newPurchases }
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -49,8 +91,11 @@ update msg model =
             ( model, Cmd.none )
 
         ToggleAccActive accRule ->
-            Debug.log (Debug.toString accRule)
-                ( model, Cmd.none )
+            let
+                newModel =
+                    toggleAccRule model accRule
+            in
+            ( newModel, Cmd.none )
 
         ToggleDenyActive ->
             Debug.log "ToggleDenyActive"

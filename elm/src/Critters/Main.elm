@@ -1,9 +1,9 @@
 module Critters.Main exposing (..)
 
 import Browser
+import Common.Utils as Utils
 import Critters.Types as T exposing (Flags, Model, Msg(..), Oidable)
 import Critters.Update as U
-import Common.Utils as Utils
 import Critters.Views as V
 import Html as H
 
@@ -60,56 +60,47 @@ initx =
 
 
 {-
-   replaceWith : List (Oidable a) -> Int -> Oidable a -> List (Oidable a)
-   replaceWith oldList oid newEl =
-       Debug.todo "replaceWith"
+      replaceWith : List (Oidable a) -> Int -> Oidable a -> List (Oidable a)
+      replaceWith oldList oid newEl =
+          Debug.todo "replaceWith"
+
+
+   mx curAcc =
+       let
+           m =
+               initx
+
+           pm =
+               Utils.findInList m.purchases curAcc.purchaseId
+       in
+       case pm of
+           Nothing ->
+               Nothing
+
+           Just p ->
+               let
+                   cm =
+                       Utils.findInList p.critters curAcc.critId
+               in
+               case cm of
+                   Nothing ->
+                       Nothing
+
+                   Just c ->
+                       let
+                           newAccs =
+                               List.map (U.toggleOid curAcc.oid) c.accRules
+
+                           newCrit =
+                               { c | accRules = newAccs }
+
+                           newCrits =
+                               List.map (Utils.replaceWith newCrit) p.critters
+                       in
+                       Just { p | critters = newCrits }
+
+
 -}
-
-
-replaceWith : Oidable a -> Oidable a -> Oidable a
-replaceWith newEl el =
-    if (el.oid == newEl.oid) then
-        newEl
-    else
-        el
-
-
-mx curAcc =
-    let
-        m =
-            initx
-
-        pm =
-            Utils.findInList m.purchases curAcc.purchaseId
-    in
-        case pm of
-            Nothing ->
-                Nothing
-
-            Just p ->
-                let
-                    cm =
-                        Utils.findInList p.critters curAcc.critId
-                in
-                    case cm of
-                        Nothing ->
-                            Nothing
-
-                        Just c ->
-                            let
-                                newAccs =
-                                    (List.map (U.toggleOid curAcc.oid) c.accRules)
-
-                                newCrit =
-                                    { c | accRules = newAccs }
-
-                                newCrits =
-                                    List.map (replaceWith newCrit) p.critters
-                            in
-                                Just { p | critters = newCrits }
-
-
-
 {-
    mxx curAcc =
        let
