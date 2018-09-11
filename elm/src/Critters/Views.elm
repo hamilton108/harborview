@@ -12,9 +12,9 @@ import Critters.Types
         , OptionPurchases
         , rtypDesc
         )
-import Html.Events as E
 import Html as H
 import Html.Attributes as A
+import Html.Events as E
 
 
 {-
@@ -141,13 +141,13 @@ accPart acc =
                         ]
                         []
             in
-                [ H.td [] [ H.text (String.fromInt curAcc.oid) ]
-                , H.td [] [ H.text (String.fromInt curAcc.rtyp) ]
-                , H.td [] [ H.text (rtypDesc curAcc.rtyp) ]
-                , H.td [] [ H.text (String.fromFloat curAcc.value) ]
-                , H.td [] [ cbActive ]
-                , H.td [] [ H.a [ A.href "#", A.class "newdnyrule href-td" ] [ H.text "New Deny" ] ]
-                ]
+            [ H.td [] [ H.text (String.fromInt curAcc.oid) ]
+            , H.td [] [ H.text (String.fromInt curAcc.rtyp) ]
+            , H.td [] [ H.text (rtypDesc curAcc.rtyp) ]
+            , H.td [] [ H.text (String.fromFloat curAcc.value) ]
+            , H.td [] [ cbActive ]
+            , H.td [] [ H.a [ A.href "#", A.class "newdnyrule href-td" ] [ H.text "New Deny" ] ]
+            ]
 
 
 denyPart : Maybe DenyRule -> List (H.Html Msg)
@@ -169,7 +169,7 @@ denyPart dny =
                         [ A.checked d.active
                         , A.type_ "checkbox"
                         , A.attribute "data-oid" (String.fromInt d.oid)
-                        , E.onClick ToggleDenyActive
+                        , E.onClick (ToggleDenyActive d)
                         ]
                         []
 
@@ -178,13 +178,13 @@ denyPart dny =
 
                 -- , E.onClick ToggleRealTimePurchase ]
             in
-                [ H.td [] [ H.text (String.fromInt d.oid) ]
-                , H.td [] [ H.text (String.fromInt d.rtyp) ]
-                , H.td [] [ H.text (rtypDesc d.rtyp) ]
-                , H.td [] [ H.text (String.fromFloat d.value) ]
-                , H.td [] [ cbActive ]
-                , H.td [] [ cbMemory ]
-                ]
+            [ H.td [] [ H.text (String.fromInt d.oid) ]
+            , H.td [] [ H.text (String.fromInt d.rtyp) ]
+            , H.td [] [ H.text (rtypDesc d.rtyp) ]
+            , H.td [] [ H.text (String.fromFloat d.value) ]
+            , H.td [] [ cbActive ]
+            , H.td [] [ cbMemory ]
+            ]
 
 
 {-| Return H.tr [][ H.td [][], .. ]
@@ -195,7 +195,7 @@ critAccDenyTr crit acc dny =
         tdRow =
             List.concat [ critterPart crit, accPart acc, denyPart dny ]
     in
-        H.tr [] tdRow
+    H.tr [] tdRow
 
 
 denyTr : DenyRule -> H.Html Msg
@@ -204,7 +204,7 @@ denyTr dny =
         tdRow =
             List.concat [ critterPart Nothing, accPart Nothing, denyPart (Just dny) ]
     in
-        H.tr [] tdRow
+    H.tr [] tdRow
 
 
 critAccTr : Maybe Critter -> AccRule -> List (H.Html Msg)
@@ -215,14 +215,14 @@ critAccTr crit acc =
                 tdRow =
                     List.concat [ critterPart crit, accPart (Just acc), denyPart Nothing ]
             in
-                [ H.tr [] tdRow ]
+            [ H.tr [] tdRow ]
 
         [ dny ] ->
             let
                 tdRow =
                     List.concat [ critterPart crit, accPart (Just acc), denyPart (Just dny) ]
             in
-                [ H.tr [] tdRow ]
+            [ H.tr [] tdRow ]
 
         x :: xs ->
             let
@@ -232,7 +232,7 @@ critAccTr crit acc =
                 restRows =
                     List.map denyTr xs
             in
-                firstRow :: restRows
+            firstRow :: restRows
 
 
 {-| Return a list of H.tr [][ H.td [][], .. ]
@@ -251,7 +251,7 @@ critterRows crit =
                 firstRow =
                     critAccTr (Just crit) x
             in
-                List.concat [ firstRow, List.concat (List.map (critAccTr Nothing) xs) ]
+            List.concat [ firstRow, List.concat (List.map (critAccTr Nothing) xs) ]
 
 
 critterArea : OptionPurchase -> List (H.Html Msg)
@@ -276,15 +276,15 @@ view model =
         ps =
             List.map details model.purchases
     in
-        H.div []
-            [ H.div [ A.class "grid-elm" ]
-                [ H.div [ A.class "form-group form-group--elm" ]
-                    [ BTN.button "Paper Critters" PaperCritters ]
-                , H.div [ A.class "form-group form-group--elm" ]
-                    [ BTN.button "Real Time Critters" RealTimeCritters ]
-                , H.div [ A.class "form-group form-group--elm" ]
-                    [ BTN.button "New Critter" NewCritter ]
-                ]
-            , H.div [ A.class "grid-elm" ]
-                ps
+    H.div []
+        [ H.div [ A.class "grid-elm" ]
+            [ H.div [ A.class "form-group form-group--elm" ]
+                [ BTN.button "Paper Critters" PaperCritters ]
+            , H.div [ A.class "form-group form-group--elm" ]
+                [ BTN.button "Real Time Critters" RealTimeCritters ]
+            , H.div [ A.class "form-group form-group--elm" ]
+                [ BTN.button "New Critter" NewCritter ]
             ]
+        , H.div [ A.class "grid-elm" ]
+            ps
+        ]

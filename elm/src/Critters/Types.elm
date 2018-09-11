@@ -37,7 +37,7 @@ type Msg
     | RealTimeCritters
     | NewCritter
     | ToggleAccActive AccRule
-    | ToggleDenyActive
+    | ToggleDenyActive DenyRule
 
 
 type alias Activable a =
@@ -80,6 +80,9 @@ type alias AccRule =
 
 type alias DenyRule =
     { oid : Int
+    , purchaseId : Int
+    , critId : Int
+    , accId : Int
     , rtyp : Int
     , value : Float
     , active : Bool

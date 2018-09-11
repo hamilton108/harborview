@@ -24,11 +24,11 @@ init flags =
 
 
 dny1 =
-    T.DenyRule 1 1 2.0 True False
+    T.DenyRule 1 1 1 1 2 2.0 True False
 
 
 dny2 =
-    T.DenyRule 2 2 4.0 False True
+    T.DenyRule 2 1 1 1 2 4.0 False True
 
 
 acc =
