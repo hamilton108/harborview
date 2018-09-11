@@ -58,20 +58,73 @@ initx =
     initModel Flags
 
 
+
+{-
+   replaceWith : List (Oidable a) -> Int -> Oidable a -> List (Oidable a)
+   replaceWith oldList oid newEl =
+       Debug.todo "replaceWith"
+-}
+
+
+replaceWith : Oidable a -> Oidable a -> Oidable a
+replaceWith newEl el =
+    if (el.oid == newEl.oid) then
+        newEl
+    else
+        el
+
+
 mx curAcc =
     let
         m =
             initx
 
-        p1m =
+        pm =
             Utils.findInList m.purchases curAcc.purchaseId
-                |> Maybe.andThen (\p -> Utils.findInList p.critters curAcc.critId)
-                -- |> Maybe.andThen (\c -> findInList c.accRules curAcc.oid)
-                |> Maybe.andThen (\c -> Just (List.map (U.toggleOid curAcc.oid) c.accRules))
     in
-        case p1m of
+        case pm of
             Nothing ->
-                []
+                Nothing
 
-            Just toggleList ->
-                toggleList
+            Just p ->
+                let
+                    cm =
+                        Utils.findInList p.critters curAcc.critId
+                in
+                    case cm of
+                        Nothing ->
+                            Nothing
+
+                        Just c ->
+                            let
+                                newAccs =
+                                    (List.map (U.toggleOid curAcc.oid) c.accRules)
+
+                                newCrit =
+                                    { c | accRules = newAccs }
+
+                                newCrits =
+                                    List.map (replaceWith newCrit) p.critters
+                            in
+                                Just { p | critters = newCrits }
+
+
+
+{-
+   mxx curAcc =
+       let
+           m =
+               initx
+
+           p1m =
+               Utils.findInList m.purchases curAcc.purchaseId
+                   |> Maybe.andThen (\p -> Utils.findInList p.critters curAcc.critId)
+                   |> Maybe.andThen (\c -> Just (List.map (U.toggleOid curAcc.oid) c.accRules))
+       in
+           case p1m of
+               Nothing ->
+                   []
+
+               Just toggleList ->
+                   toggleList
+-}
