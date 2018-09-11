@@ -1,5 +1,8 @@
 module Critters.Types exposing (..)
 
+import Http
+import Common.Decoders exposing (JsonStatus)
+
 
 rtypDesc : Int -> String
 rtypDesc rtyp =
@@ -38,6 +41,7 @@ type Msg
     | NewCritter
     | ToggleAccActive AccRule
     | ToggleDenyActive DenyRule
+    | Toggled (Result Http.Error JsonStatus)
 
 
 type alias Activable a =
