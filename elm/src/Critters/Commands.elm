@@ -1,6 +1,7 @@
 module Critters.Commands exposing (..)
 
 import Common.Decoders as Dec
+import Critters.Decoders as CD
 import Critters.Types exposing (Msg(..))
 import Http
 
@@ -21,8 +22,8 @@ toggleRule isAccRule oid =
         url =
             mainUrl ++ "/" ++ toggle ++ "/" ++ String.fromInt oid
     in
-    Http.send Toggled <|
-        Http.get url Dec.jsonStatusDecoder
+        Http.send Toggled <|
+            Http.get url Dec.jsonStatusDecoder
 
 
 fetchCritters : Bool -> Cmd Msg
@@ -35,7 +36,7 @@ fetchCritters isRealTime =
                 "11"
 
         url =
-            mainUrl ++ "/critters/" ++ critterTypeUrl
+            mainUrl ++ "/" ++ critterTypeUrl
 
         msg =
             if isRealTime == True then
@@ -43,5 +44,5 @@ fetchCritters isRealTime =
             else
                 PaperCrittersFetched
     in
-    Http.send msg <|
-        Http.get url Dec.jsonStatusDecoder
+        Http.send msg <|
+            Http.get url CD.optionPurchasesDecoder

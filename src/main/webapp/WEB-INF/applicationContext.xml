@@ -42,4 +42,7 @@
         <property name="optionRepos" ref="optionRepos" />
         <property name="optionCalculator" ref="calculator"/>
     </bean>
+    <bean id="critterModel" class="harborview.maunaloa.CritterModel">
+    </bean>
+
 </beans>

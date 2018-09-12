@@ -1,11 +1,8 @@
 module Common.Decoders exposing (..)
 
+import Critters.Types exposing (JsonStatus)
 import Json.Decode.Pipeline as JP
 import Json.Decode as Json
-
-
-type alias JsonStatus =
-    { ok : Bool, msg : String, statusCode : Int }
 
 
 jsonStatusDecoder : Json.Decoder JsonStatus

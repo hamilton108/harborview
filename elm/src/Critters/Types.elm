@@ -1,6 +1,5 @@
 module Critters.Types exposing (..)
 
-import Common.Decoders exposing (JsonStatus)
 import Http
 
 
@@ -44,6 +43,10 @@ type Msg
     | ToggleAccActive AccRule
     | ToggleDenyActive DenyRule
     | Toggled (Result Http.Error JsonStatus)
+
+
+type alias JsonStatus =
+    { ok : Bool, msg : String, statusCode : Int }
 
 
 type alias Activable a =
