@@ -1,7 +1,7 @@
 module Critters.Types exposing (..)
 
-import Http
 import Common.Decoders exposing (JsonStatus)
+import Http
 
 
 rtypDesc : Int -> String
@@ -37,7 +37,9 @@ rtypDesc rtyp =
 
 type Msg
     = PaperCritters
+    | PaperCrittersFetched (Result Http.Error OptionPurchases)
     | RealTimeCritters
+    | RealTimeCrittersFetched (Result Http.Error OptionPurchases)
     | NewCritter
     | ToggleAccActive AccRule
     | ToggleDenyActive DenyRule

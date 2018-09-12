@@ -46,23 +46,77 @@ toggleAccRule model curAcc =
         pm =
             U.findInList model.purchases curAcc.purchaseId
     in
-        case pm of
-            Nothing ->
-                model
+    case pm of
+        Nothing ->
+            model
 
-            Just p ->
-                let
-                    cm =
-                        U.findInList p.critters curAcc.critId
-                in
-                    case cm of
+        Just p ->
+            let
+                cm =
+                    U.findInList p.critters curAcc.critId
+            in
+            case cm of
+                Nothing ->
+                    model
+
+                Just c ->
+                    let
+                        newAccs =
+                            List.map (toggleOid curAcc.oid) c.accRules
+
+                        newCrit =
+                            { c | accRules = newAccs }
+
+                        newCrits =
+                            List.map (U.replaceWith newCrit) p.critters
+
+                        newPurchase =
+                            { p | critters = newCrits }
+
+                        newPurchases =
+                            List.map (U.replaceWith newPurchase) model.purchases
+                    in
+                    { model | purchases = newPurchases }
+
+
+toggleDenyRule : Model -> DenyRule -> Model
+toggleDenyRule model dny =
+    let
+        pm =
+            U.findInList model.purchases dny.purchaseId
+    in
+    case pm of
+        Nothing ->
+            model
+
+        Just p ->
+            let
+                cm =
+                    U.findInList p.critters dny.critId
+            in
+            case cm of
+                Nothing ->
+                    model
+
+                Just c ->
+                    let
+                        accm =
+                            U.findInList c.accRules dny.accId
+                    in
+                    case accm of
                         Nothing ->
                             model
 
-                        Just c ->
+                        Just acc ->
                             let
+                                newDenys =
+                                    List.map (toggleOid dny.oid) acc.denyRules
+
+                                newAcc =
+                                    { acc | denyRules = newDenys }
+
                                 newAccs =
-                                    List.map (toggleOid curAcc.oid) c.accRules
+                                    List.map (U.replaceWith newAcc) c.accRules
 
                                 newCrit =
                                     { c | accRules = newAccs }
@@ -76,61 +130,7 @@ toggleAccRule model curAcc =
                                 newPurchases =
                                     List.map (U.replaceWith newPurchase) model.purchases
                             in
-                                { model | purchases = newPurchases }
-
-
-toggleDenyRule : Model -> DenyRule -> Model
-toggleDenyRule model dny =
-    let
-        pm =
-            U.findInList model.purchases dny.purchaseId
-    in
-        case pm of
-            Nothing ->
-                model
-
-            Just p ->
-                let
-                    cm =
-                        U.findInList p.critters dny.critId
-                in
-                    case cm of
-                        Nothing ->
-                            model
-
-                        Just c ->
-                            let
-                                accm =
-                                    U.findInList c.accRules dny.accId
-                            in
-                                case accm of
-                                    Nothing ->
-                                        model
-
-                                    Just acc ->
-                                        let
-                                            newDenys =
-                                                List.map (toggleOid dny.oid) acc.denyRules
-
-                                            newAcc =
-                                                { acc | denyRules = newDenys }
-
-                                            newAccs =
-                                                List.map (U.replaceWith newAcc) c.accRules
-
-                                            newCrit =
-                                                { c | accRules = newAccs }
-
-                                            newCrits =
-                                                List.map (U.replaceWith newCrit) p.critters
-
-                                            newPurchase =
-                                                { p | critters = newCrits }
-
-                                            newPurchases =
-                                                List.map (U.replaceWith newPurchase) model.purchases
-                                        in
-                                            { model | purchases = newPurchases }
+                            { model | purchases = newPurchases }
 
 
 
@@ -163,8 +163,21 @@ update msg model =
         PaperCritters ->
             ( model, Cmd.none )
 
+        PaperCrittersFetched (Ok purchases) ->
+            ( model, Cmd.none )
+
+        PaperCrittersFetched (Err s) ->
+            ( model, Cmd.none )
+
         RealTimeCritters ->
             ( model, Cmd.none )
+
+        RealTimeCrittersFetched (Ok p) ->
+            ( { model | purchases = p }, Cmd.none )
+
+        RealTimeCrittersFetched (Err s) ->
+            Debug.log "RealTimeCrittersFetched"
+                ( model, Cmd.none )
 
         NewCritter ->
             ( model, Cmd.none )
@@ -174,17 +187,18 @@ update msg model =
                 newModel =
                     toggleAccRule model accRule
             in
-                ( newModel, Cmd.none )
+            ( newModel, C.toggleRule True accRule.oid )
 
         ToggleDenyActive denyRule ->
             let
                 newModel =
                     toggleDenyRule model denyRule
             in
-                ( newModel, Cmd.none )
+            ( newModel, C.toggleRule False denyRule.oid )
 
         Toggled (Ok s) ->
             ( model, Cmd.none )
 
         Toggled (Err s) ->
-            ( model, Cmd.none )
+            Debug.log "Toggled Err"
+                ( model, Cmd.none )
