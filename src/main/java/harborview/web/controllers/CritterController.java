@@ -43,11 +43,15 @@ public class CritterController {
         return result;
     }
     @ResponseBody
-    @RequestMapping(value = "purchases/toggleacc/{oid}/{newVal}",
+    @RequestMapping(value = "purchases/toggle/{rt}/{oid}/{newVal}",
             method =  RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public JsonResult toggleAccRule(@PathVariable("oid") int oid, @PathVariable("newVal") boolean newVal) {
+    public JsonResult toggleAccRule(
+            @PathVariable("rt") int rt,
+            @PathVariable("oid") int oid,
+            @PathVariable("newVal") boolean newVal) {
         try {
+            model.toggleRule(rt, oid, newVal);
             return new JsonResult(true, "AccRule toggled", 0);
         }
         catch (Exception ex) {

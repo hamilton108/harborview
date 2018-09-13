@@ -13,11 +13,11 @@ mainUrl =
 toggleRule : Bool -> Int -> Bool -> Cmd Msg
 toggleRule isAccRule oid newVal =
     let
-        toggle =
+        rt =
             if isAccRule == True then
-                "toggleacc"
+                "1"
             else
-                "toggledny"
+                "2"
 
         newValx =
             if newVal == True then
@@ -26,7 +26,7 @@ toggleRule isAccRule oid newVal =
                 "false"
 
         url =
-            mainUrl ++ "/" ++ toggle ++ "/" ++ String.fromInt oid ++ "/" ++ newValx
+            mainUrl ++ "/toggle/" ++ rt ++ "/" ++ String.fromInt oid ++ "/" ++ newValx
     in
         Http.send Toggled <|
             Http.get url Dec.jsonStatusDecoder

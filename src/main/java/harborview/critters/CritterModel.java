@@ -30,6 +30,17 @@ public class CritterModel {
         }
         return critters;
     }
+    public void toggleRule(int ruleType, int oid, boolean newVal) {
+        MyBatisUtils.withSessionConsumer((session) -> {
+            CritterMapper mapper = session.getMapper(CritterMapper.class);
+            if (ruleType == 1) {
+                mapper.toggleAcceptRule(oid, newVal == true ? "y" : "n");
+            }
+            else {
+                mapper.toggleDenyRule(oid, newVal == true ? "y" : "n");
+            }
+        });
+    }
     public void resetCache() {
         critters4 = null;
         critters11 = null;
