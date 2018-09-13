@@ -7,11 +7,11 @@ import Http
 
 
 mainUrl =
-    "critters"
+    "purchases"
 
 
-toggleRule : Bool -> Int -> Cmd Msg
-toggleRule isAccRule oid =
+toggleRule : Bool -> Int -> Bool -> Cmd Msg
+toggleRule isAccRule oid newVal =
     let
         toggle =
             if isAccRule == True then
@@ -19,8 +19,14 @@ toggleRule isAccRule oid =
             else
                 "toggledny"
 
+        newValx =
+            if newVal == True then
+                "true"
+            else
+                "false"
+
         url =
-            mainUrl ++ "/" ++ toggle ++ "/" ++ String.fromInt oid
+            mainUrl ++ "/" ++ toggle ++ "/" ++ String.fromInt oid ++ "/" ++ newValx
     in
         Http.send Toggled <|
             Http.get url Dec.jsonStatusDecoder

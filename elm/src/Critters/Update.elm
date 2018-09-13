@@ -163,20 +163,23 @@ update msg model =
         PaperCritters ->
             ( model, C.fetchCritters False )
 
-        PaperCrittersFetched (Ok purchases) ->
-            ( model, Cmd.none )
+        PaperCrittersFetched (Ok p) ->
+            Debug.log "PaperCrittersFetched"
+                ( { model | purchases = p }, Cmd.none )
 
         PaperCrittersFetched (Err s) ->
-            ( model, Cmd.none )
+            Debug.log (U.httpErr2str s)
+                ( model, Cmd.none )
 
         RealTimeCritters ->
             ( model, C.fetchCritters True )
 
         RealTimeCrittersFetched (Ok p) ->
-            ( { model | purchases = p }, Cmd.none )
+            Debug.log "RealTimeCrittersFetched"
+                ( { model | purchases = p }, Cmd.none )
 
         RealTimeCrittersFetched (Err s) ->
-            Debug.log "RealTimeCrittersFetched"
+            Debug.log (U.httpErr2str s)
                 ( model, Cmd.none )
 
         NewCritter ->
@@ -184,17 +187,23 @@ update msg model =
 
         ToggleAccActive accRule ->
             let
+                newVal =
+                    not accRule.active
+
                 newModel =
                     toggleAccRule model accRule
             in
-                ( newModel, C.toggleRule True accRule.oid )
+                ( newModel, C.toggleRule True accRule.oid newVal )
 
         ToggleDenyActive denyRule ->
             let
+                newVal =
+                    not denyRule.active
+
                 newModel =
                     toggleDenyRule model denyRule
             in
-                ( newModel, C.toggleRule False denyRule.oid )
+                ( newModel, C.toggleRule False denyRule.oid newVal )
 
         Toggled (Ok s) ->
             ( model, Cmd.none )

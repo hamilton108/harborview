@@ -1,14 +1,18 @@
 package harborview.web.controllers;
 
+import critterrepos.beans.options.OptionPurchaseBean;
 import harborview.dto.html.critters.OptionPurchaseDTO;
-import harborview.maunaloa.CritterModel;
+import harborview.critters.CritterModel;
+import harborview.web.controllers.web.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -26,10 +30,28 @@ public class CritterController {
         return "critters/overlook.html";
     }
 
-    @RequestMapping(value = "{critterType}",
+    @ResponseBody
+    @RequestMapping(value = "purchases/{purchaseType}",
                     method =  RequestMethod.GET,
                     produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<OptionPurchaseDTO> critters(@PathVariable("critterType") int critterType) {
-        return null;
+    public List<OptionPurchaseDTO> purchases(@PathVariable("purchaseType") int purchaseType) {
+        List<OptionPurchaseBean> purchases = model.fetchCritters(purchaseType);
+        List<OptionPurchaseDTO> result = new ArrayList<>();
+        for (OptionPurchaseBean p : purchases) {
+            result.add(new OptionPurchaseDTO(p));
+        }
+        return result;
+    }
+    @ResponseBody
+    @RequestMapping(value = "purchases/toggleacc/{oid}/{newVal}",
+            method =  RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public JsonResult toggleAccRule(@PathVariable("oid") int oid, @PathVariable("newVal") boolean newVal) {
+        try {
+            return new JsonResult(true, "AccRule toggled", 0);
+        }
+        catch (Exception ex) {
+            return new JsonResult(false, ex.getMessage(), 0);
+        }
     }
 }

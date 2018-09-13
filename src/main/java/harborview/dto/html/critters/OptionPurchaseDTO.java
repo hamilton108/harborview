@@ -1,7 +1,11 @@
 package harborview.dto.html.critters;
 
+import critterrepos.beans.critters.CritterBean;
+import critterrepos.beans.options.OptionPurchaseBean;
 import oahu.financial.OptionPurchase;
+import oahu.financial.critters.Critter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OptionPurchaseDTO {
@@ -20,7 +24,12 @@ public class OptionPurchaseDTO {
     }
 
     public List<CritterDTO> getCritters()  {
-        return null;
+        List<CritterDTO> result = new ArrayList<>();
+        OptionPurchaseBean bean = (OptionPurchaseBean)purchase;
+        for (Critter critter : bean.getCritters()) {
+            result.add(new CritterDTO(getOid(), critter));
+        }
+        return result;
     }
 
 }

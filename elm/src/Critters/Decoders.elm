@@ -34,7 +34,7 @@ accRuleDecoder =
         |> JP.required "rtyp" Json.int
         |> JP.required "value" Json.float
         |> JP.required "active" Json.bool
-        |> JP.optional "dnyrules" (Json.list denyRuleDecoder) []
+        |> JP.optional "dnyRules" (Json.list denyRuleDecoder) []
 
 
 critterDecoder : Json.Decoder Critter
@@ -43,7 +43,7 @@ critterDecoder =
         |> JP.required "oid" Json.int
         |> JP.required "vol" Json.int
         |> JP.required "status" Json.int
-        |> JP.optional "accrules" (Json.list accRuleDecoder) []
+        |> JP.optional "accRules" (Json.list accRuleDecoder) []
 
 
 optionPurchaseDecoder : Json.Decoder OptionPurchase
