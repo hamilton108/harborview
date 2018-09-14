@@ -311,9 +311,10 @@ view model =
                 ps
             , DLG.modalDialog ("New " ++ title)
                 model.dlgNewCritter
-                NewCritterOk
-                NewCritterCancel
+                DlgNewCritterOk
+                DlgNewCritterCancel
                 [ S.makeSelect "Option: " SelectedPurchaseChanged (List.map purchaseToSelectItem model.purchases) Nothing
                 , CH.makeInput "Sales volume:" SaleVolChanged model.saleVol
                 ]
+            , DLG.alert model.dlgAlert AlertOk
             ]

@@ -10,9 +10,47 @@ mainUrl =
     "purchases"
 
 
+newCritter_ : Int -> Int -> Int -> Cmd Msg
+newCritter_ purchaseType oid vol =
+    let
+        url =
+            mainUrl
+                ++ "/newcritter/"
+                ++ String.fromInt purchaseType
+                ++ "/"
+                ++ String.fromInt oid
+                ++ "/"
+                ++ String.fromInt vol
+    in
+        Http.send OnNewCritter <|
+            Http.get url Dec.jsonStatusDecoder
+
+
 newCritter : Int -> String -> String -> Cmd Msg
 newCritter purchaseType oid vol =
-    Cmd.none
+    let
+        maybeCmd =
+            String.toInt oid
+                |> Maybe.andThen
+                    (\oidx ->
+                        String.toInt vol
+                            |> Maybe.andThen (\volx -> Just (newCritter_ purchaseType oidx volx))
+                    )
+    in
+        case maybeCmd of
+            Nothing ->
+                Cmd.none
+
+            Just cmd ->
+                cmd
+
+
+
+--  p1m =
+--      Utils.findInList m.purchases curAcc.purchaseId
+--          |> Maybe.andThen (\p -> Utils.findInList p.critters curAcc.critId)
+--          |> Maybe.andThen (\c -> Just (List.map (U.toggleOid curAcc.oid) c.accRules))
+--
 
 
 toggleRule : Bool -> Int -> Bool -> Cmd Msg

@@ -162,6 +162,9 @@ toggleDenyRule model dny =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        AlertOk ->
+            ( { model | dlgAlert = DLG.DialogHidden }, Cmd.none )
+
         PaperCritters ->
             ( model, C.fetchCritters False )
 
@@ -209,7 +212,7 @@ update msg model =
         Toggled (Err s) ->
             ( model, Cmd.none )
 
-        NewCritterOk ->
+        DlgNewCritterOk ->
             let
                 cmd =
                     case model.selectedPurchase of
@@ -221,7 +224,7 @@ update msg model =
             in
                 ( { model | dlgNewCritter = DLG.DialogHidden }, cmd )
 
-        NewCritterCancel ->
+        DlgNewCritterCancel ->
             ( { model | dlgNewCritter = DLG.DialogHidden }, Cmd.none )
 
         SelectedPurchaseChanged s ->
@@ -231,3 +234,9 @@ update msg model =
         SaleVolChanged s ->
             Debug.log (Debug.toString s)
                 ( { model | saleVol = s }, Cmd.none )
+
+        OnNewCritter (Ok s) ->
+            ( model, Cmd.none )
+
+        OnNewCritter (Err s) ->
+            ( DLG.errorAlert "Error" "RealTimeCrittersFetched Error: " s model, Cmd.none )

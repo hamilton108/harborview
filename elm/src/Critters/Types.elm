@@ -36,7 +36,8 @@ rtypDesc rtyp =
 
 
 type Msg
-    = PaperCritters
+    = AlertOk
+    | PaperCritters
     | PaperCrittersFetched (Result Http.Error OptionPurchases)
     | RealTimeCritters
     | RealTimeCrittersFetched (Result Http.Error OptionPurchases)
@@ -44,10 +45,11 @@ type Msg
     | ToggleAccActive AccRule
     | ToggleDenyActive DenyRule
     | Toggled (Result Http.Error JsonStatus)
-    | NewCritterOk
-    | NewCritterCancel
+    | DlgNewCritterOk
+    | DlgNewCritterCancel
     | SelectedPurchaseChanged String
     | SaleVolChanged String
+    | OnNewCritter (Result Http.Error JsonStatus)
 
 
 type alias JsonStatus =
