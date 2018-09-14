@@ -1,5 +1,6 @@
 module Critters.Update exposing (..)
 
+import Common.Web as W
 import Common.Utils as U
 import Critters.Commands as C
 import Critters.Types
@@ -168,7 +169,7 @@ update msg model =
                 ( { model | purchases = p }, Cmd.none )
 
         PaperCrittersFetched (Err s) ->
-            Debug.log (U.httpErr2str s)
+            Debug.log (W.httpErr2str s)
                 ( model, Cmd.none )
 
         RealTimeCritters ->
@@ -179,7 +180,7 @@ update msg model =
                 ( { model | purchases = p }, Cmd.none )
 
         RealTimeCrittersFetched (Err s) ->
-            Debug.log (U.httpErr2str s)
+            Debug.log (W.httpErr2str s)
                 ( model, Cmd.none )
 
         NewCritter ->

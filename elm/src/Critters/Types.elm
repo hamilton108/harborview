@@ -1,6 +1,7 @@
 module Critters.Types exposing (..)
 
 import Http
+import Common.ModalDialog as DLG
 
 
 rtypDesc : Int -> String
@@ -105,4 +106,5 @@ type alias Flags =
 
 type alias Model =
     { purchases : OptionPurchases
+    , dlgNewCritter : DLG.DialogState
     }

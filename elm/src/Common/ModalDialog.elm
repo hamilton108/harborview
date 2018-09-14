@@ -5,7 +5,7 @@ import Http
 import Html as H
 import Html.Attributes as A
 import Html.Events as E
-import Common.Utils as U
+import Common.Web as W
 
 
 type AlertCategory
@@ -123,6 +123,6 @@ errorAlert : String -> String -> Http.Error -> Alertable a -> Alertable a
 errorAlert title errMsg httpErr model =
     let
         errStr =
-            errMsg ++ (U.httpErr2str httpErr)
+            errMsg ++ (W.httpErr2str httpErr)
     in
         { model | dlgAlert = DialogVisibleAlert title errStr Error }

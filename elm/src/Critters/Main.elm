@@ -1,6 +1,7 @@
 module Critters.Main exposing (..)
 
 import Browser
+import Common.ModalDialog as DLG
 import Common.Utils as Utils
 import Critters.Types as T exposing (Flags, Model, Msg(..), Oidable)
 import Critters.Update as U
@@ -58,4 +59,5 @@ init flags =
 initModel : Flags -> Model
 initModel flags =
     { purchases = []
+    , dlgNewCritter = DLG.DialogHidden
     }
