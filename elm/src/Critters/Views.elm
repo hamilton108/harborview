@@ -1,6 +1,8 @@
 module Critters.Views exposing (..)
 
+import Common.Select as S
 import Common.Buttons as BTN
+import Common.ModalDialog as DLG
 import Critters.Types
     exposing
         ( AccRule
@@ -270,21 +272,46 @@ details opx =
         ]
 
 
+purchaseToSelectItem p =
+    S.SelectItem (String.fromInt p.oid) p.ticker
+
+
 view : Model -> H.Html Msg
 view model =
     let
+        clazz =
+            "form-group form-group--elm"
+
         ps =
             List.map details model.purchases
+
+        title =
+            case model.currentPurchaseType of
+                4 ->
+                    "Real-time Critters"
+
+                11 ->
+                    "Paper Critters"
+
+                _ ->
+                    "-"
     in
         H.div []
             [ H.div [ A.class "grid-elm" ]
-                [ H.div [ A.class "form-group form-group--elm" ]
+                [ H.div [ A.class clazz ]
                     [ BTN.button "Paper Critters" PaperCritters ]
-                , H.div [ A.class "form-group form-group--elm" ]
+                , H.div [ A.class clazz ]
                     [ BTN.button "Real Time Critters" RealTimeCritters ]
-                , H.div [ A.class "form-group form-group--elm" ]
+                , H.div [ A.class clazz ]
                     [ BTN.button "New Critter" NewCritter ]
+                , H.text title
                 ]
             , H.div []
                 ps
+            , DLG.modalDialog ("New " ++ title)
+                model.dlgNewCritter
+                NewCritterOk
+                NewCritterCancel
+                [ S.makeSelect "Option: " SelectedPurchaseChanged (List.map purchaseToSelectItem model.purchases) Nothing
+                ]
             ]

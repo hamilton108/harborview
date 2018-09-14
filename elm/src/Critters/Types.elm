@@ -44,6 +44,9 @@ type Msg
     | ToggleAccActive AccRule
     | ToggleDenyActive DenyRule
     | Toggled (Result Http.Error JsonStatus)
+    | NewCritterOk
+    | NewCritterCancel
+    | SelectedPurchaseChanged String
 
 
 type alias JsonStatus =
@@ -107,4 +110,5 @@ type alias Flags =
 type alias Model =
     { purchases : OptionPurchases
     , dlgNewCritter : DLG.DialogState
+    , currentPurchaseType : Int
     }

@@ -1,6 +1,6 @@
 module Critters.Update exposing (..)
 
-import Common.Web as W
+import Common.Html as W
 import Common.Utils as U
 import Critters.Commands as C
 import Critters.Types
@@ -13,6 +13,7 @@ import Critters.Types
         , OptionPurchase
         , OptionPurchases
         )
+import Common.ModalDialog as DLG
 
 
 -- https://medium.com/elm-shorts/updating-nested-records-in-elm-15d162e80480
@@ -166,7 +167,7 @@ update msg model =
 
         PaperCrittersFetched (Ok p) ->
             Debug.log "PaperCrittersFetched"
-                ( { model | purchases = p }, Cmd.none )
+                ( { model | purchases = p, currentPurchaseType = 11 }, Cmd.none )
 
         PaperCrittersFetched (Err s) ->
             Debug.log (W.httpErr2str s)
@@ -177,14 +178,14 @@ update msg model =
 
         RealTimeCrittersFetched (Ok p) ->
             Debug.log "RealTimeCrittersFetched"
-                ( { model | purchases = p }, Cmd.none )
+                ( { model | purchases = p, currentPurchaseType = 4 }, Cmd.none )
 
         RealTimeCrittersFetched (Err s) ->
             Debug.log (W.httpErr2str s)
                 ( model, Cmd.none )
 
         NewCritter ->
-            ( model, Cmd.none )
+            ( { model | dlgNewCritter = DLG.DialogVisible }, Cmd.none )
 
         ToggleAccActive accRule ->
             let
@@ -211,4 +212,14 @@ update msg model =
 
         Toggled (Err s) ->
             Debug.log "Toggled Err"
+                ( model, Cmd.none )
+
+        NewCritterOk ->
+            ( { model | dlgNewCritter = DLG.DialogHidden }, Cmd.none )
+
+        NewCritterCancel ->
+            ( { model | dlgNewCritter = DLG.DialogHidden }, Cmd.none )
+
+        SelectedPurchaseChanged s ->
+            Debug.log (Debug.toString s)
                 ( model, Cmd.none )
