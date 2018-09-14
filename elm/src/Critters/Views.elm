@@ -1,6 +1,7 @@
 module Critters.Views exposing (..)
 
 import Common.Select as S
+import Common.Html as CH
 import Common.Buttons as BTN
 import Common.ModalDialog as DLG
 import Critters.Types
@@ -303,7 +304,7 @@ view model =
                 , H.div [ A.class clazz ]
                     [ BTN.button "Real Time Critters" RealTimeCritters ]
                 , H.div [ A.class clazz ]
-                    [ BTN.button "New Critter" NewCritter ]
+                    [ BTN.button "New Critt er" NewCritter ]
                 , H.text title
                 ]
             , H.div []
@@ -313,5 +314,6 @@ view model =
                 NewCritterOk
                 NewCritterCancel
                 [ S.makeSelect "Option: " SelectedPurchaseChanged (List.map purchaseToSelectItem model.purchases) Nothing
+                , CH.makeInput "Sales volume:" SaleVolChanged model.saleVol
                 ]
             ]

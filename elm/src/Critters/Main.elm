@@ -58,7 +58,10 @@ init flags =
 
 initModel : Flags -> Model
 initModel flags =
-    { purchases = []
+    { dlgAlert = DLG.DialogHidden
     , dlgNewCritter = DLG.DialogHidden
+    , purchases = []
     , currentPurchaseType = 0
+    , saleVol = "10"
+    , selectedPurchase = Nothing
     }

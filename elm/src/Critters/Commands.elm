@@ -10,6 +10,11 @@ mainUrl =
     "purchases"
 
 
+newCritter : Int -> String -> String -> Cmd Msg
+newCritter purchaseType oid vol =
+    Cmd.none
+
+
 toggleRule : Bool -> Int -> Bool -> Cmd Msg
 toggleRule isAccRule oid newVal =
     let

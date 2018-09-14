@@ -166,23 +166,19 @@ update msg model =
             ( model, C.fetchCritters False )
 
         PaperCrittersFetched (Ok p) ->
-            Debug.log "PaperCrittersFetched"
-                ( { model | purchases = p, currentPurchaseType = 11 }, Cmd.none )
+            ( { model | purchases = p, currentPurchaseType = 11 }, Cmd.none )
 
         PaperCrittersFetched (Err s) ->
-            Debug.log (W.httpErr2str s)
-                ( model, Cmd.none )
+            ( DLG.errorAlert "Error" "PaperCrittersFetched Error: " s model, Cmd.none )
 
         RealTimeCritters ->
             ( model, C.fetchCritters True )
 
         RealTimeCrittersFetched (Ok p) ->
-            Debug.log "RealTimeCrittersFetched"
-                ( { model | purchases = p, currentPurchaseType = 4 }, Cmd.none )
+            ( { model | purchases = p, currentPurchaseType = 4 }, Cmd.none )
 
         RealTimeCrittersFetched (Err s) ->
-            Debug.log (W.httpErr2str s)
-                ( model, Cmd.none )
+            ( DLG.errorAlert "Error" "RealTimeCrittersFetched Error: " s model, Cmd.none )
 
         NewCritter ->
             ( { model | dlgNewCritter = DLG.DialogVisible }, Cmd.none )
@@ -211,15 +207,27 @@ update msg model =
             ( model, Cmd.none )
 
         Toggled (Err s) ->
-            Debug.log "Toggled Err"
-                ( model, Cmd.none )
+            ( model, Cmd.none )
 
         NewCritterOk ->
-            ( { model | dlgNewCritter = DLG.DialogHidden }, Cmd.none )
+            let
+                cmd =
+                    case model.selectedPurchase of
+                        Nothing ->
+                            Cmd.none
+
+                        Just p ->
+                            C.newCritter model.currentPurchaseType p model.saleVol
+            in
+                ( { model | dlgNewCritter = DLG.DialogHidden }, cmd )
 
         NewCritterCancel ->
             ( { model | dlgNewCritter = DLG.DialogHidden }, Cmd.none )
 
         SelectedPurchaseChanged s ->
             Debug.log (Debug.toString s)
-                ( model, Cmd.none )
+                ( { model | selectedPurchase = Just s }, Cmd.none )
+
+        SaleVolChanged s ->
+            Debug.log (Debug.toString s)
+                ( { model | saleVol = s }, Cmd.none )

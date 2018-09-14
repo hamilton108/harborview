@@ -47,6 +47,7 @@ type Msg
     | NewCritterOk
     | NewCritterCancel
     | SelectedPurchaseChanged String
+    | SaleVolChanged String
 
 
 type alias JsonStatus =
@@ -108,7 +109,10 @@ type alias Flags =
 
 
 type alias Model =
-    { purchases : OptionPurchases
-    , dlgNewCritter : DLG.DialogState
+    { dlgNewCritter : DLG.DialogState
+    , dlgAlert : DLG.DialogState
+    , purchases : OptionPurchases
     , currentPurchaseType : Int
+    , saleVol : String
+    , selectedPurchase : Maybe String
     }
