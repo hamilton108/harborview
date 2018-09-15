@@ -210,7 +210,7 @@ update msg model =
             ( model, Cmd.none )
 
         Toggled (Err s) ->
-            ( model, Cmd.none )
+            ( DLG.errorAlert "Error" "Toggled Error: " s model, Cmd.none )
 
         DlgNewCritterOk ->
             let
@@ -228,15 +228,22 @@ update msg model =
             ( { model | dlgNewCritter = DLG.DialogHidden }, Cmd.none )
 
         SelectedPurchaseChanged s ->
-            Debug.log (Debug.toString s)
-                ( { model | selectedPurchase = Just s }, Cmd.none )
+            ( { model | selectedPurchase = Just s }, Cmd.none )
 
         SaleVolChanged s ->
-            Debug.log (Debug.toString s)
-                ( { model | saleVol = s }, Cmd.none )
+            ( { model | saleVol = s }, Cmd.none )
 
         OnNewCritter (Ok s) ->
             ( model, Cmd.none )
 
         OnNewCritter (Err s) ->
-            ( DLG.errorAlert "Error" "RealTimeCrittersFetched Error: " s model, Cmd.none )
+            ( DLG.errorAlert "Error" "OnNewCritter Error: " s model, Cmd.none )
+
+        ResetCache ->
+            ( model, C.resetCache model.currentPurchaseType )
+
+        CacheReset (Ok s) ->
+            ( model, Cmd.none )
+
+        CacheReset (Err s) ->
+            ( DLG.errorAlert "Error" "CacheReset Error: " s model, Cmd.none )

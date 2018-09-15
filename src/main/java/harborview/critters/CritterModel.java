@@ -34,10 +34,10 @@ public class CritterModel {
         MyBatisUtils.withSessionConsumer((session) -> {
             CritterMapper mapper = session.getMapper(CritterMapper.class);
             if (ruleType == 1) {
-                mapper.toggleAcceptRule(oid, newVal == true ? "y" : "n");
+                mapper.toggleAcceptRule(oid, newVal ? "y" : "n");
             }
             else {
-                mapper.toggleDenyRule(oid, newVal == true ? "y" : "n");
+                mapper.toggleDenyRule(oid, newVal ? "y" : "n");
             }
         });
     }

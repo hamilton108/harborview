@@ -50,6 +50,8 @@ type Msg
     | SelectedPurchaseChanged String
     | SaleVolChanged String
     | OnNewCritter (Result Http.Error JsonStatus)
+    | ResetCache
+    | CacheReset (Result Http.Error JsonStatus)
 
 
 type alias JsonStatus =

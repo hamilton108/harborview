@@ -274,7 +274,11 @@ details opx =
 
 
 purchaseToSelectItem p =
-    S.SelectItem (String.fromInt p.oid) p.ticker
+    let
+        oidStr =
+            String.fromInt p.oid
+    in
+        S.SelectItem oidStr ("[ " ++ oidStr ++ " ] " ++ p.ticker)
 
 
 view : Model -> H.Html Msg
@@ -305,6 +309,8 @@ view model =
                     [ BTN.button "Real Time Critters" RealTimeCritters ]
                 , H.div [ A.class clazz ]
                     [ BTN.button "New Critt er" NewCritter ]
+                , H.div [ A.class clazz ]
+                    [ BTN.button "Reset Cache" ResetCache ]
                 , H.text title
                 ]
             , H.div []

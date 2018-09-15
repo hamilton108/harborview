@@ -22,8 +22,17 @@ public class HomeController {
 
     @RequestMapping(method =  RequestMethod.GET)
     public String index(Locale locale, Model model) {
-        model.addAttribute("stockTickers", maunaloaCommon.getStocks());
+        //model.addAttribute("stockTickers", maunaloaCommon.getStocks());
+        DbInfo info = getDbInfo();
+        model.addAttribute("dbinfo", info);
         return "index.html";
     }
 
+    private static DbInfo dbInfo;
+    public static DbInfo getDbInfo() {
+        if (dbInfo == null) {
+            dbInfo = new DbInfo();
+        }
+        return dbInfo;
+    }
 }

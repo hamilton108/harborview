@@ -38,17 +38,19 @@ public class MaunaloaController {
 
     @RequestMapping(value = "charts", method =  RequestMethod.GET)
     public String charts(Locale locale, Model model) {
-        //model.addAttribute("stockTickers", maunaloaModel.getStocks());
+        model.addAttribute("dbinfo", HomeController.getDbInfo());
         return "maunaloa/charts.html";
     }
 
     @RequestMapping(value = "optiontickers", method =  RequestMethod.GET)
     public String options(Locale locale, Model model) {
+        model.addAttribute("dbinfo", HomeController.getDbInfo());
         return "maunaloa/options.html";
     }
 
     @RequestMapping(value = "optionpurchases", method =  RequestMethod.GET)
     public String optionpurchases(Locale locale, Model model) {
+        model.addAttribute("dbinfo", HomeController.getDbInfo());
         return "maunaloa/optionpurchases.html";
     }
 

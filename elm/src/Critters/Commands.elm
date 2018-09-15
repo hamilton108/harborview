@@ -53,6 +53,11 @@ newCritter purchaseType oid vol =
 --
 
 
+resetCache : Int -> Cmd Msg
+resetCache purchaseType =
+    Cmd.none
+
+
 toggleRule : Bool -> Int -> Bool -> Cmd Msg
 toggleRule isAccRule oid newVal =
     let
