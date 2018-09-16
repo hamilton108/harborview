@@ -1,5 +1,6 @@
 package harborview.web.controllers;
 
+import critterrepos.beans.critters.CritterBean;
 import critterrepos.beans.options.OptionPurchaseBean;
 import harborview.dto.html.critters.OptionPurchaseDTO;
 import harborview.critters.CritterModel;
@@ -56,7 +57,38 @@ public class CritterController {
         try {
             model.toggleRule(rt, oid, newVal);
             model.resetCache();
-            return new JsonResult(true, "AccRule toggled", 0);
+            return new JsonResult(true, String.format("%s rule [id=%d] toggled ok", rt == 1 ? "Acc" : "Deny", oid), 0);
+        }
+        catch (Exception ex) {
+            return new JsonResult(false, ex.getMessage(), 0);
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "purchases/newcritter/{oid}/{vol}",
+            method =  RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public JsonResult newCritter (
+            @PathVariable("oid") int oid,
+            @PathVariable("vol") int vol) {
+        try {
+            CritterBean bean = model.insertCritter(oid,vol);
+            model.resetCache();
+            return new JsonResult(true, String.format("[id=%d] New Critter", bean.getOid()), 0);
+        }
+        catch (Exception ex) {
+            return new JsonResult(false, ex.getMessage(), 0);
+        }
+    }
+    @ResponseBody
+    @RequestMapping(value = "purchases/resetcache/{ptype}",
+            method =  RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public JsonResult resetCache (
+            @PathVariable("ptype") int purchaseType) {
+        try {
+            model.resetCache();
+            return new JsonResult(true, String.format("Cache reset for purchase type %d", purchaseType), 0);
         }
         catch (Exception ex) {
             return new JsonResult(false, ex.getMessage(), 0);

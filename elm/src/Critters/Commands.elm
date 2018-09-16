@@ -10,14 +10,12 @@ mainUrl =
     "purchases"
 
 
-newCritter_ : Int -> Int -> Int -> Cmd Msg
-newCritter_ purchaseType oid vol =
+newCritter_ : Int -> Int -> Cmd Msg
+newCritter_ oid vol =
     let
         url =
             mainUrl
                 ++ "/newcritter/"
-                ++ String.fromInt purchaseType
-                ++ "/"
                 ++ String.fromInt oid
                 ++ "/"
                 ++ String.fromInt vol
@@ -26,15 +24,15 @@ newCritter_ purchaseType oid vol =
             Http.get url Dec.jsonStatusDecoder
 
 
-newCritter : Int -> String -> String -> Cmd Msg
-newCritter purchaseType oid vol =
+newCritter : String -> String -> Cmd Msg
+newCritter oid vol =
     let
         maybeCmd =
             String.toInt oid
                 |> Maybe.andThen
                     (\oidx ->
                         String.toInt vol
-                            |> Maybe.andThen (\volx -> Just (newCritter_ purchaseType oidx volx))
+                            |> Maybe.andThen (\volx -> Just (newCritter_ oidx volx))
                     )
     in
         case maybeCmd of
@@ -55,7 +53,12 @@ newCritter purchaseType oid vol =
 
 resetCache : Int -> Cmd Msg
 resetCache purchaseType =
-    Cmd.none
+    let
+        url =
+            mainUrl ++ "/resetcache/" ++ String.fromInt purchaseType
+    in
+        Http.send CacheReset <|
+            Http.get url Dec.jsonStatusDecoder
 
 
 toggleRule : Bool -> Int -> Bool -> Cmd Msg

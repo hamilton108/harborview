@@ -117,7 +117,7 @@ critterPart crit =
             [ H.td [] [ H.text (String.fromInt c.oid) ]
             , H.td [] [ H.text (String.fromInt c.sellVolume) ]
             , H.td [] [ H.text (String.fromInt c.status) ]
-            , H.td [] [ H.a [ A.href "#", A.class "newaccrule href-td" ] [ H.text "New Acc" ] ]
+            , H.td [] [ H.a [ A.href "#", A.class "newaccrule href-td", E.onClick (NewAccRule c.oid) ] [ H.text "New Acc" ] ]
             ]
 
 
@@ -149,7 +149,7 @@ accPart acc =
                 , H.td [] [ H.text (rtypDesc curAcc.rtyp) ]
                 , H.td [] [ H.text (String.fromFloat curAcc.value) ]
                 , H.td [] [ cbActive ]
-                , H.td [] [ H.a [ A.href "#", A.class "newdnyrule href-td" ] [ H.text "New Deny" ] ]
+                , H.td [] [ H.a [ A.href "#", A.class "newdnyrule href-td", E.onClick (NewDenyRule curAcc.oid) ] [ H.text "New Deny" ] ]
                 ]
 
 

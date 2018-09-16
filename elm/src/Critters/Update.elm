@@ -207,7 +207,7 @@ update msg model =
                 ( newModel, C.toggleRule False denyRule.oid newVal )
 
         Toggled (Ok s) ->
-            ( model, Cmd.none )
+            ( { model | dlgAlert = DLG.DialogVisibleAlert "Toggle" s.msg DLG.Info }, Cmd.none )
 
         Toggled (Err s) ->
             ( DLG.errorAlert "Error" "Toggled Error: " s model, Cmd.none )
@@ -220,7 +220,7 @@ update msg model =
                             Cmd.none
 
                         Just p ->
-                            C.newCritter model.currentPurchaseType p model.saleVol
+                            C.newCritter p model.saleVol
             in
                 ( { model | dlgNewCritter = DLG.DialogHidden }, cmd )
 
@@ -234,7 +234,14 @@ update msg model =
             ( { model | saleVol = s }, Cmd.none )
 
         OnNewCritter (Ok s) ->
-            ( model, Cmd.none )
+            let
+                cmd =
+                    if model.currentPurchaseType == 4 then
+                        C.fetchCritters True
+                    else
+                        C.fetchCritters False
+            in
+                ( model, cmd )
 
         OnNewCritter (Err s) ->
             ( DLG.errorAlert "Error" "OnNewCritter Error: " s model, Cmd.none )
@@ -247,3 +254,11 @@ update msg model =
 
         CacheReset (Err s) ->
             ( DLG.errorAlert "Error" "CacheReset Error: " s model, Cmd.none )
+
+        NewAccRule critId ->
+            Debug.log (String.fromInt critId)
+                ( model, Cmd.none )
+
+        NewDenyRule accId ->
+            Debug.log (String.fromInt accId)
+                ( model, Cmd.none )

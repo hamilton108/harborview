@@ -52,6 +52,8 @@ type Msg
     | OnNewCritter (Result Http.Error JsonStatus)
     | ResetCache
     | CacheReset (Result Http.Error JsonStatus)
+    | NewAccRule Int
+    | NewDenyRule Int
 
 
 type alias JsonStatus =

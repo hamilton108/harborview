@@ -1,5 +1,6 @@
 package harborview.critters;
 
+import critterrepos.beans.critters.CritterBean;
 import critterrepos.beans.options.OptionPurchaseBean;
 import critterrepos.models.mybatis.CritterMapper;
 import critterrepos.utils.MyBatisUtils;
@@ -41,6 +42,19 @@ public class CritterModel {
             }
         });
     }
+    public CritterBean insertCritter(int purchaseId, int volume) {
+        return MyBatisUtils.withSession((session) -> {
+            CritterMapper mapper = session.getMapper(CritterMapper.class);
+            CritterBean bean = new CritterBean();
+            bean.setStatus(7);
+            bean.setCritterType(1);
+            bean.setPurchaseId(purchaseId);
+            bean.setSellVolume(volume);
+            mapper.insertCritter(bean);
+            return bean;
+        });
+    }
+
     public void resetCache() {
         critters4 = null;
         critters11 = null;
