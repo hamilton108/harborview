@@ -13,6 +13,8 @@ import Critters.Types
         , OptionPurchase
         , OptionPurchases
         , CritterMsg(..)
+        , AccRuleMsg(..)
+        , DenyRuleMsg(..)
         )
 import Common.ModalDialog as DLG
 
@@ -213,15 +215,9 @@ updateCritterMsg critMsg model =
             ( DLG.errorAlert "Error" "OnNewCritter Error: " s model, Cmd.none )
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        AlertOk ->
-            ( { model | dlgAlert = DLG.DialogHidden }, Cmd.none )
-
-        CritterMsgFor critMsg ->
-            updateCritterMsg critMsg model
-
+updateAccRuleMsg : AccRuleMsg -> Model -> ( Model, Cmd Msg )
+updateAccRuleMsg accMsg model =
+    case accMsg of
         ToggleAccActive accRule ->
             let
                 newVal =
@@ -232,6 +228,14 @@ update msg model =
             in
                 ( newModel, C.toggleRule True accRule.oid newVal )
 
+        NewAccRule critId ->
+            Debug.log (String.fromInt critId)
+                ( model, Cmd.none )
+
+
+updateDenyRuleMsg : DenyRuleMsg -> Model -> ( Model, Cmd Msg )
+updateDenyRuleMsg denyMsg model =
+    case denyMsg of
         ToggleDenyActive denyRule ->
             let
                 newVal =
@@ -241,6 +245,26 @@ update msg model =
                     toggleDenyRule model denyRule
             in
                 ( newModel, C.toggleRule False denyRule.oid newVal )
+
+        NewDenyRule accId ->
+            Debug.log (String.fromInt accId)
+                ( model, Cmd.none )
+
+
+update : Msg -> Model -> ( Model, Cmd Msg )
+update msg model =
+    case msg of
+        AlertOk ->
+            ( { model | dlgAlert = DLG.DialogHidden }, Cmd.none )
+
+        CritterMsgFor critMsg ->
+            updateCritterMsg critMsg model
+
+        AccRuleMsgFor accMsg ->
+            updateAccRuleMsg accMsg model
+
+        DenyRuleMsgFor denyMsg ->
+            updateDenyRuleMsg denyMsg model
 
         Toggled (Ok s) ->
             ( { model | dlgAlert = DLG.DialogVisibleAlert "Toggle" s.msg DLG.Info }, Cmd.none )
@@ -262,11 +286,3 @@ update msg model =
 
         CacheReset (Err s) ->
             ( DLG.errorAlert "Error" "CacheReset Error: " s model, Cmd.none )
-
-        NewAccRule critId ->
-            Debug.log (String.fromInt critId)
-                ( model, Cmd.none )
-
-        NewDenyRule accId ->
-            Debug.log (String.fromInt accId)
-                ( model, Cmd.none )

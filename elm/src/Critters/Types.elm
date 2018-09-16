@@ -46,18 +46,26 @@ type CritterMsg
     | OnNewCritter (Result Http.Error JsonStatus)
 
 
+type AccRuleMsg
+    = ToggleAccActive AccRule
+    | NewAccRule Int
+
+
+type DenyRuleMsg
+    = ToggleDenyActive DenyRule
+    | NewDenyRule Int
+
+
 type Msg
     = AlertOk
     | CritterMsgFor CritterMsg
-    | ToggleAccActive AccRule
-    | ToggleDenyActive DenyRule
+    | AccRuleMsgFor AccRuleMsg
+    | DenyRuleMsgFor DenyRuleMsg
     | Toggled (Result Http.Error JsonStatus)
     | SelectedPurchaseChanged String
     | SaleVolChanged String
     | ResetCache
     | CacheReset (Result Http.Error JsonStatus)
-    | NewAccRule Int
-    | NewDenyRule Int
 
 
 type alias JsonStatus =

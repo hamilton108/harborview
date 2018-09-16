@@ -14,6 +14,8 @@ import Critters.Types
         , OptionPurchase
         , OptionPurchases
         , CritterMsg(..)
+        , AccRuleMsg(..)
+        , DenyRuleMsg(..)
         , rtypDesc
         )
 import Html as H
@@ -118,7 +120,7 @@ critterPart crit =
             [ H.td [] [ H.text (String.fromInt c.oid) ]
             , H.td [] [ H.text (String.fromInt c.sellVolume) ]
             , H.td [] [ H.text (String.fromInt c.status) ]
-            , H.td [] [ H.a [ A.href "#", A.class "newaccrule href-td", E.onClick (NewAccRule c.oid) ] [ H.text "New Acc" ] ]
+            , H.td [] [ H.a [ A.href "#", A.class "newaccrule href-td", E.onClick (AccRuleMsgFor (NewAccRule c.oid)) ] [ H.text "New Acc" ] ]
             ]
 
 
@@ -141,7 +143,7 @@ accPart acc =
                         [ A.checked curAcc.active
                         , A.type_ "checkbox"
                         , A.attribute "data-oid" (String.fromInt curAcc.oid)
-                        , E.onClick (ToggleAccActive curAcc)
+                        , E.onClick (AccRuleMsgFor (ToggleAccActive curAcc))
                         ]
                         []
             in
@@ -150,7 +152,7 @@ accPart acc =
                 , H.td [] [ H.text (rtypDesc curAcc.rtyp) ]
                 , H.td [] [ H.text (String.fromFloat curAcc.value) ]
                 , H.td [] [ cbActive ]
-                , H.td [] [ H.a [ A.href "#", A.class "newdnyrule href-td", E.onClick (NewDenyRule curAcc.oid) ] [ H.text "New Deny" ] ]
+                , H.td [] [ H.a [ A.href "#", A.class "newdnyrule href-td", E.onClick (DenyRuleMsgFor (NewDenyRule curAcc.oid)) ] [ H.text "New Deny" ] ]
                 ]
 
 
@@ -173,7 +175,7 @@ denyPart dny =
                         [ A.checked d.active
                         , A.type_ "checkbox"
                         , A.attribute "data-oid" (String.fromInt d.oid)
-                        , E.onClick (ToggleDenyActive d)
+                        , E.onClick (DenyRuleMsgFor (ToggleDenyActive d))
                         ]
                         []
 
