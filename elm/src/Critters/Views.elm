@@ -13,6 +13,7 @@ import Critters.Types
         , Msg(..)
         , OptionPurchase
         , OptionPurchases
+        , CritterMsg(..)
         , rtypDesc
         )
 import Html as H
@@ -304,11 +305,11 @@ view model =
         H.div []
             [ H.div [ A.class "grid-elm" ]
                 [ H.div [ A.class clazz ]
-                    [ BTN.button "Paper Critters" PaperCritters ]
+                    [ BTN.button "Paper Critters" (CritterMsgFor PaperCritters) ]
                 , H.div [ A.class clazz ]
-                    [ BTN.button "Real Time Critters" RealTimeCritters ]
+                    [ BTN.button "Real Time Critters" (CritterMsgFor RealTimeCritters) ]
                 , H.div [ A.class clazz ]
-                    [ BTN.button "New Critt er" NewCritter ]
+                    [ BTN.button "New Critt er" (CritterMsgFor NewCritter) ]
                 , H.div [ A.class clazz ]
                     [ BTN.button "Reset Cache" ResetCache ]
                 , H.text title

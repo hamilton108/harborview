@@ -35,21 +35,25 @@ rtypDesc rtyp =
             "Composite"
 
 
+type CritterMsg
+    = PaperCritters
+    | RealTimeCritters
+    | NewCritter
+    | PaperCrittersFetched (Result Http.Error OptionPurchases)
+    | RealTimeCrittersFetched (Result Http.Error OptionPurchases)
+    | DlgNewCritterOk
+    | DlgNewCritterCancel
+    | OnNewCritter (Result Http.Error JsonStatus)
+
+
 type Msg
     = AlertOk
-    | PaperCritters
-    | PaperCrittersFetched (Result Http.Error OptionPurchases)
-    | RealTimeCritters
-    | RealTimeCrittersFetched (Result Http.Error OptionPurchases)
-    | NewCritter
+    | CritterMsgFor CritterMsg
     | ToggleAccActive AccRule
     | ToggleDenyActive DenyRule
     | Toggled (Result Http.Error JsonStatus)
-    | DlgNewCritterOk
-    | DlgNewCritterCancel
     | SelectedPurchaseChanged String
     | SaleVolChanged String
-    | OnNewCritter (Result Http.Error JsonStatus)
     | ResetCache
     | CacheReset (Result Http.Error JsonStatus)
     | NewAccRule Int

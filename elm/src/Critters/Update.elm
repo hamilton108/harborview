@@ -12,6 +12,7 @@ import Critters.Types
         , Msg(..)
         , OptionPurchase
         , OptionPurchases
+        , CritterMsg(..)
         )
 import Common.ModalDialog as DLG
 
@@ -165,26 +166,56 @@ update msg model =
         AlertOk ->
             ( { model | dlgAlert = DLG.DialogHidden }, Cmd.none )
 
-        PaperCritters ->
-            ( model, C.fetchCritters False )
+        CritterMsgFor critMsg ->
+            case critMsg of
+                PaperCritters ->
+                    ( model, C.fetchCritters False )
 
-        PaperCrittersFetched (Ok p) ->
-            ( { model | purchases = p, currentPurchaseType = 11 }, Cmd.none )
+                RealTimeCritters ->
+                    ( model, C.fetchCritters True )
 
-        PaperCrittersFetched (Err s) ->
-            ( DLG.errorAlert "Error" "PaperCrittersFetched Error: " s model, Cmd.none )
+                NewCritter ->
+                    ( { model | dlgNewCritter = DLG.DialogVisible }, Cmd.none )
 
-        RealTimeCritters ->
-            ( model, C.fetchCritters True )
+                PaperCrittersFetched (Ok p) ->
+                    ( { model | purchases = p, currentPurchaseType = 11 }, Cmd.none )
 
-        RealTimeCrittersFetched (Ok p) ->
-            ( { model | purchases = p, currentPurchaseType = 4 }, Cmd.none )
+                PaperCrittersFetched (Err s) ->
+                    ( DLG.errorAlert "Error" "PaperCrittersFetched Error: " s model, Cmd.none )
 
-        RealTimeCrittersFetched (Err s) ->
-            ( DLG.errorAlert "Error" "RealTimeCrittersFetched Error: " s model, Cmd.none )
+                RealTimeCrittersFetched (Ok p) ->
+                    ( { model | purchases = p, currentPurchaseType = 4 }, Cmd.none )
 
-        NewCritter ->
-            ( { model | dlgNewCritter = DLG.DialogVisible }, Cmd.none )
+                RealTimeCrittersFetched (Err s) ->
+                    ( DLG.errorAlert "Error" "RealTimeCrittersFetched Error: " s model, Cmd.none )
+
+                DlgNewCritterOk ->
+                    let
+                        cmd =
+                            case model.selectedPurchase of
+                                Nothing ->
+                                    Cmd.none
+
+                                Just p ->
+                                    C.newCritter p model.saleVol
+                    in
+                        ( { model | dlgNewCritter = DLG.DialogHidden }, cmd )
+
+                DlgNewCritterCancel ->
+                    ( { model | dlgNewCritter = DLG.DialogHidden }, Cmd.none )
+
+                OnNewCritter (Ok s) ->
+                    let
+                        cmd =
+                            if model.currentPurchaseType == 4 then
+                                C.fetchCritters True
+                            else
+                                C.fetchCritters False
+                    in
+                        ( model, cmd )
+
+                OnNewCritter (Err s) ->
+                    ( DLG.errorAlert "Error" "OnNewCritter Error: " s model, Cmd.none )
 
         ToggleAccActive accRule ->
             let
@@ -212,39 +243,11 @@ update msg model =
         Toggled (Err s) ->
             ( DLG.errorAlert "Error" "Toggled Error: " s model, Cmd.none )
 
-        DlgNewCritterOk ->
-            let
-                cmd =
-                    case model.selectedPurchase of
-                        Nothing ->
-                            Cmd.none
-
-                        Just p ->
-                            C.newCritter p model.saleVol
-            in
-                ( { model | dlgNewCritter = DLG.DialogHidden }, cmd )
-
-        DlgNewCritterCancel ->
-            ( { model | dlgNewCritter = DLG.DialogHidden }, Cmd.none )
-
         SelectedPurchaseChanged s ->
             ( { model | selectedPurchase = Just s }, Cmd.none )
 
         SaleVolChanged s ->
             ( { model | saleVol = s }, Cmd.none )
-
-        OnNewCritter (Ok s) ->
-            let
-                cmd =
-                    if model.currentPurchaseType == 4 then
-                        C.fetchCritters True
-                    else
-                        C.fetchCritters False
-            in
-                ( model, cmd )
-
-        OnNewCritter (Err s) ->
-            ( DLG.errorAlert "Error" "OnNewCritter Error: " s model, Cmd.none )
 
         ResetCache ->
             ( model, C.resetCache model.currentPurchaseType )

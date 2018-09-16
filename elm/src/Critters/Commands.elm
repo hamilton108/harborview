@@ -2,7 +2,7 @@ module Critters.Commands exposing (..)
 
 import Common.Decoders as Dec
 import Critters.Decoders as CD
-import Critters.Types exposing (Msg(..))
+import Critters.Types exposing (Msg(..), CritterMsg(..))
 import Http
 
 
@@ -20,7 +20,7 @@ newCritter_ oid vol =
                 ++ "/"
                 ++ String.fromInt vol
     in
-        Http.send OnNewCritter <|
+        Http.send (CritterMsgFor << OnNewCritter) <|
             Http.get url Dec.jsonStatusDecoder
 
 
@@ -97,9 +97,9 @@ fetchCritters isRealTime =
 
         msg =
             if isRealTime == True then
-                RealTimeCrittersFetched
+                (CritterMsgFor << RealTimeCrittersFetched)
             else
-                PaperCrittersFetched
+                (CritterMsgFor << PaperCrittersFetched)
     in
         Http.send msg <|
             Http.get url CD.optionPurchasesDecoder

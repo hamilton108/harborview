@@ -59,4 +59,12 @@ public class CritterModel {
         critters4 = null;
         critters11 = null;
     }
+    public void resetCache(int purchaseType) {
+        if (purchaseType == 4) {
+            critters4 = null;
+        }
+        else {
+            critters11 = null;
+        }
+    }
 }
