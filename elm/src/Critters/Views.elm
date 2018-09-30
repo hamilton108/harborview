@@ -1,26 +1,27 @@
-module Critters.Views exposing (..)
+module Critters.Views exposing (accPart, critAccDenyTr, critAccTr, critterArea, critterPart, critterRows, denyPart, denyTr, details, purchaseToSelectItem, tableHeader, view)
 
-import Common.Select as S
-import Common.Html as CH
 import Common.Buttons as BTN
+import Common.Html as CH
 import Common.ModalDialog as DLG
+import Common.Select as S
 import Critters.Types
     exposing
         ( AccRule
+        , AccRuleMsg(..)
         , Critter
+        , CritterMsg(..)
         , DenyRule
+        , DenyRuleMsg(..)
         , Model
         , Msg(..)
         , OptionPurchase
         , OptionPurchases
-        , CritterMsg(..)
-        , AccRuleMsg(..)
-        , DenyRuleMsg(..)
         , rtypDesc
         )
 import Html as H
 import Html.Attributes as A
 import Html.Events as E
+
 
 
 {-
@@ -147,13 +148,13 @@ accPart acc =
                         ]
                         []
             in
-                [ H.td [] [ H.text (String.fromInt curAcc.oid) ]
-                , H.td [] [ H.text (String.fromInt curAcc.rtyp) ]
-                , H.td [] [ H.text (rtypDesc curAcc.rtyp) ]
-                , H.td [] [ H.text (String.fromFloat curAcc.value) ]
-                , H.td [] [ cbActive ]
-                , H.td [] [ H.a [ A.href "#", A.class "newdnyrule href-td", E.onClick (DenyRuleMsgFor (NewDenyRule curAcc.oid)) ] [ H.text "New Deny" ] ]
-                ]
+            [ H.td [] [ H.text (String.fromInt curAcc.oid) ]
+            , H.td [] [ H.text (String.fromInt curAcc.rtyp) ]
+            , H.td [] [ H.text (rtypDesc curAcc.rtyp) ]
+            , H.td [] [ H.text (String.fromFloat curAcc.value) ]
+            , H.td [] [ cbActive ]
+            , H.td [] [ H.a [ A.href "#", A.class "newdnyrule href-td", E.onClick (DenyRuleMsgFor (NewDenyRule curAcc.oid)) ] [ H.text "New Deny" ] ]
+            ]
 
 
 denyPart : Maybe DenyRule -> List (H.Html Msg)
@@ -184,13 +185,13 @@ denyPart dny =
 
                 -- , E.onClick ToggleRealTimePurchase ]
             in
-                [ H.td [] [ H.text (String.fromInt d.oid) ]
-                , H.td [] [ H.text (String.fromInt d.rtyp) ]
-                , H.td [] [ H.text (rtypDesc d.rtyp) ]
-                , H.td [] [ H.text (String.fromFloat d.value) ]
-                , H.td [] [ cbActive ]
-                , H.td [] [ cbMemory ]
-                ]
+            [ H.td [] [ H.text (String.fromInt d.oid) ]
+            , H.td [] [ H.text (String.fromInt d.rtyp) ]
+            , H.td [] [ H.text (rtypDesc d.rtyp) ]
+            , H.td [] [ H.text (String.fromFloat d.value) ]
+            , H.td [] [ cbActive ]
+            , H.td [] [ cbMemory ]
+            ]
 
 
 {-| Return H.tr [][ H.td [][], .. ]
@@ -201,7 +202,7 @@ critAccDenyTr crit acc dny =
         tdRow =
             List.concat [ critterPart crit, accPart acc, denyPart dny ]
     in
-        H.tr [] tdRow
+    H.tr [] tdRow
 
 
 denyTr : DenyRule -> H.Html Msg
@@ -210,7 +211,7 @@ denyTr dny =
         tdRow =
             List.concat [ critterPart Nothing, accPart Nothing, denyPart (Just dny) ]
     in
-        H.tr [] tdRow
+    H.tr [] tdRow
 
 
 critAccTr : Maybe Critter -> AccRule -> List (H.Html Msg)
@@ -221,14 +222,14 @@ critAccTr crit acc =
                 tdRow =
                     List.concat [ critterPart crit, accPart (Just acc), denyPart Nothing ]
             in
-                [ H.tr [] tdRow ]
+            [ H.tr [] tdRow ]
 
         [ dny ] ->
             let
                 tdRow =
                     List.concat [ critterPart crit, accPart (Just acc), denyPart (Just dny) ]
             in
-                [ H.tr [] tdRow ]
+            [ H.tr [] tdRow ]
 
         x :: xs ->
             let
@@ -238,7 +239,7 @@ critAccTr crit acc =
                 restRows =
                     List.map denyTr xs
             in
-                firstRow :: restRows
+            firstRow :: restRows
 
 
 {-| Return a list of H.tr [][ H.td [][], .. ]
@@ -257,7 +258,7 @@ critterRows crit =
                 firstRow =
                     critAccTr (Just crit) x
             in
-                List.concat [ firstRow, List.concat (List.map (critAccTr Nothing) xs) ]
+            List.concat [ firstRow, List.concat (List.map (critAccTr Nothing) xs) ]
 
 
 critterArea : OptionPurchase -> List (H.Html Msg)
@@ -281,7 +282,7 @@ purchaseToSelectItem p =
         oidStr =
             String.fromInt p.oid
     in
-        S.SelectItem oidStr ("[ " ++ oidStr ++ " ] " ++ p.ticker)
+    S.SelectItem oidStr ("[ " ++ oidStr ++ " ] " ++ p.ticker)
 
 
 view : Model -> H.Html Msg
@@ -304,26 +305,36 @@ view model =
                 _ ->
                     "-"
     in
-        H.div []
-            [ H.div [ A.class "grid-elm" ]
-                [ H.div [ A.class clazz ]
-                    [ BTN.button "Paper Critters" (CritterMsgFor PaperCritters) ]
-                , H.div [ A.class clazz ]
-                    [ BTN.button "Real Time Critters" (CritterMsgFor RealTimeCritters) ]
-                , H.div [ A.class clazz ]
-                    [ BTN.button "New Critt er" (CritterMsgFor NewCritter) ]
-                , H.div [ A.class clazz ]
-                    [ BTN.button "Reset Cache" ResetCache ]
-                , H.text title
-                ]
-            , H.div []
-                ps
-            , DLG.modalDialog ("New " ++ title)
-                model.dlgNewCritter
-                (CritterMsgFor DlgNewCritterOk)
-                (CritterMsgFor DlgNewCritterCancel)
-                [ S.makeSelect "Option: " SelectedPurchaseChanged (List.map purchaseToSelectItem model.purchases) Nothing
-                , CH.makeInput "Sales volume:" SaleVolChanged model.saleVol
-                ]
-            , DLG.alert model.dlgAlert AlertOk
+    H.div []
+        [ H.div [ A.class "grid-elm" ]
+            [ H.div [ A.class clazz ]
+                [ BTN.button "Paper Critters" (CritterMsgFor PaperCritters) ]
+            , H.div [ A.class clazz ]
+                [ BTN.button "Real Time Critters" (CritterMsgFor RealTimeCritters) ]
+            , H.div [ A.class clazz ]
+                [ BTN.button "New Critt er" (CritterMsgFor NewCritter) ]
+            , H.div [ A.class clazz ]
+                [ BTN.button "Reset Cache" ResetCache ]
+            , H.text title
             ]
+        , H.div []
+            ps
+        , DLG.modalDialog ("New " ++ title)
+            model.dlgNewCritter
+            (CritterMsgFor DlgNewCritterOk)
+            (CritterMsgFor DlgNewCritterCancel)
+            [ S.makeSelect "Option: " SelectedPurchaseChanged (List.map purchaseToSelectItem model.purchases) Nothing
+            , CH.makeInput "Sales volume:" SaleVolChanged model.saleVol
+            ]
+        , DLG.modalDialog "New Accept Rule"
+            model.dlgNewAccRule
+            (AccRuleMsgFor DlgNewAccOk)
+            (AccRuleMsgFor DlgNewAccCancel)
+            []
+        , DLG.modalDialog ("New " ++ title)
+            model.dlgNewCritter
+            (DenyRuleMsgFor DlgNewDenyOk)
+            (DenyRuleMsgFor DlgNewDenyCancel)
+            []
+        , DLG.alert model.dlgAlert AlertOk
+        ]

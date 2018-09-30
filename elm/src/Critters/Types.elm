@@ -1,7 +1,7 @@
-module Critters.Types exposing (..)
+module Critters.Types exposing (AccRule, AccRuleMsg(..), Activable, Critter, CritterMsg(..), DenyRule, DenyRuleMsg(..), Flags, JsonStatus, Model, Msg(..), Oidable, OptionPurchase, OptionPurchases, rtypDesc)
 
-import Http
 import Common.ModalDialog as DLG
+import Http
 
 
 rtypDesc : Int -> String
@@ -49,11 +49,17 @@ type CritterMsg
 type AccRuleMsg
     = ToggleAccActive AccRule
     | NewAccRule Int
+    | DlgNewAccOk
+    | DlgNewAccCancel
+    | OnNewAccRule (Result Http.Error JsonStatus)
 
 
 type DenyRuleMsg
     = ToggleDenyActive DenyRule
     | NewDenyRule Int
+    | DlgNewDenyOk
+    | DlgNewDenyCancel
+    | OnNewDenyRule (Result Http.Error JsonStatus)
 
 
 type Msg
@@ -127,8 +133,10 @@ type alias Flags =
 
 
 type alias Model =
-    { dlgNewCritter : DLG.DialogState
-    , dlgAlert : DLG.DialogState
+    { dlgAlert : DLG.DialogState
+    , dlgNewCritter : DLG.DialogState
+    , dlgNewAccRule : DLG.DialogState
+    , dlgNewDenyRule : DLG.DialogState
     , purchases : OptionPurchases
     , currentPurchaseType : Int
     , saleVol : String

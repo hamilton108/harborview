@@ -1,4 +1,4 @@
-module Critters.Main exposing (..)
+module Critters.Main exposing (init, initModel, main)
 
 import Browser
 import Common.ModalDialog as DLG
@@ -60,6 +60,8 @@ initModel : Flags -> Model
 initModel flags =
     { dlgAlert = DLG.DialogHidden
     , dlgNewCritter = DLG.DialogHidden
+    , dlgNewAccRule = DLG.DialogHidden
+    , dlgNewDenyRule = DLG.DialogHidden
     , purchases = []
     , currentPurchaseType = 0
     , saleVol = "10"

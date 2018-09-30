@@ -1,22 +1,23 @@
-module Critters.Update exposing (..)
+module Critters.Update exposing (toggleAccRule, toggleDenyRule, toggleOid, update, updateAccRuleMsg, updateCritterMsg, updateDenyRuleMsg)
 
 import Common.Html as W
+import Common.ModalDialog as DLG
 import Common.Utils as U
 import Critters.Commands as C
 import Critters.Types
     exposing
         ( AccRule
+        , AccRuleMsg(..)
         , Activable
+        , CritterMsg(..)
         , DenyRule
+        , DenyRuleMsg(..)
         , Model
         , Msg(..)
         , OptionPurchase
         , OptionPurchases
-        , CritterMsg(..)
-        , AccRuleMsg(..)
-        , DenyRuleMsg(..)
         )
-import Common.ModalDialog as DLG
+
 
 
 -- https://medium.com/elm-shorts/updating-nested-records-in-elm-15d162e80480
@@ -41,6 +42,7 @@ toggleOid : Int -> Activable a -> Activable a
 toggleOid oid acc =
     if acc.oid == oid then
         { acc | active = not acc.active }
+
     else
         acc
 
@@ -51,23 +53,77 @@ toggleAccRule model curAcc =
         pm =
             U.findInList model.purchases curAcc.purchaseId
     in
-        case pm of
-            Nothing ->
-                model
+    case pm of
+        Nothing ->
+            model
 
-            Just p ->
-                let
-                    cm =
-                        U.findInList p.critters curAcc.critId
-                in
-                    case cm of
+        Just p ->
+            let
+                cm =
+                    U.findInList p.critters curAcc.critId
+            in
+            case cm of
+                Nothing ->
+                    model
+
+                Just c ->
+                    let
+                        newAccs =
+                            List.map (toggleOid curAcc.oid) c.accRules
+
+                        newCrit =
+                            { c | accRules = newAccs }
+
+                        newCrits =
+                            List.map (U.replaceWith newCrit) p.critters
+
+                        newPurchase =
+                            { p | critters = newCrits }
+
+                        newPurchases =
+                            List.map (U.replaceWith newPurchase) model.purchases
+                    in
+                    { model | purchases = newPurchases }
+
+
+toggleDenyRule : Model -> DenyRule -> Model
+toggleDenyRule model dny =
+    let
+        pm =
+            U.findInList model.purchases dny.purchaseId
+    in
+    case pm of
+        Nothing ->
+            model
+
+        Just p ->
+            let
+                cm =
+                    U.findInList p.critters dny.critId
+            in
+            case cm of
+                Nothing ->
+                    model
+
+                Just c ->
+                    let
+                        accm =
+                            U.findInList c.accRules dny.accId
+                    in
+                    case accm of
                         Nothing ->
                             model
 
-                        Just c ->
+                        Just acc ->
                             let
+                                newDenys =
+                                    List.map (toggleOid dny.oid) acc.denyRules
+
+                                newAcc =
+                                    { acc | denyRules = newDenys }
+
                                 newAccs =
-                                    List.map (toggleOid curAcc.oid) c.accRules
+                                    List.map (U.replaceWith newAcc) c.accRules
 
                                 newCrit =
                                     { c | accRules = newAccs }
@@ -81,61 +137,7 @@ toggleAccRule model curAcc =
                                 newPurchases =
                                     List.map (U.replaceWith newPurchase) model.purchases
                             in
-                                { model | purchases = newPurchases }
-
-
-toggleDenyRule : Model -> DenyRule -> Model
-toggleDenyRule model dny =
-    let
-        pm =
-            U.findInList model.purchases dny.purchaseId
-    in
-        case pm of
-            Nothing ->
-                model
-
-            Just p ->
-                let
-                    cm =
-                        U.findInList p.critters dny.critId
-                in
-                    case cm of
-                        Nothing ->
-                            model
-
-                        Just c ->
-                            let
-                                accm =
-                                    U.findInList c.accRules dny.accId
-                            in
-                                case accm of
-                                    Nothing ->
-                                        model
-
-                                    Just acc ->
-                                        let
-                                            newDenys =
-                                                List.map (toggleOid dny.oid) acc.denyRules
-
-                                            newAcc =
-                                                { acc | denyRules = newDenys }
-
-                                            newAccs =
-                                                List.map (U.replaceWith newAcc) c.accRules
-
-                                            newCrit =
-                                                { c | accRules = newAccs }
-
-                                            newCrits =
-                                                List.map (U.replaceWith newCrit) p.critters
-
-                                            newPurchase =
-                                                { p | critters = newCrits }
-
-                                            newPurchases =
-                                                List.map (U.replaceWith newPurchase) model.purchases
-                                        in
-                                            { model | purchases = newPurchases }
+                            { model | purchases = newPurchases }
 
 
 
@@ -196,7 +198,7 @@ updateCritterMsg critMsg model =
                         Just p ->
                             C.newCritter p model.saleVol
             in
-                ( { model | dlgNewCritter = DLG.DialogHidden }, cmd )
+            ( { model | dlgNewCritter = DLG.DialogHidden }, cmd )
 
         DlgNewCritterCancel ->
             ( { model | dlgNewCritter = DLG.DialogHidden }, Cmd.none )
@@ -206,10 +208,11 @@ updateCritterMsg critMsg model =
                 cmd =
                     if model.currentPurchaseType == 4 then
                         C.fetchCritters True
+
                     else
                         C.fetchCritters False
             in
-                ( model, cmd )
+            ( model, cmd )
 
         OnNewCritter (Err s) ->
             ( DLG.errorAlert "Error" "OnNewCritter Error: " s model, Cmd.none )
@@ -226,11 +229,22 @@ updateAccRuleMsg accMsg model =
                 newModel =
                     toggleAccRule model accRule
             in
-                ( newModel, C.toggleRule True accRule.oid newVal )
+            ( newModel, C.toggleRule True accRule.oid newVal )
 
         NewAccRule critId ->
-            Debug.log (String.fromInt critId)
-                ( model, Cmd.none )
+            ( { model | dlgNewAccRule = DLG.DialogVisible }, Cmd.none )
+
+        DlgNewAccOk ->
+            ( model, Cmd.none )
+
+        DlgNewAccCancel ->
+            ( model, Cmd.none )
+
+        OnNewAccRule (Ok s) ->
+            ( model, Cmd.none )
+
+        OnNewAccRule (Err err) ->
+            ( model, Cmd.none )
 
 
 updateDenyRuleMsg : DenyRuleMsg -> Model -> ( Model, Cmd Msg )
@@ -244,11 +258,22 @@ updateDenyRuleMsg denyMsg model =
                 newModel =
                     toggleDenyRule model denyRule
             in
-                ( newModel, C.toggleRule False denyRule.oid newVal )
+            ( newModel, C.toggleRule False denyRule.oid newVal )
 
         NewDenyRule accId ->
-            Debug.log (String.fromInt accId)
-                ( model, Cmd.none )
+            ( { model | dlgNewDenyRule = DLG.DialogVisible }, Cmd.none )
+
+        DlgNewDenyOk ->
+            ( model, Cmd.none )
+
+        DlgNewDenyCancel ->
+            ( model, Cmd.none )
+
+        OnNewDenyRule (Ok s) ->
+            ( model, Cmd.none )
+
+        OnNewDenyRule (Err err) ->
+            ( model, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
