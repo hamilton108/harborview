@@ -12,7 +12,6 @@
             "elm/html": "1.0.0",
             "elm/http": "1.0.0",
             "elm/virtual-dom": "1.0.0",
-            "arturopala/elm-monocle": "2.0.0",
             "NoRedInk/elm-json-decode-pipeline": "1.0.0"
         },
         "indirect": {

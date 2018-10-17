@@ -1,6 +1,23 @@
-module Critters.Types exposing (AccRule, AccRuleMsg(..), Activable, Critter, CritterMsg(..), DenyRule, DenyRuleMsg(..), Flags, JsonStatus, Model, Msg(..), Oidable, OptionPurchase, OptionPurchases, rtypDesc)
+module Critters.Types exposing
+    ( AccRule
+    , AccRuleMsg(..)
+    , Activable
+    , Critter
+    , CritterMsg(..)
+    , DenyRule
+    , DenyRuleMsg(..)
+    , Flags
+    , JsonStatus
+    , Model
+    , Msg(..)
+    , Oidable
+    , OptionPurchase
+    , OptionPurchases
+    , rtypDesc
+    )
 
 import Common.ModalDialog as DLG
+import Common.Select as S
 import Http
 
 
@@ -33,6 +50,11 @@ rtypDesc rtyp =
 
         _ ->
             "Composite"
+
+
+rtypSelectItems : S.SelectItems
+rtypSelectItems =
+    Debug.todo "rtypSelectItems"
 
 
 type CritterMsg
