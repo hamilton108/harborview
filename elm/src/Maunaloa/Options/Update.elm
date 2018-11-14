@@ -18,13 +18,24 @@ updateOption : OptionMsg -> Model -> ( Model, Cmd Msg )
 updateOption msg model =
     case msg of
         FetchOptions s ->
-            ( { model | selectedTicker = s }, C.fetchOptions model s False )
+            let
+                sx =
+                    if s == "-1" then
+                        Nothing
+
+                    else
+                        Just s
+            in
+            Debug.log "FetchOptions: "
+                ( { model | selectedTicker = sx }, C.fetchOptions model sx False )
 
         OptionsFetched (Ok s) ->
-            ( { model | stock = Just s.stock, options = Just s.opx }, Cmd.none )
+            Debug.log "OptionsFetched: "
+                ( { model | stock = Just s.stock, options = s.opx }, Cmd.none )
 
         OptionsFetched (Err s) ->
-            ( errorAlert "Error" "OptionsFetched Error: " s model, Cmd.none )
+            Debug.log "OptionsFetched ERR: "
+                ( errorAlert "Error" "OptionsFetched Error: " s model, Cmd.none )
 
 
 updatePurchase : PurchaseMsg -> Model -> ( Model, Cmd Msg )
@@ -117,7 +128,7 @@ update msg model =
 
         TickersFetched (Ok s) ->
             ( { model
-                | tickers = Just s
+                | tickers = s
               }
             , Cmd.none
             )
@@ -159,15 +170,16 @@ update msg model =
             ( { model | risc = s }, Cmd.none )
 
         ToggleSelected ticker ->
-            case model.options of
-                Nothing ->
-                    ( model, Cmd.none )
+            Debug.todo "ToggleSelected"
 
-                Just optionx ->
-                    ( { model | options = Just (List.map (C.toggle ticker) optionx) }
-                    , Cmd.none
-                    )
-
+        -- case model.options of
+        --     Nothing ->
+        --         ( model, Cmd.none )
+        --
+        --     Just optionx ->
+        --         ( { model | options = Just (List.map (C.toggle ticker) optionx) }
+        --         , Cmd.none
+        --         )
         ToggleRealTimePurchase ->
             let
                 checked =

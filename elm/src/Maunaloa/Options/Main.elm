@@ -2,6 +2,7 @@ module Maunaloa.Options.Main exposing (main)
 
 import Browser
 import Common.ModalDialog as DLG exposing (errorAlert)
+import Maunaloa.Options.Commands as C
 import Maunaloa.Options.Types exposing (Flags, Model, Msg(..))
 import Maunaloa.Options.Update exposing (update)
 import Maunaloa.Options.Views exposing (view)
@@ -20,15 +21,15 @@ main =
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
-    ( initModel flags, Cmd.none )
+    ( initModel flags, C.fetchTickers )
 
 
 initModel : Flags -> Model
 initModel flags =
-    { tickers = Nothing
-    , selectedTicker = "-1"
+    { tickers = []
+    , selectedTicker = Nothing
     , stock = Nothing
-    , options = Nothing
+    , options = []
     , risc = "0.0"
     , flags = flags
     , tableState = Table.initialSort "Ticker"

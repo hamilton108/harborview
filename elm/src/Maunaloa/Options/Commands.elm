@@ -16,10 +16,11 @@ module Maunaloa.Options.Commands exposing
 
 --import Common.Miscellaneous as M
 
+import Common.Decoders as DEC
 import Common.Select as CMB
 import Common.Types as T
 import Http
-import Json.Decode as Json
+import Json.Decode as JD
 import Json.Decode.Pipeline as JP
 import Json.Encode as JE
 import Maunaloa.Options.Decoders as D
@@ -184,7 +185,7 @@ setRisc curRisc riscItems opt =
 -}
 
 
-calcRisc : String -> Maybe Options -> Cmd Msg
+calcRisc : String -> Options -> Cmd Msg
 calcRisc riscStr options =
     Debug.todo "-"
 
@@ -210,13 +211,13 @@ calcRisc riscStr options =
 
        myDecoder =
            JP.decode RiscItem
-               |> JP.required "ticker" Json.string
-               |> JP.required "risc" Json.float
+               |> JP.required "ticker" JD.string
+               |> JP.required "risc" JD.float
    in
    Http.send
        RiscCalculated
    <|
-       Http.post url jbody (Json.list myDecoder)
+       Http.post url jbody (JD.list myDecoder)
 -}
 
 
@@ -255,96 +256,71 @@ buildOption t x d b s ib is be ex =
 -}
 
 
-optionDecoder : Json.Decoder Option
+optionDecoder : JD.Decoder Option
 optionDecoder =
-    Debug.todo "-"
+    JD.succeed buildOption
+        |> JP.required "ticker" JD.string
+        |> JP.required "x" JD.float
+        |> JP.required "days" JD.float
+        |> JP.required "buy" JD.float
+        |> JP.required "sell" JD.float
+        |> JP.required "ivBuy" JD.float
+        |> JP.required "ivSell" JD.float
+        |> JP.required "brEven" JD.float
+        |> JP.required "expiry" JD.string
 
 
-
-{-
-   JP.decode buildOption
-       |> JP.required "ticker" Json.string
-       |> JP.required "x" Json.float
-       |> JP.required "days" Json.float
-       |> JP.required "buy" Json.float
-       |> JP.required "sell" Json.float
-       |> JP.required "ivBuy" Json.float
-       |> JP.required "ivSell" Json.float
-       |> JP.required "brEven" Json.float
-       |> JP.required "expiry" Json.string
--}
-
-
-stockDecoder : Json.Decoder Stock
+stockDecoder : JD.Decoder Stock
 stockDecoder =
-    Debug.todo "-"
-
-
-
-{-
-   JP.decode Stock
-       |> JP.required "dx" Json.string
-       |> JP.required "tm" Json.string
-       |> JP.required "o" Json.float
-       |> JP.required "h" Json.float
-       |> JP.required "l" Json.float
-       |> JP.required "c" Json.float
--}
+    JD.succeed Stock
+        |> JP.required "dx" JD.string
+        |> JP.required "tm" JD.string
+        |> JP.required "o" JD.float
+        |> JP.required "h" JD.float
+        |> JP.required "l" JD.float
+        |> JP.required "c" JD.float
 
 
 bool2json : Bool -> String
 bool2json v =
-    Debug.todo "-"
+    case v of
+        True ->
+            "true"
+
+        False ->
+            "false"
 
 
-
-{-
-   case v of
-       True ->
-           "true"
-
-       False ->
-           "false"
--}
-
-
-fetchOptions : Model -> String -> Bool -> Cmd Msg
+fetchOptions : Model -> Maybe String -> Bool -> Cmd Msg
 fetchOptions model s resetCache =
-    Debug.todo "-"
+    case s of
+        Nothing ->
+            Cmd.none
 
+        Just sx ->
+            let
+                url =
+                    case model.flags.isCalls of
+                        True ->
+                            mainUrl ++ "/calls/" ++ sx ++ "/" ++ bool2json resetCache
 
+                        False ->
+                            mainUrl ++ "/puts/" ++ sx ++ "/" ++ bool2json resetCache
 
-{-
-   let
-       url =
-           case model.flags.isCalls of
-               True ->
-                   mainUrl ++ "/calls/" ++ s ++ "/" ++ bool2json resetCache
-
-               False ->
-                   mainUrl ++ "/puts/" ++ s ++ "/" ++ bool2json resetCache
-
-       myDecoder =
-           JP.decode StockAndOptions
-               |> JP.required "stock" stockDecoder
-               |> JP.required "options" (Json.list optionDecoder)
-   in
-   Http.send (OptionMsgFor << OptionsFetched) <|
-       Http.get url myDecoder
--}
+                myDecoder =
+                    JD.succeed StockAndOptions
+                        |> JP.required "stock" stockDecoder
+                        |> JP.required "options" (JD.list optionDecoder)
+            in
+            Http.send (OptionMsgFor << OptionsFetched) <|
+                Http.get url myDecoder
 
 
 fetchTickers : Cmd Msg
 fetchTickers =
-    Debug.todo "-"
-
-
-
-{-
-   let
-       url =
-           mainUrl ++ "/tickers"
-   in
-   Http.send TickersFetched <|
-       Http.get url CMB.comboBoxItemListDecoder
--}
+    let
+        url =
+            mainUrl ++ "/tickers"
+    in
+    Http.send TickersFetched <|
+        Http.get url DEC.selectItemListDecoder

@@ -9,15 +9,15 @@
     <bean id="webClientManager" class="netfondsrepos.webclient.DefaultWebClientManager">
         <property name="realTime" value="false" />
     </bean>
-    <!--
     <bean id="downloader" class="netfondsrepos.downloader.DefaultDownloader">
         <property name="webClientManager" ref="webClientManager" />
     </bean>
-    -->
+    <!--
     <bean id="downloader" class="netfondsrepos.downloader.MockDownloader">
-        <property name="storePath" value="/home/rcs/opt/java/netfondsjanitor/feed/2018/5/25" />
+        <property name="storePath" value="/home/rcs/opt/haskell/etradejanitor/feed-tmp/2018/11/9" />
         <property name="applyCounter" value="false" />
     </bean>
+    -->
     <bean id="calculator" class="vega.financial.calculator.BlackScholes">
     </bean>
     <bean id="contenthandler" class="netfondsrepos.contenthandler.DefaultContentHandler">

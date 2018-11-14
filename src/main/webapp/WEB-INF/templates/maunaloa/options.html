@@ -32,13 +32,9 @@
     <script type="text/javascript" src="/js/common.js"></script>
     <script type="text/javascript">
         const node1 = document.getElementById('my-app');
-        const app1 = Elm.Maunaloa.Options.Main.embed(node1, {
-            isCalls: true
-        });
         const node2 = document.getElementById('my-app2');
-        const app2 = Elm.Maunaloa.Options.Main.embed(node2, {
-            isCalls: false
-        });
+        const app1 = Elm.Maunaloa.Options.Main.init({node:node1, flags: {isCalls: true}});
+        const app2 = Elm.Maunaloa.Options.Main.init({node:node2, flags: {isCalls: false}});
     </script>
 </body>
 

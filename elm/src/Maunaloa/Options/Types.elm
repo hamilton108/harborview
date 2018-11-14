@@ -121,10 +121,10 @@ type Msg
 
 
 type alias Model =
-    { tickers : Maybe CMB.SelectItems
-    , selectedTicker : String
+    { tickers : CMB.SelectItems
+    , selectedTicker : Maybe String
     , stock : Maybe Stock
-    , options : Maybe Options
+    , options : Options
     , risc : String
     , flags : Flags
     , tableState : Table.State
