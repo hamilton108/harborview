@@ -1,4 +1,17 @@
-module Critters.Views exposing (accPart, critAccDenyTr, critAccTr, critterArea, critterPart, critterRows, denyPart, denyTr, details, purchaseToSelectItem, tableHeader, view)
+module Critters.Views exposing
+    ( accPart
+    , critAccDenyTr
+    , critAccTr
+    , critterArea
+    , critterPart
+    , critterRows
+    , denyPart
+    , denyTr
+    , details
+    , purchaseToSelectItem
+    , tableHeader
+    , view
+    )
 
 import Common.Buttons as BTN
 import Common.Html as CH
@@ -277,6 +290,7 @@ details opx =
         ]
 
 
+purchaseToSelectItem : OptionPurchase -> S.SelectItem
 purchaseToSelectItem p =
     let
         oidStr =
@@ -332,7 +346,7 @@ view model =
             (AccRuleMsgFor DlgNewAccCancel)
             []
         , DLG.modalDialog ("New " ++ title)
-            model.dlgNewCritter
+            model.dlgNewDenyRule
             (DenyRuleMsgFor DlgNewDenyOk)
             (DenyRuleMsgFor DlgNewDenyCancel)
             []

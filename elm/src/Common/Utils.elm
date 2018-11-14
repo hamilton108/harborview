@@ -1,4 +1,9 @@
-module Common.Utils exposing (..)
+module Common.Utils exposing
+    ( findInList
+    , flip
+    , replaceWith
+    , unpackMaybe
+    )
 
 import Critters.Types exposing (Oidable)
 
@@ -17,5 +22,11 @@ replaceWith : Oidable a -> Oidable a -> Oidable a
 replaceWith newEl el =
     if el.oid == newEl.oid then
         newEl
+
     else
         el
+
+
+unpackMaybe : Maybe a -> (a -> b) -> b -> b
+unpackMaybe obj fn default =
+    Maybe.withDefault default <| Maybe.map fn obj
