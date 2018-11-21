@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="stockMarketRepos" class="critterrepos.models.impl.CachedStockMarketReposImpl">
+        <property name="mybatisConfigFile" value="critters-mybatis.conf.xml" />
+    </bean>
+    <bean id="webClientManager" class="netfondsrepos.webclient.DefaultWebClientManager">
+        <property name="realTime" value="false" />
+    </bean>
+    <!--
+    <bean id="downloader" class="netfondsrepos.downloader.DefaultDownloader">
+        <property name="webClientManager" ref="webClientManager" />
+    </bean>
+    -->
+    <bean id="downloader" class="netfondsrepos.downloader.MockDownloader">
+        <property name="storePath" value="/home/rcs/opt/haskell/etradejanitor/feed-tmp" />
+      <!--
+        <property name="storePath" value="/home/rcs/opt/java/netfondsjanitor/feed/2018/5/18" />
+      -->
+        <property name="applyCounter" value="false" />
+    </bean>
+    <bean id="calculator" class="vega.financial.calculator.BlackScholes">
+    </bean>
+    <bean id="contenthandler" class="netfondsrepos.contenthandler.DefaultContentHandler">
+    </bean>
+
+    <bean id="etrade" class="netfondsrepos.repos.EtradeRepository2">
+        <property name="downloader" ref="downloader"/>
+    </bean>
+    <!--
+    <bean id="etrade" class="netfondsrepos.repos.DefaultEtradeRepository">
+        <property name="downloader" ref="downloader"/>
+        <property name="stockMarketRepository" ref="stockMarketRepos"/>
+        <property name="optionCalculator" ref="calculator"/>
+        <property name="contentHandler" ref="contenthandler"/>
+    </bean>
+  -->
+    <bean id="cached-etrade" class="netfondsrepos.repos.ChachedEtradeReposImpl">
+        <property name="repos" ref="etrade"/>
+    </bean>
+    <bean id="optionRepos" class="harborview.maunaloa.repos.OptionRepository">
+        <property name="stockMarketRepository" ref="stockMarketRepos" />
+        <property name="etrade" ref="etrade" />
+    </bean>
+    <bean id="maunaloaModel" class="harborview.maunaloa.MaunaloaModel">
+        <property name="cachedEtrade" ref="cached-etrade" />
+        <property name="etrade" ref="etrade" />
+        <property name="stockMarketRepository" ref="stockMarketRepos" />
+        <property name="optionRepos" ref="optionRepos" />
+        <property name="optionCalculator" ref="calculator"/>
+    </bean>
+    <bean id="critterModel" class="harborview.critters.CritterModel">
+    </bean>
+
+</beans>
