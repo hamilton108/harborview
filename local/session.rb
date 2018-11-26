@@ -11,6 +11,10 @@ def init
 
   java_import "java.io.File"
 
+  java_import "java.util.stream.Collectors"
+
+  java_import "java.util.ArrayList"
+
   $ctx = ClassPathXmlApplicationContext.new "jruby.xml"
 
   $dl = $ctx.getBean "downloader"
@@ -35,15 +39,31 @@ def optionType(tds)
   myEl.text
 end
 
+def exercise(tds)
+  myEl = tds.get 2
+  myEl.text
+end
+
 def processOption(el)
   tds = el.children
   puts optionName tds
   puts optionType tds
 end
 
+$filterLamb = ->(v) {
+    optionName v == "NHY8L30"
+}
+
 def run
   f = $el.first
   fx = f.getElementsByTag "tr"
   fxx = fx.get(10)
   processOption fxx
+end
+
+def run2
+  stream = $el.stream()
+  l1 = ->() { java.util.ArrayList.new }
+  result = stream.filter($filterLamb).collect(l1)
+  puts result
 end
