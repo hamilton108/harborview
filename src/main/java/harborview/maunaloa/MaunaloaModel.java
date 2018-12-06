@@ -32,7 +32,7 @@ public class MaunaloaModel {
     private EtradeRepository<Tuple<String>,Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>>
         etrade;
 
-    private ChachedEtradeRepository<Tuple<String>> cachedEtrade;
+    //private ChachedEtradeRepository<Tuple<String>> cachedEtrade;
 
     public Collection<Stock> getStocks() {
        return stockMarketRepository.getStocks();
@@ -147,7 +147,7 @@ public class MaunaloaModel {
                 .map(x -> new PurchaseWithSalesDTO(x, etrade, optionCalculator))
                 .collect(Collectors.toList());
         for (PurchaseWithSalesDTO p : result) {
-            p.setCachedEtrade(cachedEtrade);
+            p.setEtrade(etrade);
         }
         return result;
     }
@@ -192,8 +192,10 @@ public class MaunaloaModel {
                                   etrade) {
         this.etrade = etrade;
     }
+    /*
     public void setCachedEtrade(ChachedEtradeRepository<Tuple<String>> cachedEtrade) {
         this.cachedEtrade = cachedEtrade;
     }
+    */
     //endregion
 }

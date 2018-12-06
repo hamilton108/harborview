@@ -21,6 +21,8 @@ def init
 
   $etrade = $ctx.getBean "etrade"
 
+  $repos = $ctx.getBean "stockMarketRepos"
+
   $f = File.new "/home/rcs/opt/haskell/etradejanitor/feed/2018/11/23/NHY.html"
 
   $doc = Jsoup.parse($f, "UTF-8")
