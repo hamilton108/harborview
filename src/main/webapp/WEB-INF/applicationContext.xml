@@ -9,17 +9,18 @@
     <bean id="webClientManager" class="netfondsrepos.webclient.DefaultWebClientManager">
         <property name="realTime" value="false" />
     </bean>
+    <!--
     <bean id="downloader" class="netfondsrepos.downloader.DefaultDownloader">
         <property name="webClientManager" ref="webClientManager" />
     </bean>
-    <!--
+    -->
     <bean id="downloader" class="netfondsrepos.downloader.MockDownloader">
-        <property name="storePath" value="/home/rcs/opt/haskell/etradejanitor/feed-tmp/2018/11/9" />
+        <property name="storePath" value="/home/rcs/opt/haskell/etradejanitor/feed/2018/12/17" />
         <property name="applyCounter" value="false" />
     </bean>
-    -->
     <bean id="calculator" class="vega.financial.calculator.BlackScholes">
     </bean>
+    <!--
     <bean id="contenthandler" class="netfondsrepos.contenthandler.DefaultContentHandler">
     </bean>
     <bean id="etrade" class="netfondsrepos.repos.DefaultEtradeRepository">
@@ -28,19 +29,25 @@
         <property name="optionCalculator" ref="calculator"/>
         <property name="contentHandler" ref="contenthandler"/>
     </bean>
+    -->
     <!--
     <bean id="cached-etrade" class="netfondsrepos.repos.ChachedEtradeReposImpl">
         <property name="repos" ref="etrade"/>
     </bean>
     -->
+    <bean id="etrade" class="netfondsrepos.repos.EtradeRepository2">
+        <property name="downloader" ref="downloader"/>
+        <property name="stockMarketRepository" ref="stockMarketRepos"/>
+    </bean>
+    <!--
     <bean id="optionRepos" class="harborview.maunaloa.repos.OptionRepository">
         <property name="stockMarketRepository" ref="stockMarketRepos" />
         <property name="etrade" ref="etrade" />
     </bean>
+    -->
     <bean id="maunaloaModel" class="harborview.maunaloa.MaunaloaModel">
         <property name="etrade" ref="etrade" />
         <property name="stockMarketRepository" ref="stockMarketRepos" />
-        <property name="optionRepos" ref="optionRepos" />
         <property name="optionCalculator" ref="calculator"/>
     </bean>
     <bean id="critterModel" class="harborview.critters.CritterModel">

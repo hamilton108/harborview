@@ -96,6 +96,12 @@ type PurchaseMsg
     | OptionPurchased (Result Http.Error JsonStatus)
 
 
+type RiscMsg
+    = CalcRisc
+    | RiscCalculated (Result Http.Error RiscItems)
+    | RiscChange String
+
+
 type Msg
     = AlertOk
     | TickersFetched (Result Http.Error CMB.SelectItems)
@@ -103,9 +109,6 @@ type Msg
       -- | OptionsFetched (Result Http.Error StockAndOptions)
     | SetTableState Table.State
     | ResetCache
-    | CalcRisc
-    | RiscCalculated (Result Http.Error RiscItems)
-    | RiscChange String
     | ToggleSelected String
       --| PurchaseClick Option
       --| PurchaseDlgOk
@@ -116,6 +119,7 @@ type Msg
     | BidChange String
     | VolumeChange String
     | SpotChange String
+    | RiscMsgFor RiscMsg
     | OptionMsgFor OptionMsg
     | PurchaseMsgFor PurchaseMsg
 
