@@ -1,24 +1,21 @@
 package harborview.maunaloa;
 
-import com.gargoylesoftware.htmlunit.CollectingAlertHandler;
 import com.gargoylesoftware.htmlunit.Page;
+import harborview.dto.html.options.OptionDTO;
 import harborview.dto.html.options.StockAndOptions;
+import harborview.dto.html.options.StockPriceDTO;
 import harborview.maunaloa.repos.OptionRiscRepos;
 import netfondsrepos.downloader.MockDownloader;
 import netfondsrepos.repos.EtradeRepository2;
-import oahu.financial.DerivativePrice;
-import oahu.financial.StockPrice;
 import oahu.financial.html.EtradeDownloader;
 import oahu.financial.repository.StockMarketRepository;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class TestOptionRiscRepos {
@@ -41,6 +38,18 @@ public class TestOptionRiscRepos {
         riscRepos.setEtrade(etrade);
 
         StockAndOptions result = riscRepos.calls(stockId);
-        assertNotNull(result.getStock(), "Stock is null");
+        StockPriceDTO stock = result.getStock();
+        assertNotNull(stock, "Stock is null");
+        assertEquals("2018-11-23", stock.getDx(), "Stock dx not 2018-11-23");
+        assertEquals("18:30", stock.getTm(), "Stock tm not 18:13");
+        testDouble(41.83, stock.getO(), "getO() ");
+        testDouble(41.85, stock.getH(), "getH() ");
+        testDouble(40.87, stock.getL(), "getL() ");
+        testDouble(41.05, stock.getC(), "getC() ");
+        List<OptionDTO> calls = result.getOptions();
+        assertEquals(91, calls.size(), "Number of calls not 91");
+    }
+    private void testDouble(double expected, double acutal, String msg) {
+        assertEquals(expected, acutal, 0.01, String.format("%s not %.2f",msg, expected));
     }
 }

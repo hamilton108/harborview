@@ -8,6 +8,7 @@ import harborview.dto.html.RiscLinesDTO;
 import harborview.dto.html.SelectItem;
 import harborview.dto.html.options.*;
 import harborview.maunaloa.repos.OptionRepository;
+import harborview.maunaloa.repos.OptionRiscRepos;
 import netfondsrepos.repos.ChachedEtradeReposImpl;
 import oahu.dto.Tuple;
 import oahu.dto.Tuple3;
@@ -29,6 +30,7 @@ public class MaunaloaModel {
     private Map<Integer,ElmCharts> elmChartsDayMap = new HashMap<>();
     private Map<Integer,ElmCharts> elmChartsWeekMap = new HashMap<>();
     private OptionRepository optionRepos;
+    private OptionRiscRepos optionRiscRepos;
     private EtradeRepository<Tuple<String>,Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>>
         etrade;
 
@@ -37,6 +39,7 @@ public class MaunaloaModel {
     public Collection<Stock> getStocks() {
        return stockMarketRepository.getStocks();
     }
+
 
     public enum ElmChartType { DAY, WEEK, MONTH }
 
@@ -65,7 +68,8 @@ public class MaunaloaModel {
         optionRepos.resetSpotAndOptions();
     }
     public StockAndOptions calls(int oid) {
-        return optionRepos.calls(oid);
+        //return optionRepos.calls(oid);
+        return optionRiscRepos.calls(oid);
     }
     public StockAndOptions puts(int oid) {
         return optionRepos.puts(oid);
@@ -181,8 +185,8 @@ public class MaunaloaModel {
     public void setStockMarketRepository(StockMarketRepository stockMarketRepository) {
         this.stockMarketRepository = stockMarketRepository;
     }
-    public void setOptionRepos(OptionRepository optionRepos) {
-        this.optionRepos = optionRepos;
+    public void setOptionRiscRepos(OptionRiscRepos optionRiscRepos) {
+        this.optionRiscRepos = optionRiscRepos;
     }
 
     public void setOptionCalculator(OptionCalculator optionCalculator) {

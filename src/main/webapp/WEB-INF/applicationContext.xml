@@ -36,6 +36,7 @@
     </bean>
     -->
     <bean id="etrade" class="netfondsrepos.repos.EtradeRepository2">
+        <property name="optionCalculator" ref="calculator"/>
         <property name="downloader" ref="downloader"/>
         <property name="stockMarketRepository" ref="stockMarketRepos"/>
     </bean>
@@ -45,10 +46,14 @@
         <property name="etrade" ref="etrade" />
     </bean>
     -->
+    <bean id="optionRiscRepos" class="harborview.maunaloa.repos.OptionRiscRepos">
+        <property name="etrade" ref="etrade" />
+    </bean>
     <bean id="maunaloaModel" class="harborview.maunaloa.MaunaloaModel">
         <property name="etrade" ref="etrade" />
         <property name="stockMarketRepository" ref="stockMarketRepos" />
         <property name="optionCalculator" ref="calculator"/>
+        <property name="optionRiscRepos" ref="optionRiscRepos"/>
     </bean>
     <bean id="critterModel" class="harborview.critters.CritterModel">
     </bean>
