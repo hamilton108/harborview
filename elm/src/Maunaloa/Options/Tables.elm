@@ -50,21 +50,17 @@ toTableAttrs =
 
 toRowAttrs : Option -> List (H.Attribute Msg)
 toRowAttrs opt =
-    Debug.todo "toRowAttrs"
+    let
+        myStyle =
+            if opt.selected then
+                "#FFCC99"
 
-
-
--- [ -- E.onClick (ToggleSelected opt.ticker)
---   A.style
---     [ ( "background"
---       , if opt.selected then
---             "#FFCC99"
---
---         else
---             "white"
---       )
---     ]
--- ]
+            else
+                "white"
+    in
+    [ E.onClick (ToggleSelected opt.ticker)
+    , A.style "background" myStyle
+    ]
 
 
 checkboxColumn : Table.Column Option Msg

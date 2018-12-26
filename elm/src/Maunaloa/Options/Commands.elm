@@ -2,6 +2,7 @@ module Maunaloa.Options.Commands exposing
     ( fetchOptions
     , fetchTickers
     , registerAndPurchaseOption
+    , toggle
     )
 
 --import Common.Miscellaneous as M
@@ -135,17 +136,11 @@ registerAndPurchaseOption model =
 
 toggle : String -> Option -> Option
 toggle ticker opt =
-    Debug.todo "-"
+    if opt.ticker == ticker then
+        { opt | selected = not opt.selected }
 
-
-
-{-
-   if opt.ticker == ticker then
-       { opt | selected = not opt.selected }
-
-   else
-       opt
--}
+    else
+        opt
 
 
 setRisc : Float -> RiscItems -> Option -> Option

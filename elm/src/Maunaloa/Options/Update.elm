@@ -27,12 +27,10 @@ updateOption msg model =
                     else
                         Just s
             in
-            Debug.log "FetchOptions: "
-                ( { model | selectedTicker = sx }, C.fetchOptions model sx False )
+            ( { model | selectedTicker = sx }, C.fetchOptions model sx False )
 
         OptionsFetched (Ok s) ->
-            Debug.log "OptionsFetched: "
-                ( { model | stock = Just s.stock, options = s.opx }, Cmd.none )
+            ( { model | stock = Just s.stock, options = s.opx }, Cmd.none )
 
         OptionsFetched (Err s) ->
             Debug.log "OptionsFetched ERR: "
@@ -180,16 +178,14 @@ update msg model =
             ( model, C.fetchOptions model model.selectedTicker True )
 
         ToggleSelected ticker ->
-            Debug.todo "ToggleSelected"
+            let
+                newOptions =
+                    List.map (C.toggle ticker) model.options
+            in
+            ( { model | options = newOptions }
+            , Cmd.none
+            )
 
-        -- case model.options of
-        --     Nothing ->
-        --         ( model, Cmd.none )
-        --
-        --     Just optionx ->
-        --         ( { model | options = Just (List.map (C.toggle ticker) optionx) }
-        --         , Cmd.none
-        --         )
         ToggleRealTimePurchase ->
             let
                 checked =

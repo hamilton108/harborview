@@ -4,6 +4,7 @@ import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, int, list, string)
 import Json.Decode as JD
 import Json.Encode as JE
+import Maunaloa.Options.Commands as C
 import Maunaloa.Options.Decoders as D
 import Maunaloa.Options.Main as Main
 import Maunaloa.Options.Types as T
@@ -44,8 +45,14 @@ optionJson =
     ]
 
 
+optionObj : T.Option
 optionObj =
-    T.Option "YAR8L305" 305 209 32.5 34.5 1.2 1.4 35.7 "2018-12-21" 6.2 0 0 0 False
+    optionObjTick "YAR8L305"
+
+
+optionObjTick : String -> T.Option
+optionObjTick s =
+    T.Option s 305 209 32.5 34.5 1.2 1.4 35.7 "2018-12-21" 6.2 0 0 0 False
 
 
 stockObj =
@@ -93,4 +100,27 @@ suite =
                 stockJson
                     |> JD.decodeValue D.stockDecoder
                     |> Expect.equal (Ok stockObj)
+        , test "Test toggle selected" <|
+            \_ ->
+                let
+                    unSelected =
+                        [ optionObjTick "NHY1", optionObjTick "NHY2" ]
+
+                    selected =
+                        List.map (C.toggle "NHY1") unSelected
+
+                    result1 =
+                        List.head selected |> Maybe.andThen (\x -> Just <| x.selected == True)
+
+                    result2 =
+                        let
+                            selectedx =
+                                List.drop 1 selected
+                        in
+                        List.head selectedx |> Maybe.andThen (\x -> Just <| x.selected == False)
+
+                    result =
+                        ( result1, result2 )
+                in
+                Expect.equal ( Just True, Just True ) result
         ]
