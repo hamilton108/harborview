@@ -16,6 +16,7 @@ EOF
 EV="1"
 MODULE=
 OPTIMIZE="0"
+TMP="/home/rcs/opt/elmcommon"
 while getopts “hoi:” OPTION
 do
      case $OPTION in
@@ -67,9 +68,11 @@ case $MODULE in
 esac
 
 if [ "$OPTIMIZE" = "1" ]; then
-    docker run --user $(id -u):$(id -g) -it --rm -v "$(pwd):/code" -v "/tmp:/tmp" -w "/code" -e "HOME=/tmp" -u $UID:$GID $DOCKER_IMG make $ELM --output $JS --optimize
+    docker run --user $(id -u):$(id -g) -it --rm -v "$(pwd):/code" -v "$TMP:/tmp" -w "/code" -e "HOME=/tmp" $DOCKER_IMG make $ELM --output $JS --optimize
+    # docker run --user $(id -u):$(id -g) -it --rm -v "$(pwd):/code" -v "/tmp:/tmp" -w "/code" -e "HOME=/tmp" -u $UID:$GID $DOCKER_IMG make $ELM --output $JS --optimize
 else
-    docker run --user $(id -u):$(id -g) -it --rm -v "$(pwd):/code" -v "/tmp:/tmp" -w "/code" -e "HOME=/tmp" -u $UID:$GID $DOCKER_IMG make $ELM --output $JS
+    docker run --user $(id -u):$(id -g) -it --rm -v "$(pwd):/code" -v "$TMP:/tmp" -w "/code" -e "HOME=/tmp" $DOCKER_IMG make $ELM --output $JS
+    # docker run --user $(id -u):$(id -g) -it --rm -v "$(pwd):/code" -v "/tmp:/tmp" -w "/code" -e "HOME=/tmp" -u $UID:$GID $DOCKER_IMG make $ELM --output $JS
 fi
 
 cp $JS ../src/main/webapp/js/$TODIR/$JS
