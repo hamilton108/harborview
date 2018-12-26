@@ -9,6 +9,7 @@ module Maunaloa.Options.Types exposing
     , PurchaseMsg(..)
     , RiscItem
     , RiscItems
+    , RiscMsg(..)
     , Stock
     , StockAndOptions
     )

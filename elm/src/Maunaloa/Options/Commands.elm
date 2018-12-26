@@ -1,17 +1,7 @@
 module Maunaloa.Options.Commands exposing
-    ( bool2json
-    , buildOption
-    , calcRisc
-    , fetchOptions
+    ( fetchOptions
     , fetchTickers
-    , mainUrl
-    , optionDecoder
-    , purchaseOption
     , registerAndPurchaseOption
-    , registerAndPurchaseOption_
-    , setRisc
-    , stockDecoder
-    , toggle
     )
 
 --import Common.Miscellaneous as M
@@ -221,66 +211,6 @@ calcRisc riscStr options =
 -}
 
 
-buildOption :
-    String
-    -> Float
-    -> Float
-    -> Float
-    -> Float
-    -> Float
-    -> Float
-    -> Float
-    -> String
-    -> Option
-buildOption t x d b s ib is be ex =
-    Debug.todo "-"
-
-
-
-{-
-   Option
-       t
-       x
-       d
-       b
-       s
-       ib
-       is
-       be
-       ex
-       (M.toDecimal (100 * ((s / b) - 1.0)) 10.0)
-       0
-       0
-       0
-       False
--}
-
-
-optionDecoder : JD.Decoder Option
-optionDecoder =
-    JD.succeed buildOption
-        |> JP.required "ticker" JD.string
-        |> JP.required "x" JD.float
-        |> JP.required "days" JD.float
-        |> JP.required "buy" JD.float
-        |> JP.required "sell" JD.float
-        |> JP.required "ivBuy" JD.float
-        |> JP.required "ivSell" JD.float
-        |> JP.required "brEven" JD.float
-        |> JP.required "expiry" JD.string
-
-
-stockDecoder : JD.Decoder Stock
-stockDecoder =
-    JD.succeed Stock
-        |> JP.required "dx" JD.string
-        |> JP.required "tm" JD.string
-        |> JP.required "o" JD.float
-        |> JP.required "h" JD.float
-        |> JP.required "l" JD.float
-        |> JP.required "c" JD.float
-
-
 bool2json : Bool -> String
 bool2json v =
     case v of
@@ -306,14 +236,9 @@ fetchOptions model s resetCache =
 
                         False ->
                             mainUrl ++ "/puts/" ++ sx ++ "/" ++ bool2json resetCache
-
-                myDecoder =
-                    JD.succeed StockAndOptions
-                        |> JP.required "stock" stockDecoder
-                        |> JP.required "options" (JD.list optionDecoder)
             in
             Http.send (OptionMsgFor << OptionsFetched) <|
-                Http.get url myDecoder
+                Http.get url D.stockAndOptionsDecoder
 
 
 fetchTickers : Cmd Msg

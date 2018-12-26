@@ -11,6 +11,7 @@ import Maunaloa.Options.Types
         , Msg(..)
         , OptionMsg(..)
         , PurchaseMsg(..)
+        , RiscMsg(..)
         )
 
 
@@ -114,6 +115,37 @@ updatePurchase msg model =
                 ( errorAlert "Purchase Sale ERROR!" "SaleOk Error: " s model, Cmd.none )
 
 
+updateRisc : RiscMsg -> Model -> ( Model, Cmd Msg )
+updateRisc msg model =
+    Debug.todo "updateRisc"
+
+
+
+{-
+   CalcRisc ->
+       ( model, C.calcRisc model.risc model.options )
+
+   RiscCalculated (Ok s) ->
+       case model.options of
+           Nothing ->
+               ( model, Cmd.none )
+
+           Just optionx ->
+               let
+                   curRisc =
+                       Result.withDefault 0 (String.toFloat model.risc)
+               in
+               ( { model | options = Just (List.map (C.setRisc curRisc s) optionx) }, Cmd.none )
+
+   RiscCalculated (Err s) ->
+       ( errorAlert "RiscCalculated" "RiscCalculated Error: " s model, Cmd.none )
+
+   RiscChange s ->
+       --Debug.log "RiscChange"
+       ( { model | risc = s }, Cmd.none )
+-}
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -122,6 +154,9 @@ update msg model =
 
         PurchaseMsgFor purchaseMsg ->
             updatePurchase purchaseMsg model
+
+        RiscMsgFor riscMsg ->
+            ( model, Cmd.none )
 
         AlertOk ->
             ( { model | dlgAlert = DLG.DialogHidden }, Cmd.none )
@@ -143,31 +178,6 @@ update msg model =
 
         ResetCache ->
             ( model, C.fetchOptions model model.selectedTicker True )
-
-        CalcRisc ->
-            ( model, C.calcRisc model.risc model.options )
-
-        RiscCalculated (Ok s) ->
-            ( model, Cmd.none )
-
-        {-
-           case model.options of
-               Nothing ->
-                   ( model, Cmd.none )
-
-               Just optionx ->
-                   let
-                       curRisc =
-                           Result.withDefault 0 (String.toFloat model.risc)
-                   in
-                   ( { model | options = Just (List.map (C.setRisc curRisc s) optionx) }, Cmd.none )
-        -}
-        RiscCalculated (Err s) ->
-            ( errorAlert "RiscCalculated" "RiscCalculated Error: " s model, Cmd.none )
-
-        RiscChange s ->
-            --Debug.log "RiscChange"
-            ( { model | risc = s }, Cmd.none )
 
         ToggleSelected ticker ->
             Debug.todo "ToggleSelected"

@@ -1,4 +1,4 @@
-module Maunaloa.Options.Main exposing (main)
+module Maunaloa.Options.Main exposing (initModel, main)
 
 import Browser
 import Common.ModalDialog as DLG exposing (errorAlert)

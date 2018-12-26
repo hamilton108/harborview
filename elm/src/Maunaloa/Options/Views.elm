@@ -16,6 +16,7 @@ import Maunaloa.Options.Types
         , Msg(..)
         , OptionMsg(..)
         , PurchaseMsg(..)
+        , RiscMsg(..)
         )
 import Table
 
@@ -45,9 +46,9 @@ view model =
         [ H.div [ A.class "grid-elm" ]
             [ H.div [ A.class "form-group form-group--elm" ]
                 [ H.text stockInfo ]
-            , BTN.button "Calc Risc" CalcRisc
+            , BTN.button "Calc Risc" (RiscMsgFor CalcRisc)
             , H.div [ A.class "form-group form-group--elm" ]
-                [ H.input [ A.placeholder "Risc", E.onInput RiscChange ] [] ]
+                [ H.input [ A.placeholder "Risc", E.onInput (RiscMsgFor << RiscChange) ] [] ]
             , BTN.button "Reset Cache" ResetCache
             , CMB.makeSelect "Tickers: " (OptionMsgFor << FetchOptions) model.tickers model.selectedTicker
             ]
