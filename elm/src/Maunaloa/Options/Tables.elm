@@ -58,8 +58,7 @@ toRowAttrs opt =
             else
                 "white"
     in
-    [ E.onClick (ToggleSelected opt.ticker)
-    , A.style "background" myStyle
+    [ A.style "background" myStyle
     ]
 
 
