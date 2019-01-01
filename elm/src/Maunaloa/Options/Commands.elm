@@ -1,7 +1,10 @@
 module Maunaloa.Options.Commands exposing
-    ( fetchOptions
+    ( calcRisc
+    , fetchOptions
     , fetchTickers
+    , purchaseOption
     , registerAndPurchaseOption
+    , setRisc
     , toggle
     )
 
@@ -10,6 +13,7 @@ module Maunaloa.Options.Commands exposing
 import Common.Decoders as DEC
 import Common.Select as CMB
 import Common.Types as T
+import Common.Utils as U
 import Http
 import Json.Decode as JD
 import Json.Decode.Pipeline as JP
@@ -17,7 +21,9 @@ import Json.Encode as JE
 import Maunaloa.Options.Decoders as D
 import Maunaloa.Options.Types
     exposing
-        ( Model
+        ( Ask(..)
+        , Bid(..)
+        , Model
         , Msg(..)
         , Option
         , OptionMsg(..)
@@ -25,8 +31,13 @@ import Maunaloa.Options.Types
         , PurchaseMsg(..)
         , RiscItem
         , RiscItems
+        , RiscMsg(..)
+        , Spot(..)
         , Stock
         , StockAndOptions
+        , StockId(..)
+        , Ticker(..)
+        , Volume(..)
         )
 
 
@@ -34,104 +45,89 @@ mainUrl =
     "/maunaloa"
 
 
-purchaseOption : Int -> String -> Float -> Float -> Int -> Float -> Bool -> Cmd Msg
-purchaseOption stockId ticker ask bid volume spot isRealTime =
-    Debug.todo "-"
+purchaseOption : Ticker -> Ask -> Bid -> Volume -> Spot -> Bool -> Cmd Msg
+purchaseOption (Ticker ticker) (Ask ask) (Bid bid) (Volume volume) (Spot spot) isRealTime =
+    let
+        url =
+            mainUrl ++ "/purchaseoption"
 
+        params =
+            [ ( "ticker", JE.string ticker )
+            , ( "ask", JE.float ask )
+            , ( "bid", JE.float bid )
+            , ( "volume", JE.int volume )
+            , ( "spot", JE.float spot )
+            , ( "rt", JE.bool isRealTime )
+            ]
 
-
-{-
-   let
-       url =
-           mainUrl ++ "/purchaseoption"
-
-       params =
-           [ ( "ticker", JE.string ticker )
-           , ( "ask", JE.float ask )
-           , ( "bid", JE.float bid )
-           , ( "volume", JE.int volume )
-           , ( "spot", JE.float spot )
-           , ( "rt", JE.bool isRealTime )
-           ]
-
-       jbody =
-           M.asHttpBody params
-   in
-   Http.send
-       (PurchaseMsgFor << OptionPurchased)
-   <|
-       Http.post url jbody T.jsonStatusDecoder
--}
+        jbody =
+            U.asHttpBody params
+    in
+    Http.send
+        (PurchaseMsgFor << OptionPurchased)
+    <|
+        Http.post url jbody T.jsonStatusDecoder
 
 
 registerAndPurchaseOption_ : Model -> Option -> Cmd Msg
 registerAndPurchaseOption_ model opx =
-    Debug.todo "-"
+    let
+        url =
+            mainUrl ++ "/regpuroption"
 
+        soids =
+            Maybe.withDefault "-1" model.selectedTicker
 
+        soid =
+            Maybe.withDefault -1 (String.toInt soids)
 
-{-
-   let
-       url =
-           mainUrl ++ "/regpuroption"
+        curAsk =
+            Maybe.withDefault -1 (String.toFloat model.ask)
 
-       soid =
-           Result.withDefault -1 (String.toInt model.selectedTicker)
+        curBid =
+            Maybe.withDefault -1 (String.toFloat model.bid)
 
-       curAsk =
-           Result.withDefault -1 (String.toFloat model.ask)
+        curVol =
+            Maybe.withDefault -1 (String.toInt model.volume)
 
-       curBid =
-           Result.withDefault -1 (String.toFloat model.bid)
+        curSpot =
+            Maybe.withDefault -1 (String.toFloat model.spot)
 
-       curVol =
-           Result.withDefault -1 (String.toInt model.volume)
+        opType =
+            if model.flags.isCalls == True then
+                "c"
 
-       curSpot =
-           Result.withDefault -1 (String.toFloat model.spot)
+            else
+                "p"
 
-       opType =
-           if model.flags.isCalls == True then
-               "c"
+        params =
+            [ ( "ticker", JE.string opx.ticker )
+            , ( "ask", JE.float curAsk )
+            , ( "bid", JE.float curBid )
+            , ( "volume", JE.int curVol )
+            , ( "spot", JE.float curSpot )
+            , ( "rt", JE.bool model.isRealTimePurchase )
+            , ( "stockId", JE.int soid )
+            , ( "opType", JE.string opType )
+            , ( "expiry", JE.string opx.expiry )
+            , ( "x", JE.float opx.x )
+            ]
 
-           else
-               "p"
-
-       params =
-           [ ( "ticker", JE.string opx.ticker )
-           , ( "ask", JE.float curAsk )
-           , ( "bid", JE.float curBid )
-           , ( "volume", JE.int curVol )
-           , ( "spot", JE.float curSpot )
-           , ( "rt", JE.bool model.isRealTimePurchase )
-           , ( "stockId", JE.int soid )
-           , ( "opType", JE.string opType )
-           , ( "expiry", JE.string opx.expiry )
-           , ( "x", JE.float opx.x )
-           ]
-
-       jbody =
-           M.asHttpBody params
-   in
-   Http.send (PurchaseMsgFor << OptionPurchased) <|
-       Http.post url jbody T.jsonStatusDecoder
--}
+        jbody =
+            U.asHttpBody params
+    in
+    Http.send (PurchaseMsgFor << OptionPurchased) <|
+        Http.post url jbody T.jsonStatusDecoder
 
 
 registerAndPurchaseOption : Model -> Cmd Msg
 registerAndPurchaseOption model =
-    Debug.todo "-"
+    case model.selectedPurchase of
+        Nothing ->
+            Cmd.none
 
-
-
-{-
-   case model.selectedPurchase of
-       Nothing ->
-           Cmd.none
-
-       Just opx ->
-           registerAndPurchaseOption_ model opx
--}
+        Just opx ->
+            registerAndPurchaseOption_ model opx
 
 
 toggle : String -> Option -> Option
@@ -145,65 +141,50 @@ toggle ticker opt =
 
 setRisc : Float -> RiscItems -> Option -> Option
 setRisc curRisc riscItems opt =
-    Debug.todo "-"
+    let
+        predicate =
+            \x -> x.ticker == opt.ticker
 
+        curRiscItem =
+            List.head <| List.filter predicate riscItems
+    in
+    case curRiscItem of
+        Nothing ->
+            opt
 
-
-{-
-   let
-       predicate =
-           \x -> x.ticker == opt.ticker
-
-       curRiscItem =
-           M.findInList predicate riscItems
-   in
-   case curRiscItem of
-       Nothing ->
-           opt
-
-       Just curRiscItem_ ->
-           { opt
-               | stockPriceAtRisc = M.toDecimal curRiscItem_.risc 100
-               , optionPriceAtRisc = opt.sell - curRisc
-               , risc = curRisc
-           }
--}
+        Just curRiscItem_ ->
+            { opt
+                | stockPriceAtRisc = U.toDecimal curRiscItem_.risc 100
+                , optionPriceAtRisc = opt.sell - curRisc
+                , risc = curRisc
+            }
 
 
 calcRisc : String -> Options -> Cmd Msg
 calcRisc riscStr options =
-    Debug.todo "-"
+    let
+        risc =
+            Maybe.withDefault 0 (String.toFloat riscStr)
 
+        url =
+            mainUrl ++ "/calcriscstockprices"
 
+        checked =
+            List.filter (\x -> x.selected == True) options
 
-{-
-   let
-       risc =
-           Result.withDefault 0 (String.toFloat riscStr)
+        jbody =
+            U.listAsHttpBody
+                (List.map (\x -> [ ( "ticker", JE.string x.ticker ), ( "risc", JE.float risc ) ]) checked)
 
-       url =
-           mainUrl ++ "/calcriscstockprices"
-
-       opx =
-           Maybe.withDefault [] options
-
-       checked =
-           List.filter (\x -> x.selected == True) opx
-
-       jbody =
-           M.listAsHttpBody
-               (List.map (\x -> [ ( "ticker", JE.string x.ticker ), ( "risc", JE.float risc ) ]) checked)
-
-       myDecoder =
-           JP.decode RiscItem
-               |> JP.required "ticker" JD.string
-               |> JP.required "risc" JD.float
-   in
-   Http.send
-       RiscCalculated
-   <|
-       Http.post url jbody (JD.list myDecoder)
--}
+        myDecoder =
+            JD.succeed RiscItem
+                |> JP.required "ticker" JD.string
+                |> JP.required "risc" JD.float
+    in
+    Http.send
+        (RiscMsgFor << RiscCalculated)
+    <|
+        Http.post url jbody (JD.list myDecoder)
 
 
 bool2json : Bool -> String

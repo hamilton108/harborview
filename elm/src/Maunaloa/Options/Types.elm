@@ -1,5 +1,7 @@
 module Maunaloa.Options.Types exposing
-    ( Flags
+    ( Ask(..)
+    , Bid(..)
+    , Flags
     , Model
     , Msg(..)
     , Option
@@ -10,8 +12,12 @@ module Maunaloa.Options.Types exposing
     , RiscItem
     , RiscItems
     , RiscMsg(..)
+    , Spot(..)
     , Stock
     , StockAndOptions
+    , StockId(..)
+    , Ticker(..)
+    , Volume(..)
     )
 
 import Common.ModalDialog as DLG exposing (errorAlert)
@@ -78,7 +84,35 @@ type alias OptionSale =
     {}
 
 
+type StockId
+    = StockId Int
 
+
+type Ask
+    = Ask Float
+
+
+type Bid
+    = Bid Float
+
+
+type Ticker
+    = Ticker String
+
+
+type Spot
+    = Spot Float
+
+
+type Volume
+    = Volume Int
+
+
+
+{-
+   type alias PurchaseStatus =
+       { ok : Bool, msg : String, statusCode : Int }
+-}
 {-
    type alias PurchaseStatus =
        { ok : Bool, msg : String, statusCode : Int }
@@ -106,15 +140,9 @@ type RiscMsg
 type Msg
     = AlertOk
     | TickersFetched (Result Http.Error CMB.SelectItems)
-      -- | FetchOptions String
-      -- | OptionsFetched (Result Http.Error StockAndOptions)
     | SetTableState Table.State
     | ResetCache
     | ToggleSelected String
-      --| PurchaseClick Option
-      --| PurchaseDlgOk
-      --| PurchaseDlgCancel
-      -- | OptionPurchased (Result Http.Error PurchaseStatus)
     | ToggleRealTimePurchase
     | AskChange String
     | BidChange String

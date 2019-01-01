@@ -7,11 +7,17 @@ import Common.Utils as U
 import Maunaloa.Options.Commands as C
 import Maunaloa.Options.Types
     exposing
-        ( Model
+        ( Ask(..)
+        , Bid(..)
+        , Model
         , Msg(..)
         , OptionMsg(..)
         , PurchaseMsg(..)
         , RiscMsg(..)
+        , Spot(..)
+        , StockId(..)
+        , Ticker(..)
+        , Volume(..)
         )
 
 
@@ -59,38 +65,45 @@ updatePurchase msg model =
             )
 
         PurchaseDlgOk ->
-            {-
-               case model.selectedPurchase of
-                   Just opx ->
-                       let
-                           soid =
-                               Result.withDefault -1 (String.toInt model.selectedTicker)
+            case model.selectedPurchase of
+                Just opx ->
+                    let
+                        curAsk =
+                            Maybe.withDefault -1 (String.toFloat model.ask)
 
-                           curAsk =
-                               Result.withDefault -1 (String.toFloat model.ask)
+                        curBid =
+                            Maybe.withDefault -1 (String.toFloat model.bid)
 
-                           curBid =
-                               Result.withDefault -1 (String.toFloat model.bid)
+                        curVol =
+                            Maybe.withDefault -1 (String.toInt model.volume)
 
-                           curVol =
-                               Result.withDefault -1 (String.toInt model.volume)
+                        curSpot =
+                            Maybe.withDefault -1 (String.toFloat model.spot)
+                    in
+                    ( { model | dlgPurchase = DLG.DialogHidden }
+                    , C.purchaseOption (Ticker opx.ticker) (Ask curAsk) (Bid curBid) (Volume curVol) (Spot curSpot) model.isRealTimePurchase
+                    )
 
-                           curSpot =
-                               Result.withDefault -1 (String.toFloat model.spot)
-                       in
-                       ( { model | dlgPurchase = DLG.DialogHidden }
-                       , C.purchaseOption soid opx.ticker curAsk curBid curVol curSpot model.isRealTimePurchase
-                       )
+                Nothing ->
+                    ( { model | dlgPurchase = DLG.DialogHidden }, Cmd.none )
 
-                   Nothing ->
-                       ( { model | dlgPurchase = DLG.DialogHidden }, Cmd.none )
-            -}
-            ( model, Cmd.none )
-
+        --( model, Cmd.none )
         PurchaseDlgCancel ->
             ( { model | dlgPurchase = DLG.DialogHidden }, Cmd.none )
 
         OptionPurchased (Ok s) ->
+            {-
+               let
+                   alertCat =
+                       case s.ok of
+                           True ->
+                               DLG.Info
+
+                           False ->
+                               DLG.Error
+               in
+               ( { model | dlgAlert = DLG.DialogVisibleAlert "Option purchase" s.msg alertCat }, Cmd.none )
+            -}
             if s.statusCode == 1 then
                 ( { model | dlgPurchase = DLG.DialogHidden }
                 , C.registerAndPurchaseOption model
@@ -115,33 +128,26 @@ updatePurchase msg model =
 
 updateRisc : RiscMsg -> Model -> ( Model, Cmd Msg )
 updateRisc msg model =
-    Debug.todo "updateRisc"
+    case msg of
+        CalcRisc ->
+            ( model, C.calcRisc model.risc model.options )
 
+        RiscCalculated (Ok s) ->
+            let
+                curRisc =
+                    Maybe.withDefault 0 (String.toFloat model.risc)
 
+                optionx =
+                    model.options
+            in
+            ( { model | options = List.map (C.setRisc curRisc s) optionx }, Cmd.none )
 
-{-
-   CalcRisc ->
-       ( model, C.calcRisc model.risc model.options )
+        RiscCalculated (Err s) ->
+            ( errorAlert "RiscCalculated" "RiscCalculated Error: " s model, Cmd.none )
 
-   RiscCalculated (Ok s) ->
-       case model.options of
-           Nothing ->
-               ( model, Cmd.none )
-
-           Just optionx ->
-               let
-                   curRisc =
-                       Result.withDefault 0 (String.toFloat model.risc)
-               in
-               ( { model | options = Just (List.map (C.setRisc curRisc s) optionx) }, Cmd.none )
-
-   RiscCalculated (Err s) ->
-       ( errorAlert "RiscCalculated" "RiscCalculated Error: " s model, Cmd.none )
-
-   RiscChange s ->
-       --Debug.log "RiscChange"
-       ( { model | risc = s }, Cmd.none )
--}
+        RiscChange s ->
+            --Debug.log "RiscChange"
+            ( { model | risc = s }, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
