@@ -67,14 +67,7 @@ view model =
             model.dlgPurchase
             (PurchaseMsgFor PurchaseDlgOk)
             (PurchaseMsgFor PurchaseDlgCancel)
-            [ {-
-                 H.div [ A.class "form-group row" ]
-                 [ H.input [ A.class "form-control", A.checked model.isRealTimePurchase, A.type_ "checkbox", E.onClick ToggleRealTimePurchase ]
-                     []
-                 , H.text "Real-time purchase"
-                 ]
-              -}
-              labelCheckBox (HtmlId "cb1") (InputCaption "Real-time purchase") (Checked model.isRealTimePurchase) ToggleRealTimePurchase
+            [ labelCheckBox (HtmlId "cb1") (InputCaption "Real-time purchase") (Checked model.isRealTimePurchase) ToggleRealTimePurchase
             , labelInputItem (InputCaption "Ask:") (InputType "number") (InputValue model.ask) (HtmlClass "form-control") (Just AskChange)
             , labelInputItem (InputCaption "Bid:") (InputType "number") (InputValue model.bid) (HtmlClass "form-control") (Just BidChange)
             , labelInputItem (InputCaption "Voluime:") (InputType "number") (InputValue model.volume) (HtmlClass "form-control") (Just VolumeChange)

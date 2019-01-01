@@ -65,7 +65,7 @@ toRowAttrs opt =
 checkboxColumn : Table.Column Option Msg
 checkboxColumn =
     Table.veryCustomColumn
-        { name = ""
+        { name = "Select"
         , viewData = viewCheckbox
         , sorter = Table.unsortable
         }

@@ -45,13 +45,6 @@ onChange tagger =
     E.on "change" (JD.map tagger E.targetValue)
 
 
-
--- onChange : (a -> msg) -> Html.Attribute msg
--- onChange tagger =
---     E.on "change" (JD.succeed tagger)
--- makeInput : (String -> a) -> String -> VD.Node a
-
-
 type InputType
     = InputType String
 
@@ -95,64 +88,17 @@ labelInputItem (InputCaption caption) inputType inputValue htmlClass event =
         ]
 
 
-
-{-
-     <div class="checkbox">
-       <label><input type="checkbox"> Remember me</label>
-     </div>
-
-    <div class="custom-control custom-checkbox">
-       <input type="checkbox" class="custom-control-input" id="defaultChecked2" checked>
-       <label class="custom-control-label" for="defaultChecked2">Default checked</label>
-   </div>
-
-
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label for="check">
-                            <input type="checkbox" id="check" />
-                            <span class="fake-input"></span>
-                            <span class="fake-label">Option 2</span>
-                        </label>
-                    </div>
-                </div>
--}
-
-
 labelCheckBox : HtmlId -> InputCaption -> Checked -> msg -> H.Html msg
 labelCheckBox (HtmlId htmlId) (InputCaption caption) (Checked isChecked) event =
     H.div [ A.class "form-group" ]
         [ H.div [ A.class "checkbox" ]
             [ H.label [ A.for htmlId ]
-                [ H.input [ A.type_ "checkbox", A.checked isChecked, E.onClick event, A.id htmlId ] []
+                [ H.input [ A.type_ "checkbox", A.class "fake-cb", A.checked isChecked, E.onClick event, A.id htmlId ] []
                 , H.span [ A.class "fake-input" ] []
                 , H.span [ A.class "fake-label" ] [ H.text caption ]
                 ]
             ]
         ]
-
-
-
-{-
-   labelCheckBox : InputCaption -> Checked -> msg -> H.Html msg
-   labelCheckBox (InputCaption caption) (Checked isChecked) event =
-       H.div
-           [ A.class "form-check abc-checkbox" ]
-           [ H.input [ E.onClick event, A.checked isChecked, A.id "ax", A.type_ "checkbox", A.class "form-check-input" ] []
-           , H.label [ A.class "form-check-label", A.for "ax" ] [ H.text caption ]
-           ]
-
-
-
-      labelCheckBox : InputCaption -> msg -> H.Html msg
-      labelCheckBox (InputCaption caption) event =
-          H.div
-              [ A.class "checkbox" ]
-              [ H.label []
-                  [ H.input [ E.onClick event, A.type_ "checkbox" ] [ H.text caption ]
-                  ]
-              ]
--}
 
 
 makeInput : String -> (String -> msg) -> String -> H.Html msg

@@ -1,12 +1,14 @@
 module Common.Utils exposing
-    ( findInList
+    ( asHttpBody
     , flip
-    , replaceWith
+    , listAsHttpBody
     , toDecimal
     , unpackMaybe
     )
 
 import Critters.Types exposing (Oidable)
+import Http
+import Json.Encode as JE
 
 
 flip : (a -> b -> c) -> b -> a -> c
@@ -23,18 +25,40 @@ toDecimal value roundFactor =
     valx / roundFactor
 
 
-findInList : List (Oidable a) -> Int -> Maybe (Oidable a)
-findInList lx oid =
-    List.head <| List.filter (\x -> x.oid == oid) lx
+asHttpBody : List ( String, JE.Value ) -> Http.Body
+asHttpBody lx =
+    let
+        x =
+            JE.object lx
+    in
+    Http.stringBody "application/json" (JE.encode 0 x)
 
 
-replaceWith : Oidable a -> Oidable a -> Oidable a
-replaceWith newEl el =
-    if el.oid == newEl.oid then
-        newEl
+listAsHttpBody : List (List ( String, JE.Value )) -> Http.Body
+listAsHttpBody lx =
+    let
+        xx =
+            --JE.list (List.map (\x -> JE.object x) lx)
+            JE.list JE.object lx
+    in
+    Http.stringBody "application/json" (JE.encode 0 xx)
 
-    else
-        el
+
+
+{-
+      findInList : List (Oidable a) -> Int -> Maybe (Oidable a)
+      findInList lx oid =
+          List.head <| List.filter (\x -> x.oid == oid) lx
+
+
+   replaceWith : Oidable a -> Oidable a -> Oidable a
+   replaceWith newEl el =
+       if el.oid == newEl.oid then
+           newEl
+
+       else
+           el
+-}
 
 
 unpackMaybe : Maybe a -> (a -> b) -> b -> b
