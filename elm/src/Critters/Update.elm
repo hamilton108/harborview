@@ -212,7 +212,7 @@ updateCritterMsg critMsg model =
                     else
                         C.fetchCritters False
             in
-            ( model, cmd )
+            ( { model | dlgAlert = DLG.DialogVisibleAlert "New Critter" s.msg DLG.Info }, Cmd.none )
 
         OnNewCritter (Err s) ->
             ( DLG.errorAlert "Error" "OnNewCritter Error: " s model, Cmd.none )
@@ -235,10 +235,10 @@ updateAccRuleMsg accMsg model =
             ( { model | dlgNewAccRule = DLG.DialogVisible }, Cmd.none )
 
         DlgNewAccOk ->
-            ( model, Cmd.none )
+            ( { model | dlgNewAccRule = DLG.DialogHidden }, Cmd.none )
 
         DlgNewAccCancel ->
-            ( model, Cmd.none )
+            ( { model | dlgNewAccRule = DLG.DialogHidden }, Cmd.none )
 
         OnNewAccRule (Ok s) ->
             ( model, Cmd.none )
