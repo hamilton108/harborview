@@ -14,8 +14,11 @@ import Critters.Types
         , DenyRuleMsg(..)
         , Model
         , Msg(..)
+        , Oid(..)
         , OptionPurchase
         , OptionPurchases
+        , RuleType(..)
+        , RuleValue(..)
         )
 
 
@@ -232,10 +235,21 @@ updateAccRuleMsg accMsg model =
             ( newModel, C.toggleRule True accRule.oid newVal )
 
         NewAccRule critId ->
-            ( { model | dlgNewAccRule = DLG.DialogVisible }, Cmd.none )
+            ( { model | dlgNewAccRule = DLG.DialogVisible, currentCritId = critId }, Cmd.none )
 
         DlgNewAccOk ->
-            ( { model | dlgNewAccRule = DLG.DialogHidden }, Cmd.none )
+            let
+                rvx =
+                    Maybe.withDefault -1.0 (String.toFloat model.ruleValue)
+
+                rv =
+                    if rvx > 0 then
+                        RuleValue rvx
+
+                    else
+                        NoRuleValue
+            in
+            ( { model | dlgNewAccRule = DLG.DialogHidden }, C.newAccRule (Oid model.currentCritId) model.selectedRule rv )
 
         DlgNewAccCancel ->
             ( { model | dlgNewAccRule = DLG.DialogHidden }, Cmd.none )
@@ -300,8 +314,25 @@ update msg model =
         SelectedPurchaseChanged s ->
             ( { model | selectedPurchase = Just s }, Cmd.none )
 
+        SelectedRuleChanged s ->
+            let
+                rt =
+                    if String.isEmpty s then
+                        NoRuleType
+
+                    else
+                        RuleType s
+            in
+            ( { model | selectedRule = rt }, Cmd.none )
+
         SaleVolChanged s ->
             ( { model | saleVol = s }, Cmd.none )
+
+        RuleValueChanged s ->
+            ( { model | ruleValue = s }, Cmd.none )
+
+        ToggleHasMemory ->
+            ( model, Cmd.none )
 
         ResetCache ->
             ( model, C.resetCache model.currentPurchaseType )

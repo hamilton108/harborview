@@ -10,10 +10,14 @@ module Critters.Types exposing
     , JsonStatus
     , Model
     , Msg(..)
+    , Oid(..)
     , Oidable
     , OptionPurchase
     , OptionPurchases
+    , RuleType(..)
+    , RuleValue(..)
     , rtypDesc
+    , rtypSelectItems
     )
 
 import Common.ModalDialog as DLG
@@ -25,28 +29,28 @@ rtypDesc : Int -> String
 rtypDesc rtyp =
     case rtyp of
         1 ->
-            "Diff from watermark"
+            "[1] Diff from watermark"
 
         2 ->
-            "Diff from watermark percent"
+            "[2] Diff from watermark percent"
 
         3 ->
-            "Stock price floor (valid if above price)"
+            "[3] Stock price floor (valid if above price)"
 
         4 ->
-            "Stock price roof (valid if below price)"
+            "[4] Stock price roof (valid if below price)"
 
         5 ->
-            "Option price floor (valid if above price)"
+            "[5] Option price floor (valid if above price)"
 
         6 ->
-            "Option price roof (valid if below price)"
+            "[6] Option price roof (valid if below price)"
 
         7 ->
-            "Diff from bought"
+            "[7] Diff from bought"
 
         9 ->
-            "Gradient diff from watermark"
+            "[9] Gradient diff from watermark"
 
         _ ->
             "Composite"
@@ -54,7 +58,15 @@ rtypDesc rtyp =
 
 rtypSelectItems : S.SelectItems
 rtypSelectItems =
-    Debug.todo "rtypSelectItems"
+    [ S.SelectItem "1" (rtypDesc 1)
+    , S.SelectItem "2" (rtypDesc 2)
+    , S.SelectItem "3" (rtypDesc 3)
+    , S.SelectItem "4" (rtypDesc 4)
+    , S.SelectItem "5" (rtypDesc 5)
+    , S.SelectItem "6" (rtypDesc 6)
+    , S.SelectItem "7" (rtypDesc 7)
+    , S.SelectItem "9" (rtypDesc 9)
+    ]
 
 
 type CritterMsg
@@ -91,9 +103,26 @@ type Msg
     | DenyRuleMsgFor DenyRuleMsg
     | Toggled (Result Http.Error JsonStatus)
     | SelectedPurchaseChanged String
+    | SelectedRuleChanged String
     | SaleVolChanged String
+    | RuleValueChanged String
+    | ToggleHasMemory
     | ResetCache
     | CacheReset (Result Http.Error JsonStatus)
+
+
+type Oid
+    = Oid Int
+
+
+type RuleType
+    = RuleType String
+    | NoRuleType
+
+
+type RuleValue
+    = RuleValue Float
+    | NoRuleValue
 
 
 type alias JsonStatus =
@@ -161,6 +190,10 @@ type alias Model =
     , dlgNewDenyRule : DLG.DialogState
     , purchases : OptionPurchases
     , currentPurchaseType : Int
+    , currentCritId : Int
     , saleVol : String
     , selectedPurchase : Maybe String
+    , selectedRule : RuleType
+    , ruleValue : String
+    , hasMemory : Bool
     }

@@ -1,8 +1,15 @@
-module Critters.Commands exposing (..)
+module Critters.Commands exposing (fetchCritters, mainUrl, newAccRule, newCritter, resetCache, toggleRule)
 
 import Common.Decoders as Dec
 import Critters.Decoders as CD
-import Critters.Types exposing (Msg(..), CritterMsg(..))
+import Critters.Types
+    exposing
+        ( CritterMsg(..)
+        , Msg(..)
+        , Oid(..)
+        , RuleType(..)
+        , RuleValue(..)
+        )
 import Http
 
 
@@ -20,8 +27,8 @@ newCritter_ oid vol =
                 ++ "/"
                 ++ String.fromInt vol
     in
-        Http.send (CritterMsgFor << OnNewCritter) <|
-            Http.get url Dec.jsonStatusDecoder
+    Http.send (CritterMsgFor << OnNewCritter) <|
+        Http.get url Dec.jsonStatusDecoder
 
 
 newCritter : String -> String -> Cmd Msg
@@ -35,12 +42,17 @@ newCritter oid vol =
                             |> Maybe.andThen (\volx -> Just (newCritter_ oidx volx))
                     )
     in
-        case maybeCmd of
-            Nothing ->
-                Cmd.none
+    case maybeCmd of
+        Nothing ->
+            Cmd.none
 
-            Just cmd ->
-                cmd
+        Just cmd ->
+            cmd
+
+
+newAccRule : Oid -> RuleType -> RuleValue -> Cmd Msg
+newAccRule (Oid oid) rt val =
+    Debug.todo "newAccRule"
 
 
 
@@ -57,8 +69,8 @@ resetCache purchaseType =
         url =
             mainUrl ++ "/resetcache/" ++ String.fromInt purchaseType
     in
-        Http.send CacheReset <|
-            Http.get url Dec.jsonStatusDecoder
+    Http.send CacheReset <|
+        Http.get url Dec.jsonStatusDecoder
 
 
 toggleRule : Bool -> Int -> Bool -> Cmd Msg
@@ -67,20 +79,22 @@ toggleRule isAccRule oid newVal =
         rt =
             if isAccRule == True then
                 "1"
+
             else
                 "2"
 
         newValx =
             if newVal == True then
                 "true"
+
             else
                 "false"
 
         url =
             mainUrl ++ "/toggle/" ++ rt ++ "/" ++ String.fromInt oid ++ "/" ++ newValx
     in
-        Http.send Toggled <|
-            Http.get url Dec.jsonStatusDecoder
+    Http.send Toggled <|
+        Http.get url Dec.jsonStatusDecoder
 
 
 fetchCritters : Bool -> Cmd Msg
@@ -89,6 +103,7 @@ fetchCritters isRealTime =
         critterTypeUrl =
             if isRealTime == True then
                 "4"
+
             else
                 "11"
 
@@ -97,9 +112,10 @@ fetchCritters isRealTime =
 
         msg =
             if isRealTime == True then
-                (CritterMsgFor << RealTimeCrittersFetched)
+                CritterMsgFor << RealTimeCrittersFetched
+
             else
-                (CritterMsgFor << PaperCrittersFetched)
+                CritterMsgFor << PaperCrittersFetched
     in
-        Http.send msg <|
-            Http.get url CD.optionPurchasesDecoder
+    Http.send msg <|
+        Http.get url CD.optionPurchasesDecoder

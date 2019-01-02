@@ -1,10 +1,10 @@
-module Common.Select exposing (..)
+module Common.Select exposing (SelectItem, SelectItems, emptySelectOption, makeSelect, makeSelectOption)
 
-import Http
-import VirtualDom as VD
+import Common.Html as W
 import Html as H
 import Html.Attributes as A
-import Common.Html as W
+import Http
+import VirtualDom as VD
 
 
 type alias SelectItem =
@@ -20,7 +20,7 @@ type alias SelectItems =
 emptySelectOption : VD.Node a
 emptySelectOption =
     H.option
-        [ A.value "-1"
+        [ A.value ""
         ]
         [ H.text "-" ]
 
@@ -50,21 +50,12 @@ makeSelect caption msg payload selected =
 
         px =
             emptySelectOption :: List.map makeSelectOption_ payload
-
-        {-
-           case payload of
-               Just p ->
-                   emptySelectOption :: List.map makeSelectOption_ p
-
-               Nothing ->
-                   []
-        -}
     in
-        H.span [ A.class "form-group" ]
-            [ H.label [] [ H.text caption ]
-            , H.select
-                [ W.onChange msg
-                , A.class "form-control"
-                ]
-                px
+    H.span [ A.class "form-group" ]
+        [ H.label [] [ H.text caption ]
+        , H.select
+            [ W.onChange msg
+            , A.class "form-control"
             ]
+            px
+        ]

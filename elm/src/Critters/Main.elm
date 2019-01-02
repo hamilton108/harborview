@@ -3,7 +3,7 @@ module Critters.Main exposing (init, initModel, main)
 import Browser
 import Common.ModalDialog as DLG
 import Common.Utils as Utils
-import Critters.Types as T exposing (Flags, Model, Msg(..), Oidable)
+import Critters.Types as T exposing (Flags, Model, Msg(..), Oidable, RuleType(..))
 import Critters.Update as U
 import Critters.Views as V
 import Html as H
@@ -64,6 +64,10 @@ initModel flags =
     , dlgNewDenyRule = DLG.DialogHidden
     , purchases = []
     , currentPurchaseType = 0
+    , currentCritId = 0
     , saleVol = "10"
     , selectedPurchase = Nothing
+    , selectedRule = NoRuleType
+    , ruleValue = "0.0"
+    , hasMemory = True
     }

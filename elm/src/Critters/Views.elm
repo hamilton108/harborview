@@ -30,6 +30,7 @@ import Critters.Types
         , OptionPurchase
         , OptionPurchases
         , rtypDesc
+        , rtypSelectItems
         )
 import Html as H
 import Html.Attributes as A
@@ -340,20 +341,20 @@ view model =
             [ S.makeSelect "Option: " SelectedPurchaseChanged (List.map purchaseToSelectItem model.purchases) Nothing
             , CH.makeInput "Sales volume:" SaleVolChanged model.saleVol
             ]
-        , DLG.modalDialog "New Accept Rule"
+        , DLG.modalDialog ("New Accept Rule for crit id: " ++ String.fromInt model.currentCritId)
             model.dlgNewAccRule
             (AccRuleMsgFor DlgNewAccOk)
             (AccRuleMsgFor DlgNewAccCancel)
-            [ S.makeSelect "Rule Type: " SelectedPurchaseChanged (List.map purchaseToSelectItem model.purchases) Nothing
-            , CH.makeInput "Value:" SaleVolChanged model.saleVol
+            [ S.makeSelect "Rule Type: " SelectedRuleChanged rtypSelectItems Nothing
+            , CH.makeInput "Value:" RuleValueChanged model.ruleValue
             ]
         , DLG.modalDialog ("New " ++ title)
             model.dlgNewDenyRule
             (DenyRuleMsgFor DlgNewDenyOk)
             (DenyRuleMsgFor DlgNewDenyCancel)
-            [ S.makeSelect "Rule Type: " SelectedPurchaseChanged (List.map purchaseToSelectItem model.purchases) Nothing
-            , CH.makeInput "Value:" SaleVolChanged model.saleVol
-            , CH.labelCheckBox (HtmlId "cb1") (InputCaption "Memory") (Checked model.isRealTimePurchase) ToggleRealTimePurchase
+            [ S.makeSelect "Rule Type: " SelectedRuleChanged rtypSelectItems Nothing
+            , CH.makeInput "Value:" RuleValueChanged model.ruleValue
+            , CH.labelCheckBox (CH.HtmlId "cb1") (CH.InputCaption "Memory") (CH.Checked model.hasMemory) ToggleHasMemory
             ]
         , DLG.alert model.dlgAlert AlertOk
         ]
