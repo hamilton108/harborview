@@ -1,5 +1,6 @@
 package harborview.web.controllers;
 
+import critterrepos.beans.critters.AcceptRuleBean;
 import critterrepos.beans.critters.CritterBean;
 import critterrepos.beans.options.OptionPurchaseBean;
 import harborview.dto.html.critters.OptionPurchaseDTO;
@@ -65,12 +66,34 @@ public class CritterController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "purchases/newacc/{oid}/{rt}/{val}",
+            method =  RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public JsonResult newAcc(
+            @PathVariable("oid") int oid,
+            @PathVariable("rt") int ruleType,
+            @PathVariable("val") double ruleValue) {
+        return Common.jsonTryCatch(()-> {
+            AcceptRuleBean bean = model.insertAccRule(oid,ruleType,ruleValue);
+            model.resetCache();
+            return String.format("[id=%d] New Acc Rule", bean.getOid());
+        });
+    }
+
+
+    @ResponseBody
     @RequestMapping(value = "purchases/newcritter/{oid}/{vol}",
             method =  RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public JsonResult newCritter (
             @PathVariable("oid") int oid,
             @PathVariable("vol") int vol) {
+        return Common.jsonTryCatch(()-> {
+            CritterBean bean = model.insertCritter(oid,vol);
+            model.resetCache();
+            return String.format("[id=%d] New Critter", bean.getOid());
+        });
+        /*
         try {
             CritterBean bean = model.insertCritter(oid,vol);
             model.resetCache();
@@ -79,6 +102,7 @@ public class CritterController {
         catch (Exception ex) {
             return new JsonResult(false, ex.getMessage(), 0);
         }
+        */
     }
     @ResponseBody
     @RequestMapping(value = "purchases/resetcache/{ptype}",
@@ -86,6 +110,11 @@ public class CritterController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public JsonResult resetCache (
             @PathVariable("ptype") int purchaseType) {
+        return Common.jsonTryCatch(()-> {
+                    model.resetCache();
+                    return String.format("Cache reset for purchase type %d", purchaseType);
+                });
+        /*
         try {
             model.resetCache();
             return new JsonResult(true, String.format("Cache reset for purchase type %d", purchaseType), 0);
@@ -93,5 +122,6 @@ public class CritterController {
         catch (Exception ex) {
             return new JsonResult(false, ex.getMessage(), 0);
         }
+        */
     }
 }

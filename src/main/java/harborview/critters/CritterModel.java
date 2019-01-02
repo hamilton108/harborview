@@ -1,5 +1,6 @@
 package harborview.critters;
 
+import critterrepos.beans.critters.AcceptRuleBean;
 import critterrepos.beans.critters.CritterBean;
 import critterrepos.beans.options.OptionPurchaseBean;
 import critterrepos.models.mybatis.CritterMapper;
@@ -51,6 +52,17 @@ public class CritterModel {
             bean.setPurchaseId(purchaseId);
             bean.setSellVolume(volume);
             mapper.insertCritter(bean);
+            return bean;
+        });
+    }
+    public AcceptRuleBean insertAccRule(int critterId, int ruleType, double ruleValue) {
+        return MyBatisUtils.withSession((session) -> {
+            CritterMapper mapper = session.getMapper(CritterMapper.class);
+            AcceptRuleBean bean = new AcceptRuleBean();
+            bean.setCid(critterId);
+            bean.setRtyp(ruleType);
+            bean.setAccValue(ruleValue);
+            mapper.insertAcceptRule(bean);
             return bean;
         });
     }
