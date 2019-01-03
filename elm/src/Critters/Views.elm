@@ -354,7 +354,9 @@ view model =
             (AccRuleMsgFor DlgNewAccOk)
             (AccRuleMsgFor DlgNewAccCancel)
             [ S.makeSelect "Rule Type: " SelectedRuleChanged rtypSelectItems Nothing
-            , CH.makeInput "Value:" RuleValueChanged rv
+
+            -- , CH.makeInput "Value:" RuleValueChanged rv
+            , CH.labelInputItem (CH.InputCaption "Value") (CH.InputType "number") (CH.InputValue rv) (CH.HtmlClass "form-control") (Just RuleValueChanged)
             ]
         , DLG.modalDialog ("New " ++ title)
             model.dlgNewDenyRule
