@@ -238,19 +238,15 @@ updateAccRuleMsg accMsg model =
             ( { model | dlgNewAccRule = DLG.DialogVisible, currentCritId = critId }, Cmd.none )
 
         DlgNewAccOk ->
-            let
-                rvx =
-                    Maybe.withDefault -1.0 (String.toFloat model.ruleValue)
+            ( { model | dlgNewAccRule = DLG.DialogHidden }, C.newAccRule model.currentCritId model.selectedRule model.ruleValue )
 
-                rv =
-                    if rvx > 0 then
-                        RuleValue rvx
-
-                    else
-                        NoRuleValue
-            in
-            ( { model | dlgNewAccRule = DLG.DialogHidden }, C.newAccRule (Oid model.currentCritId) model.selectedRule rv )
-
+        {-
+           let
+               rv =
+                   RuleValue <| Maybe.withDefault -1.0 (String.toFloat model.ruleValue)
+           in
+           ( { model | dlgNewAccRule = DLG.DialogHidden }, C.newAccRule (Oid model.currentCritId) model.selectedRule rv )
+        -}
         DlgNewAccCancel ->
             ( { model | dlgNewAccRule = DLG.DialogHidden }, Cmd.none )
 
@@ -321,7 +317,15 @@ update msg model =
                         NoRuleType
 
                     else
-                        RuleType s
+                        let
+                            ruleId =
+                                Maybe.withDefault -1 (String.toInt s)
+                        in
+                        if ruleId < 0 then
+                            NoRuleType
+
+                        else
+                            RuleType ruleId
             in
             ( { model | selectedRule = rt }, Cmd.none )
 
@@ -329,7 +333,7 @@ update msg model =
             ( { model | saleVol = s }, Cmd.none )
 
         RuleValueChanged s ->
-            ( { model | ruleValue = s }, Cmd.none )
+            ( { model | ruleValue = RuleValue s }, Cmd.none )
 
         ToggleHasMemory ->
             ( model, Cmd.none )

@@ -82,7 +82,7 @@ type CritterMsg
 
 type AccRuleMsg
     = ToggleAccActive AccRule
-    | NewAccRule Int
+    | NewAccRule Oid
     | DlgNewAccOk
     | DlgNewAccCancel
     | OnNewAccRule (Result Http.Error JsonStatus)
@@ -116,13 +116,12 @@ type Oid
 
 
 type RuleType
-    = RuleType String
+    = RuleType Int
     | NoRuleType
 
 
 type RuleValue
-    = RuleValue Float
-    | NoRuleValue
+    = RuleValue String
 
 
 type alias JsonStatus =
@@ -190,10 +189,10 @@ type alias Model =
     , dlgNewDenyRule : DLG.DialogState
     , purchases : OptionPurchases
     , currentPurchaseType : Int
-    , currentCritId : Int
+    , currentCritId : Oid
     , saleVol : String
     , selectedPurchase : Maybe String
     , selectedRule : RuleType
-    , ruleValue : String
+    , ruleValue : RuleValue
     , hasMemory : Bool
     }

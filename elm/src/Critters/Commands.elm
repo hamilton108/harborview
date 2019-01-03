@@ -50,9 +50,26 @@ newCritter oid vol =
             cmd
 
 
+
+{-
+   newAccRule_ : Oid -> RuleType -> RuleValue -> Cmd Msg
+   newAccRule_ (Oid oid) rt val =
+       let
+           url =
+               mainUrl
+                   ++ "/newacc/"
+                   ++ String.fromInt oid
+                   ++ "/"
+                   ++ String.fromFloat vol
+       in
+       Http.send (CritterMsgFor << OnNewCritter) <|
+           Http.get url Dec.jsonStatusDecoder
+-}
+
+
 newAccRule : Oid -> RuleType -> RuleValue -> Cmd Msg
-newAccRule (Oid oid) rt val =
-    Debug.todo "newAccRule"
+newAccRule oid rt val =
+    Cmd.none
 
 
 

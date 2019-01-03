@@ -27,8 +27,10 @@ import Critters.Types
         , DenyRuleMsg(..)
         , Model
         , Msg(..)
+        , Oid(..)
         , OptionPurchase
         , OptionPurchases
+        , RuleValue(..)
         , rtypDesc
         , rtypSelectItems
         )
@@ -135,7 +137,7 @@ critterPart crit =
             [ H.td [] [ H.text (String.fromInt c.oid) ]
             , H.td [] [ H.text (String.fromInt c.sellVolume) ]
             , H.td [] [ H.text (String.fromInt c.status) ]
-            , H.td [] [ H.a [ A.href "#", A.class "newaccrule href-td", E.onClick (AccRuleMsgFor (NewAccRule c.oid)) ] [ H.text "New Acc" ] ]
+            , H.td [] [ H.a [ A.href "#", A.class "newaccrule href-td", E.onClick (AccRuleMsgFor (NewAccRule <| Oid c.oid)) ] [ H.text "New Acc" ] ]
             ]
 
 
@@ -319,6 +321,12 @@ view model =
 
                 _ ->
                     "-"
+
+        (RuleValue rv) =
+            model.ruleValue
+
+        (Oid oid) =
+            model.currentCritId
     in
     H.div []
         [ H.div [ A.class "grid-elm" ]
@@ -341,19 +349,19 @@ view model =
             [ S.makeSelect "Option: " SelectedPurchaseChanged (List.map purchaseToSelectItem model.purchases) Nothing
             , CH.makeInput "Sales volume:" SaleVolChanged model.saleVol
             ]
-        , DLG.modalDialog ("New Accept Rule for crit id: " ++ String.fromInt model.currentCritId)
+        , DLG.modalDialog ("New Accept Rule for crit id: " ++ String.fromInt oid)
             model.dlgNewAccRule
             (AccRuleMsgFor DlgNewAccOk)
             (AccRuleMsgFor DlgNewAccCancel)
             [ S.makeSelect "Rule Type: " SelectedRuleChanged rtypSelectItems Nothing
-            , CH.makeInput "Value:" RuleValueChanged model.ruleValue
+            , CH.makeInput "Value:" RuleValueChanged rv
             ]
         , DLG.modalDialog ("New " ++ title)
             model.dlgNewDenyRule
             (DenyRuleMsgFor DlgNewDenyOk)
             (DenyRuleMsgFor DlgNewDenyCancel)
             [ S.makeSelect "Rule Type: " SelectedRuleChanged rtypSelectItems Nothing
-            , CH.makeInput "Value:" RuleValueChanged model.ruleValue
+            , CH.makeInput "Value:" RuleValueChanged rv
             , CH.labelCheckBox (CH.HtmlId "cb1") (CH.InputCaption "Memory") (CH.Checked model.hasMemory) ToggleHasMemory
             ]
         , DLG.alert model.dlgAlert AlertOk
