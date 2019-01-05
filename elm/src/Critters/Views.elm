@@ -169,7 +169,7 @@ accPart acc =
             , H.td [] [ H.text (rtypDesc curAcc.rtyp) ]
             , H.td [] [ H.text (String.fromFloat curAcc.value) ]
             , H.td [] [ cbActive ]
-            , H.td [] [ H.a [ A.href "#", A.class "newdnyrule href-td", E.onClick (DenyRuleMsgFor (NewDenyRule curAcc.oid)) ] [ H.text "New Deny" ] ]
+            , H.td [] [ H.a [ A.href "#", A.class "newdnyrule href-td", E.onClick (DenyRuleMsgFor (NewDenyRule <| Oid curAcc.oid)) ] [ H.text "New Deny" ] ]
             ]
 
 
@@ -327,6 +327,9 @@ view model =
 
         (Oid oid) =
             model.currentCritId
+
+        (Oid accId) =
+            model.currentAccId
     in
     H.div []
         [ H.div [ A.class "grid-elm" ]
@@ -358,7 +361,7 @@ view model =
             -- , CH.makeInput "Value:" RuleValueChanged rv
             , CH.labelInputItem (CH.InputCaption "Value") (CH.InputType "number") (CH.InputValue rv) (CH.HtmlClass "form-control") (Just RuleValueChanged)
             ]
-        , DLG.modalDialog ("New " ++ title)
+        , DLG.modalDialog ("New Deny Rule for acc id: " ++ String.fromInt accId)
             model.dlgNewDenyRule
             (DenyRuleMsgFor DlgNewDenyOk)
             (DenyRuleMsgFor DlgNewDenyCancel)

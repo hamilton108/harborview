@@ -1,10 +1,12 @@
-module Critters.Commands exposing (fetchCritters, mainUrl, newAccRule, newCritter, resetCache, toggleRule)
+module Critters.Commands exposing (fetchCritters, mainUrl, newAccRule, newCritter, newDenyRule, resetCache, toggleRule)
 
 import Common.Decoders as Dec
 import Critters.Decoders as CD
 import Critters.Types
     exposing
-        ( CritterMsg(..)
+        ( AccRuleMsg(..)
+        , CritterMsg(..)
+        , DenyRuleMsg(..)
         , Msg(..)
         , Oid(..)
         , RuleType(..)
@@ -68,8 +70,54 @@ newCritter oid vol =
 
 
 newAccRule : Oid -> RuleType -> RuleValue -> Cmd Msg
-newAccRule oid rt val =
-    Cmd.none
+newAccRule (Oid oid) ruleType (RuleValue val) =
+    case ruleType of
+        NoRuleType ->
+            Cmd.none
+
+        RuleType rt ->
+            let
+                url =
+                    mainUrl
+                        ++ "/newacc/"
+                        ++ String.fromInt oid
+                        ++ "/"
+                        ++ String.fromInt rt
+                        ++ "/"
+                        ++ val
+            in
+            Http.send (AccRuleMsgFor << OnNewAccRule) <|
+                Http.get url Dec.jsonStatusDecoder
+
+
+newDenyRule : Oid -> RuleType -> RuleValue -> Bool -> Cmd Msg
+newDenyRule (Oid oid) ruleType (RuleValue val) hasMemory =
+    case ruleType of
+        NoRuleType ->
+            Cmd.none
+
+        RuleType rt ->
+            let
+                boolStr =
+                    if hasMemory == True then
+                        "true"
+
+                    else
+                        "false"
+
+                url =
+                    mainUrl
+                        ++ "/newdeny/"
+                        ++ String.fromInt oid
+                        ++ "/"
+                        ++ String.fromInt rt
+                        ++ "/"
+                        ++ val
+                        ++ "/"
+                        ++ boolStr
+            in
+            Http.send (DenyRuleMsgFor << OnNewDenyRule) <|
+                Http.get url Dec.jsonStatusDecoder
 
 
 

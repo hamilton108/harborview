@@ -167,6 +167,19 @@ toggleDenyRule model dny =
 -}
 
 
+refreshCritters : String -> String -> Model -> ( Model, Cmd Msg )
+refreshCritters title statusMsg model =
+    let
+        cmd =
+            if model.currentPurchaseType == 4 then
+                C.fetchCritters True
+
+            else
+                C.fetchCritters False
+    in
+    ( { model | dlgAlert = DLG.DialogVisibleAlert title statusMsg DLG.Info }, cmd )
+
+
 updateCritterMsg : CritterMsg -> Model -> ( Model, Cmd Msg )
 updateCritterMsg critMsg model =
     case critMsg of
@@ -207,15 +220,7 @@ updateCritterMsg critMsg model =
             ( { model | dlgNewCritter = DLG.DialogHidden }, Cmd.none )
 
         OnNewCritter (Ok s) ->
-            let
-                cmd =
-                    if model.currentPurchaseType == 4 then
-                        C.fetchCritters True
-
-                    else
-                        C.fetchCritters False
-            in
-            ( { model | dlgAlert = DLG.DialogVisibleAlert "New Critter" s.msg DLG.Info }, Cmd.none )
+            refreshCritters "New Critter" s.msg model
 
         OnNewCritter (Err s) ->
             ( DLG.errorAlert "Error" "OnNewCritter Error: " s model, Cmd.none )
@@ -240,21 +245,14 @@ updateAccRuleMsg accMsg model =
         DlgNewAccOk ->
             ( { model | dlgNewAccRule = DLG.DialogHidden }, C.newAccRule model.currentCritId model.selectedRule model.ruleValue )
 
-        {-
-           let
-               rv =
-                   RuleValue <| Maybe.withDefault -1.0 (String.toFloat model.ruleValue)
-           in
-           ( { model | dlgNewAccRule = DLG.DialogHidden }, C.newAccRule (Oid model.currentCritId) model.selectedRule rv )
-        -}
         DlgNewAccCancel ->
             ( { model | dlgNewAccRule = DLG.DialogHidden }, Cmd.none )
 
         OnNewAccRule (Ok s) ->
-            ( model, Cmd.none )
+            refreshCritters "New Acc Rule" s.msg model
 
         OnNewAccRule (Err err) ->
-            ( model, Cmd.none )
+            ( DLG.errorAlert "Error" "OnNewAccRule Error: " err model, Cmd.none )
 
 
 updateDenyRuleMsg : DenyRuleMsg -> Model -> ( Model, Cmd Msg )
@@ -271,19 +269,19 @@ updateDenyRuleMsg denyMsg model =
             ( newModel, C.toggleRule False denyRule.oid newVal )
 
         NewDenyRule accId ->
-            ( { model | dlgNewDenyRule = DLG.DialogVisible }, Cmd.none )
+            ( { model | dlgNewDenyRule = DLG.DialogVisible, currentAccId = accId }, Cmd.none )
 
         DlgNewDenyOk ->
-            ( model, Cmd.none )
+            ( { model | dlgNewDenyRule = DLG.DialogHidden }, C.newDenyRule model.currentAccId model.selectedRule model.ruleValue model.hasMemory )
 
         DlgNewDenyCancel ->
-            ( model, Cmd.none )
+            ( { model | dlgNewDenyRule = DLG.DialogHidden }, Cmd.none )
 
         OnNewDenyRule (Ok s) ->
-            ( model, Cmd.none )
+            refreshCritters "New Deny Rule" s.msg model
 
         OnNewDenyRule (Err err) ->
-            ( model, Cmd.none )
+            ( DLG.errorAlert "Error" "OnNewDenyRule Error: " err model, Cmd.none )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

@@ -90,7 +90,7 @@ type AccRuleMsg
 
 type DenyRuleMsg
     = ToggleDenyActive DenyRule
-    | NewDenyRule Int
+    | NewDenyRule Oid
     | DlgNewDenyOk
     | DlgNewDenyCancel
     | OnNewDenyRule (Result Http.Error JsonStatus)
@@ -190,6 +190,7 @@ type alias Model =
     , purchases : OptionPurchases
     , currentPurchaseType : Int
     , currentCritId : Oid
+    , currentAccId : Oid
     , saleVol : String
     , selectedPurchase : Maybe String
     , selectedRule : RuleType

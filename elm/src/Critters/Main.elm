@@ -74,6 +74,7 @@ initModel flags =
     , purchases = []
     , currentPurchaseType = 0
     , currentCritId = Oid 0
+    , currentAccId = Oid 0
     , saleVol = "10"
     , selectedPurchase = Nothing
     , selectedRule = NoRuleType
