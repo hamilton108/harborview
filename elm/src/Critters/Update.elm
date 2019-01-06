@@ -334,7 +334,7 @@ update msg model =
             ( { model | ruleValue = RuleValue s }, Cmd.none )
 
         ToggleHasMemory ->
-            ( model, Cmd.none )
+            ( { model | hasMemory = not model.hasMemory }, Cmd.none )
 
         ResetCache ->
             ( model, C.resetCache model.currentPurchaseType )

@@ -132,15 +132,12 @@ updateRisc msg model =
         CalcRisc ->
             ( model, C.calcRisc model.risc model.options )
 
-        RiscCalculated (Ok s) ->
+        RiscCalculated (Ok riscItems) ->
             let
                 curRisc =
                     Maybe.withDefault 0 (String.toFloat model.risc)
-
-                optionx =
-                    model.options
             in
-            ( { model | options = List.map (C.setRisc curRisc s) optionx }, Cmd.none )
+            ( { model | options = List.map (C.setRisc curRisc riscItems) model.options }, Cmd.none )
 
         RiscCalculated (Err s) ->
             ( errorAlert "RiscCalculated" "RiscCalculated Error: " s model, Cmd.none )
