@@ -2,6 +2,7 @@ package harborview.maunaloa;
 
 import com.gargoylesoftware.htmlunit.Page;
 import harborview.dto.html.options.OptionDTO;
+import harborview.dto.html.options.RiscItemDTO;
 import harborview.dto.html.options.StockAndOptions;
 import harborview.dto.html.options.StockPriceDTO;
 import harborview.maunaloa.repos.OptionRiscRepos;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class TestOptionRiscRepos {
 
+    private static String c1 = "NHY9I34";
     private static String storePath = "/home/rcs/opt/java/netfonds-repos/src/test/resources";
     private static final EtradeDownloader<Page, Serializable> downloader = new MockDownloader(storePath);
     private static final StockMarketRepository stockMarketRepos = new StockMarketReposStub();
@@ -52,4 +55,32 @@ public class TestOptionRiscRepos {
     private void testDouble(double expected, double acutal, String msg) {
         assertEquals(expected, acutal, 0.01, String.format("%s not %.2f",msg, expected));
     }
+
+    private List<RiscItemDTO> optionsForRiscCalculations() {
+        List<RiscItemDTO>  result = new ArrayList<>();
+
+        result.add(new RiscItemDTO(c1, 2.35));
+
+        return result;
+    }
+
+    @DisplayName("Test calculating List<RiscItemDTO>")
+    @Test
+    public void testRiscs() {
+        List<RiscItemDTO> opx = optionsForRiscCalculations();
+
+        OptionRiscRepos riscRepos = new OptionRiscRepos();
+        riscRepos.setEtrade(etrade);
+
+        List<RiscItemDTO> calculated = riscRepos.calcRiscs(opx);
+
+        for (RiscItemDTO item : calculated) {
+            if (item.getTicker().equals(c1)) {
+
+            }
+        }
+    }
+
 }
+
+

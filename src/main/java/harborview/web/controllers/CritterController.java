@@ -80,6 +80,20 @@ public class CritterController {
         });
     }
 
+    @ResponseBody
+    @RequestMapping(value = "purchases/newdeny/{oid}/{rt}/{val}/{mem}",
+            method =  RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public JsonResult newDeny(
+            @PathVariable("oid") int oid,
+            @PathVariable("rt") int ruleType,
+            @PathVariable("val") double ruleValue,
+            @PathVariable("mem") boolean hasMemory) {
+        return Common.jsonTryCatch(()-> {
+            System.out.printf("oid: %d, ruleType: %d, ruleValue: %.2f, hasMemory: %s", oid, ruleType, ruleValue, hasMemory);
+            return String.format("[id=%d] New Deny Rule", 1000);
+        });
+    }
 
     @ResponseBody
     @RequestMapping(value = "purchases/newcritter/{oid}/{vol}",
