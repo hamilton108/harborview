@@ -1,7 +1,6 @@
 package harborview.maunaloa.repos;
 
 import harborview.dto.html.options.OptionDTO;
-import harborview.dto.html.options.RiscItemDTO;
 import harborview.dto.html.options.StockAndOptions;
 import harborview.dto.html.options.StockPriceDTO;
 import oahu.dto.Tuple;
@@ -30,9 +29,8 @@ public class OptionRiscRepos {
         return new StockAndOptions(stockPriceDTO, derivativesDTO);
     }
 
-    public List<RiscItemDTO> calcRiscs(List<RiscItemDTO> items) {
-        return items;
-    }
+
+
     //region Properties
     public void setEtrade(EtradeRepository<Tuple<String>, Tuple3<Optional<StockPrice>, Collection<DerivativePrice>, Collection<DerivativePrice>>> etrade) {
         this.etrade = etrade;
