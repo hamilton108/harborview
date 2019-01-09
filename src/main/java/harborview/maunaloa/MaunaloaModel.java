@@ -159,7 +159,7 @@ public class MaunaloaModel {
         return optionRepos.fetchRiscLines(oid);
     }
 
-    public List<OptionRiscDTO> calcStockPricesFor(List<OptionRiscDTO> riscs) {
+    public List<OptionRiscDTO> calcStockPricesFor(String stockTicker, List<OptionRiscDTO> riscs) {
         List<OptionRiscDTO> result = new ArrayList<>();
         riscs.forEach(x -> {
             DerivativePrice price = optionRepos.getOptionFor(x.getTicker());
