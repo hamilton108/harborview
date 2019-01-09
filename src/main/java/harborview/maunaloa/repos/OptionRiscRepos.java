@@ -44,7 +44,9 @@ public class OptionRiscRepos {
             Tuple<String> info = new Tuple<>(stockTicker, item.getTicker());
             Optional<DerivativePrice> price = etrade.findDerivativePrice(info);
             if (price.isPresent()) {
-                Optional<Double> spf = price.get().stockPriceFor(item.getRisc());
+                DerivativePrice pricex = price.get();
+                double curOptionPrice = pricex.getSell() - item.getRisc();
+                Optional<Double> spf = price.get().stockPriceFor(curOptionPrice);
                 double spfx = -1.0;
                 if (spf.isPresent()) {
                    spfx = spf.get();
