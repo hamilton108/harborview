@@ -160,14 +160,14 @@ setRisc curRisc riscItems opt =
             }
 
 
-calcRisc : String -> Options -> Cmd Msg
-calcRisc riscStr options =
+calcRisc : String -> String -> Options -> Cmd Msg
+calcRisc stockTicker riscStr options =
     let
         risc =
             Maybe.withDefault 0 (String.toFloat riscStr)
 
         url =
-            mainUrl ++ "/calcriscstockprices"
+            mainUrl ++ "/calcriscstockprices/" ++ stockTicker
 
         checked =
             List.filter (\x -> x.selected == True) options
