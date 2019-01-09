@@ -2,17 +2,23 @@ package harborview.dto.html.options;
 
 public class RiscItemDTO {
     private String ticker;
-    private String option;
+    //private String option;
     private double risc;
 
     public RiscItemDTO(){
     }
+    public RiscItemDTO(String ticker, double risc){
+        this.ticker = ticker;
+        this.risc = risc;
+    }
 
+    /*
     public RiscItemDTO(String ticker, String option, double risc){
         this.ticker = ticker;
         this.risc = risc;
         this.setOption(option);
     }
+    */
 
     public String getTicker() {
         return ticker;
@@ -30,6 +36,7 @@ public class RiscItemDTO {
         this.risc = risc;
     }
 
+    /*
     public String getOption() {
         return option;
     }
@@ -37,4 +44,5 @@ public class RiscItemDTO {
     public void setOption(String option) {
         this.option = option;
     }
+    */
 }

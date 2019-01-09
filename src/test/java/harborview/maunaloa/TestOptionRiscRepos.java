@@ -8,11 +8,13 @@ import harborview.dto.html.options.StockPriceDTO;
 import harborview.maunaloa.repos.OptionRiscRepos;
 import netfondsrepos.downloader.MockDownloader;
 import netfondsrepos.repos.EtradeRepository2;
+import oahu.financial.OptionCalculator;
 import oahu.financial.html.EtradeDownloader;
 import oahu.financial.repository.EtradeRepository;
 import oahu.financial.repository.StockMarketRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import vega.financial.calculator.BlackScholes;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,10 +29,12 @@ public class TestOptionRiscRepos {
     private static String storePath = "/home/rcs/opt/java/netfonds-repos/src/test/resources";
     private static final EtradeDownloader<Page, Serializable> downloader = new MockDownloader(storePath);
     private static final StockMarketRepository stockMarketRepos = new StockMarketReposStub();
+    private static final OptionCalculator calculator = new BlackScholes();
     private static final EtradeRepository2 etrade = new EtradeRepositoryStub(); //EtradeRepository2();
     static {
         etrade.setDownloader(downloader);
         etrade.setStockMarketRepository(stockMarketRepos);
+        etrade.setOptionCalculator(calculator);
     }
 
     @DisplayName("Test fetching stock and calls")
@@ -60,7 +64,7 @@ public class TestOptionRiscRepos {
     private List<RiscItemDTO> optionsForRiscCalculations() {
         List<RiscItemDTO>  result = new ArrayList<>();
 
-        result.add(new RiscItemDTO("NHY", c1, 2.35));
+        result.add(new RiscItemDTO(c1, 2.35));
 
         return result;
     }
@@ -73,11 +77,12 @@ public class TestOptionRiscRepos {
         OptionRiscRepos riscRepos = new OptionRiscRepos();
         riscRepos.setEtrade(etrade);
 
-        List<RiscItemDTO> calculated = riscRepos.calcRiscs(opx);
+        List<RiscItemDTO> calculated = riscRepos.calcRiscs("NHY",opx);
 
         for (RiscItemDTO item : calculated) {
-            if (item.getOption().equals(c1)) {
-                testDouble(12.9, item.getRisc(), "Risc");
+            if (item.getTicker().equals(c1)) {
+                double expected = 32.71;
+                assertEquals(expected, item.getRisc(), 0.1, String.format("%s not %.2f",item.getTicker(), expected));
             }
         }
     }
