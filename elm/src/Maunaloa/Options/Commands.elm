@@ -160,31 +160,36 @@ setRisc curRisc riscItems opt =
             }
 
 
-calcRisc : String -> String -> Options -> Cmd Msg
+calcRisc : Maybe String -> String -> Options -> Cmd Msg
 calcRisc stockTicker riscStr options =
-    let
-        risc =
-            Maybe.withDefault 0 (String.toFloat riscStr)
+    case stockTicker of
+        Nothing ->
+            Cmd.none
 
-        url =
-            mainUrl ++ "/calcriscstockprices/" ++ stockTicker
+        Just st ->
+            let
+                risc =
+                    Maybe.withDefault 0 (String.toFloat riscStr)
 
-        checked =
-            List.filter (\x -> x.selected == True) options
+                url =
+                    mainUrl ++ "/calcriscstockprices/" ++ st
 
-        jbody =
-            U.listAsHttpBody
-                (List.map (\x -> [ ( "ticker", JE.string x.ticker ), ( "risc", JE.float risc ) ]) checked)
+                checked =
+                    List.filter (\x -> x.selected == True) options
 
-        myDecoder =
-            JD.succeed RiscItem
-                |> JP.required "ticker" JD.string
-                |> JP.required "risc" JD.float
-    in
-    Http.send
-        (RiscMsgFor << RiscCalculated)
-    <|
-        Http.post url jbody (JD.list myDecoder)
+                jbody =
+                    U.listAsHttpBody
+                        (List.map (\x -> [ ( "ticker", JE.string x.ticker ), ( "risc", JE.float risc ) ]) checked)
+
+                myDecoder =
+                    JD.succeed RiscItem
+                        |> JP.required "ticker" JD.string
+                        |> JP.required "risc" JD.float
+            in
+            Http.send
+                (RiscMsgFor << RiscCalculated)
+            <|
+                Http.post url jbody (JD.list myDecoder)
 
 
 bool2json : Bool -> String

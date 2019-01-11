@@ -130,7 +130,7 @@ updateRisc : RiscMsg -> Model -> ( Model, Cmd Msg )
 updateRisc msg model =
     case msg of
         CalcRisc ->
-            ( model, C.calcRisc model.risc model.options )
+            ( model, C.calcRisc model.selectedTicker model.risc model.options )
 
         RiscCalculated (Ok riscItems) ->
             let
@@ -143,7 +143,6 @@ updateRisc msg model =
             ( errorAlert "RiscCalculated" "RiscCalculated Error: " s model, Cmd.none )
 
         RiscChange s ->
-            --Debug.log "RiscChange"
             ( { model | risc = s }, Cmd.none )
 
 
@@ -157,7 +156,7 @@ update msg model =
             updatePurchase purchaseMsg model
 
         RiscMsgFor riscMsg ->
-            ( model, Cmd.none )
+            updateRisc riscMsg model
 
         AlertOk ->
             ( { model | dlgAlert = DLG.DialogHidden }, Cmd.none )

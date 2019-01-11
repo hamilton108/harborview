@@ -41,7 +41,7 @@ DOCKER_IMG="rcs/elm:0.19"
 
 case $MODULE in
 
-    1) ELM="src/Maunaloa/Charts.elm"
+    1) ELM="src/Maunaloa/Charts/Main.elm"
        JS="elm-charts.js"
        TODIR="maunaloa"
         ;;
