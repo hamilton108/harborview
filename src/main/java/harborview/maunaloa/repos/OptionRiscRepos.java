@@ -1,9 +1,6 @@
 package harborview.maunaloa.repos;
 
-import harborview.dto.html.options.OptionDTO;
-import harborview.dto.html.options.RiscItemDTO;
-import harborview.dto.html.options.StockAndOptions;
-import harborview.dto.html.options.StockPriceDTO;
+import harborview.dto.html.options.*;
 import oahu.dto.Tuple;
 import oahu.dto.Tuple3;
 import oahu.financial.DerivativePrice;
@@ -31,16 +28,14 @@ public class OptionRiscRepos {
         return new StockAndOptions(stockPriceDTO, derivativesDTO);
     }
 
-
-
     //region Properties
     public void setEtrade(EtradeRepository<Tuple<String>, Tuple3<Optional<StockPrice>, Collection<DerivativePrice>, Collection<DerivativePrice>>> etrade) {
         this.etrade = etrade;
     }
 
-    public List<RiscItemDTO> calcRiscs(String stockTicker, List<RiscItemDTO> items) {
-        List<RiscItemDTO> result = new ArrayList<>();
-        for (RiscItemDTO item : items) {
+    public List<OptionRiscDTO> calcRiscs(String stockTicker, List<OptionRiscDTO> items) {
+        List<OptionRiscDTO> result = new ArrayList<>();
+        for (OptionRiscDTO item : items) {
             Tuple<String> info = new Tuple<>(stockTicker, item.getTicker());
             Optional<DerivativePrice> price = etrade.findDerivativePrice(info);
             if (price.isPresent()) {
@@ -51,7 +46,7 @@ public class OptionRiscRepos {
                 if (spf.isPresent()) {
                    spfx = spf.get();
                 }
-                RiscItemDTO calculated = new RiscItemDTO(item.getTicker(),spfx);
+                OptionRiscDTO calculated = new OptionRiscDTO(item.getTicker(),spfx);
                 result.add(calculated);
             }
         }

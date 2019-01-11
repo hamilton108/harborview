@@ -186,13 +186,13 @@ public class MaunaloaController {
 
     @ResponseBody
     @RequestMapping(
-            value = "calcriscstockprices/{ticker}",
+            value = "calcriscstockprices/{oid}",
             method =  RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public List<OptionRiscDTO> calcRiscStockprices(
-            @PathVariable("ticker") String stockTicker,
+            @PathVariable("oid") int oid,
             @RequestBody List<OptionRiscDTO> riscs) {
-        List<OptionRiscDTO> result = maunaloaModel.calcStockPricesFor(stockTicker,riscs);
+        List<OptionRiscDTO> result = maunaloaModel.calcStockPricesFor(oid,riscs);
         return result;
     }
 }

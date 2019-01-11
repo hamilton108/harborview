@@ -1,10 +1,7 @@
 package harborview.maunaloa;
 
 import com.gargoylesoftware.htmlunit.Page;
-import harborview.dto.html.options.OptionDTO;
-import harborview.dto.html.options.RiscItemDTO;
-import harborview.dto.html.options.StockAndOptions;
-import harborview.dto.html.options.StockPriceDTO;
+import harborview.dto.html.options.*;
 import harborview.maunaloa.repos.OptionRiscRepos;
 import netfondsrepos.downloader.MockDownloader;
 import netfondsrepos.repos.EtradeRepository2;
@@ -61,10 +58,10 @@ public class TestOptionRiscRepos {
         assertEquals(expected, acutal, 0.01, String.format("%s not %.2f",msg, expected));
     }
 
-    private List<RiscItemDTO> optionsForRiscCalculations() {
-        List<RiscItemDTO>  result = new ArrayList<>();
+    private List<OptionRiscDTO> optionsForRiscCalculations() {
+        List<OptionRiscDTO>  result = new ArrayList<>();
 
-        result.add(new RiscItemDTO(c1, 2.35));
+        result.add(new OptionRiscDTO(c1, 2.35));
 
         return result;
     }
@@ -72,14 +69,14 @@ public class TestOptionRiscRepos {
     @DisplayName("Test calculating List<RiscItemDTO>")
     @Test
     public void testRiscs() {
-        List<RiscItemDTO> opx = optionsForRiscCalculations();
+        List<OptionRiscDTO> opx = optionsForRiscCalculations();
 
         OptionRiscRepos riscRepos = new OptionRiscRepos();
         riscRepos.setEtrade(etrade);
 
-        List<RiscItemDTO> calculated = riscRepos.calcRiscs("NHY",opx);
+        List<OptionRiscDTO> calculated = riscRepos.calcRiscs("NHY",opx);
 
-        for (RiscItemDTO item : calculated) {
+        for (OptionRiscDTO item : calculated) {
             if (item.getTicker().equals(c1)) {
                 double expected = 39.05;
                 assertEquals(expected, item.getRisc(), 0.1, String.format("%s not %.2f",item.getTicker(), expected));
