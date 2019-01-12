@@ -2,23 +2,12 @@ module Maunaloa.Charts.Main exposing (mx)
 
 import Browser
 import Html as H
+import Maunaloa.Charts.Types exposing (Flags, Model, Msg(..))
 
 
 mx : Int
 mx =
     3435
-
-
-type alias Model =
-    {}
-
-
-type alias Flags =
-    Int
-
-
-type Msg
-    = NoOp
 
 
 main : Program Flags Model Msg

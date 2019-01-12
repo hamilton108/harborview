@@ -3,10 +3,21 @@ module Maunaloa.Charts.Types exposing
     , Chart
     , ChartInfo
     , ChartInfoWindow
+    , ChartType(..)
+    , Model
+    , Msg(..)
     , UnixTime
     )
 
 import Time
+
+
+type alias Flags =
+    Int
+
+
+type Msg
+    = NoOp
 
 
 type alias Candlestick =
@@ -47,4 +58,15 @@ type alias ChartInfo =
     , chart : Chart
     , chart2 : Maybe Chart
     , chart3 : Maybe Chart
+    }
+
+
+type ChartType
+    = DayChart
+    | MonthChart
+    | YearChart
+
+
+type alias Model =
+    { chartType : ChartType
     }

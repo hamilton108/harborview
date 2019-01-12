@@ -1,4 +1,8 @@
-module Maunaloa.Charts.Decoders exposing (candlestickDecoder, chartDecoder)
+module Maunaloa.Charts.Decoders exposing
+    ( candlestickDecoder
+    , chartDecoder
+    , chartInfoDecoder
+    )
 
 import Json.Decode exposing (Decoder, field, float, int, list, map4, nullable, succeed)
 import Json.Decode.Pipeline as JP
