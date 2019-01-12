@@ -91,14 +91,14 @@ chart =
     T.Chart lines [] candleSticks ( 0, 0 ) 10
 
 
+chart1 : T.Chart
+chart1 =
+    T.Chart (List.take 3 lines) [] (List.take 3 candleSticks) ( 40.1, 45 ) 10
+
+
 chartInfo : T.ChartInfo
 chartInfo =
     T.ChartInfo 1547282905000 xAxis chart Nothing Nothing
-
-
-chartInfoWin : T.ChartInfoWindow
-chartInfoWin =
-    Debug.todo "char"
 
 
 createChartInfoWin : T.ChartInfo -> T.ChartInfoWindow
@@ -121,12 +121,16 @@ suite =
             \_ ->
                 JD.decodeValue DEC.chartInfoDecoder jchartInfo
                     |> Expect.equal (Ok chartInfo)
+        , test "Test " <|
+            \_ ->
+                let
+                    model =
+                        T.Model T.DayChart
+                in
+                Expect.equal 2 2
         , only <|
-            test "Test chartWindow" <|
+            test "Test chartWindow 1" <|
                 \_ ->
-                    let
-                        model =
-                            T.Model T.DayChart
-                    in
-                    Expect.equal 2 2
+                    ChartCommon.chartWindow 0 3 chart 1.0 False
+                        |> Expect.equal chart1
         ]
