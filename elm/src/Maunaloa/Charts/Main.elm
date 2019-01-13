@@ -1,13 +1,13 @@
-module Maunaloa.Charts.Main exposing (mx)
+module Maunaloa.Charts.Main exposing (main)
 
 import Browser
 import Html as H
-import Maunaloa.Charts.Types exposing (Flags, Model, Msg(..))
+import Maunaloa.Charts.Types exposing (ChartInfoWindow, ChartType(..), Flags, Model, Msg(..))
+import Maunaloa.Charts.Update exposing (update)
 
 
-mx : Int
-mx =
-    3435
+
+-------------------- INIT ---------------------
 
 
 main : Program Flags Model Msg
@@ -25,15 +25,20 @@ init flags =
     ( initModel flags, Cmd.none )
 
 
+initModel : Flags -> Model
 initModel flags =
-    {}
+    { chartType =
+        case flags of
+            2 ->
+                MonthChart
+
+            3 ->
+                YearChart
+
+            _ ->
+                DayChart
+    }
 
 
 view model =
     H.div [] []
-
-
-update msg model =
-    case msg of
-        NoOp ->
-            ( model, Cmd.none )

@@ -5,6 +5,7 @@ module Maunaloa.Charts.Types exposing
     , ChartInfoWindow
     , ChartType(..)
     , Drop(..)
+    , Flags
     , Model
     , Msg(..)
     , Scaling(..)
@@ -12,6 +13,8 @@ module Maunaloa.Charts.Types exposing
     )
 
 import Common.DateUtil exposing (UnixTime)
+import Common.Select as CS
+import Http
 import Time
 
 
@@ -20,7 +23,7 @@ type alias Flags =
 
 
 type Msg
-    = NoOp
+    = TickersFetched (Result Http.Error CS.SelectItems)
 
 
 type alias Candlestick =
