@@ -191,10 +191,18 @@ chartInfoWindow dropAmt takeAmt chartType ci =
             chartWindow dropAmt takeAmt ci.chart (T.Scaling 1.0) False
 
         chw2 =
-            Nothing
+            ci.chart2
+                |> Maybe.andThen
+                    (\c2 ->
+                        Just (chartWindow dropAmt takeAmt c2 (T.Scaling 1.0) True)
+                    )
 
         chw3 =
-            Nothing
+            ci.chart3
+                |> Maybe.andThen
+                    (\c3 ->
+                        Just (chartWindow dropAmt takeAmt c3 (T.Scaling 1.0) False)
+                    )
     in
     T.ChartInfoWindow minDx_ xAxis_ chw chw2 chw3 strokes incMonths
 
