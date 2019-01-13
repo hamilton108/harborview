@@ -39,4 +39,6 @@ initModel flags =
 
             _ ->
                 DayChart
+    , selectedTicker = Nothing
+    , tickers = []
     }

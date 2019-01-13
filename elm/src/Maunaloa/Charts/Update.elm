@@ -20,14 +20,18 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         TickersFetched (Ok s) ->
-            ( model, Cmd.none )
+            ( { model
+                | tickers = s
+              }
+            , Cmd.none
+            )
 
-        {-
-           ( { model
-               | tickers = Just s
-             }
-           , Cmd.none
-           )
-        -}
         TickersFetched (Err s) ->
             Debug.log ("TickersFetched Error: " ++ CH.httpErr2str s) ( model, Cmd.none )
+
+        FetchCharts s ->
+            ( model, Cmd.none )
+
+
+
+--( { model | selectedTicker = s }, fetchCharts s model.flags.chartResolution model.isResetCache )
