@@ -1,5 +1,7 @@
 module Maunaloa.Charts.Commands exposing (fetchTickers)
 
+import Common.Decoders as CD
+import Http
 import Maunaloa.Charts.Types exposing (Msg(..))
 
 
@@ -14,4 +16,4 @@ fetchTickers =
             mainUrl ++ "/tickers"
     in
     Http.send TickersFetched <|
-        Http.get url CB.comboBoxItemListDecoder
+        Http.get url CD.selectItemListDecoder

@@ -2,8 +2,10 @@ module Maunaloa.Charts.Main exposing (main)
 
 import Browser
 import Html as H
+import Maunaloa.Charts.Commands exposing (fetchTickers)
 import Maunaloa.Charts.Types exposing (ChartInfoWindow, ChartType(..), Flags, Model, Msg(..))
 import Maunaloa.Charts.Update exposing (update)
+import Maunaloa.Charts.View exposing (view)
 
 
 
@@ -22,7 +24,7 @@ main =
 
 init : Flags -> ( Model, Cmd Msg )
 init flags =
-    ( initModel flags, Cmd.none )
+    ( initModel flags, fetchTickers )
 
 
 initModel : Flags -> Model
@@ -38,7 +40,3 @@ initModel flags =
             _ ->
                 DayChart
     }
-
-
-view model =
-    H.div [] []
