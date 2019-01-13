@@ -2,6 +2,7 @@ port module Maunaloa.Charts.Update exposing (update)
 
 import Common.Html as CH
 import Common.Select as CS
+import Maunaloa.Charts.ChartCommon as ChartCommon
 import Maunaloa.Charts.Types exposing (ChartInfoWindow, Model, Msg(..))
 
 
@@ -27,11 +28,37 @@ update msg model =
             )
 
         TickersFetched (Err s) ->
-            Debug.log ("TickersFetched Error: " ++ CH.httpErr2str s) ( model, Cmd.none )
+            Debug.log ("TickersFetched Error: " ++ CH.httpErr2str s)
+                ( model, Cmd.none )
 
         FetchCharts s ->
-            ( model, Cmd.none )
+            ( { model | selectedTicker = Just s }, Cmd.none )
+
+        ChartsFetched (Ok chartInfo) ->
+            let
+                ciWin =
+                    ChartCommon.chartInfoWindow model.dropAmount model.takeAmount model.chartType chartInfo
+            in
+            ( model
+            , drawCanvas ciWin
+            )
+
+        {-
+           let
+               ciWin =
+                   chartInfoWindow s model
+           in
+           ( { model
+               | chartInfo = Just s
+               , chartInfoWin = Just ciWin
+             }
+           , drawCanvas ciWin
+           )
+        -}
+        ChartsFetched (Err s) ->
+            Debug.log ("ChartsFetched Error: " ++ CH.httpErr2str s)
+                ( model, Cmd.none )
 
 
 
---( { model | selectedTicker = s }, fetchCharts s model.flags.chartResolution model.isResetCache )
+--( { model | selectedTicker = Just s }, fetchCharts s model.flags.chartResolution model.isResetCache )

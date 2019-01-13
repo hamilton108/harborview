@@ -22,11 +22,6 @@ type alias Flags =
     Int
 
 
-type Msg
-    = TickersFetched (Result Http.Error CS.SelectItems)
-    | FetchCharts String
-
-
 type alias Candlestick =
     { o : Float
     , h : Float
@@ -82,8 +77,16 @@ type ChartType
     | YearChart
 
 
+type Msg
+    = TickersFetched (Result Http.Error CS.SelectItems)
+    | FetchCharts String
+    | ChartsFetched (Result Http.Error ChartInfo)
+
+
 type alias Model =
     { chartType : ChartType
     , selectedTicker : Maybe String
     , tickers : CS.SelectItems
+    , dropAmount : Drop
+    , takeAmount : Take
     }

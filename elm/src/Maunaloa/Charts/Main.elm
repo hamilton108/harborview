@@ -3,7 +3,16 @@ module Maunaloa.Charts.Main exposing (main)
 import Browser
 import Html as H
 import Maunaloa.Charts.Commands exposing (fetchTickers)
-import Maunaloa.Charts.Types exposing (ChartInfoWindow, ChartType(..), Flags, Model, Msg(..))
+import Maunaloa.Charts.Types
+    exposing
+        ( ChartInfoWindow
+        , ChartType(..)
+        , Drop(..)
+        , Flags
+        , Model
+        , Msg(..)
+        , Take(..)
+        )
 import Maunaloa.Charts.Update exposing (update)
 import Maunaloa.Charts.View exposing (view)
 
@@ -41,4 +50,6 @@ initModel flags =
                 DayChart
     , selectedTicker = Nothing
     , tickers = []
+    , dropAmount = Drop 0
+    , takeAmount = Take 90
     }
