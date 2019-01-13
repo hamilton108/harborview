@@ -1,4 +1,4 @@
-module Common.DateUtil exposing (UnixTime, dateRangeOf)
+module Common.DateUtil exposing (UnixTime, dateRangeOf, day_)
 
 import Common.Utils as U
 import Time
@@ -21,9 +21,12 @@ dateRangeOf dx lx =
 
         offsetLow =
             U.lastElem lx |> Maybe.withDefault 0
+
+        dx_ =
+            day_ * dx
     in
     -- ( dxOf dx offsetLow, dxOf dx offsetHi )
-    ( 0, 4 )
+    ( dx_ * offsetLow, offsetHi * dx_ )
 
 
 

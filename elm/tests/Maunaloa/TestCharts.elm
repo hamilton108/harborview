@@ -1,6 +1,6 @@
 module Maunaloa.TestCharts exposing (suite)
 
-import Common.DateUtil exposing (UnixTime)
+import Common.DateUtil exposing (UnixTime, day_)
 import Expect exposing (Expectation)
 import Json.Decode as JD
 import Json.Encode as JE
@@ -106,9 +106,16 @@ chartInfo =
     T.ChartInfo curMinDx xAxis chart Nothing Nothing
 
 
-createChartInfoWin : T.ChartInfo -> T.ChartInfoWindow
-createChartInfoWin ci =
-    Debug.todo "char"
+chartInfo1 : T.ChartInfoWindow
+chartInfo1 =
+    let
+        strokes =
+            [ "#000000", "#ff0000", "#aa00ff" ]
+
+        minDx_ =
+            curMinDx * day_ * 97
+    in
+    T.ChartInfoWindow minDx_ (List.take 3 xAxis) chart1 Nothing Nothing strokes 1
 
 
 
@@ -126,16 +133,13 @@ suite =
             \_ ->
                 JD.decodeValue DEC.chartInfoDecoder jchartInfo
                     |> Expect.equal (Ok chartInfo)
-        , test "Test " <|
+        , test "Test chartWindow 1" <|
             \_ ->
-                let
-                    model =
-                        T.Model T.DayChart
-                in
-                Expect.equal 2 2
+                ChartCommon.chartWindow (T.Drop 0) (T.Take 3) chart (T.Scaling 1.0) False
+                    |> Expect.equal chart1
         , only <|
-            test "Test chartWindow 1" <|
+            test "Test chartInfoWindow 1" <|
                 \_ ->
-                    ChartCommon.chartWindow (T.Drop 0) (T.Take 3) chart (T.Scaling 1.0) False
-                        |> Expect.equal chart1
+                    ChartCommon.chartInfoWindow (T.Drop 0) (T.Take 3) T.DayChart chartInfo
+                        |> Expect.equal chartInfo1
         ]

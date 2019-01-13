@@ -1,5 +1,6 @@
-module Maunaloa.Charts.ChartCommon exposing (chartWindow)
+module Maunaloa.Charts.ChartCommon exposing (chartInfoWindow, chartWindow)
 
+import Common.DateUtil as DU
 import Maunaloa.Charts.Types as T
 import Tuple exposing (first, second)
 
@@ -177,10 +178,25 @@ chartInfoWindow dropAmt takeAmt chartType ci =
                 T.YearChart ->
                     6
 
+        strokes =
+            [ "#000000", "#ff0000", "#aa00ff" ]
+
         xAxis_ =
             slice dropAmt takeAmt ci.xAxis
+
+        ( minDx_, _ ) =
+            DU.dateRangeOf ci.minDx xAxis_
+
+        chw =
+            chartWindow dropAmt takeAmt ci.chart (T.Scaling 1.0) False
+
+        chw2 =
+            Nothing
+
+        chw3 =
+            Nothing
     in
-    Debug.todo "chartInfoWin"
+    T.ChartInfoWindow minDx_ xAxis_ chw chw2 chw3 strokes incMonths
 
 
 
