@@ -1,5 +1,6 @@
 module Maunaloa.TestCharts exposing (suite)
 
+import Common.DateUtil exposing (UnixTime)
 import Expect exposing (Expectation)
 import Json.Decode as JD
 import Json.Encode as JE
@@ -51,9 +52,9 @@ lines =
     [ [ 42, 45, 44.7, 44, 43.6 ] ]
 
 
-xAxis : List Float
+xAxis : List UnixTime
 xAxis =
-    [ 1, 2, 3, 4, 5 ]
+    [ 100, 98, 97, 95, 94 ]
 
 
 jlines : JE.Value
@@ -63,7 +64,7 @@ jlines =
 
 jxAxis : JE.Value
 jxAxis =
-    JE.list JE.float xAxis
+    JE.list JE.int xAxis
 
 
 jchart : JE.Value
@@ -75,10 +76,14 @@ jchart =
         ]
 
 
+curMinDx =
+    1547282905000
+
+
 jchartInfo : JE.Value
 jchartInfo =
     JE.object
-        [ ( "min-dx", JE.int 1547282905000 )
+        [ ( "min-dx", JE.int curMinDx )
         , ( "x-axis", jxAxis )
         , ( "chart", jchart )
         , ( "chart2", JE.null )
@@ -98,7 +103,7 @@ chart1 =
 
 chartInfo : T.ChartInfo
 chartInfo =
-    T.ChartInfo 1547282905000 xAxis chart Nothing Nothing
+    T.ChartInfo curMinDx xAxis chart Nothing Nothing
 
 
 createChartInfoWin : T.ChartInfo -> T.ChartInfoWindow
@@ -131,6 +136,6 @@ suite =
         , only <|
             test "Test chartWindow 1" <|
                 \_ ->
-                    ChartCommon.chartWindow 0 3 chart 1.0 False
+                    ChartCommon.chartWindow (T.Drop 0) (T.Take 3) chart (T.Scaling 1.0) False
                         |> Expect.equal chart1
         ]

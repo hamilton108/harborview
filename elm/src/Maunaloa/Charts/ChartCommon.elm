@@ -94,8 +94,8 @@ chartValueRange lx bars cx scaling =
     minMaxTuples result scaling
 
 
-slice : Int -> Int -> List a -> List a
-slice dropAmount takeAmount vals =
+slice : T.Drop -> T.Take -> List a -> List a
+slice (T.Drop dropAmount) (T.Take takeAmount) vals =
     if dropAmount == 0 then
         List.take takeAmount vals
 
@@ -137,8 +137,8 @@ normalizeLines lines =
     List.map normalizeLine lines
 
 
-chartWindow : Int -> Int -> T.Chart -> Float -> Bool -> T.Chart
-chartWindow dropAmt takeAmt c scaling doNormalizeLines =
+chartWindow : T.Drop -> T.Take -> T.Chart -> T.Scaling -> Bool -> T.Chart
+chartWindow dropAmt takeAmt c (T.Scaling scaling) doNormalizeLines =
     let
         sliceFn =
             slice dropAmt takeAmt
@@ -161,6 +161,26 @@ chartWindow dropAmt takeAmt c scaling doNormalizeLines =
         cndl_
         valueRange
         c.numVlines
+
+
+chartInfoWindow : T.Drop -> T.Take -> T.ChartType -> T.ChartInfo -> T.ChartInfoWindow
+chartInfoWindow dropAmt takeAmt chartType ci =
+    let
+        incMonths =
+            case chartType of
+                T.DayChart ->
+                    1
+
+                T.MonthChart ->
+                    3
+
+                T.YearChart ->
+                    6
+
+        xAxis_ =
+            slice dropAmt takeAmt ci.xAxis
+    in
+    Debug.todo "chartInfoWin"
 
 
 

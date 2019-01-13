@@ -4,11 +4,14 @@ module Maunaloa.Charts.Types exposing
     , ChartInfo
     , ChartInfoWindow
     , ChartType(..)
+    , Drop(..)
     , Model
     , Msg(..)
-    , UnixTime
+    , Scaling(..)
+    , Take(..)
     )
 
+import Common.DateUtil exposing (UnixTime)
 import Time
 
 
@@ -28,8 +31,16 @@ type alias Candlestick =
     }
 
 
-type alias UnixTime =
-    Int
+type Drop
+    = Drop Int
+
+
+type Take
+    = Take Int
+
+
+type Scaling
+    = Scaling Float
 
 
 type alias Chart =
@@ -43,7 +54,7 @@ type alias Chart =
 
 type alias ChartInfoWindow =
     { startdate : UnixTime
-    , xaxis : List Float
+    , xaxis : List UnixTime
     , chart : Chart
     , chart2 : Maybe Chart
     , chart3 : Maybe Chart
@@ -54,7 +65,7 @@ type alias ChartInfoWindow =
 
 type alias ChartInfo =
     { minDx : UnixTime
-    , xAxis : List Float
+    , xAxis : List UnixTime
     , chart : Chart
     , chart2 : Maybe Chart
     , chart3 : Maybe Chart

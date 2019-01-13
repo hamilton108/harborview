@@ -2,6 +2,7 @@ module Common.Utils exposing
     ( asHttpBody
     , findInList
     , flip
+    , lastElem
     , listAsHttpBody
     , replaceWith
     , toDecimal
@@ -63,3 +64,8 @@ replaceWith newEl el =
 unpackMaybe : Maybe a -> (a -> b) -> b -> b
 unpackMaybe obj fn default =
     Maybe.withDefault default <| Maybe.map fn obj
+
+
+lastElem : List a -> Maybe a
+lastElem =
+    List.foldl (Just >> always) Nothing
