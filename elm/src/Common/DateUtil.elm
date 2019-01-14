@@ -21,12 +21,9 @@ dateRangeOf dx lx =
 
         offsetLow =
             U.lastElem lx |> Maybe.withDefault 0
-
-        dx_ =
-            day_ * dx
     in
     -- ( dxOf dx offsetLow, dxOf dx offsetHi )
-    ( dx_ * offsetLow, offsetHi * dx_ )
+    ( dx + (offsetLow * day_), dx + (offsetHi * day_) )
 
 
 

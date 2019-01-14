@@ -35,7 +35,7 @@ update msg model =
         FetchCharts s ->
             let
                 curTick =
-                    if s == "-1" then
+                    if String.isEmpty s then
                         NoTicker
 
                     else
@@ -48,9 +48,10 @@ update msg model =
                 ciWin =
                     ChartCommon.chartInfoWindow model.dropAmount model.takeAmount model.chartType chartInfo
             in
-            ( model
-            , drawCanvas ciWin
-            )
+            Debug.log (Debug.toString chartInfo)
+                ( model
+                , drawCanvas ciWin
+                )
 
         {-
            let

@@ -117,7 +117,7 @@ chartInfo1 =
             [ "#000000", "#ff0000", "#aa00ff" ]
 
         minDx_ =
-            curMinDx * day_ * 97
+            curMinDx + (day_ * 97)
     in
     T.ChartInfoWindow minDx_ (List.take 3 xAxis) chart1 Nothing Nothing strokes 1
 
