@@ -31,8 +31,8 @@ chartDecoder numVlines =
 chartInfoDecoder : Decoder T.ChartInfo
 chartInfoDecoder =
     succeed T.ChartInfo
-        |> JP.required "min-dx" int
-        |> JP.required "x-axis" (list int)
+        |> JP.required "minDx" int
+        |> JP.required "xAxis" (list int)
         |> JP.required "chart" (chartDecoder 10)
         |> JP.required "chart2" (nullable (chartDecoder 5))
         |> JP.required "chart3" (nullable (chartDecoder 5))

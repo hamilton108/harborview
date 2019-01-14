@@ -12,6 +12,7 @@ import Maunaloa.Charts.Types
         , Model
         , Msg(..)
         , Take(..)
+        , Ticker(..)
         )
 import Maunaloa.Charts.Update exposing (update)
 import Maunaloa.Charts.View exposing (view)

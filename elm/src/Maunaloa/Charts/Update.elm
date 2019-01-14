@@ -3,7 +3,8 @@ port module Maunaloa.Charts.Update exposing (update)
 import Common.Html as CH
 import Common.Select as CS
 import Maunaloa.Charts.ChartCommon as ChartCommon
-import Maunaloa.Charts.Types exposing (ChartInfoWindow, Model, Msg(..))
+import Maunaloa.Charts.Commands as C
+import Maunaloa.Charts.Types exposing (ChartInfoWindow, Model, Msg(..), Ticker(..))
 
 
 
@@ -32,7 +33,15 @@ update msg model =
                 ( model, Cmd.none )
 
         FetchCharts s ->
-            ( { model | selectedTicker = Just s }, Cmd.none )
+            let
+                curTick =
+                    if s == "-1" then
+                        NoTicker
+
+                    else
+                        Ticker s
+            in
+            ( { model | selectedTicker = Just s }, C.fetchCharts curTick model.chartType False )
 
         ChartsFetched (Ok chartInfo) ->
             let

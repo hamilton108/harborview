@@ -111,13 +111,14 @@ document.addEventListener("DOMContentLoaded", function() {
         const myChart = new Chart(myCanvases,levelLines);
         const scrap = new Scrapbook(config);
         const node = document.getElementById(appId);
-        const app = Elm.Maunaloa.Charts.embed(node, {
-            chartResolution: chartRes
-        });
+        const app = Elm.Maunaloa.Charts.Main.init({
+            node: node,
+            flags: chartRes});
         app.ports.drawCanvas.subscribe(cfg => {
             scrap.clear();
             myChart.drawCanvases(cfg);
         });
+        /*
         const drawSpot = function(spot) {
           levelLines.spot = spot;
         };
@@ -126,6 +127,7 @@ document.addEventListener("DOMContentLoaded", function() {
             levelLines.addRiscLines(riscLines);
         };
         app.ports.drawRiscLines.subscribe(drawRiscLines);
+        */
 
         const btnClear = document.getElementById(config.BTN_CLEAR);
         btnClear.onclick = () => { 

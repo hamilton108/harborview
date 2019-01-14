@@ -11,6 +11,8 @@ import vega.filters.ehlers.Itrend;
 import vega.filters.ehlers.RoofingFilter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.List;
@@ -23,7 +25,8 @@ public class ElmChartsFactory {
     private Filter calcCyberCycle10 = new CyberCycle(10);
     private Filter roofingFilter = new RoofingFilter();
 
-    private LocalDate startDate = LocalDate.of(2014,1,1);
+    private LocalDateTime startDate = LocalDateTime.of(2014,1,1,0,0);
+    private LocalDate startDatex = LocalDate.of(2014,1,1);
     private double roundToNumDecimals(double value) {
         return roundToNumDecimals(value,10.0);
     }
@@ -37,15 +40,26 @@ public class ElmChartsFactory {
         int day = d.getDayOfMonth();
         return String.format("%d-%02d-%02d", year,month,day);
     }
+    private long unixTime() {
+        return startDate.toInstant(ZoneOffset.UTC).toEpochMilli();
+    }
     private long hRuler(LocalDate d) {
-        return ChronoUnit.DAYS.between(startDate,d);
+        return ChronoUnit.DAYS.between(startDatex,d);
+    }
+    private List<Double> calculateFilter(Filter filter, List<Double> values) {
+        return filter.calculate(values).stream()
+                .map(this::roundToNumDecimals).collect(Collectors.toList());
     }
     private Chart mainChart(List<Double> spots, List<StockPrice> winSpots) {
+        /*
         List<Double> itrend10 = calcItrend10.calculate(spots).stream()
                 .map(this::roundToNumDecimals).collect(Collectors.toList());
         List<Double> itrend50 = calcItrend50.calculate(spots).stream()
                 .map(this::roundToNumDecimals).collect(Collectors.toList());
-        List<Candlestick> candlesticks = winSpots.stream().map(x -> new Candlestick(x)).collect(Collectors.toList());
+                */
+        List<Double> itrend10 = calculateFilter(calcItrend10, spots);
+        List<Double> itrend50 = calculateFilter(calcItrend50, spots);
+        List<Candlestick> candlesticks = winSpots.stream().map(Candlestick::new).collect(Collectors.toList());
         Chart chart = new Chart();
         chart.addLine(Lists.reverse(itrend10));
         chart.addLine(Lists.reverse(itrend50));
@@ -54,10 +68,14 @@ public class ElmChartsFactory {
     }
     private Chart cyberCycleChart(List<Double> spots) {
         Chart chart = new Chart();
+        /*
         List<Double> cc10 = calcCyberCycle10.calculate(spots).stream()
                 .map(this::roundToNumDecimals).collect(Collectors.toList());
         List<Double> cc10rf = roofingFilter.calculate(cc10).stream()
                 .map(this::roundToNumDecimals).collect(Collectors.toList());
+                */
+        List<Double> cc10 = calculateFilter(calcCyberCycle10, spots);
+        List<Double> cc10rf = calculateFilter(roofingFilter, spots);
         chart.addLine(Lists.reverse(cc10));
         chart.addLine(Lists.reverse(cc10rf));
         return chart;
@@ -82,13 +100,13 @@ public class ElmChartsFactory {
         List<Double> spots = winSpots.stream().map(x -> x.getCls()).collect(Collectors.toList());
 
         result.setChart(mainChart(spots,winSpots));
-        result.setChart2(cyberCycleChart(spots));
-        result.setChart3(volumeChart(winSpots));
+        //result.setChart2(cyberCycleChart(spots));
+        //result.setChart3(volumeChart(winSpots));
 
         List<LocalDate> dx = winSpots.stream().map(StockPrice::getLocalDx).collect(Collectors.toList());
         List<Long> xAxis = dx.stream().map(this::hRuler).collect(Collectors.toList());
         result.setxAxis(Lists.reverse(xAxis));
-        result.setMinDx(toIso8601(startDate));
+        result.setMinDx(unixTime());
         return result;
     }
 }

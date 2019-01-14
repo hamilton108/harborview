@@ -34,6 +34,10 @@ jcandleSticks : JE.Value
 jcandleSticks =
     JE.list JE.object
         [ jcandleStick 42.0 44.5 40.1 42.5
+        , jcandleStick 42.0 44.5 40.1 42.5
+        , jcandleStick 42.0 44.5 40.1 42.5
+        , jcandleStick 42.0 44.5 40.1 42.5
+        , jcandleStick 42.0 44.5 40.1 42.5
         ]
 
 
@@ -83,8 +87,8 @@ curMinDx =
 jchartInfo : JE.Value
 jchartInfo =
     JE.object
-        [ ( "min-dx", JE.int curMinDx )
-        , ( "x-axis", jxAxis )
+        [ ( "minDx", JE.int curMinDx )
+        , ( "xAxis", jxAxis )
         , ( "chart", jchart )
         , ( "chart2", JE.null )
         , ( "chart3", JE.null )
@@ -137,9 +141,8 @@ suite =
             \_ ->
                 ChartCommon.chartWindow (T.Drop 0) (T.Take 3) chart (T.Scaling 1.0) False
                     |> Expect.equal chart1
-        , only <|
-            test "Test chartInfoWindow 1" <|
-                \_ ->
-                    ChartCommon.chartInfoWindow (T.Drop 0) (T.Take 3) T.DayChart chartInfo
-                        |> Expect.equal chartInfo1
+        , test "Test chartInfoWindow 1" <|
+            \_ ->
+                ChartCommon.chartInfoWindow (T.Drop 0) (T.Take 3) T.DayChart chartInfo
+                    |> Expect.equal chartInfo1
         ]

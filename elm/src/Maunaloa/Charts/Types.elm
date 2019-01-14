@@ -10,6 +10,7 @@ module Maunaloa.Charts.Types exposing
     , Msg(..)
     , Scaling(..)
     , Take(..)
+    , Ticker(..)
     )
 
 import Common.DateUtil exposing (UnixTime)
@@ -40,6 +41,11 @@ type Take
 
 type Scaling
     = Scaling Float
+
+
+type Ticker
+    = NoTicker
+    | Ticker String
 
 
 type alias Chart =
