@@ -21,9 +21,9 @@ candlestickDecoder =
 chartDecoder : Int -> Decoder T.Chart
 chartDecoder numVlines =
     succeed T.Chart
-        |> JP.required "lines" (list (list float))
+        |> JP.optional "lines" (list (list float)) []
         |> JP.optional "bars" (list (list float)) []
-        |> JP.optional "cndl" (list candlestickDecoder) []
+        |> JP.optional "candlesticks" (list candlestickDecoder) []
         |> JP.hardcoded ( 0, 0 )
         |> JP.hardcoded numVlines
 

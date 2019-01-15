@@ -100,8 +100,8 @@ public class ElmChartsFactory {
         List<Double> spots = winSpots.stream().map(x -> x.getCls()).collect(Collectors.toList());
 
         result.setChart(mainChart(spots,winSpots));
-        //result.setChart2(cyberCycleChart(spots));
-        //result.setChart3(volumeChart(winSpots));
+        result.setChart2(cyberCycleChart(spots));
+        result.setChart3(volumeChart(winSpots));
 
         List<LocalDate> dx = winSpots.stream().map(StockPrice::getLocalDx).collect(Collectors.toList());
         List<Long> xAxis = dx.stream().map(this::hRuler).collect(Collectors.toList());

@@ -1,4 +1,4 @@
-module Maunaloa.Charts.ChartCommon exposing (chartValueRange, chartInfoWindow, chartWindow)
+module Maunaloa.Charts.ChartCommon exposing (chartInfoWindow, chartValueRange, chartWindow)
 
 import Common.DateUtil as DU
 import Maunaloa.Charts.Types as T
@@ -60,8 +60,8 @@ mmax =
     mfunc max
 
 
-minMaxTuples : List ( Maybe Float, Maybe Float ) -> Float -> ( Float, Float )
-minMaxTuples tuples scale =
+minMaxTuples : List ( Maybe Float, Maybe Float ) -> T.Scaling -> ( Float, Float )
+minMaxTuples tuples (T.Scaling scale) =
     let
         min_ =
             List.map first tuples |> List.foldr mmin Nothing |> Maybe.withDefault 0
@@ -76,7 +76,7 @@ chartValueRange :
     List (List Float)
     -> List (List Float)
     -> List T.Candlestick
-    -> Float
+    -> T.Scaling
     -> ( Float, Float )
 chartValueRange lx bars cx scaling =
     let
@@ -139,13 +139,17 @@ normalizeLines lines =
 
 
 chartWindow : T.Drop -> T.Take -> T.Chart -> T.Scaling -> Bool -> T.Chart
-chartWindow dropAmt takeAmt c (T.Scaling scaling) doNormalizeLines =
+chartWindow dropAmt takeAmt c scaling doNormalizeLines =
     let
         sliceFn =
             slice dropAmt takeAmt
 
         lines_ =
-            List.map sliceFn c.lines
+            if doNormalizeLines == True then
+                normalizeLines <| List.map sliceFn c.lines
+
+            else
+                List.map sliceFn c.lines
 
         bars_ =
             List.map sliceFn c.bars
@@ -188,7 +192,7 @@ chartInfoWindow dropAmt takeAmt chartType ci =
             DU.dateRangeOf ci.minDx xAxis_
 
         chw =
-            chartWindow dropAmt takeAmt ci.chart (T.Scaling 1.0) False
+            chartWindow dropAmt takeAmt ci.chart (T.Scaling 1.05) False
 
         chw2 =
             ci.chart2
