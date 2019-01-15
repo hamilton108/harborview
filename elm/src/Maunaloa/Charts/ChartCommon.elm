@@ -1,4 +1,4 @@
-module Maunaloa.Charts.ChartCommon exposing (chartInfoWindow, chartWindow)
+module Maunaloa.Charts.ChartCommon exposing (chartValueRange, chartInfoWindow, chartWindow)
 
 import Common.DateUtil as DU
 import Maunaloa.Charts.Types as T
@@ -145,10 +145,10 @@ chartWindow dropAmt takeAmt c (T.Scaling scaling) doNormalizeLines =
             slice dropAmt takeAmt
 
         lines_ =
-            sliceFn c.lines
+            List.map sliceFn c.lines
 
         bars_ =
-            sliceFn c.bars
+            List.map sliceFn c.bars
 
         cndl_ =
             sliceFn c.candlesticks

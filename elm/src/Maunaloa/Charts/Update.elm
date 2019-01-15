@@ -48,7 +48,7 @@ update msg model =
                 ciWin =
                     ChartCommon.chartInfoWindow model.dropAmount model.takeAmount model.chartType chartInfo
             in
-            Debug.log (Debug.toString chartInfo)
+            Debug.log (Debug.toString ciWin)
                 ( model
                 , drawCanvas ciWin
                 )

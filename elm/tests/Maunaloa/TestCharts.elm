@@ -102,7 +102,7 @@ chart =
 
 chart1 : T.Chart
 chart1 =
-    T.Chart (List.take 3 lines) [] (List.take 3 candleSticks) ( 40.1, 45 ) 10
+    T.Chart (List.map (List.take 3) lines) [] (List.take 3 candleSticks) ( 40.1, 45 ) 10
 
 
 chartInfo : T.ChartInfo
@@ -130,6 +130,16 @@ chartInfo1 =
 -}
 
 
+lines01 : List (List Float)
+lines01 = [[45, 44, 42.5, 43.5, 45, 46.7, 48, 49.8, 47, 45.9]
+          ,[145, 144, 142.5, 143.5, 145, 146.7, 148, 149.8, 147, 145.9]]
+
+cndl01 : List (T.Candlestick)
+cndl01 = [
+            T.Candlestick 42.0 44.5 40.1 42.5
+          , T.Candlestick 42.0 44.5 40.1 42.5
+        ]
+
 suite : Test
 suite =
     describe "Testing CHART"
@@ -145,4 +155,13 @@ suite =
             \_ ->
                 ChartCommon.chartInfoWindow (T.Drop 0) (T.Take 3) T.DayChart chartInfo
                     |> Expect.equal chartInfo1
+        , test "Test chartValueRange: only lines" <|
+            \_ ->
+                ChartCommon.chartValueRange lines01 [] [] 1.0
+                    |> Expect.equal (42.5, 149.8)
+        , 
+            test "Test chartValueRange: lines and candlesticks" <|
+            \_ ->
+                ChartCommon.chartValueRange lines01 [] cndl01 1.0
+                    |> Expect.equal (40.1, 149.8)
         ]

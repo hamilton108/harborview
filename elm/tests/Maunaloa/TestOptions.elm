@@ -80,6 +80,7 @@ suite =
     --    m =
     --        Main.initModel <| T.Flags True
     --in
+    skip <| 
     describe "Testing OPTIONS"
         [ {-
              test "Test fetching calls" <|
