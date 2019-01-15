@@ -1,5 +1,12 @@
 module Maunaloa.Charts.View exposing (view)
 
+import Common.Html
+    exposing
+        ( Checked(..)
+        , HtmlId(..)
+        , InputCaption(..)
+        , labelCheckBox
+        )
 import Common.Select as CS
 import Html as H
 import Html.Attributes as A
@@ -12,4 +19,5 @@ view model =
         [ H.div [ A.class "grid-elm" ]
             []
         , CS.makeSelect "Tickers: " FetchCharts model.tickers model.selectedTicker
+        , labelCheckBox (HtmlId "cb1") (InputCaption "Reset cache") (Checked model.resetCache) ToggleResetCache
         ]

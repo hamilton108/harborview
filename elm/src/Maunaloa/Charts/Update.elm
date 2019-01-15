@@ -53,6 +53,9 @@ update msg model =
                 , drawCanvas ciWin
                 )
 
+        ToggleResetCache ->
+            ( { model | resetCache = not model.resetCache }, Cmd.none )
+
         {-
            let
                ciWin =

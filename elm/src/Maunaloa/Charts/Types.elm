@@ -87,6 +87,7 @@ type Msg
     = TickersFetched (Result Http.Error CS.SelectItems)
     | FetchCharts String
     | ChartsFetched (Result Http.Error ChartInfo)
+    | ToggleResetCache
 
 
 type alias Model =
@@ -95,4 +96,5 @@ type alias Model =
     , tickers : CS.SelectItems
     , dropAmount : Drop
     , takeAmount : Take
+    , resetCache : Bool
     }
