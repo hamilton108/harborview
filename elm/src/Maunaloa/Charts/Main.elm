@@ -54,4 +54,5 @@ initModel flags =
     , dropAmount = Drop 0
     , takeAmount = Take 90
     , resetCache = False
+    , chartInfo = Nothing
     }

@@ -88,6 +88,8 @@ type Msg
     | FetchCharts String
     | ChartsFetched (Result Http.Error ChartInfo)
     | ToggleResetCache
+    | Previous
+    | Next
 
 
 type alias Model =
@@ -97,4 +99,5 @@ type alias Model =
     , dropAmount : Drop
     , takeAmount : Take
     , resetCache : Bool
+    , chartInfo : Maybe ChartInfo
     }
