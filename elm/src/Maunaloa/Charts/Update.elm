@@ -4,7 +4,17 @@ import Common.Html as CH
 import Common.Select as CS
 import Maunaloa.Charts.ChartCommon as ChartCommon
 import Maunaloa.Charts.Commands as C
-import Maunaloa.Charts.Types exposing (Drop(..),ChartInfoWindow, Model, Msg(..), Ticker(..))
+import Maunaloa.Charts.Types
+    exposing
+        ( ChartInfo
+        , ChartInfoWindow
+        , ChartType(..)
+        , Drop(..)
+        , Model
+        , Msg(..)
+        , Take(..)
+        , Ticker(..)
+        )
 
 
 
@@ -53,7 +63,6 @@ update msg model =
                 , drawCanvas ciWin
                 )
 
-
         ChartsFetched (Err s) ->
             Debug.log ("ChartsFetched Error: " ++ CH.httpErr2str s)
                 ( model, Cmd.none )
@@ -62,40 +71,36 @@ update msg model =
             ( { model | resetCache = not model.resetCache }, Cmd.none )
 
         Previous ->
-            case model.chartInfo of
-
-                Nothing -> (model, Cmd.none) 
-
-                Just chartInfo ->
-                    let 
-                        (Drop curDrop) = model.dropAmount
-
-                        newDrop = Drop <| curDrop + 30 
-
-                        ciWin =
-                            ChartCommon.chartInfoWindow newDrop model.takeAmount model.chartType chartInfo
-                    in
-                    ( { model | dropAmount = newDrop }, drawCanvas ciWin  )
+            let
+                (Drop curDrop) =
+                    model.dropAmount
+            in
+            shift model (Drop <| curDrop + 30)
 
         Next ->
-            case model.chartInfo of
+            let
+                (Drop curDrop) =
+                    model.dropAmount
+            in
+            if curDrop == 0 then
+                ( model, Cmd.none )
 
-                Nothing -> (model, Cmd.none) 
+            else
+                shift model (Drop <| curDrop - 30)
 
-                Just chartInfo ->
-                    let 
-                        (Drop curDrop) = model.dropAmount
-                    in
-                        if curDrop == 0 then
-                            (model, Cmd.none)
-                        else
-                            let 
-                                newDrop = Drop <| curDrop - 30 
-
-                                ciWin =
-                                    ChartCommon.chartInfoWindow newDrop model.takeAmount model.chartType chartInfo
-                            in
-                            ( { model | dropAmount = newDrop }, drawCanvas ciWin  )
+        Last ->
+            shift model (Drop 0)
 
 
---( { model | selectedTicker = Just s }, fetchCharts s model.flags.chartResolution model.isResetCache )
+shift : Model -> Drop -> ( Model, Cmd Msg )
+shift model newDrop =
+    case model.chartInfo of
+        Nothing ->
+            ( model, Cmd.none )
+
+        Just chartInfo ->
+            let
+                ciWin =
+                    ChartCommon.chartInfoWindow newDrop model.takeAmount model.chartType chartInfo
+            in
+            ( { model | dropAmount = newDrop }, drawCanvas ciWin )

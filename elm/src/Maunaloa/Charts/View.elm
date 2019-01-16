@@ -1,5 +1,6 @@
 module Maunaloa.Charts.View exposing (view)
 
+import Common.Buttons as BTN
 import Common.Html
     exposing
         ( Checked(..)
@@ -7,7 +8,6 @@ import Common.Html
         , InputCaption(..)
         , labelCheckBox
         )
-import Common.Buttons as BTN
 import Common.Select as CS
 import Html as H
 import Html.Attributes as A
@@ -23,4 +23,5 @@ view model =
         , labelCheckBox (HtmlId "cb1") (InputCaption "Reset cache") (Checked model.resetCache) ToggleResetCache
         , BTN.button "Previous" Previous
         , BTN.button "Next" Next
+        , BTN.button "Last" Last
         ]

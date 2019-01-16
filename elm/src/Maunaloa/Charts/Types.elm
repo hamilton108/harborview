@@ -90,6 +90,7 @@ type Msg
     | ToggleResetCache
     | Previous
     | Next
+    | Last
 
 
 type alias Model =
