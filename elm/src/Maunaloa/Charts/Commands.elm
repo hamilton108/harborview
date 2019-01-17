@@ -49,7 +49,7 @@ fetchCharts ticker ct resetCache =
                             mainUrl ++ "/ticker/" ++ s ++ "/" ++ resetCacheJson resetCache
 
                         MonthChart ->
-                            mainUrl ++ "/tickerweek?oid=" ++ s ++ resetCacheJson resetCache
+                            mainUrl ++ "/tickerweek/" ++ s ++ "/" ++ resetCacheJson resetCache
 
                         YearChart ->
                             mainUrl ++ "/tickermonth?oid=" ++ s ++ resetCacheJson resetCache

@@ -90,7 +90,7 @@ labelInputItem (InputCaption caption) inputType inputValue htmlClass event =
 
 labelCheckBox : HtmlId -> InputCaption -> Checked -> msg -> H.Html msg
 labelCheckBox (HtmlId htmlId) (InputCaption caption) (Checked isChecked) event =
-    H.div [ A.class "form-group" ]
+    H.div [ A.class "form-group form-group--elm" ]
         [ H.div [ A.class "checkbox" ]
             [ H.label [ A.for htmlId ]
                 [ H.input [ A.type_ "checkbox", A.class "fake-cb", A.checked isChecked, E.onClick event, A.id htmlId ] []

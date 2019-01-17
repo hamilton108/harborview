@@ -139,6 +139,7 @@ a.href-td {
   vertical-align: middle;
   position: relative;
   margin-right: 10px;
+  margin-left: 10px;
   border-radius: 4px; }
 
 /*input[type="checkbox"] {*/

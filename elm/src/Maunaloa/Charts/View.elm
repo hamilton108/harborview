@@ -16,10 +16,8 @@ import Maunaloa.Charts.Types exposing (Model, Msg(..))
 
 view : Model -> H.Html Msg
 view model =
-    H.div []
-        [ H.div [ A.class "grid-elm" ]
-            []
-        , CS.makeSelect "Tickers: " FetchCharts model.tickers model.selectedTicker
+    H.div [ A.class "grid-elm" ]
+        [ CS.makeSelect "Tickers: " FetchCharts model.tickers model.selectedTicker
         , labelCheckBox (HtmlId "cb1") (InputCaption "Reset cache") (Checked model.resetCache) ToggleResetCache
         , BTN.button "Previous" Previous
         , BTN.button "Next" Next
