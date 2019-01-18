@@ -1,6 +1,7 @@
 module Maunaloa.Charts.Main exposing (main)
 
 import Browser
+import Common.ModalDialog as DLG
 import Html as H
 import Maunaloa.Charts.Commands exposing (fetchTickers)
 import Maunaloa.Charts.Types
@@ -39,7 +40,8 @@ init flags =
 
 initModel : Flags -> Model
 initModel flags =
-    { chartType =
+    { dlgAlert = DLG.DialogHidden
+    , chartType =
         case flags of
             2 ->
                 MonthChart

@@ -1,6 +1,7 @@
 port module Maunaloa.Charts.Update exposing (update)
 
 import Common.Html as CH
+import Common.ModalDialog as DLG
 import Common.Select as CS
 import Maunaloa.Charts.ChartCommon as ChartCommon
 import Maunaloa.Charts.Commands as C
@@ -37,6 +38,9 @@ port drawRiscLines : RiscLinesJs -> Cmd msg
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        AlertOk ->
+            ( { model | dlgAlert = DLG.DialogHidden }, Cmd.none )
+
         TickersFetched (Ok s) ->
             ( { model
                 | tickers = s
@@ -45,8 +49,7 @@ update msg model =
             )
 
         TickersFetched (Err s) ->
-            Debug.log ("TickersFetched Error: " ++ CH.httpErr2str s)
-                ( model, Cmd.none )
+            ( model, Cmd.none )
 
         FetchCharts s ->
             let
@@ -60,14 +63,12 @@ update msg model =
                 ciWin =
                     ChartCommon.chartInfoWindow model.dropAmount model.takeAmount model.chartType chartInfo
             in
-            Debug.log (Debug.toString ciWin)
-                ( { model | chartInfo = Just chartInfo, curValueRange = Just ciWin.chart.valueRange }
-                , drawCanvas ciWin
-                )
+            ( { model | chartInfo = Just chartInfo, curValueRange = Just ciWin.chart.valueRange }
+            , drawCanvas ciWin
+            )
 
         ChartsFetched (Err s) ->
-            Debug.log ("ChartsFetched Error: " ++ CH.httpErr2str s)
-                ( model, Cmd.none )
+            ( DLG.errorAlert "Error" "ChartsFetched Error: " s model, Cmd.none )
 
         ToggleResetCache ->
             ( { model | resetCache = not model.resetCache }, Cmd.none )
@@ -121,7 +122,8 @@ update msg model =
                     ( model, Cmd.none )
 
         RiscLinesFetched (Err s) ->
-            Debug.log ("RiscLinesFetched Error: " ++ CH.httpErr2str s) ( model, Cmd.none )
+            --Debug.log ("RiscLinesFetched Error: " ++ CH.httpErr2str s) ( model, Cmd.none )
+            ( DLG.errorAlert "Error" "RiscLinesFetched Error: " s model, Cmd.none )
 
 
 shift : Model -> Drop -> ( Model, Cmd Msg )

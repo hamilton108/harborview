@@ -8,6 +8,7 @@ import Common.Html
         , InputCaption(..)
         , labelCheckBox
         )
+import Common.ModalDialog as DLG
 import Common.Select as CS
 import Html as H
 import Html.Attributes as A
@@ -23,4 +24,5 @@ view model =
         , BTN.button "Previous" Previous
         , BTN.button "Next" Next
         , BTN.button "Last" Last
+        , DLG.alert model.dlgAlert AlertOk
         ]

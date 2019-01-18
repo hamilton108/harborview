@@ -18,6 +18,7 @@ module Maunaloa.Charts.Types exposing
     )
 
 import Common.DateUtil exposing (UnixTime)
+import Common.ModalDialog as DLG
 import Common.Select as CS
 import Http
 import Time
@@ -117,7 +118,8 @@ type ChartType
 
 
 type Msg
-    = TickersFetched (Result Http.Error CS.SelectItems)
+    = AlertOk
+    | TickersFetched (Result Http.Error CS.SelectItems)
     | FetchCharts String
     | ChartsFetched (Result Http.Error ChartInfo)
     | ToggleResetCache
@@ -129,7 +131,8 @@ type Msg
 
 
 type alias Model =
-    { chartType : ChartType
+    { dlgAlert : DLG.DialogState
+    , chartType : ChartType
     , selectedTicker : Maybe String
     , tickers : CS.SelectItems
     , dropAmount : Drop
