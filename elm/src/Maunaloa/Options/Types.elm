@@ -144,6 +144,7 @@ type Msg
     | ResetCache
     | ToggleSelected String
     | ToggleRealTimePurchase
+    | ToggleOnlyIvGtZero
     | AskChange String
     | BidChange String
     | VolumeChange String
@@ -165,6 +166,7 @@ type alias Model =
     , dlgAlert : DLG.DialogState
     , selectedPurchase : Maybe Option
     , isRealTimePurchase : Bool
+    , isOnlyIvGtZero : Bool
     , ask : String
     , bid : String
     , volume : String

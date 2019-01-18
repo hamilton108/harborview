@@ -37,6 +37,7 @@ initModel flags =
     , dlgAlert = DLG.DialogHidden
     , selectedPurchase = Nothing
     , isRealTimePurchase = True
+    , isOnlyIvGtZero = True
     , ask = "0.0"
     , bid = "0.0"
     , volume = "10"

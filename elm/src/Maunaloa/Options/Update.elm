@@ -189,11 +189,10 @@ update msg model =
             )
 
         ToggleRealTimePurchase ->
-            let
-                checked =
-                    not model.isRealTimePurchase
-            in
-            ( { model | isRealTimePurchase = checked }, Cmd.none )
+            ( { model | isRealTimePurchase = not model.isRealTimePurchase }, Cmd.none )
+
+        ToggleOnlyIvGtZero ->
+            ( { model | isOnlyIvGtZero = not model.isOnlyIvGtZero }, Cmd.none )
 
         AskChange s ->
             ( { model | ask = s }, Cmd.none )
