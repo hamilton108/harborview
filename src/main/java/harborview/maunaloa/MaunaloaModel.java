@@ -156,7 +156,7 @@ public class MaunaloaModel {
         return result;
     }
     public List<RiscLinesDTO> fetchRiscLines(int oid) {
-        return optionRepos.fetchRiscLines(oid);
+        return optionRiscRepos.getRiscLines(oid);
     }
 
     public List<OptionRiscDTO> calcStockPricesFor(int oid, List<OptionRiscDTO> riscs) {
@@ -170,8 +170,8 @@ public class MaunaloaModel {
         });
         return result;
         */
-        String stockTicker= stockMarketRepository.getTickerFor(oid);
-        return optionRiscRepos.calcRiscs(stockTicker, riscs);
+        //String stockTicker= stockMarketRepository.getTickerFor(oid);
+        return optionRiscRepos.calcRiscs(oid, riscs);
     }
 
     public OptionPriceForDTO optionPriceFor(String optionTicker, double levelValue) {

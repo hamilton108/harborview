@@ -1,10 +1,14 @@
 package harborview.maunaloa;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gargoylesoftware.htmlunit.Page;
+import harborview.dto.html.RiscLinesDTO;
 import harborview.dto.html.options.*;
 import harborview.maunaloa.repos.OptionRiscRepos;
 import netfondsrepos.downloader.MockDownloader;
 import netfondsrepos.repos.EtradeRepository2;
+import oahu.financial.DerivativePrice;
 import oahu.financial.OptionCalculator;
 import oahu.financial.html.EtradeDownloader;
 import oahu.financial.repository.EtradeRepository;
@@ -73,8 +77,9 @@ public class TestOptionRiscRepos {
 
         OptionRiscRepos riscRepos = new OptionRiscRepos();
         riscRepos.setEtrade(etrade);
+        riscRepos.setStockMarketRepository(stockMarketRepos);
 
-        List<OptionRiscDTO> calculated = riscRepos.calcRiscs("NHY",opx);
+        List<OptionRiscDTO> calculated = riscRepos.calcRiscs(1,opx);
 
         for (OptionRiscDTO item : calculated) {
             if (item.getTicker().equals(c1)) {
@@ -82,7 +87,22 @@ public class TestOptionRiscRepos {
                 assertEquals(expected, item.getRisc(), 0.1, String.format("%s not %.2f",item.getTicker(), expected));
             }
         }
+
+        List<RiscLinesDTO> cached = riscRepos.getRiscLines(1);
+        assertEquals(1, cached.size(), "Cached riscs not 1");
     }
+
+
+    /*
+    @DisplayName("Test serializing RiscLine from DerivativePrice by Jackson")
+    @Test
+    public void testRiscLineJackson() throws JsonProcessingException {
+        DerivativePrice stub = new DerivativePriceStub();
+        RiscLinesDTO dto = new RiscLinesDTO(stub);
+        String result = new ObjectMapper().writeValueAsString(dto);
+        System.out.printf(result);
+    }
+    */
 
 }
 

@@ -48,6 +48,7 @@
     -->
     <bean id="optionRiscRepos" class="harborview.maunaloa.repos.OptionRiscRepos">
         <property name="etrade" ref="etrade" />
+        <property name="stockMarketRepository" ref="stockMarketRepos" />
     </bean>
     <bean id="maunaloaModel" class="harborview.maunaloa.MaunaloaModel">
         <property name="etrade" ref="etrade" />

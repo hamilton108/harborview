@@ -8,9 +8,13 @@ module Maunaloa.Charts.Types exposing
     , Flags
     , Model
     , Msg(..)
+    , RiscLine
+    , RiscLines
+    , RiscLinesJs
     , Scaling(..)
     , Take(..)
     , Ticker(..)
+    , asTicker
     )
 
 import Common.DateUtil exposing (UnixTime)
@@ -48,6 +52,15 @@ type Ticker
     | Ticker String
 
 
+asTicker : String -> Ticker
+asTicker s =
+    if String.isEmpty s then
+        NoTicker
+
+    else
+        Ticker s
+
+
 type alias Chart =
     { lines : List (List Float)
     , bars : List (List Float)
@@ -77,6 +90,26 @@ type alias ChartInfo =
     }
 
 
+type alias RiscLine =
+    { ticker : String
+    , be : Float
+    , stockPrice : Float
+    , optionPrice : Float
+    , risc : Float
+    , ask : Float
+    }
+
+
+type alias RiscLines =
+    List RiscLine
+
+
+type alias RiscLinesJs =
+    { riscLines : RiscLines
+    , valueRange : ( Float, Float )
+    }
+
+
 type ChartType
     = DayChart
     | MonthChart
@@ -91,6 +124,8 @@ type Msg
     | Previous
     | Next
     | Last
+    | FetchRiscLines
+    | RiscLinesFetched (Result Http.Error RiscLines)
 
 
 type alias Model =
@@ -101,4 +136,5 @@ type alias Model =
     , takeAmount : Take
     , resetCache : Bool
     , chartInfo : Maybe ChartInfo
+    , curValueRange : Maybe ( Float, Float )
     }

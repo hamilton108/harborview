@@ -2,9 +2,10 @@ module Maunaloa.Charts.Decoders exposing
     ( candlestickDecoder
     , chartDecoder
     , chartInfoDecoder
+    , riscsDecoder
     )
 
-import Json.Decode exposing (Decoder, field, float, int, list, map4, nullable, succeed)
+import Json.Decode exposing (Decoder, field, float, int, list, map4, nullable, string, succeed)
 import Json.Decode.Pipeline as JP
 import Maunaloa.Charts.Types as T
 
@@ -36,3 +37,19 @@ chartInfoDecoder =
         |> JP.required "chart" (chartDecoder 10)
         |> JP.required "chart2" (nullable (chartDecoder 5))
         |> JP.required "chart3" (nullable (chartDecoder 5))
+
+
+riscDecoder : Decoder T.RiscLine
+riscDecoder =
+    succeed T.RiscLine
+        |> JP.required "ticker" string
+        |> JP.required "be" float
+        |> JP.required "stockprice" float
+        |> JP.required "optionprice" float
+        |> JP.required "risc" float
+        |> JP.required "ask" float
+
+
+riscsDecoder : Decoder T.RiscLines
+riscsDecoder =
+    list riscDecoder

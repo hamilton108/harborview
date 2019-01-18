@@ -12,8 +12,11 @@ import Maunaloa.Charts.Types
         , Drop(..)
         , Model
         , Msg(..)
+        , RiscLines
+        , RiscLinesJs
         , Take(..)
         , Ticker(..)
+        , asTicker
         )
 
 
@@ -22,6 +25,9 @@ import Maunaloa.Charts.Types
 
 
 port drawCanvas : ChartInfoWindow -> Cmd msg
+
+
+port drawRiscLines : RiscLinesJs -> Cmd msg
 
 
 
@@ -45,11 +51,7 @@ update msg model =
         FetchCharts s ->
             let
                 curTick =
-                    if String.isEmpty s then
-                        NoTicker
-
-                    else
-                        Ticker s
+                    asTicker s
             in
             ( { model | selectedTicker = Just s }, C.fetchCharts curTick model.chartType False )
 
@@ -59,7 +61,7 @@ update msg model =
                     ChartCommon.chartInfoWindow model.dropAmount model.takeAmount model.chartType chartInfo
             in
             Debug.log (Debug.toString ciWin)
-                ( { model | chartInfo = Just chartInfo }
+                ( { model | chartInfo = Just chartInfo, curValueRange = Just ciWin.chart.valueRange }
                 , drawCanvas ciWin
                 )
 
@@ -90,6 +92,36 @@ update msg model =
 
         Last ->
             shift model (Drop 0)
+
+        FetchRiscLines ->
+            case model.selectedTicker of
+                Nothing ->
+                    ( model, Cmd.none )
+
+                Just s ->
+                    let
+                        curTick =
+                            asTicker s
+                    in
+                    ( model, C.fetchRiscLines curTick )
+
+        --( model, fetchRiscLines model )
+        RiscLinesFetched (Ok riscLines) ->
+            case model.curValueRange of
+                Just vr ->
+                    let
+                        riscLinesJs =
+                            RiscLinesJs riscLines vr
+                    in
+                    --( { model | riscLines = Just riscLines }, drawRiscLines riscLinesJs )
+                    ( model, drawRiscLines riscLinesJs )
+
+                Nothing ->
+                    --( { model | riscLines = Just riscLines }, Cmd.none )
+                    ( model, Cmd.none )
+
+        RiscLinesFetched (Err s) ->
+            Debug.log ("RiscLinesFetched Error: " ++ CH.httpErr2str s) ( model, Cmd.none )
 
 
 shift : Model -> Drop -> ( Model, Cmd Msg )

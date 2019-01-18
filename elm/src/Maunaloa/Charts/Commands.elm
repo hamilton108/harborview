@@ -1,4 +1,4 @@
-module Maunaloa.Charts.Commands exposing (fetchCharts, fetchTickers)
+module Maunaloa.Charts.Commands exposing (fetchCharts, fetchRiscLines, fetchTickers)
 
 import Common.Decoders as CD
 import Http
@@ -55,3 +55,18 @@ fetchCharts ticker ct resetCache =
                             mainUrl ++ "/tickermonth?oid=" ++ s ++ resetCacheJson resetCache
             in
             Http.send ChartsFetched <| Http.get url DEC.chartInfoDecoder
+
+
+fetchRiscLines : Ticker -> Cmd Msg
+fetchRiscLines ticker =
+    case ticker of
+        NoTicker ->
+            Cmd.none
+
+        Ticker s ->
+            let
+                url =
+                    mainUrl ++ "/risclines/" ++ s
+            in
+            Http.send RiscLinesFetched <|
+                Http.get url DEC.riscsDecoder

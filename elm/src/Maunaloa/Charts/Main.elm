@@ -55,4 +55,5 @@ initModel flags =
     , takeAmount = Take 90
     , resetCache = False
     , chartInfo = Nothing
+    , curValueRange = Nothing
     }

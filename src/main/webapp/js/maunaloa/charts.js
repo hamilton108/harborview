@@ -1,24 +1,24 @@
-import {Chart} from "./canvas/chart.js";
-import {Scrapbook} from "./canvas/scrapbook.js";
-import {LevelLines} from "./canvas/levelline.js";
+import { Chart } from "./canvas/chart.js";
+import { Scrapbook } from "./canvas/scrapbook.js";
+import { LevelLines } from "./canvas/levelline.js";
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const canvases = {
-        DAY : {
+        DAY: {
             MAIN_CHART: 'chart-1',
             VOLUME: 'vol-1',
             OSC: 'osc-1',
         },
-        WEEK : {
+        WEEK: {
             MAIN_CHART: 'chart-2',
             VOLUME: 'vol-2',
             OSC: 'osc-2',
         },
-        MONTH : {
+        MONTH: {
         }
     };
     const scrapbooks = {
-        DAY : {
+        DAY: {
             SVG: 'svg-1',
             DIV_DOODLE: 'div-1-doodle',
             DIV_LEVEL_LINES: 'div-1-levelline',
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
             ARROW_ORIENT: "arrow1-orient",
             COMMENT: "comment1",
         },
-        WEEK : {
+        WEEK: {
             SVG: 'svg-2',
             DIV_DOODLE: 'div-2-doodle',
             DIV_LEVEL_LINES: 'div-2-levelline',
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function() {
             COMMENT: "comment2",
         }
     };
-    const setCanvasSize = function(selector, w, h) {
+    const setCanvasSize = function (selector, w, h) {
         const c1 = document.querySelectorAll(selector);
         for (let i = 0; i < c1.length; ++i) {
             const canvas = c1[i];
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
             canvas.height = h;
         }
     };
-    const setCanvasSizes = function() {
+    const setCanvasSizes = function () {
         setCanvasSize('canvas.c1', 1310, 500);
         setCanvasSize('canvas.c2', 1310, 200);
         setCanvasSize('canvas.c3', 1310, 110);
@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function() {
     //---------------------- Elm.Maunaloa.Charts ---------------------------
 
     const saveCanvases = (canvases) => {
-        const canvas =  canvases[0]; // this.canvas; //document.getElementById('canvas');
+        const canvas = canvases[0]; // this.canvas; //document.getElementById('canvas');
         const newCanvas = document.createElement('canvas');
         newCanvas.width = canvas.width;
         newCanvas.height = canvas.height;
@@ -108,29 +108,30 @@ document.addEventListener("DOMContentLoaded", function() {
     };
     const elmApp = (appId, chartRes, myCanvases, config) => {
         const levelLines = new LevelLines(config);
-        const myChart = new Chart(myCanvases,levelLines);
+        const myChart = new Chart(myCanvases, levelLines);
         const scrap = new Scrapbook(config);
         const node = document.getElementById(appId);
         const app = Elm.Maunaloa.Charts.Main.init({
             node: node,
-            flags: chartRes});
+            flags: chartRes
+        });
         app.ports.drawCanvas.subscribe(cfg => {
             scrap.clear();
             myChart.drawCanvases(cfg);
         });
+        const drawRiscLines = function (riscLines) {
+            levelLines.addRiscLines(riscLines);
+        };
+        app.ports.drawRiscLines.subscribe(drawRiscLines);
         /*
         const drawSpot = function(spot) {
           levelLines.spot = spot;
         };
         app.ports.drawSpot.subscribe(drawSpot);
-        const drawRiscLines = function(riscLines) {
-            levelLines.addRiscLines(riscLines);
-        };
-        app.ports.drawRiscLines.subscribe(drawRiscLines);
         */
 
         const btnClear = document.getElementById(config.BTN_CLEAR);
-        btnClear.onclick = () => { 
+        btnClear.onclick = () => {
             scrap.clear();
             levelLines.clearCanvas();
         };

@@ -10,6 +10,7 @@ public class RiscLinesDTO {
     public RiscLinesDTO(DerivativePrice price) {
         this.price = price;
     }
+
     public String getTicker() {
         return price.getTicker();
     }
