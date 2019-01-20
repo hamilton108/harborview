@@ -40,6 +40,10 @@ public class MaunaloaModel {
        return stockMarketRepository.getStocks();
     }
 
+    public void clearRiscLines(int ticker) {
+
+    }
+
 
     public enum ElmChartType { DAY, WEEK, MONTH }
 

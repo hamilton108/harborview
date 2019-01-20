@@ -173,6 +173,18 @@ public class MaunaloaController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "clearrisclines/{ticker}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public JsonResult clearRiscLines(@PathVariable("ticker") int ticker) {
+        try {
+            maunaloaModel.clearRiscLines(ticker);
+            return new JsonResult(true, null, 0);
+        }
+        catch (Exception ex) {
+            return new JsonResult(false, ex.getMessage(), 0);
+        }
+    }
+
+    @ResponseBody
     @RequestMapping(
             value = "optionprice/{optionticker}/{levelvalue}",
             method =  RequestMethod.GET,

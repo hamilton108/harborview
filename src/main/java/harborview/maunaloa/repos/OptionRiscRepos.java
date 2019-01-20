@@ -78,22 +78,44 @@ public class OptionRiscRepos {
     }
 
     public List<RiscLinesDTO> getRiscLines(int oid) {
+        /*
         Collection<DerivativePrice> calls = etrade.calls(oid);
         Collection<DerivativePrice> puts = etrade.puts(oid);
         List<DerivativePrice> calculatedCalls =
                 calls.stream().filter(x -> x.getCurrentRiscStockPrice().isPresent()).collect(Collectors.toList());
         List<DerivativePrice> calculatedPuts=
                 puts.stream().filter(x -> x.getCurrentRiscStockPrice().isPresent()).collect(Collectors.toList());
+                */
 
+        Tuple<List<DerivativePrice>> calculated = calculatedCallsAndPuts(oid);
         List<RiscLinesDTO> result = new ArrayList<>();
 
-        for (DerivativePrice call : calculatedCalls) {
+        for (DerivativePrice call : calculated.first()) {
             result.add(new RiscLinesDTO(call));
         }
-        for (DerivativePrice put : calculatedPuts) {
+        for (DerivativePrice put : calculated.second()) {
             result.add(new RiscLinesDTO(put));
         }
 
         return result;
+    }
+    public void clearRiscLines(int oid) {
+        Tuple<List<DerivativePrice>> calculated = calculatedCallsAndPuts(oid);
+        for (DerivativePrice price : calculated.first()) {
+            price.resetRiscCalc();
+        }
+        for (DerivativePrice price : calculated.second()) {
+            price.resetRiscCalc();
+        }
+
+    }
+    private Tuple<List<DerivativePrice>> calculatedCallsAndPuts(int oid) {
+        Collection<DerivativePrice> calls = etrade.calls(oid);
+        Collection<DerivativePrice> puts = etrade.puts(oid);
+        List<DerivativePrice> calculatedCalls =
+                calls.stream().filter(x -> x.getCurrentRiscStockPrice().isPresent()).collect(Collectors.toList());
+        List<DerivativePrice> calculatedPuts=
+                puts.stream().filter(x -> x.getCurrentRiscStockPrice().isPresent()).collect(Collectors.toList());
+        return new Tuple<>(calculatedCalls,calculatedPuts);
     }
 }

@@ -91,4 +91,9 @@ public class DerivativePriceStub implements DerivativePrice {
     public Optional<Double> getCurrentRiscStockPrice() {
         return Optional.empty();
     }
+
+    @Override
+    public void resetRiscCalc() {
+
+    }
 }

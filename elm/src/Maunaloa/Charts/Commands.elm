@@ -1,6 +1,12 @@
-module Maunaloa.Charts.Commands exposing (fetchCharts, fetchRiscLines, fetchTickers)
+module Maunaloa.Charts.Commands exposing
+    ( clearRiscLines
+    , fetchCharts
+    , fetchRiscLines
+    , fetchTickers
+    )
 
 import Common.Decoders as CD
+import Common.Types as T
 import Http
 import Maunaloa.Charts.Decoders as DEC
 import Maunaloa.Charts.Types
@@ -70,3 +76,18 @@ fetchRiscLines ticker =
             in
             Http.send RiscLinesFetched <|
                 Http.get url DEC.riscsDecoder
+
+
+clearRiscLines : Ticker -> Cmd Msg
+clearRiscLines ticker =
+    case ticker of
+        NoTicker ->
+            Cmd.none
+
+        Ticker s ->
+            let
+                url =
+                    mainUrl ++ "/clearrisclines/" ++ s
+            in
+            Http.send RiscLinesCleared <|
+                Http.get url T.jsonStatusDecoder

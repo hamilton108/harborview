@@ -20,6 +20,7 @@ module Maunaloa.Charts.Types exposing
 import Common.DateUtil exposing (UnixTime)
 import Common.ModalDialog as DLG
 import Common.Select as CS
+import Common.Types as T
 import Http
 import Time
 
@@ -53,13 +54,18 @@ type Ticker
     | Ticker String
 
 
-asTicker : String -> Ticker
-asTicker s =
-    if String.isEmpty s then
-        NoTicker
+asTicker : Maybe String -> Ticker
+asTicker ticker =
+    case ticker of
+        Nothing ->
+            NoTicker
 
-    else
-        Ticker s
+        Just s ->
+            if String.isEmpty s then
+                NoTicker
+
+            else
+                Ticker s
 
 
 type alias Chart =
@@ -128,6 +134,8 @@ type Msg
     | Last
     | FetchRiscLines
     | RiscLinesFetched (Result Http.Error RiscLines)
+    | ClearRiscLines
+    | RiscLinesCleared (Result Http.Error T.JsonStatus)
 
 
 type alias Model =

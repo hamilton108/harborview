@@ -83,13 +83,17 @@ public class TestOptionRiscRepos {
 
         for (OptionRiscDTO item : calculated) {
             if (item.getTicker().equals(c1)) {
-                double expected = 39.05;
+                double expected = 38.88;
                 assertEquals(expected, item.getRisc(), 0.1, String.format("%s not %.2f",item.getTicker(), expected));
             }
         }
 
         List<RiscLinesDTO> cached = riscRepos.getRiscLines(1);
         assertEquals(1, cached.size(), "Cached riscs not 1");
+        riscRepos.clearRiscLines(1);
+        cached = riscRepos.getRiscLines(1);
+        assertEquals(0, cached.size(), "Cached riscs not 0 after clear risclines");
+
     }
 
 

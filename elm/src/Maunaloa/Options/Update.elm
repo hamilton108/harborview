@@ -39,8 +39,7 @@ updateOption msg model =
             ( { model | stock = Just s.stock, options = s.opx }, Cmd.none )
 
         OptionsFetched (Err s) ->
-            Debug.log "OptionsFetched ERR: "
-                ( errorAlert "Error" "OptionsFetched Error: " s model, Cmd.none )
+            ( errorAlert "Error" "OptionsFetched Error: " s model, Cmd.none )
 
 
 updatePurchase : PurchaseMsg -> Model -> ( Model, Cmd Msg )
@@ -122,8 +121,7 @@ updatePurchase msg model =
                 ( { model | dlgAlert = DLG.DialogVisibleAlert "Option purchase" s.msg alertCat }, Cmd.none )
 
         OptionPurchased (Err s) ->
-            Debug.log "OptionPurchased ERR"
-                ( errorAlert "Purchase Sale ERROR!" "SaleOk Error: " s model, Cmd.none )
+            ( errorAlert "Purchase Sale ERROR!" "SaleOk Error: " s model, Cmd.none )
 
 
 updateRisc : RiscMsg -> Model -> ( Model, Cmd Msg )

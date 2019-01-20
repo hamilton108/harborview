@@ -54,7 +54,7 @@ update msg model =
         FetchCharts s ->
             let
                 curTick =
-                    asTicker s
+                    asTicker <| Just s
             in
             ( { model | selectedTicker = Just s }, C.fetchCharts curTick model.chartType False )
 
@@ -95,16 +95,7 @@ update msg model =
             shift model (Drop 0)
 
         FetchRiscLines ->
-            case model.selectedTicker of
-                Nothing ->
-                    ( model, Cmd.none )
-
-                Just s ->
-                    let
-                        curTick =
-                            asTicker s
-                    in
-                    ( model, C.fetchRiscLines curTick )
+            ( model, C.fetchRiscLines <| asTicker model.selectedTicker )
 
         --( model, fetchRiscLines model )
         RiscLinesFetched (Ok riscLines) ->
@@ -124,6 +115,19 @@ update msg model =
         RiscLinesFetched (Err s) ->
             --Debug.log ("RiscLinesFetched Error: " ++ CH.httpErr2str s) ( model, Cmd.none )
             ( DLG.errorAlert "Error" "RiscLinesFetched Error: " s model, Cmd.none )
+
+        ClearRiscLines ->
+            ( model, C.clearRiscLines <| asTicker model.selectedTicker )
+
+        RiscLinesCleared (Ok status) ->
+            if status.ok == True then
+                ( model, Cmd.none )
+
+            else
+                ( { model | dlgAlert = DLG.DialogVisibleAlert "RiscLinesCleared Error" status.msg DLG.Error }, Cmd.none )
+
+        RiscLinesCleared (Err s) ->
+            ( DLG.errorAlert "Error" "RiscLinesCleared Error: " s model, Cmd.none )
 
 
 shift : Model -> Drop -> ( Model, Cmd Msg )
