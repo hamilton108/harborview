@@ -1,8 +1,8 @@
-package harborview.maunaloa;
+package harborview.maunaloa.charts;
 
 import critterrepos.beans.StockPriceBean;
 import harborview.dto.html.ElmCharts;
-import oahu.financial.Stock;
+import harborview.maunaloa.charts.ElmChartsFactory;
 import oahu.financial.StockPrice;
 
 import java.time.DayOfWeek;
@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ElmChartsWeekFactory extends ElmChartsFactory {
+    @Override
     public ElmCharts elmCharts(Collection<StockPrice> prices) {
         /*
         List<Integer> distYears = distinctYears(prices);

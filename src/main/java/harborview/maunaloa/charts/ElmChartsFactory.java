@@ -1,4 +1,4 @@
-package harborview.maunaloa;
+package harborview.maunaloa.charts;
 
 import com.google.common.collect.Lists;
 import harborview.dto.html.Candlestick;
