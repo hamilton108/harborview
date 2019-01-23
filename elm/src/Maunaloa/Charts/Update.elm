@@ -13,6 +13,7 @@ import Maunaloa.Charts.Types
         , Drop(..)
         , Model
         , Msg(..)
+        , Spot
         , RiscLines
         , RiscLinesJs
         , Take(..)
@@ -29,6 +30,8 @@ port drawCanvas : ChartInfoWindow -> Cmd msg
 
 
 port drawRiscLines : RiscLinesJs -> Cmd msg
+
+port drawSpot : Spot -> Cmd msg
 
 
 
@@ -129,6 +132,15 @@ update msg model =
         RiscLinesCleared (Err s) ->
             ( DLG.errorAlert "Error" "RiscLinesCleared Error: " s model, Cmd.none )
 
+        FetchSpot ->
+            (model, Cmd.none) 
+            -- ( model, fetchSpot model.selectedTicker model.isResetCache )
+
+        SpotFetched (Ok s) ->
+            ( model, drawSpot s )
+
+        SpotFetched (Err s) ->
+            ( DLG.errorAlert "Error" "SpotFetched Error: " s model, Cmd.none )
 
 shift : Model -> Drop -> ( Model, Cmd Msg )
 shift model newDrop =

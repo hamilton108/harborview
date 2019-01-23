@@ -3,6 +3,7 @@ module Maunaloa.Charts.Decoders exposing
     , chartDecoder
     , chartInfoDecoder
     , riscsDecoder
+    , spotDecoder
     )
 
 import Json.Decode exposing (Decoder, field, float, int, list, map4, nullable, string, succeed)
@@ -53,3 +54,12 @@ riscDecoder =
 riscsDecoder : Decoder T.RiscLines
 riscsDecoder =
     list riscDecoder
+
+spotDecoder : Decoder T.Spot
+spotDecoder =
+    succeed T.Spot
+        |> JP.required "tm" int
+        |> JP.required "o" float
+        |> JP.required "h" float
+        |> JP.required "l" float
+        |> JP.required "c" float

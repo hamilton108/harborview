@@ -91,3 +91,18 @@ clearRiscLines ticker =
             in
             Http.send RiscLinesCleared <|
                 Http.get url T.jsonStatusDecoder
+
+fetchSpot : Ticker -> Bool -> Cmd Msg
+fetchSpot ticker resetCache =
+    case ticker of
+        NoTicker ->
+            Cmd.none
+
+        Ticker s ->
+            let
+                url =
+                    mainUrl ++ "/spot/" ++ s ++ "/" ++ resetCacheJson resetCache
+
+            in
+                Http.send SpotFetched <|
+                    Http.get url DEC.spotDecoder

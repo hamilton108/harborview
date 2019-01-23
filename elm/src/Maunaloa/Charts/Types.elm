@@ -12,6 +12,7 @@ module Maunaloa.Charts.Types exposing
     , RiscLines
     , RiscLinesJs
     , Scaling(..)
+    , Spot
     , Take(..)
     , Ticker(..)
     , asTicker
@@ -116,6 +117,13 @@ type alias RiscLinesJs =
     , valueRange : ( Float, Float )
     }
 
+type alias Spot =
+    { tm : UnixTime
+    , o : Float -- open
+    , h : Float -- high
+    , l : Float -- low
+    , c : Float -- close
+    }
 
 type ChartType
     = DayChart
@@ -136,6 +144,8 @@ type Msg
     | RiscLinesFetched (Result Http.Error RiscLines)
     | ClearRiscLines
     | RiscLinesCleared (Result Http.Error T.JsonStatus)
+    | FetchSpot
+    | SpotFetched (Result Http.Error Spot)
 
 
 type alias Model =
