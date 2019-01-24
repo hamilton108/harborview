@@ -76,7 +76,8 @@ public class MaunaloaModel {
         return optionRiscRepos.calls(oid);
     }
     public StockAndOptions puts(int oid) {
-        return optionRepos.puts(oid);
+        //return optionRepos.puts(oid);
+        return optionRiscRepos.puts(oid);
     }
 
     public ElmCharts elmChartsDay(int stockId) {
@@ -110,6 +111,7 @@ public class MaunaloaModel {
     }
 
     public StockPriceDTO spot(int oid) {
+        /*
         Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>
                 tmp = optionRepos.stockAndOptions(oid);
         StockPriceDTO sp = null;
@@ -117,6 +119,8 @@ public class MaunaloaModel {
             sp = new StockPriceDTO(tmp.first().get());
         }
         return sp;
+        */
+        return optionRiscRepos.spot(oid);
     }
 
     private Optional<Stock> findStock(int stockId) {

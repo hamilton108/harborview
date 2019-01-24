@@ -20,6 +20,7 @@ view model =
     H.div [ A.class "grid-elm" ]
         [ CS.makeSelect "Tickers: " FetchCharts model.tickers model.selectedTicker
         , labelCheckBox (HtmlId "cb1") (InputCaption "Reset cache") (Checked model.resetCache) ToggleResetCache
+        , BTN.button "Spot" FetchSpot
         , BTN.button "Risc Lines" FetchRiscLines
         , BTN.button "Previous" Previous
         , BTN.button "Next" Next

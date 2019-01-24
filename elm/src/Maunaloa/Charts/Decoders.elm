@@ -55,10 +55,11 @@ riscsDecoder : Decoder T.RiscLines
 riscsDecoder =
     list riscDecoder
 
+
 spotDecoder : Decoder T.Spot
 spotDecoder =
     succeed T.Spot
-        |> JP.required "tm" int
+        |> JP.required "unixTime" int
         |> JP.required "o" float
         |> JP.required "h" float
         |> JP.required "l" float

@@ -49,8 +49,10 @@ public class TestOptionRiscRepos {
         StockAndOptions result = riscRepos.calls(stockId);
         StockPriceDTO stock = result.getStock();
         assertNotNull(stock, "Stock is null");
-        assertEquals("2018-11-23", stock.getDx(), "Stock dx not 2018-11-23");
-        assertEquals("18:30", stock.getTm(), "Stock tm not 18:13");
+        //assertEquals("2018-11-23", stock.getDx(), "Stock dx not 2018-11-23");
+        //assertEquals("18:30", stock.getTm(), "Stock tm not 18:13");
+        long expectedUnixTime = 1542997800000L;
+        assertEquals( expectedUnixTime , stock.getUnixTime(),String.format("Unix time not %d", expectedUnixTime));
         testDouble(41.83, stock.getO(), "getO() ");
         testDouble(41.85, stock.getH(), "getH() ");
         testDouble(40.87, stock.getL(), "getL() ");

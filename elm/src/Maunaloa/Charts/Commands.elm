@@ -2,6 +2,7 @@ module Maunaloa.Charts.Commands exposing
     ( clearRiscLines
     , fetchCharts
     , fetchRiscLines
+    , fetchSpot
     , fetchTickers
     )
 
@@ -92,6 +93,7 @@ clearRiscLines ticker =
             Http.send RiscLinesCleared <|
                 Http.get url T.jsonStatusDecoder
 
+
 fetchSpot : Ticker -> Bool -> Cmd Msg
 fetchSpot ticker resetCache =
     case ticker of
@@ -102,7 +104,6 @@ fetchSpot ticker resetCache =
             let
                 url =
                     mainUrl ++ "/spot/" ++ s ++ "/" ++ resetCacheJson resetCache
-
             in
-                Http.send SpotFetched <|
-                    Http.get url DEC.spotDecoder
+            Http.send SpotFetched <|
+                Http.get url DEC.spotDecoder

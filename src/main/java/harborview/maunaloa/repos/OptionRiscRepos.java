@@ -28,31 +28,30 @@ public class OptionRiscRepos {
     //endregion Properties
     public StockAndOptions callsOrPuts(int oid, boolean isCalls) {
         Collection<DerivativePrice> derivatives = isCalls == true ? etrade.calls(oid) : etrade.puts(oid);
+        /*
         Optional<StockPrice> stockPrice = etrade.stockPrice(oid);
         StockPriceDTO stockPriceDTO = null;
         if (stockPrice.isPresent()) {
             stockPriceDTO = new StockPriceDTO(stockPrice.get());
         }
-
+        */
+        StockPriceDTO stockPriceDTO = spot(oid);
         List<OptionDTO> derivativesDTO = derivatives.stream().map(OptionDTO::new).collect(Collectors.toList());
         return new StockAndOptions(stockPriceDTO, derivativesDTO);
     }
     public StockAndOptions calls(int oid) {
-        /*
-        Collection<DerivativePrice> derivatives = etrade.calls(oid);
-        Optional<StockPrice> stockPrice = etrade.stockPrice(oid);
-        StockPriceDTO stockPriceDTO = null;
-        if (stockPrice.isPresent()) {
-           stockPriceDTO = new StockPriceDTO(stockPrice.get());
-        }
-
-        List<OptionDTO> derivativesDTO = derivatives.stream().map(OptionDTO::new).collect(Collectors.toList());
-        return new StockAndOptions(stockPriceDTO, derivativesDTO);
-        */
         return callsOrPuts(oid, true);
     }
     public StockAndOptions puts(int oid) {
         return callsOrPuts(oid, false);
+    }
+    public StockPriceDTO spot(int oid) {
+        Optional<StockPrice> stockPrice = etrade.stockPrice(oid);
+        StockPriceDTO result = null;
+        if (stockPrice.isPresent()) {
+            result = new StockPriceDTO(stockPrice.get());
+        }
+        return result;
     }
 
 
