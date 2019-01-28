@@ -117,4 +117,8 @@ public class OptionRiscRepos {
                 puts.stream().filter(x -> x.getCurrentRiscStockPrice().isPresent()).collect(Collectors.toList());
         return new Tuple<>(calculatedCalls,calculatedPuts);
     }
+
+    public void resetSpotAndOptions() {
+        etrade.invalidateCache();
+    }
 }

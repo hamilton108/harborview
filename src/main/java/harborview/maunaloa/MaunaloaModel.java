@@ -69,7 +69,9 @@ public class MaunaloaModel {
     }
 
     public void resetSpotAndOptions() {
-        optionRepos.resetSpotAndOptions();
+        //optionRepos.resetSpotAndOptions();
+        //optionRepos.resetSpotAndOptions();
+        optionRiscRepos.resetSpotAndOptions();
     }
     public StockAndOptions calls(int oid) {
         //return optionRepos.calls(oid);
