@@ -1,4 +1,9 @@
-module Common.DateUtil exposing (UnixTime, dateRangeOf, day_)
+module Common.DateUtil exposing
+    ( UnixTime
+    , dateRangeOf
+    , day_
+    , unixTimeStr
+    )
 
 import Common.Utils as U
 import Time
@@ -24,6 +29,70 @@ dateRangeOf dx lx =
     in
     -- ( dxOf dx offsetLow, dxOf dx offsetHi )
     ( dx + (offsetLow * day_), dx + (offsetHi * day_) )
+
+
+monthStr : Time.Month -> String
+monthStr month =
+    case month of
+        Time.Jan ->
+            "01"
+
+        Time.Feb ->
+            "02"
+
+        Time.Mar ->
+            "03"
+
+        Time.Apr ->
+            "04"
+
+        Time.May ->
+            "05"
+
+        Time.Jun ->
+            "06"
+
+        Time.Jul ->
+            "07"
+
+        Time.Aug ->
+            "08"
+
+        Time.Sep ->
+            "09"
+
+        Time.Oct ->
+            "10"
+
+        Time.Nov ->
+            "11"
+
+        Time.Dec ->
+            "12"
+
+
+unixTimeStr : UnixTime -> String
+unixTimeStr tm =
+    let
+        pt =
+            Time.millisToPosix tm
+
+        y =
+            String.fromInt <| Time.toYear Time.utc pt
+
+        mo =
+            monthStr <| Time.toMonth Time.utc pt
+
+        d =
+            String.fromInt <| Time.toDay Time.utc pt
+
+        h =
+            String.fromInt <| Time.toHour Time.utc pt
+
+        mi =
+            String.fromInt <| Time.toMinute Time.utc pt
+    in
+    y ++ "-" ++ mo ++ "-" ++ d ++ " " ++ h ++ ":" ++ mi
 
 
 

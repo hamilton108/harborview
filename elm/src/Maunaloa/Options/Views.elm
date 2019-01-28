@@ -1,6 +1,7 @@
 module Maunaloa.Options.Views exposing (view)
 
 import Common.Buttons as BTN
+import Common.DateUtil exposing (unixTimeStr)
 import Common.Html
     exposing
         ( Checked(..)
@@ -41,7 +42,20 @@ view model =
                     ""
 
                 Just sx ->
-                    Debug.toString sx
+                    let
+                        o =
+                            String.fromFloat sx.o
+
+                        hi =
+                            String.fromFloat sx.h
+
+                        lo =
+                            String.fromFloat sx.l
+
+                        c =
+                            String.fromFloat sx.c
+                    in
+                    unixTimeStr sx.unixTime ++ ", o: " ++ o ++ ", hi: " ++ hi ++ ", lo: " ++ lo ++ ", c: " ++ c
 
         dlgHeader =
             case model.selectedPurchase of

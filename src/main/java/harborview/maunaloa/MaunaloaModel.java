@@ -41,7 +41,7 @@ public class MaunaloaModel {
     }
 
     public void clearRiscLines(int ticker) {
-
+        optionRiscRepos.clearRiscLines(ticker);
     }
 
 

@@ -177,7 +177,7 @@ public class MaunaloaController {
     public JsonResult clearRiscLines(@PathVariable("ticker") int ticker) {
         try {
             maunaloaModel.clearRiscLines(ticker);
-            return new JsonResult(true, null, 0);
+            return new JsonResult(true, String.format("Risc Lines for %d cleared", ticker), 0);
         }
         catch (Exception ex) {
             return new JsonResult(false, ex.getMessage(), 0);

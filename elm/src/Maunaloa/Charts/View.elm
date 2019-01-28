@@ -34,6 +34,7 @@ view model =
         , labelCheckBox (HtmlId cbId) (InputCaption "Reset cache") (Checked model.resetCache) ToggleResetCache
         , BTN.button "Spot" FetchSpot
         , BTN.button "Risc Lines" FetchRiscLines
+        , BTN.button "Clear Risc Lines" ClearRiscLines
         , BTN.button "Previous" Previous
         , BTN.button "Next" Next
         , BTN.button "Last" Last

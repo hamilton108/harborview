@@ -60,8 +60,7 @@ optionDecoder =
 stockDecoder : JD.Decoder Stock
 stockDecoder =
     JD.succeed Stock
-        |> JP.required "dx" JD.string
-        |> JP.required "tm" JD.string
+        |> JP.required "unixTime" JD.int
         |> JP.required "o" JD.float
         |> JP.required "h" JD.float
         |> JP.required "l" JD.float

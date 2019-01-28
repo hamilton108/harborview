@@ -20,6 +20,7 @@ module Maunaloa.Options.Types exposing
     , Volume(..)
     )
 
+import Common.DateUtil exposing (UnixTime)
 import Common.ModalDialog as DLG exposing (errorAlert)
 import Common.Select as CMB
 import Common.Types exposing (JsonStatus)
@@ -33,8 +34,7 @@ type alias Flags =
 
 
 type alias Stock =
-    { date : String
-    , time : String
+    { unixTime : UnixTime
     , o : Float
     , h : Float
     , l : Float
