@@ -81,17 +81,23 @@ document.addEventListener("DOMContentLoaded", function () {
     */
     //---------------------- Elm.Maunaloa.Charts ---------------------------
 
-    const saveCanvases = (canvases) => {
-        const canvas = canvases[0]; // this.canvas; //document.getElementById('canvas');
+    const saveCanvases = (canvases, canvasVolume, canvasCyberCycle) => {
+        const c1 = canvases[0]; // this.canvas; //document.getElementById('canvas');
+        const w1 = c1.width;
+        const h1 = c1.height;
+        const h2 = canvasVolume.height;
+        const h3 = canvasCyberCycle.height;
         const newCanvas = document.createElement('canvas');
-        newCanvas.width = canvas.width;
-        newCanvas.height = canvas.height;
+        newCanvas.width = w1;
+        newCanvas.height = h1 + h2 + h3;
         const newCtx = newCanvas.getContext("2d");
         newCtx.fillStyle = "FloralWhite";
-        newCtx.fillRect(0, 0, canvas.width, canvas.height);
+        newCtx.fillRect(0, 0, newCanvas.width, newCanvas.height);
         canvases.forEach(cx => {
             newCtx.drawImage(cx, 0, 0);
         });
+        newCtx.drawImage(canvasVolume, 0, h1);
+        newCtx.drawImage(canvasCyberCycle, 0, h1 + h2);
         newCanvas.toBlob(function (blob) {
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a");
@@ -139,7 +145,9 @@ document.addEventListener("DOMContentLoaded", function () {
             blobCanvases.push(document.getElementById(myCanvases.MAIN_CHART));
             blobCanvases.push(document.getElementById(config.DOODLE));
             blobCanvases.push(document.getElementById(config.LEVEL_LINES));
-            saveCanvases(blobCanvases);
+            const canvasVolume = document.getElementById(myCanvases.VOLUME);
+            const canvasCyberCycle = document.getElementById(myCanvases.OSC);
+            saveCanvases(blobCanvases, canvasVolume, canvasCyberCycle);
         };
     };
     elmApp("my-app", 1, canvases.DAY, scrapbooks.DAY);
