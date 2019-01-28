@@ -117,6 +117,7 @@ type alias RiscLinesJs =
     , valueRange : ( Float, Float )
     }
 
+
 type alias Spot =
     { tm : UnixTime
     , o : Float -- open
@@ -125,10 +126,11 @@ type alias Spot =
     , c : Float -- close
     }
 
+
 type ChartType
     = DayChart
+    | WeekChart
     | MonthChart
-    | YearChart
 
 
 type Msg

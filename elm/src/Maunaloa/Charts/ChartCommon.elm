@@ -176,11 +176,11 @@ chartInfoWindow dropAmt takeAmt chartType ci =
                 T.DayChart ->
                     1
 
-                T.MonthChart ->
-                    3
-
-                T.YearChart ->
+                T.WeekChart ->
                     6
+
+                T.MonthChart ->
+                    12
 
         strokes =
             [ "#000000", "#ff0000", "#aa00ff" ]

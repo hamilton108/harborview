@@ -44,10 +44,10 @@ initModel flags =
     , chartType =
         case flags of
             2 ->
-                MonthChart
+                WeekChart
 
             3 ->
-                YearChart
+                MonthChart
 
             _ ->
                 DayChart

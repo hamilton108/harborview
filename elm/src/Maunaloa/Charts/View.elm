@@ -12,14 +12,26 @@ import Common.ModalDialog as DLG
 import Common.Select as CS
 import Html as H
 import Html.Attributes as A
-import Maunaloa.Charts.Types exposing (Model, Msg(..))
+import Maunaloa.Charts.Types exposing (ChartType(..), Model, Msg(..))
 
 
 view : Model -> H.Html Msg
 view model =
+    let
+        cbId =
+            case model.chartType of
+                DayChart ->
+                    "cb-day"
+
+                WeekChart ->
+                    "cb-week"
+
+                MonthChart ->
+                    "cb-month"
+    in
     H.div [ A.class "grid-elm" ]
         [ CS.makeSelect "Tickers: " FetchCharts model.tickers model.selectedTicker
-        , labelCheckBox (HtmlId "cb1") (InputCaption "Reset cache") (Checked model.resetCache) ToggleResetCache
+        , labelCheckBox (HtmlId cbId) (InputCaption "Reset cache") (Checked model.resetCache) ToggleResetCache
         , BTN.button "Spot" FetchSpot
         , BTN.button "Risc Lines" FetchRiscLines
         , BTN.button "Previous" Previous

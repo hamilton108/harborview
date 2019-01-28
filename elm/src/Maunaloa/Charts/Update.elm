@@ -75,7 +75,8 @@ update msg model =
             ( DLG.errorAlert "Error" "ChartsFetched Error: " s model, Cmd.none )
 
         ToggleResetCache ->
-            ( { model | resetCache = not model.resetCache }, Cmd.none )
+            Debug.log "ToggleResetCache"
+                ( { model | resetCache = not model.resetCache }, Cmd.none )
 
         Previous ->
             let
