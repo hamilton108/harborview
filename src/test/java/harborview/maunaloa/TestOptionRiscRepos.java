@@ -1,17 +1,16 @@
 package harborview.maunaloa;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gargoylesoftware.htmlunit.Page;
 import harborview.dto.html.RiscLinesDTO;
-import harborview.dto.html.options.*;
+import harborview.dto.html.options.OptionDTO;
+import harborview.dto.html.options.OptionRiscDTO;
+import harborview.dto.html.options.StockAndOptions;
+import harborview.dto.html.options.StockPriceDTO;
 import harborview.maunaloa.repos.OptionRiscRepos;
 import netfondsrepos.downloader.MockDownloader;
 import netfondsrepos.repos.EtradeRepository2;
-import oahu.financial.DerivativePrice;
 import oahu.financial.OptionCalculator;
 import oahu.financial.html.EtradeDownloader;
-import oahu.financial.repository.EtradeRepository;
 import oahu.financial.repository.StockMarketRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,12 +40,12 @@ public class TestOptionRiscRepos {
     @DisplayName("Test fetching stock and calls")
     @Test
     public void testCalls() {
-        int stockId = 1; // NHY
+        int STOCK_ID_NHY = 1; // NHY
 
         OptionRiscRepos riscRepos = new OptionRiscRepos();
         riscRepos.setEtrade(etrade);
 
-        StockAndOptions result = riscRepos.calls(stockId);
+        StockAndOptions result = riscRepos.calls(STOCK_ID_NHY);
         StockPriceDTO stock = result.getStock();
         assertNotNull(stock, "Stock is null");
         //assertEquals("2018-11-23", stock.getDx(), "Stock dx not 2018-11-23");

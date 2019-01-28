@@ -4,7 +4,7 @@ const host = "localhost";
 const riscUrl = `http://${host}:6346/maunaloa/optionprice`;
 
 class LevelLine {
-    constructor(parent,levelValue,x1,x2,y,conf) {
+    constructor(parent, levelValue, x1, x2, y, conf) {
         this.parent = parent;
         this.levelValue = levelValue;
         this.lineWidth = 1;
@@ -14,7 +14,7 @@ class LevelLine {
         this.x2 = x2;
         this.y1 = y;
         this.y2 = y;
-        this.legend = conf.legendFn || function() {
+        this.legend = conf.legendFn || function () {
             return this.levelValue;
         };
         this.draggable = conf.hasOwnProperty("draggable") === true ? conf.draggable : true;
@@ -70,7 +70,7 @@ export class LevelLines {
         };
         //*/
     }
-    reset(hruler,vruler) {
+    reset(hruler, vruler) {
         this.hruler = hruler;
         this.vruler = vruler;
         this.clearCanvas();
@@ -101,11 +101,12 @@ export class LevelLines {
             ctx.stroke();
         }
         if (this._spot) {
-          const lineChart = MAUNALOA.lineChart(this.hruler, this.vruler, ctx);
-          lineChart.drawCandlestick(this._spot);
-          ctx.font = "16px Arial";
-          ctx.fillStyle = "crimson";
-          ctx.fillText("Spot: " + this._spot.tm, 1000, 50);
+            const lineChart = MAUNALOA.lineChart(this.hruler, this.vruler, ctx);
+            lineChart.drawCandlestick(this._spot);
+            ctx.font = "16px Arial";
+            ctx.fillStyle = "crimson";
+            const curTm = new Date(this._spot.tm);
+            ctx.fillText("Spot: " + curTm.toGMTString(), 1000, 50);
         }
     }
     closestLine(mx, my) {
@@ -162,7 +163,7 @@ export class LevelLines {
         });
     }
     static handleMouseDown(self) {
-        return function(e) {
+        return function (e) {
             if (self.lines.length === 0) {
                 return;
             }
@@ -178,7 +179,7 @@ export class LevelLines {
         }
     }
     static handleMouseMove(self) {
-        return function(e) {
+        return function (e) {
             if (!self.isDown) {
                 return;
             }
@@ -202,7 +203,7 @@ export class LevelLines {
         }
     }
     static handleMouseUp(self) {
-        return function(e) {
+        return function (e) {
             if (self.nearest === null) {
                 return;
             }
@@ -215,13 +216,13 @@ export class LevelLines {
             }
             self.isDown = false;
             self.nearest = null;
-            //self.draw();
+            self.draw();
         }
     }
     addLine() {
         const levelPix = 100;
         const levelValue = this.vruler.pixToValue(levelPix);
-        const line = new LevelLine(this,levelValue,300,this.canvas.width,levelPix,{});
+        const line = new LevelLine(this, levelValue, 300, this.canvas.width, levelPix, {});
         this.lines.push(line);
         this.draw();
     }
@@ -231,7 +232,7 @@ export class LevelLines {
     }
     //addRiscLines(ticker,stockPrice,optionPrice,risc,breakEven) {
     addRiscLines(cfg) {
-        cfg.riscLines.forEach( line => {
+        cfg.riscLines.forEach(line => {
             this.addRiscLine(line);
         });
         this.draw();
@@ -241,10 +242,11 @@ export class LevelLines {
         const y = this.vruler.valueToPix(breakEven);
         const x0 = 300;
         const x1 = this.canvas.width;
-        const breakEvenLine = new LevelLine(this,breakEven,x0,x1,y,
-            {   draggable: false,
+        const breakEvenLine = new LevelLine(this, breakEven, x0, x1, y,
+            {
+                draggable: false,
                 fontColor: "green",
-                legendFn: function() {
+                legendFn: function () {
                     return `[${line.ticker}] Ask: ${line.ask}, Break-even: ${breakEven}`;
                 }
             });
@@ -253,14 +255,15 @@ export class LevelLines {
         const stockPrice = line.stockPrice.toFixed(1);
         const y2 = this.vruler.valueToPix(stockPrice);
         const self = this;
-        const riscLine = new LevelLine(this,stockPrice,x0,x1,y2,
-            {   draggable: true,
-                legendFn: function() {
+        const riscLine = new LevelLine(this, stockPrice, x0, x1, y2,
+            {
+                draggable: true,
+                legendFn: function () {
                     const curRisc = this.risc || line.risc;
                     const curOptionPrice = this.optionPrice || line.optionPrice.toFixed(1);
                     return `[${line.ticker}] Price: ${curOptionPrice}, Risc: ${curRisc} => ${this.levelValue}`;
                 },
-                onMouseUp: function() {
+                onMouseUp: function () {
                     this.risc = "-";
                     const curUrl = `${riscUrl}/${line.ticker}/${this.levelValue}`;
                     fetch(curUrl)
@@ -270,7 +273,7 @@ export class LevelLines {
                             this.optionPrice = result.optionPrice.toFixed(1);
                             this.risc = result.risc.toFixed(1);
                             self.draw();
-                    });
+                        });
                 }
             });
         this.lines.push(riscLine);

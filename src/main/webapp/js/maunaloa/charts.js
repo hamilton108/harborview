@@ -123,12 +123,10 @@ document.addEventListener("DOMContentLoaded", function () {
             levelLines.addRiscLines(riscLines);
         };
         app.ports.drawRiscLines.subscribe(drawRiscLines);
-        /*
-        const drawSpot = function(spot) {
-          levelLines.spot = spot;
+        const drawSpot = function (spot) {
+            levelLines.spot = spot;
         };
         app.ports.drawSpot.subscribe(drawSpot);
-        */
 
         const btnClear = document.getElementById(config.BTN_CLEAR);
         btnClear.onclick = () => {
