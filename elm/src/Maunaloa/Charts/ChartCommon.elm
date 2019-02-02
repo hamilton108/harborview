@@ -177,10 +177,10 @@ chartInfoWindow dropAmt takeAmt chartType ci =
                     1
 
                 T.WeekChart ->
-                    6
+                    3
 
                 T.MonthChart ->
-                    12
+                    6
 
         strokes =
             [ "#000000", "#ff0000", "#aa00ff" ]

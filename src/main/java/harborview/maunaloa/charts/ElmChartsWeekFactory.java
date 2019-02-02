@@ -15,10 +15,6 @@ import java.util.stream.IntStream;
 public class ElmChartsWeekFactory extends ElmChartsFactory {
     @Override
     public ElmCharts elmCharts(Collection<StockPrice> prices) {
-        /*
-        List<Integer> distYears = distinctYears(prices);
-        System.out.println(distYears);
-        */
         Map<Integer, Map<Integer, List<StockPrice>>> mx =
                 prices.stream()
                         .collect(Collectors.groupingBy(s -> s.getLocalDx().getYear(),
@@ -65,29 +61,4 @@ public class ElmChartsWeekFactory extends ElmChartsFactory {
         LocalDate dx = price.getLocalDx();
         return dx.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
     }
-    /*
-    private List<Integer> distinctYears(Collection<StockPrice> prices) {
-        List<Integer> result = new ArrayList<>();
-        List<StockPrice> pricesx = (List<StockPrice>)prices;
-        StockPrice firstObj = pricesx.get(0);
-        StockPrice lastObj = pricesx.get(pricesx.size()-1);
-        int firstYear = firstObj.getLocalDx().getYear();
-        int lastYear = lastObj.getLocalDx().getYear();
-        result.add(firstYear);
-        if (lastYear > firstYear) {
-            int tmp = firstYear+1;
-            while (tmp <= lastYear) {
-                result.add(tmp);
-                ++tmp;
-            }
-        }
-        return result;
-    }
-    private boolean isFirstWeekInDecember(StockPrice price) {
-        LocalDate dx = price.getLocalDx();
-        int month = dx.getMonthValue();
-        int week = dx.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
-        return (week == 1) && (month == 12);
-    }
-    //*/
 }

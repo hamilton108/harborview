@@ -8,6 +8,7 @@ import harborview.dto.html.RiscLinesDTO;
 import harborview.dto.html.SelectItem;
 import harborview.dto.html.options.*;
 import harborview.maunaloa.charts.ElmChartsFactory;
+import harborview.maunaloa.charts.ElmChartsMonthFactory;
 import harborview.maunaloa.charts.ElmChartsWeekFactory;
 import harborview.maunaloa.repos.OptionRepository;
 import harborview.maunaloa.repos.OptionRiscRepos;
@@ -20,6 +21,7 @@ import oahu.financial.repository.StockMarketRepository;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class MaunaloaModel {
@@ -29,6 +31,7 @@ public class MaunaloaModel {
 
     private Map<Integer,ElmCharts> elmChartsDayMap = new HashMap<>();
     private Map<Integer,ElmCharts> elmChartsWeekMap = new HashMap<>();
+    private Map<Integer, ElmCharts> elmChartsMonthMap = new HashMap<>();
     private OptionRepository optionRepos;
     private OptionRiscRepos optionRiscRepos;
     private EtradeRepository<Tuple<String>,Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>>
@@ -59,6 +62,7 @@ public class MaunaloaModel {
                 elmChartsWeekMap = new HashMap<>();
                 break;
             case MONTH:
+                elmChartsMonthMap = new HashMap<>();
                 break;
         }
     }
@@ -82,46 +86,35 @@ public class MaunaloaModel {
         return optionRiscRepos.puts(oid);
     }
 
-    public ElmCharts elmChartsDay(int stockId) {
-        ElmCharts result = elmChartsDayMap.get(stockId);
-        if (result == null) {
-            Collection<StockPrice> prices = stockMarketRepository.findStockPrices(
-                    stockMarketRepository.getTickerFor(stockId),startDate);
-            ElmChartsFactory factory = new ElmChartsFactory();
-            result = factory.elmCharts(prices);
-            elmChartsDayMap.put(stockId,result);
-        }
-        return result;
-    }
-
-    public ElmCharts elmChartsWeek(int stockId) {
+    public ElmCharts elmCharts(int stockId, ElmChartsFactory factory, Consumer<ElmCharts> storeFn) {
         ElmCharts result = elmChartsWeekMap.get(stockId);
         if (result == null) {
             Collection<StockPrice> prices = stockMarketRepository.findStockPrices(
                     stockMarketRepository.getTickerFor(stockId),startDate);
-            ElmChartsFactory factory = new ElmChartsWeekFactory();
             result = factory.elmCharts(prices);
-            elmChartsWeekMap.put(stockId,result);
+            storeFn.accept(result);
         }
         return result;
     }
+    public ElmCharts elmChartsDay(int stockId) {
+        return elmCharts(stockId, new ElmChartsFactory(), result -> {
+            elmChartsDayMap.put(stockId, result);
+        });
+    }
+
+    public ElmCharts elmChartsWeek(int stockId) {
+        return elmCharts(stockId, new ElmChartsWeekFactory(), result -> {
+            elmChartsWeekMap.put(stockId, result);
+        });
+    }
 
     public ElmCharts elmChartsMonth(int stockId) {
-        Collection<StockPrice> prices = stockMarketRepository.findStockPrices(
-                stockMarketRepository.getTickerFor(stockId),startDate);
-        return null; // elmCharts(prices);
+        return elmCharts(stockId, new ElmChartsMonthFactory(), result -> {
+            elmChartsMonthMap.put(stockId, result);
+        });
     }
 
     public StockPriceDTO spot(int oid) {
-        /*
-        Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>
-                tmp = optionRepos.stockAndOptions(oid);
-        StockPriceDTO sp = null;
-        if (tmp.first().isPresent()) {
-            sp = new StockPriceDTO(tmp.first().get());
-        }
-        return sp;
-        */
         return optionRiscRepos.spot(oid);
     }
 

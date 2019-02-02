@@ -15,6 +15,9 @@ document.addEventListener("DOMContentLoaded", function () {
             OSC: 'osc-2',
         },
         MONTH: {
+            MAIN_CHART: 'chart-3',
+            VOLUME: 'vol-3',
+            OSC: 'osc-3',
         }
     };
     const scrapbooks = {
@@ -57,6 +60,26 @@ document.addEventListener("DOMContentLoaded", function () {
             BTN_DRAGGABLE: "btn-draggable-2",
             ARROW_ORIENT: "arrow2-orient",
             COMMENT: "comment2",
+        },
+        MONTH: {
+            SVG: 'svg-3',
+            DIV_DOODLE: 'div-3-doodle',
+            DIV_LEVEL_LINES: 'div-3-levelline',
+            DOODLE: 'doodle-3',
+            LEVEL_LINES: 'levellines-3',
+            RG_LAYER: "rg-layer3",
+            COLOR: "color3",
+            RG_LINE_SIZE: "rg-line3",
+            BTN_LINE: "btn-scrapbook3-line",
+            BTN_HORIZ: "btn-scrapbook3-horiz",
+            BTN_ARROW: "btn-scrapbook3-arrow",
+            BTN_TEXT: "btn-scrapbook3-text",
+            BTN_CLEAR: "btn-scrapbook3-clear",
+            BTN_SAVE: "btn-scrapbook3-save",
+            BTN_LEVELLINE: "btn-levelline-3",
+            BTN_DRAGGABLE: "btn-draggable-3",
+            ARROW_ORIENT: "arrow3-orient",
+            COMMENT: "comment3",
         }
     };
     const setCanvasSize = function (selector, w, h) {
@@ -152,6 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
     elmApp("my-app", 1, canvases.DAY, scrapbooks.DAY);
     elmApp("my-app2", 2, canvases.WEEK, scrapbooks.WEEK);
+    elmApp("my-app3", 3, canvases.MONTH, scrapbooks.MONTH);
     //---------------------- Scrapbooks ---------------------------
     //const scrap1 = new Scrapbook(scrapbooks.DAY);
 });

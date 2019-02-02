@@ -86,23 +86,35 @@ public class MaunaloaController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "ticker/{oid}/{rc}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ElmCharts ticker(@PathVariable("oid") int oid,
+    @RequestMapping(value = "days/{oid}/{rc}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ElmCharts dayChart(@PathVariable("oid") int oid,
                             @PathVariable("rc") boolean resetCache) {
         if (resetCache){
             maunaloaModel.resetElmChartsCache(ElmChartType.DAY);
         }
         return maunaloaModel.elmChartsDay(oid);
     }
+
     @ResponseBody
-    @RequestMapping(value = "tickerweek/{oid}/{rc}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ElmCharts tickerWeek(@PathVariable("oid") int oid,
+    @RequestMapping(value = "weeks/{oid}/{rc}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ElmCharts weekChart(@PathVariable("oid") int oid,
                             @PathVariable("rc") boolean resetCache) {
         if (resetCache){
             maunaloaModel.resetElmChartsCache(ElmChartType.WEEK);
         }
         return maunaloaModel.elmChartsWeek(oid);
     }
+
+    @ResponseBody
+    @RequestMapping(value = "months/{oid}/{rc}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ElmCharts monthChart(@PathVariable("oid") int oid,
+                               @PathVariable("rc") boolean resetCache) {
+        if (resetCache){
+            maunaloaModel.resetElmChartsCache(ElmChartType.MONTH);
+        }
+        return maunaloaModel.elmChartsMonth(oid);
+    }
+
     @ResponseBody
     @RequestMapping(value = "calls/{ticker}/{rc}", method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public StockAndOptions calls(@PathVariable("ticker") int ticker, @PathVariable("rc") boolean resetCache) {
