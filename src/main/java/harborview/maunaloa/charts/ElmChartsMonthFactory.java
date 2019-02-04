@@ -12,23 +12,31 @@ import java.util.stream.IntStream;
 public class ElmChartsMonthFactory extends ElmChartsFactory {
     @Override
     public ElmCharts elmCharts(Collection<StockPrice> prices) {
-        Map<Integer, Map<Integer, List<StockPrice>>> mx =
-                prices.stream()
-                        .collect(Collectors.groupingBy(s -> s.getLocalDx().getYear(),
-                                Collectors.groupingBy(s -> s.getLocalDx().getMonth().getValue())));
+        Map<Integer, Map<Integer, List<StockPrice>>> tmx = treeMap(prices);
+        List<StockPrice> byMonths = pricesByMonth(tmx);
+        return super.elmCharts(byMonths);
+    }
 
-        Map<Integer, Map<Integer, List<StockPrice>>> tmx = new TreeMap<>(mx);
-        List<StockPrice> pricesByMonth = new ArrayList<>();
-        for (Map.Entry<Integer, Map<Integer, List<StockPrice>>> entry : tmx.entrySet()) {
+    List<StockPrice> pricesByMonth(Map<Integer, Map<Integer, List<StockPrice>>> treeMap) {
+        List<StockPrice> result = new ArrayList<>();
+        for (Map.Entry<Integer, Map<Integer, List<StockPrice>>> entry : treeMap.entrySet()) {
             Map<Integer, List<StockPrice>> curMap = entry.getValue();
             IntStream.range(1,12).forEach(r -> {
                 List<StockPrice> curMonthPrices = curMap.get(r);
                 if (curMonthPrices != null) {
-                    pricesByMonth.add(monthToStockPrice(curMonthPrices));
+                    result .add(monthToStockPrice(curMonthPrices));
                 }
             });
         }
-        return super.elmCharts(pricesByMonth);
+        return result;
+    }
+    Map<Integer, Map<Integer, List<StockPrice>>> treeMap(Collection<StockPrice> prices) {
+        Map<Integer, Map<Integer, List<StockPrice>>> mx =
+                prices.stream()
+                        .collect(Collectors.groupingBy(s -> s.getLocalDx().getYear(),
+                                Collectors.groupingBy(s -> s.getLocalDx().getMonth().getValue())));
+        Map<Integer, Map<Integer, List<StockPrice>>> tmx = new TreeMap<>(mx);
+        return tmx;
     }
     StockPrice monthToStockPrice(List<StockPrice> monthlyPrices) {
         if (monthlyPrices == null || monthlyPrices.size() == 0) {
