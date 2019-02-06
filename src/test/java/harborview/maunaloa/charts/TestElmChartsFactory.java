@@ -1,8 +1,6 @@
 package harborview.maunaloa.charts;
 
 import critterrepos.beans.StockPriceBean;
-import harborview.dto.html.ElmCharts;
-import oahu.financial.Stock;
 import oahu.financial.StockPrice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,8 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class TestElmChartsFactory {
 

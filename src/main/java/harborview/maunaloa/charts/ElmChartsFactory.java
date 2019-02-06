@@ -25,8 +25,9 @@ public class ElmChartsFactory {
     private Filter calcCyberCycle10 = new CyberCycle(10);
     private Filter roofingFilter = new RoofingFilter();
 
-    private LocalDateTime startDate = LocalDateTime.of(2014,1,1,0,0);
-    private LocalDate startDatex = LocalDate.of(2014,1,1);
+    private int startYear = 2010;
+    private LocalDateTime startDate = LocalDateTime.of(startYear,1,1,0,0);
+    private LocalDate startDatex = LocalDate.of(startYear,1,1);
     private double roundToNumDecimals(double value) {
         return roundToNumDecimals(value,10.0);
     }
@@ -51,12 +52,6 @@ public class ElmChartsFactory {
                 .map(this::roundToNumDecimals).collect(Collectors.toList());
     }
     private Chart mainChart(List<Double> spots, List<StockPrice> winSpots) {
-        /*
-        List<Double> itrend10 = calcItrend10.calculate(spots).stream()
-                .map(this::roundToNumDecimals).collect(Collectors.toList());
-        List<Double> itrend50 = calcItrend50.calculate(spots).stream()
-                .map(this::roundToNumDecimals).collect(Collectors.toList());
-                */
         List<Double> itrend10 = calculateFilter(calcItrend10, spots);
         List<Double> itrend50 = calculateFilter(calcItrend50, spots);
         List<Candlestick> candlesticks = winSpots.stream().map(Candlestick::new).collect(Collectors.toList());
@@ -68,12 +63,6 @@ public class ElmChartsFactory {
     }
     private Chart cyberCycleChart(List<Double> spots) {
         Chart chart = new Chart();
-        /*
-        List<Double> cc10 = calcCyberCycle10.calculate(spots).stream()
-                .map(this::roundToNumDecimals).collect(Collectors.toList());
-        List<Double> cc10rf = roofingFilter.calculate(cc10).stream()
-                .map(this::roundToNumDecimals).collect(Collectors.toList());
-                */
         List<Double> cc10 = calculateFilter(calcCyberCycle10, spots);
         List<Double> cc10rf = calculateFilter(roofingFilter, spots);
         chart.addLine(Lists.reverse(cc10));
@@ -88,7 +77,6 @@ public class ElmChartsFactory {
         maxVol.ifPresent(v -> {
             List<Double> normalized = vol.stream().map(x -> x/v).collect(Collectors.toList());
             chart.addBar(Lists.reverse(normalized));
-            //chart.addLine(Lists.reverse(calcItrend10.calculate(normalized)));
         });
         return chart;
     }
