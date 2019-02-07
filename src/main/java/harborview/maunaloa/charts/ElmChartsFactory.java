@@ -28,6 +28,10 @@ public class ElmChartsFactory {
     private int startYear = 2010;
     private LocalDateTime startDate = LocalDateTime.of(startYear,1,1,0,0);
     private LocalDate startDatex = LocalDate.of(startYear,1,1);
+
+    public int skipNum(int totalNum) {
+        return totalNum - 400;
+    }
     private double roundToNumDecimals(double value) {
         return roundToNumDecimals(value,10.0);
     }
@@ -83,8 +87,8 @@ public class ElmChartsFactory {
     public ElmCharts elmCharts(Collection<StockPrice> prices) {
         ElmCharts result = new ElmCharts();
         int totalNum = prices.size();
-        int skipNum = totalNum - 400;
-        List<StockPrice> winSpots = prices.stream().skip(skipNum).collect(Collectors.toList());
+        //int skipNum = totalNum - 400;
+        List<StockPrice> winSpots = prices.stream().skip(skipNum(totalNum)).collect(Collectors.toList());
         List<Double> spots = winSpots.stream().map(x -> x.getCls()).collect(Collectors.toList());
 
         result.setChart(mainChart(spots,winSpots));

@@ -11,6 +11,10 @@ import java.util.stream.IntStream;
 
 public class ElmChartsMonthFactory extends ElmChartsFactory {
     @Override
+    public int skipNum(int totalNum) {
+        return 0;
+    }
+    @Override
     public ElmCharts elmCharts(Collection<StockPrice> prices) {
         Map<Integer, Map<Integer, List<StockPrice>>> tmx = treeMap(prices);
         List<StockPrice> byMonths = pricesByMonth(tmx);
