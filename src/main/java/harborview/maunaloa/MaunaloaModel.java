@@ -86,8 +86,8 @@ public class MaunaloaModel {
         return optionRiscRepos.puts(oid);
     }
 
-    public ElmCharts elmCharts(int stockId, ElmChartsFactory factory, Consumer<ElmCharts> storeFn) {
-        ElmCharts result = elmChartsWeekMap.get(stockId);
+    public ElmCharts elmCharts(int stockId, Map<Integer,ElmCharts> cache, ElmChartsFactory factory, Consumer<ElmCharts> storeFn) {
+        ElmCharts result = cache.get(stockId);
         if (result == null) {
             Collection<StockPrice> prices = stockMarketRepository.findStockPrices(
                     stockMarketRepository.getTickerFor(stockId),startDate);
@@ -97,19 +97,19 @@ public class MaunaloaModel {
         return result;
     }
     public ElmCharts elmChartsDay(int stockId) {
-        return elmCharts(stockId, new ElmChartsFactory(), result -> {
+        return elmCharts(stockId, elmChartsDayMap, new ElmChartsFactory(), result -> {
             elmChartsDayMap.put(stockId, result);
         });
     }
 
     public ElmCharts elmChartsWeek(int stockId) {
-        return elmCharts(stockId, new ElmChartsWeekFactory(), result -> {
+        return elmCharts(stockId, elmChartsWeekMap, new ElmChartsWeekFactory(), result -> {
             elmChartsWeekMap.put(stockId, result);
         });
     }
 
     public ElmCharts elmChartsMonth(int stockId) {
-        return elmCharts(stockId, new ElmChartsMonthFactory(), result -> {
+        return elmCharts(stockId, elmChartsMonthMap, new ElmChartsMonthFactory(), result -> {
             elmChartsMonthMap.put(stockId, result);
         });
     }
