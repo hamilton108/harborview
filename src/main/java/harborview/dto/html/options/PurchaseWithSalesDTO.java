@@ -181,9 +181,11 @@ public class PurchaseWithSalesDTO {
     }
 
 
-    public void setCachedEtrade(ChachedEtradeRepository<Tuple<String>> etrade) {
+    /*
+    public void setCachedEtrade(EtradeRepository etrade) {
         p.setRepository(etrade);
     }
+    */
     public void setEtrade(
             EtradeRepository<Tuple<String>,Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>> etrade) {
         //p.setRepository(etrade);

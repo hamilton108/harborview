@@ -10,10 +10,10 @@ import java.util.List;
 
 public class CritterModel {
     List<OptionPurchaseBean> critters11;
-    List<OptionPurchaseBean> critters4;
+    List<OptionPurchaseBean> critters3;
 
     public List<OptionPurchaseBean> fetchCritters(int purchaseType) {
-        List<OptionPurchaseBean> critters = purchaseType == 4 ? critters4 : critters11;
+        List<OptionPurchaseBean> critters = purchaseType == 3 ? critters3 : critters11;
         if (critters == null) {
             List<OptionPurchaseBean> result = MyBatisUtils.withSession((session) ->
                     session.getMapper(CritterMapper.class).activePurchasesAll(purchaseType));
@@ -23,7 +23,7 @@ public class CritterModel {
             }
             */
             if (purchaseType == 4) {
-                critters4 = result;
+                critters3 = result;
             }
             else {
                 critters11 = result;
@@ -68,12 +68,12 @@ public class CritterModel {
     }
 
     public void resetCache() {
-        critters4 = null;
+        critters3 = null;
         critters11 = null;
     }
     public void resetCache(int purchaseType) {
-        if (purchaseType == 4) {
-            critters4 = null;
+        if (purchaseType == 3) {
+            critters3 = null;
         }
         else {
             critters11 = null;

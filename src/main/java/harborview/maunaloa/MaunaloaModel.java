@@ -10,7 +10,6 @@ import harborview.dto.html.options.*;
 import harborview.maunaloa.charts.ElmChartsFactory;
 import harborview.maunaloa.charts.ElmChartsMonthFactory;
 import harborview.maunaloa.charts.ElmChartsWeekFactory;
-import harborview.maunaloa.repos.OptionRepository;
 import harborview.maunaloa.repos.OptionRiscRepos;
 import oahu.dto.Tuple;
 import oahu.dto.Tuple3;
@@ -32,7 +31,6 @@ public class MaunaloaModel {
     private Map<Integer,ElmCharts> elmChartsDayMap = new HashMap<>();
     private Map<Integer,ElmCharts> elmChartsWeekMap = new HashMap<>();
     private Map<Integer, ElmCharts> elmChartsMonthMap = new HashMap<>();
-    private OptionRepository optionRepos;
     private OptionRiscRepos optionRiscRepos;
     private EtradeRepository<Tuple<String>,Tuple3<Optional<StockPrice>,Collection<DerivativePrice>,Collection<DerivativePrice>>>
         etrade;
@@ -73,16 +71,12 @@ public class MaunaloaModel {
     }
 
     public void resetSpotAndOptions() {
-        //optionRepos.resetSpotAndOptions();
-        //optionRepos.resetSpotAndOptions();
         optionRiscRepos.resetSpotAndOptions();
     }
     public StockAndOptions calls(int oid) {
-        //return optionRepos.calls(oid);
         return optionRiscRepos.calls(oid);
     }
     public StockAndOptions puts(int oid) {
-        //return optionRepos.puts(oid);
         return optionRiscRepos.puts(oid);
     }
 
@@ -148,7 +142,7 @@ public class MaunaloaModel {
         int status,
         Derivative.OptionType ot) {
         Collection<OptionPurchase> purchases =  stockMarketRepository.purchasesWithSalesAll(purchaseType,status,null);
-        optionRepos.setOptionPurchases(purchases);
+        optionRiscRepos.setOptionPurchases(purchases);
         List<PurchaseWithSalesDTO> result =
             purchases.stream()
                 .map(x -> new PurchaseWithSalesDTO(x, etrade, optionCalculator))
@@ -178,13 +172,13 @@ public class MaunaloaModel {
     }
 
     public OptionPriceForDTO optionPriceFor(String optionTicker, double levelValue) {
-        DerivativePrice option = optionRepos.getOptionFor(optionTicker);
+        DerivativePrice option = optionRiscRepos.getOptionFor(optionTicker); //etrade.findDerivativePrice(optionTicker);
         double curOptionPrice = option.optionPriceFor(levelValue);
         return new OptionPriceForDTO(curOptionPrice,option.getCurrentRisc());
     }
 
     public int sellPurchase(OptionSaleBean dto) {
-        OptionPurchaseBean p = (OptionPurchaseBean)optionRepos.getPurchaseFor(dto.getPurchaseOid());
+        OptionPurchaseBean p = (OptionPurchaseBean)optionRiscRepos.getPurchaseFor(dto.getPurchaseOid());
         p.addSale(dto);
         return dto.getOid();
     }

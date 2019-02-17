@@ -6,6 +6,7 @@ import harborview.dto.html.options.*;
 import oahu.dto.Tuple;
 import oahu.dto.Tuple3;
 import oahu.financial.DerivativePrice;
+import oahu.financial.OptionPurchase;
 import oahu.financial.StockPrice;
 import oahu.financial.repository.EtradeRepository;
 import oahu.financial.repository.StockMarketRepository;
@@ -17,6 +18,8 @@ public class OptionRiscRepos {
     private EtradeRepository<Tuple<String>,
                 Tuple3<Optional<StockPrice>,Collection<DerivativePrice>, Collection<DerivativePrice>>> etrade;
     private StockMarketRepository stockMarketRepository;
+    private Map<Integer,OptionPurchase> purchasesMap;
+    private Map<String,DerivativePrice> optionsMap = new HashMap<>();
 
     //region Properties
     public void setEtrade(EtradeRepository<Tuple<String>, Tuple3<Optional<StockPrice>, Collection<DerivativePrice>, Collection<DerivativePrice>>> etrade) {
@@ -25,7 +28,19 @@ public class OptionRiscRepos {
     public void setStockMarketRepository(StockMarketRepository stockMarketRepository) {
         this.stockMarketRepository = stockMarketRepository;
     }
+    public void setOptionPurchases(Collection<OptionPurchase> purchases) {
+        purchasesMap = new HashMap<>();
+        for (OptionPurchase p: purchases) {
+            purchasesMap.put(p.getOid(), p);
+        }
+    }
     //endregion Properties
+    public DerivativePrice getOptionFor(String ticker) {
+        return optionsMap.get(ticker);
+    }
+    public OptionPurchase getPurchaseFor(int oid) {
+        return purchasesMap.get(oid);
+    }
     public StockAndOptions callsOrPuts(int oid, boolean isCalls) {
         Collection<DerivativePrice> derivatives = isCalls == true ? etrade.calls(oid) : etrade.puts(oid);
         /*
@@ -35,6 +50,8 @@ public class OptionRiscRepos {
             stockPriceDTO = new StockPriceDTO(stockPrice.get());
         }
         */
+
+        derivatives.forEach(x -> optionsMap.put(x.getTicker(), x));
         StockPriceDTO stockPriceDTO = spot(oid);
         List<OptionDTO> derivativesDTO = derivatives.stream().map(OptionDTO::new).collect(Collectors.toList());
         return new StockAndOptions(stockPriceDTO, derivativesDTO);
@@ -120,5 +137,6 @@ public class OptionRiscRepos {
 
     public void resetSpotAndOptions() {
         etrade.invalidateCache();
+        optionsMap = new HashMap<>();
     }
 }

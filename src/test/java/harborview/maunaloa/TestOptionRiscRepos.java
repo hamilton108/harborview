@@ -84,7 +84,7 @@ public class TestOptionRiscRepos {
 
         for (OptionRiscDTO item : calculated) {
             if (item.getTicker().equals(c1)) {
-                double expected = 38.88;
+                double expected = 38.56;
                 assertEquals(expected, item.getRisc(), 0.1, String.format("%s not %.2f",item.getTicker(), expected));
             }
         }
