@@ -265,7 +265,7 @@ export class LevelLines {
                 },
                 onMouseUp: function () {
                     this.risc = "-";
-                    const curUrl = `${riscUrl}/${line.ticker}/${this.levelValue}`;
+                    const curUrl = `${riscUrl}/${line.ticker}/${this.levelValue}/`;
                     fetch(curUrl)
                         .then(data => {
                             return data.json();

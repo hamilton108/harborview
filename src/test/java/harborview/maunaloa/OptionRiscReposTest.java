@@ -23,7 +23,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class TestOptionRiscRepos {
+public class OptionRiscReposTest {
 
     private static String c1 = "NHY9I34";
     private static String storePath = "/home/rcs/opt/java/netfonds-repos/src/test/resources";
