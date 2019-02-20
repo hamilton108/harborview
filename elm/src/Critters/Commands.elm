@@ -167,7 +167,7 @@ fetchCritters isRealTime =
     let
         critterTypeUrl =
             if isRealTime == True then
-                "4"
+                "3"
 
             else
                 "11"
