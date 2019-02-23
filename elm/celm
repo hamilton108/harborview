@@ -75,7 +75,7 @@ else
     # docker run --user $(id -u):$(id -g) -it --rm -v "$(pwd):/code" -v "/tmp:/tmp" -w "/code" -e "HOME=/tmp" -u $UID:$GID $DOCKER_IMG make $ELM --output $JS
 fi
 
-cp $JS ../src/main/webapp/js/$TODIR/$JS
+cp $JS ../src/main/resources/webapp/js/$TODIR/$JS
 
 exit 0
 
