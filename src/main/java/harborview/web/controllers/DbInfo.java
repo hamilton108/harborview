@@ -8,7 +8,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class DbInfo {
-    private static String fileName = "/home/rcs/opt/java/harborview/src/main/resources/critters-dbcp.properties";
+    //private static String fileName = "/home/rcs/opt/java/harborview/src/main/resources/critters-dbcp.properties";
+    private static String fileName = "critters-dbcp.properties";
     private static Pattern dbUrlPat = Pattern.compile("^db.url=(.*)");
     private static Pattern dbUserPat = Pattern.compile("^db.user=(.*)");
     private String dbUrl;

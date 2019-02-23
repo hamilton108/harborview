@@ -5,21 +5,24 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.util.Properties;
 
+//import org.eclipse.jetty.util.log.StdErrLog;
+
 public class EmbeddedJetty {
-    private static final Boolean DEBUG = true;
+    private static final Boolean DEBUG = false;
     private static final Boolean JETTY_DUMP = false;
 
     // https://wiki.eclipse.org/Jetty/Tutorial/Embedding_Jetty
     private static final Logger LOGGER = LoggerFactory.getLogger(EmbeddedJetty.class);
-    
+
     private static final int PORT = 6346;
     
-    private static final String WEBAPP_DIRECTORY = "/";
+    private static final String WEBAPP_DIRECTORY = "webapp";
     
     public static void main(String[] args) throws Exception {
         startJetty(PORT);
@@ -27,18 +30,16 @@ public class EmbeddedJetty {
 
     private static String getResourceBasePath() throws IOException {
         if (DEBUG) {
-            return "file:/home/rcs/opt/java/harborview/src/main/webapp";
+            return "file:/home/rcs/opt/java/harborview/src/main/resources/webapp";
         }
         else {
             String cpr = new ClassPathResource(WEBAPP_DIRECTORY).getURI().toString();
-            System.out.println(cpr);
             return cpr;
         }
     }
 
     private static void startJetty(int port) throws Exception {
         initLog4j();
-        Server server = new Server(port);
 
         WebAppContext context = new WebAppContext();
         String webapp = getResourceBasePath();
@@ -53,6 +54,7 @@ public class EmbeddedJetty {
                 //new PlusConfiguration(), new MetaInfConfiguration(), new FragmentConfiguration(), new EnvConfiguration() });
         */
 
+        Server server = new Server(port);
         server.setHandler(context);
 
         server.start();
