@@ -13,12 +13,14 @@ import java.util.Locale;
 @RequestMapping("/")
 public class HomeController {
 
-    private final MaunaloaModel maunaloaCommon;
+    //private final MaunaloaModel maunaloaCommon;
 
+    /*
     @Autowired
     public HomeController(MaunaloaModel maunaloaCommon) {
         this.maunaloaCommon = maunaloaCommon;
     }
+    */
 
     @RequestMapping(method =  RequestMethod.GET)
     public String index(Locale locale, Model model) {

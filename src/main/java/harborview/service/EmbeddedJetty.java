@@ -1,7 +1,8 @@
 package harborview.service;
 
 import org.apache.log4j.PropertyConfigurator;
-import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +15,7 @@ import java.util.Properties;
 //import org.eclipse.jetty.util.log.StdErrLog;
 
 public class EmbeddedJetty {
-    private static final Boolean DEBUG = false;
+    private static final Boolean DEBUG = true;
     private static final Boolean JETTY_DUMP = false;
 
     // https://wiki.eclipse.org/Jetty/Tutorial/Embedding_Jetty
@@ -25,7 +26,7 @@ public class EmbeddedJetty {
     private static final String WEBAPP_DIRECTORY = "webapp";
     
     public static void main(String[] args) throws Exception {
-        startJetty(PORT);
+        startJettySSL(9998);
     }
 
     private static String getResourceBasePath() throws IOException {
@@ -36,6 +37,35 @@ public class EmbeddedJetty {
             String cpr = new ClassPathResource(WEBAPP_DIRECTORY).getURI().toString();
             return cpr;
         }
+    }
+    private static void startJettySSL(int port) throws Exception {
+        WebAppContext context = new WebAppContext();
+        String webapp = getResourceBasePath();
+        context.setDescriptor(webapp+"/WEB-INF/web.xml");
+        context.setResourceBase(webapp);
+        context.setContextPath("/");
+        context.setParentLoaderPriority(true);
+
+        Server server = new Server();
+        server.setHandler(context);
+
+
+        HttpConfiguration https = new HttpConfiguration();
+        https.addCustomizer(new SecureRequestCustomizer());
+
+        SslContextFactory sslContextFactory = new SslContextFactory();
+        // keytool -genkey -alias sitename -keyalg RSA -keystore keystore.jks -keysize 2048
+        sslContextFactory.setKeyStorePath("file:///home/rcs/opt/java/harborview/keystore.jks");
+        sslContextFactory.setKeyStorePassword("123456");
+        sslContextFactory.setKeyManagerPassword("123456");
+        ServerConnector sslConnector = new ServerConnector(server,
+                new SslConnectionFactory(sslContextFactory, "http/1.1"),
+                new HttpConnectionFactory(https));
+        sslConnector.setPort(port);
+
+        server.setConnectors(new Connector[] { sslConnector });
+        server.start();
+        server.join();
     }
 
     private static void startJetty(int port) throws Exception {
