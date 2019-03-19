@@ -16,6 +16,8 @@ repositories {
 }
 
 dependencies {
+	compile project(':oahu')
+	compile project(':critter-repos')
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.0.0'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
