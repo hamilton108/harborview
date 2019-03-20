@@ -1,13 +1,6 @@
 package harborview.maunaloa;
 
 import com.gargoylesoftware.htmlunit.Page;
-import harborview.dto.html.RiscLinesDTO;
-import harborview.dto.html.options.OptionDTO;
-import harborview.dto.html.options.OptionRiscDTO;
-import harborview.dto.html.options.StockAndOptions;
-import harborview.dto.html.options.StockPriceDTO;
-import harborview.maunaloa.repos.OptionRiscRepos;
-import netfondsrepos.downloader.MockDownloader;
 import netfondsrepos.repos.EtradeRepository2;
 import oahu.financial.OptionCalculator;
 import oahu.financial.html.EtradeDownloader;
@@ -18,11 +11,13 @@ import vega.financial.calculator.BlackScholes;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+public class OptionRiscReposTest {
+
+}
+/*
 public class OptionRiscReposTest {
 
     private static String c1 = "NHY9I34";
@@ -98,17 +93,16 @@ public class OptionRiscReposTest {
     }
 
 
-    /*
-    @DisplayName("Test serializing RiscLine from DerivativePrice by Jackson")
-    @Test
-    public void testRiscLineJackson() throws JsonProcessingException {
-        DerivativePrice stub = new DerivativePriceStub();
-        RiscLinesDTO dto = new RiscLinesDTO(stub);
-        String result = new ObjectMapper().writeValueAsString(dto);
-        System.out.printf(result);
-    }
-    */
+    //@DisplayName("Test serializing RiscLine from DerivativePrice by Jackson")
+    //@Test
+    //public void testRiscLineJackson() throws JsonProcessingException {
+    //    DerivativePrice stub = new DerivativePriceStub();
+    //    RiscLinesDTO dto = new RiscLinesDTO(stub);
+    //    String result = new ObjectMapper().writeValueAsString(dto);
+    //    System.out.printf(result);
+    //}
 
 }
+*/
 
 
