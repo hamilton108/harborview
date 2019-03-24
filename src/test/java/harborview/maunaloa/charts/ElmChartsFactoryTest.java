@@ -1,19 +1,10 @@
 package harborview.maunaloa.charts;
 
-import critterrepos.beans.StockPriceBean;
-import oahu.financial.StockPrice;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
+public class ElmChartsFactoryTest {
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+}
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+/*
 public class ElmChartsFactoryTest {
 
     ElmChartsMonthFactory factory;
@@ -93,3 +84,4 @@ public class ElmChartsFactoryTest {
         return items;
     }
 }
+*/
