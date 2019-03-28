@@ -28,7 +28,7 @@ public class App implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.printf("My repository: " + repository);
+        System.out.println("My repository: " + repository);
         Collection<Stock> stox = repository.getStocks();
         for (Stock s : stox) {
             System.out.println(s.getTicker());
