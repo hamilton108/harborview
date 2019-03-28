@@ -16,12 +16,13 @@ import java.util.Collection;
 @ComponentScan({"oahu.financial.repository","critterrepos.models.impl"})
 public class App implements CommandLineRunner {
 
-    StockMarketRepository repository;
+    private final StockMarketRepository repository;
 
     @Autowired
     public App(StockMarketRepository repository) {
         this.repository = repository;
     }
+
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
     }
