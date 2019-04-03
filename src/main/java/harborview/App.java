@@ -1,19 +1,18 @@
 package harborview;
 
-import oahu.financial.Stock;
 import oahu.financial.repository.StockMarketRepository;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
-
-import java.util.Collection;
 
 @SpringBootApplication
 @MapperScan("critterrepos.models.mybatis")
 @ComponentScan({"oahu.financial.repository","critterrepos.models.impl"})
+@EnableCaching
 public class App implements CommandLineRunner {
 
     private final StockMarketRepository repository;
@@ -29,10 +28,22 @@ public class App implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+    }
+
+    /*
+    @Override
+    public void run(String... args) throws Exception {
         System.out.println("My repository: " + repository);
         Collection<Stock> stox = repository.getStocks();
         for (Stock s : stox) {
             System.out.println(s.getTicker());
         }
+        Collection<StockPrice> prices = repository.findStockPrices("NHY", LocalDate.of(2018,1,1));
+        System.out.println(prices.size());
+        prices = repository.findStockPrices("NHY", LocalDate.of(2018,1,1));
+        System.out.println(prices.size());
+        prices = repository.findStockPrices("NHY", LocalDate.of(2018,1,1));
+        System.out.println(prices.size());
     }
+    */
 }
