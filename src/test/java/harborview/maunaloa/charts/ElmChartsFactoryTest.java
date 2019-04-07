@@ -4,6 +4,8 @@ import critterrepos.beans.StockPriceBean;
 import oahu.financial.StockPrice;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+
+@RunWith(SpringRunner.class)
 public class ElmChartsFactoryTest {
     ElmChartsMonthFactory factory;
 
