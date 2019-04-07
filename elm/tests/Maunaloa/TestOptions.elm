@@ -56,7 +56,7 @@ optionObjTick s =
 
 
 stockObj =
-    T.Stock "2018-12-17" "18:30" 347.5 350 337.3 337.4
+    T.Stock 1545071400 347.5 350 337.3 337.4
 
 
 optionsJson : JE.Value
@@ -80,48 +80,48 @@ suite =
     --    m =
     --        Main.initModel <| T.Flags True
     --in
-    skip <| 
-    describe "Testing OPTIONS"
-        [ {-
-             test "Test fetching calls" <|
-               \_ ->
-                   let
-                       wi =
-                           JD.decodeValue D.stockAndOptionsDecoder stockAndOptionsJson
-                   in
-                   Expect.equal (Ok {})
-          -}
-          test "Test option" <|
-            \_ ->
-                JE.object optionJson
-                    |> JD.decodeValue D.optionDecoder
-                    |> Expect.equal (Ok optionObj)
-        , test "Test stock" <|
-            \_ ->
-                stockJson
-                    |> JD.decodeValue D.stockDecoder
-                    |> Expect.equal (Ok stockObj)
-        , test "Test toggle selected" <|
-            \_ ->
-                let
-                    unSelected =
-                        [ optionObjTick "NHY1", optionObjTick "NHY2" ]
+    skip <|
+        describe "Testing OPTIONS"
+            [ {-
+                 test "Test fetching calls" <|
+                   \_ ->
+                       let
+                           wi =
+                               JD.decodeValue D.stockAndOptionsDecoder stockAndOptionsJson
+                       in
+                       Expect.equal (Ok {})
+              -}
+              test "Test option" <|
+                \_ ->
+                    JE.object optionJson
+                        |> JD.decodeValue D.optionDecoder
+                        |> Expect.equal (Ok optionObj)
+            , test "Test stock" <|
+                \_ ->
+                    stockJson
+                        |> JD.decodeValue D.stockDecoder
+                        |> Expect.equal (Ok stockObj)
+            , test "Test toggle selected" <|
+                \_ ->
+                    let
+                        unSelected =
+                            [ optionObjTick "NHY1", optionObjTick "NHY2" ]
 
-                    selected =
-                        List.map (C.toggle "NHY1") unSelected
+                        selected =
+                            List.map (C.toggle "NHY1") unSelected
 
-                    result1 =
-                        List.head selected |> Maybe.andThen (\x -> Just <| x.selected == True)
+                        result1 =
+                            List.head selected |> Maybe.andThen (\x -> Just <| x.selected == True)
 
-                    result2 =
-                        let
-                            selectedx =
-                                List.drop 1 selected
-                        in
-                        List.head selectedx |> Maybe.andThen (\x -> Just <| x.selected == False)
+                        result2 =
+                            let
+                                selectedx =
+                                    List.drop 1 selected
+                            in
+                            List.head selectedx |> Maybe.andThen (\x -> Just <| x.selected == False)
 
-                    result =
-                        ( result1, result2 )
-                in
-                Expect.equal ( Just True, Just True ) result
-        ]
+                        result =
+                            ( result1, result2 )
+                    in
+                    Expect.equal ( Just True, Just True ) result
+            ]
