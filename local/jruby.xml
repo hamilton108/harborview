@@ -44,7 +44,7 @@
         <property name="stockMarketRepository" ref="stockMarketRepos" />
         <property name="etrade" ref="etrade" />
     </bean>
-    <bean id="maunaloaModel" class="harborview.maunaloa.MaunaloaModel">
+    <bean id="maunaloaModel" class="harborview.maunaloa.models.MaunaloaModel">
         <property name="cachedEtrade" ref="cached-etrade" />
         <property name="etrade" ref="etrade" />
         <property name="stockMarketRepository" ref="stockMarketRepos" />

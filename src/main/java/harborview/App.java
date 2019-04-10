@@ -11,7 +11,12 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @MapperScan("critterrepos.models.mybatis")
-@ComponentScan({"oahu.financial.repository","critterrepos.models.impl"})
+@ComponentScan({
+        "oahu.financial.repository"
+        , "critterrepos.models.impl"
+        , "harborview.controllers"
+        , "harborview.maunaloa.models"
+})
 @EnableCaching
 public class App implements CommandLineRunner {
 

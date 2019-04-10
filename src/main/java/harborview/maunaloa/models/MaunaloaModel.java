@@ -1,4 +1,4 @@
-package harborview.maunaloa;
+package harborview.maunaloa.models;
 
 import harborview.dto.html.ElmCharts;
 import harborview.dto.html.SelectItem;

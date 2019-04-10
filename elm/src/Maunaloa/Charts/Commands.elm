@@ -53,13 +53,13 @@ fetchCharts ticker ct resetCache =
                 url =
                     case ct of
                         DayChart ->
-                            mainUrl ++ "/days/" ++ s ++ "/" ++ resetCacheJson resetCache
+                            mainUrl ++ "/days/" ++ s
 
                         WeekChart ->
-                            mainUrl ++ "/weeks/" ++ s ++ "/" ++ resetCacheJson resetCache
+                            mainUrl ++ "/weeks/" ++ s
 
                         MonthChart ->
-                            mainUrl ++ "/months/" ++ s ++ "/" ++ resetCacheJson resetCache
+                            mainUrl ++ "/months/" ++ s
             in
             Http.send ChartsFetched <| Http.get url DEC.chartInfoDecoder
 
