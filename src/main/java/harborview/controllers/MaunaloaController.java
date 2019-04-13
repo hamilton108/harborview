@@ -23,10 +23,16 @@ public class MaunaloaController {
 
     @GetMapping(value = "/")
     public String index() {
-        return "maunaloa/index";
+        return "maunaloa/charts";
     }
 
 
+    //public String charts(Locale locale, Model model) {
+
+    @GetMapping(value = "/charts")
+    public String charts() {
+        return "maunaloa/charts";
+    }
 
     @ResponseBody
     @GetMapping(value = "/days/{oid}", produces = MediaType.APPLICATION_JSON_VALUE)
