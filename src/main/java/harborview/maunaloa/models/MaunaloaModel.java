@@ -2,7 +2,10 @@ package harborview.maunaloa.models;
 
 import harborview.dto.html.ElmCharts;
 import harborview.dto.html.SelectItem;
+import harborview.dto.html.StockPriceDTO;
 import harborview.maunaloa.charts.ElmChartsFactory;
+import harborview.maunaloa.charts.ElmChartsMonthFactory;
+import harborview.maunaloa.charts.ElmChartsWeekFactory;
 import oahu.financial.StockPrice;
 import oahu.financial.repository.StockMarketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,10 @@ public class MaunaloaModel {
         this.stockMarketRepository = stockMarketRepository;
     }
 
+    public StockPriceDTO spot(int ticker, boolean resetCache) {
+        return null;
+    }
+
     public enum ElmChartType { DAY, WEEK, MONTH }
 
     public Collection<SelectItem> getStockTickers() {
@@ -39,5 +46,11 @@ public class MaunaloaModel {
 
     public ElmCharts elmChartsDay(int stockId) {
         return elmCharts(stockId, new ElmChartsFactory());
+    }
+    public ElmCharts elmChartsWeek(int stockId) {
+        return elmCharts(stockId, new ElmChartsWeekFactory());
+    }
+    public ElmCharts elmChartsMonth(int stockId) {
+        return elmCharts(stockId, new ElmChartsMonthFactory());
     }
 }

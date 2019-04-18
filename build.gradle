@@ -5,6 +5,7 @@ plugins {
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'java'
 apply from: '../gradlecommon/spring-boot-deps.gradle'
+apply from: '../gradlecommon/integrationTest.gradle'
 
 group = 'hamilton108'
 archivesBaseName = 'harborview'
