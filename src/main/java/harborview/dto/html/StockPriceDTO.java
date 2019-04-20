@@ -10,7 +10,10 @@ public class StockPriceDTO {
     private final double c;
     private final long unixTime;
 
+    private StockPrice stockPrice;
+
     public StockPriceDTO(StockPrice stockPrice) {
+        this.stockPrice = stockPrice;
         unixTime = DateUtils.unixTime(stockPrice.getLocalDx(), stockPrice.getTm());
         this.o = stockPrice.getOpn();
         this.h = stockPrice.getHi();
@@ -36,5 +39,9 @@ public class StockPriceDTO {
 
     public long getUnixTime() {
         return unixTime;
+    }
+
+    public StockPrice getStockPrice() {
+        return stockPrice;
     }
 }

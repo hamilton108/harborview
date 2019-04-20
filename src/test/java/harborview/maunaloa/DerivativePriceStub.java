@@ -4,9 +4,18 @@ import oahu.financial.Derivative;
 import oahu.financial.DerivativePrice;
 import oahu.financial.StockPrice;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class DerivativePriceStub implements DerivativePrice {
+    private String ticker;
+    private static Map<Double,Double> stockPriceMap = new HashMap<>();
+
+    public static void setStockPriceMap(Map<Double, Double> stockPriceMap) {
+        DerivativePriceStub.stockPriceMap = stockPriceMap;
+    }
+
     @Override
     public Derivative getDerivative() {
         return null;
@@ -49,7 +58,7 @@ public class DerivativePriceStub implements DerivativePrice {
 
     @Override
     public Optional<Double> stockPriceFor(double optionValue) {
-        return Optional.empty();
+        return Optional.ofNullable(stockPriceMap.get(optionValue));
     }
 
     @Override
@@ -74,7 +83,10 @@ public class DerivativePriceStub implements DerivativePrice {
 
     @Override
     public String getTicker() {
-        return null;
+        return ticker;
+    }
+    public void setTicker(String ticker) {
+        this.ticker = ticker;
     }
 
     @Override
@@ -96,4 +108,5 @@ public class DerivativePriceStub implements DerivativePrice {
     public void resetRiscCalc() {
 
     }
+
 }
