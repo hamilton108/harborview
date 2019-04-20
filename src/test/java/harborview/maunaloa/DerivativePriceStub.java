@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public class DerivativePriceStub implements DerivativePrice {
     private String ticker;
+    private double sell;
     private static Map<Double,Double> stockPriceMap = new HashMap<>();
 
     public static void setStockPriceMap(Map<Double, Double> stockPriceMap) {
@@ -48,7 +49,10 @@ public class DerivativePriceStub implements DerivativePrice {
 
     @Override
     public double getSell() {
-        return 0;
+        return sell;
+    }
+    public void setSell(double sell) {
+        this.sell = sell;
     }
 
     @Override

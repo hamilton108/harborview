@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
+import static org.assertj.core.api.Assertions.byLessThan;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.mockito.BDDMockito.given;
 
@@ -91,6 +92,10 @@ public class OptionRiscReposTest {
         // Then
         then(items.size())
                 .isEqualTo(2);
+        then(items.get(0).getRisc())
+                .isEqualTo(108.0, byLessThan(0.01));
+        then(items.get(1).getRisc())
+                .isEqualTo(105.0, byLessThan(0.01));
     }
 
     private Optional myStockPrice() {
@@ -108,9 +113,9 @@ public class OptionRiscReposTest {
     private Tuple<String> info1 = new Tuple<>(ticker,optionTicker1);
     private Tuple<String> info2 = new Tuple<>(ticker,optionTicker2);
     private Tuple<String> info3 = new Tuple<>(ticker,optionTicker3);
-    private DerivativePrice price1 = createDerivativePriceStub(optionTicker1);
-    private DerivativePrice price2 = createDerivativePriceStub(optionTicker2);
-    private DerivativePrice price3 = createDerivativePriceStub(optionTicker3);
+    private DerivativePrice price1 = createDerivativePriceStub(optionTicker1,4);
+    private DerivativePrice price2 = createDerivativePriceStub(optionTicker2, 5);
+    private DerivativePrice price3 = createDerivativePriceStub(optionTicker3, 6);
     private Collection<DerivativePrice> myCalls() {
         Collection<DerivativePrice> result = new ArrayList<>();
         result.add(price1);
@@ -128,11 +133,11 @@ public class OptionRiscReposTest {
         return riscs;
     }
 
-    private DerivativePrice createDerivativePriceStub(String ticker) {
+    private DerivativePrice createDerivativePriceStub(String ticker, double sell) {
         DerivativePriceStub result = new DerivativePriceStub();
 
         result.setTicker(ticker);
-
+        result.setSell(sell);
         return result;
     }
 }
