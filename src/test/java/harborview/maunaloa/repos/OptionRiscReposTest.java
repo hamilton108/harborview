@@ -2,6 +2,7 @@ package harborview.maunaloa.repos;
 
 import critterrepos.beans.StockPriceBean;
 import critterrepos.beans.options.DerivativePriceBean;
+import harborview.dto.html.RiscLinesDTO;
 import harborview.dto.html.options.OptionRiscDTO;
 import harborview.dto.html.options.StockAndOptions;
 import harborview.maunaloa.CalculatorStub;
@@ -98,6 +99,21 @@ public class OptionRiscReposTest {
                 .isEqualTo(108.0, byLessThan(0.01));
         then(items.get(1).getRisc())
                 .isEqualTo(105.0, byLessThan(0.01));
+
+        // When
+        List<RiscLinesDTO> riscLines = repos.getRiscLines(oid);
+
+        // Then
+        then(riscLines.size())
+                .isEqualTo(2);
+
+        // When
+        repos.clearRiscLines(oid);
+        riscLines = repos.getRiscLines(oid);
+
+        // Then
+        then(riscLines.size())
+                .isEqualTo(0);
     }
 
     private Optional myStockPrice() {
