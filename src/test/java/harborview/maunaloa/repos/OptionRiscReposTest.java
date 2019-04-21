@@ -1,8 +1,10 @@
 package harborview.maunaloa.repos;
 
 import critterrepos.beans.StockPriceBean;
+import critterrepos.beans.options.DerivativePriceBean;
 import harborview.dto.html.options.OptionRiscDTO;
 import harborview.dto.html.options.StockAndOptions;
+import harborview.maunaloa.CalculatorStub;
 import harborview.maunaloa.DerivativePriceStub;
 import oahu.dto.Tuple;
 import oahu.financial.DerivativePrice;
@@ -70,7 +72,7 @@ public class OptionRiscReposTest {
         Map<Double,Double> stockPriceMap = new HashMap<>();
         stockPriceMap.put(2.0,108.0);
         stockPriceMap.put(3.0,105.0);
-        DerivativePriceStub.setStockPriceMap(stockPriceMap);
+        CalculatorStub.setStockPriceMap(stockPriceMap);
 
         repos.setStockMarketRepository(stockMarketRepository);
         // Given
@@ -113,9 +115,9 @@ public class OptionRiscReposTest {
     private Tuple<String> info1 = new Tuple<>(ticker,optionTicker1);
     private Tuple<String> info2 = new Tuple<>(ticker,optionTicker2);
     private Tuple<String> info3 = new Tuple<>(ticker,optionTicker3);
-    private DerivativePrice price1 = createDerivativePriceStub(optionTicker1,4);
-    private DerivativePrice price2 = createDerivativePriceStub(optionTicker2, 5);
-    private DerivativePrice price3 = createDerivativePriceStub(optionTicker3, 6);
+    private DerivativePrice price1 = createDerivativePrice(optionTicker1,4);
+    private DerivativePrice price2 = createDerivativePrice(optionTicker2, 5);
+    private DerivativePrice price3 = createDerivativePrice(optionTicker3, 6);
     private Collection<DerivativePrice> myCalls() {
         Collection<DerivativePrice> result = new ArrayList<>();
         result.add(price1);
@@ -133,11 +135,14 @@ public class OptionRiscReposTest {
         return riscs;
     }
 
-    private DerivativePrice createDerivativePriceStub(String ticker, double sell) {
+    private DerivativePrice createDerivativePrice(String ticker, double sell) {
+        /*
         DerivativePriceStub result = new DerivativePriceStub();
-
         result.setTicker(ticker);
         result.setSell(sell);
+         */
+        DerivativePriceBean result = new DerivativePriceBean(null,null,sell,sell,null);
+        result.setCalculator(new CalculatorStub());
         return result;
     }
 }
