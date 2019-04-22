@@ -3,17 +3,16 @@ package harborview.controllers;
 import harborview.dto.html.ElmCharts;
 import harborview.dto.html.SelectItem;
 import harborview.dto.html.StockPriceDTO;
+import harborview.dto.html.options.OptionRiscDTO;
 import harborview.dto.html.options.StockAndOptions;
 import harborview.maunaloa.models.MaunaloaModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @Controller
 @RequestMapping("/maunaloa")
@@ -85,5 +84,16 @@ public class MaunaloaController {
     @GetMapping(value = "/puts/{ticker}", produces = MediaType.APPLICATION_JSON_VALUE)
     public StockAndOptions puts(@PathVariable("ticker") int ticker) {
         return maunaloaModel.puts(ticker);
+    }
+
+    @ResponseBody
+    @PostMapping(
+            value = "/calcriscstockprices/{oid}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<OptionRiscDTO> calcRiscStockprices(
+            @PathVariable("oid") int oid,
+            @RequestBody List<OptionRiscDTO> riscs) {
+        List<OptionRiscDTO> result = maunaloaModel.calcStockPricesFor(oid,riscs);
+        return result;
     }
 }

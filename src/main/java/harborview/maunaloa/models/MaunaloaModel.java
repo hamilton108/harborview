@@ -3,6 +3,7 @@ package harborview.maunaloa.models;
 import harborview.dto.html.ElmCharts;
 import harborview.dto.html.SelectItem;
 import harborview.dto.html.StockPriceDTO;
+import harborview.dto.html.options.OptionRiscDTO;
 import harborview.dto.html.options.StockAndOptions;
 import harborview.maunaloa.charts.ElmChartsFactory;
 import harborview.maunaloa.charts.ElmChartsMonthFactory;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -39,6 +41,7 @@ public class MaunaloaModel {
     public StockPriceDTO spot(int ticker) {
         return null;
     }
+
 
 
     public enum ElmChartType { DAY, WEEK, MONTH }
@@ -72,6 +75,9 @@ public class MaunaloaModel {
     }
     public StockAndOptions puts(int oid) {
         return optionRiscRepos.puts(oid);
+    }
+    public List<OptionRiscDTO> calcStockPricesFor(int oid, List<OptionRiscDTO> riscs) {
+        return optionRiscRepos.calcRiscs(oid, riscs);
     }
 }
 
