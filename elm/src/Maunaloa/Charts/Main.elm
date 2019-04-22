@@ -55,7 +55,6 @@ initModel flags =
     , tickers = []
     , dropAmount = Drop 0
     , takeAmount = Take 90
-    , resetCache = False
     , chartInfo = Nothing
     , curValueRange = Nothing
     }

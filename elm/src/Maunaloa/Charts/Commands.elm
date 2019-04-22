@@ -32,16 +32,6 @@ fetchTickers =
         Http.get url CD.selectItemListDecoder
 
 
-resetCacheJson : Bool -> String
-resetCacheJson resetCache =
-    case resetCache of
-        True ->
-            "true"
-
-        False ->
-            "false"
-
-
 fetchCharts : Ticker -> ChartType -> Bool -> Cmd Msg
 fetchCharts ticker ct resetCache =
     case ticker of
@@ -94,8 +84,8 @@ clearRiscLines ticker =
                 Http.get url T.jsonStatusDecoder
 
 
-fetchSpot : Ticker -> Bool -> Cmd Msg
-fetchSpot ticker resetCache =
+fetchSpot : Ticker -> Cmd Msg
+fetchSpot ticker =
     case ticker of
         NoTicker ->
             Cmd.none
@@ -103,7 +93,7 @@ fetchSpot ticker resetCache =
         Ticker s ->
             let
                 url =
-                    mainUrl ++ "/spot/" ++ s ++ "/" ++ resetCacheJson resetCache
+                    mainUrl ++ "/spot/" ++ s
             in
             Http.send SpotFetched <|
                 Http.get url DEC.spotDecoder

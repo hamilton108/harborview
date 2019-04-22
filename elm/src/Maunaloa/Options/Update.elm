@@ -33,7 +33,7 @@ updateOption msg model =
                     else
                         Just s
             in
-            ( { model | selectedTicker = sx }, C.fetchOptions model sx False )
+            ( { model | selectedTicker = sx }, C.fetchOptions model sx )
 
         OptionsFetched (Ok s) ->
             ( { model | stock = Just s.stock, options = s.opx }, Cmd.none )
@@ -175,8 +175,9 @@ update msg model =
             )
 
         ResetCache ->
-            ( model, C.fetchOptions model model.selectedTicker True )
+            ( model, Cmd.none )
 
+        --( model, C.fetchOptions model model.selectedTicker True )
         ToggleSelected ticker ->
             let
                 newOptions =

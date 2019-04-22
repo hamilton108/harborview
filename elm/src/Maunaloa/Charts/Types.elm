@@ -138,7 +138,6 @@ type Msg
     | TickersFetched (Result Http.Error CS.SelectItems)
     | FetchCharts String
     | ChartsFetched (Result Http.Error ChartInfo)
-    | ToggleResetCache
     | Previous
     | Next
     | Last
@@ -157,7 +156,6 @@ type alias Model =
     , tickers : CS.SelectItems
     , dropAmount : Drop
     , takeAmount : Take
-    , resetCache : Bool
     , chartInfo : Maybe ChartInfo
     , curValueRange : Maybe ( Float, Float )
     }

@@ -74,10 +74,8 @@ update msg model =
         ChartsFetched (Err s) ->
             ( DLG.errorAlert "Error" "ChartsFetched Error: " s model, Cmd.none )
 
-        ToggleResetCache ->
-            Debug.log "ToggleResetCache"
-                ( { model | resetCache = not model.resetCache }, Cmd.none )
-
+        --ToggleResetCache ->
+        --       ( { model | resetCache = not model.resetCache }, Cmd.none )
         Previous ->
             let
                 (Drop curDrop) =
@@ -135,7 +133,7 @@ update msg model =
             ( DLG.errorAlert "Error" "RiscLinesCleared Error: " s model, Cmd.none )
 
         FetchSpot ->
-            ( model, C.fetchSpot (asTicker <| model.selectedTicker) model.resetCache )
+            ( model, C.fetchSpot (asTicker <| model.selectedTicker) )
 
         SpotFetched (Ok s) ->
             ( model, drawSpot s )

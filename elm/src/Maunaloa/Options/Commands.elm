@@ -202,8 +202,8 @@ bool2json v =
             "false"
 
 
-fetchOptions : Model -> Maybe String -> Bool -> Cmd Msg
-fetchOptions model s resetCache =
+fetchOptions : Model -> Maybe String -> Cmd Msg
+fetchOptions model s =
     case s of
         Nothing ->
             Cmd.none
@@ -213,10 +213,10 @@ fetchOptions model s resetCache =
                 url =
                     case model.flags.isCalls of
                         True ->
-                            mainUrl ++ "/calls/" ++ sx ++ "/" ++ bool2json resetCache
+                            mainUrl ++ "/calls/" ++ sx
 
                         False ->
-                            mainUrl ++ "/puts/" ++ sx ++ "/" ++ bool2json resetCache
+                            mainUrl ++ "/puts/" ++ sx
             in
             Http.send (OptionMsgFor << OptionsFetched) <|
                 Http.get url D.stockAndOptionsDecoder

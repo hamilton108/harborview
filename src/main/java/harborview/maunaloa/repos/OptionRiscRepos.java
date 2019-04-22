@@ -10,10 +10,13 @@ import oahu.financial.DerivativePrice;
 import oahu.financial.StockPrice;
 import oahu.financial.repository.EtradeRepository;
 import oahu.financial.repository.StockMarketRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Component
 public class OptionRiscRepos {
     private EtradeRepository<Tuple<String>> etrade;
 
@@ -28,10 +31,12 @@ public class OptionRiscRepos {
         return callsOrPuts(oid, false);
     }
 
+    @Autowired
     public void setEtrade(EtradeRepository etrade) {
         this.etrade = etrade;
     }
 
+    @Autowired
     public void setStockMarketRepository(StockMarketRepository stockMarketRepository) {
         this.stockMarketRepository = stockMarketRepository;
     }

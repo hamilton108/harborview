@@ -3,6 +3,7 @@ package harborview.controllers;
 import harborview.dto.html.ElmCharts;
 import harborview.dto.html.SelectItem;
 import harborview.dto.html.StockPriceDTO;
+import harborview.dto.html.options.StockAndOptions;
 import harborview.maunaloa.models.MaunaloaModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -26,7 +27,7 @@ public class MaunaloaController {
     }
 
     @ResponseBody
-    @GetMapping(value = "tickers", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/tickers", produces = MediaType.APPLICATION_JSON_VALUE)
     public Collection<SelectItem> tickers() {
         return maunaloaModel.getStockTickers();
     }
@@ -61,9 +62,28 @@ public class MaunaloaController {
     }
 
     @ResponseBody
-    @GetMapping(value = "spot/{ticker}/{rc}",  produces = MediaType.APPLICATION_JSON_VALUE)
-    public StockPriceDTO spot(@PathVariable("ticker") int ticker, @PathVariable("rc") boolean resetCache) {
-        return maunaloaModel.spot(ticker,resetCache);
+    @GetMapping(value = "/spot/{ticker}",  produces = MediaType.APPLICATION_JSON_VALUE)
+    public StockPriceDTO spot(@PathVariable("ticker") int ticker) {
+        return maunaloaModel.spot(ticker);
     }
 
+    //----------------------------------------------------------------
+    //--------------------------- Options ----------------------------
+    //----------------------------------------------------------------
+    @GetMapping(value = "/optiontickers")
+    public String options() {
+        return "maunaloa/options.html";
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/calls/{ticker}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public StockAndOptions calls(@PathVariable("ticker") int ticker) {
+        return maunaloaModel.calls(ticker);
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/puts/{ticker}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public StockAndOptions puts(@PathVariable("ticker") int ticker) {
+        return maunaloaModel.puts(ticker);
+    }
 }
