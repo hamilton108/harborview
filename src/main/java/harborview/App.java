@@ -21,6 +21,7 @@ import org.springframework.context.annotation.ComponentScan;
         , "harborview.controllers"
         , "harborview.maunaloa.models"
         , "harborview.maunaloa.repos"
+        , "harborview.critters"
         , "vega.financial.calculator"
 })
 @EnableCaching
