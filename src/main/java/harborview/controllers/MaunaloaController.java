@@ -1,8 +1,7 @@
 package harborview.controllers;
 
-import harborview.dto.html.ElmCharts;
-import harborview.dto.html.SelectItem;
-import harborview.dto.html.StockPriceDTO;
+import harborview.dto.html.*;
+import harborview.dto.html.options.OptionPriceForDTO;
 import harborview.dto.html.options.OptionRiscDTO;
 import harborview.dto.html.options.StockAndOptions;
 import harborview.maunaloa.models.MaunaloaModel;
@@ -18,7 +17,6 @@ import java.util.List;
 @RequestMapping("/maunaloa")
 public class MaunaloaController {
     private final MaunaloaModel maunaloaModel;
-
 
     @Autowired
     public MaunaloaController(MaunaloaModel maunaloaModel) {
@@ -95,5 +93,37 @@ public class MaunaloaController {
             @RequestBody List<OptionRiscDTO> riscs) {
         List<OptionRiscDTO> result = maunaloaModel.calcStockPricesFor(oid,riscs);
         return result;
+    }
+
+    @ResponseBody
+    @GetMapping(
+            value = "/optionprice/{optionticker}/{levelvalue}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public OptionPriceForDTO optionPrice(
+            @PathVariable("optionticker") String ticker,
+            @PathVariable("levelvalue") double levelValue) {
+        return null; //maunaloaModel.optionPriceFor(ticker,levelValue);
+    }
+
+    //----------------------------------------------------------------
+    //-------------------------- Risc Lines --------------------------
+    //----------------------------------------------------------------
+    @ResponseBody
+    @GetMapping(value = "/risclines/{ticker}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<RiscLinesDTO> riscLines(@PathVariable("ticker") int ticker) {
+        return null; //maunaloaModel.fetchRiscLines(ticker);
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/clearrisclines/{ticker}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public JsonResult clearRiscLines(@PathVariable("ticker") int ticker) {
+        try {
+            //maunaloaModel.clearRiscLines(ticker);
+            return new JsonResult(true, String.format("Risc Lines for %d cleared", ticker), 0);
+        }
+        catch (Exception ex) {
+            return new JsonResult(false, ex.getMessage(), 0);
+        }
     }
 }
