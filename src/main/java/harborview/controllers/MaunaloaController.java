@@ -112,7 +112,7 @@ public class MaunaloaController {
     @GetMapping(value = "/risclines/{ticker}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public List<RiscLinesDTO> riscLines(@PathVariable("ticker") int ticker) {
-        return null; //maunaloaModel.fetchRiscLines(ticker);
+        return maunaloaModel.fetchRiscLines(ticker);
     }
 
     @ResponseBody

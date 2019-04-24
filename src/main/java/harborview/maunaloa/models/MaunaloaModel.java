@@ -1,6 +1,7 @@
 package harborview.maunaloa.models;
 
 import harborview.dto.html.ElmCharts;
+import harborview.dto.html.RiscLinesDTO;
 import harborview.dto.html.SelectItem;
 import harborview.dto.html.StockPriceDTO;
 import harborview.dto.html.options.OptionRiscDTO;
@@ -78,6 +79,13 @@ public class MaunaloaModel {
     }
     public List<OptionRiscDTO> calcStockPricesFor(int oid, List<OptionRiscDTO> riscs) {
         return optionRiscRepos.calcRiscs(oid, riscs);
+    }
+
+    //----------------------------------------------------------------
+    //-------------------------- Risc Lines --------------------------
+    //----------------------------------------------------------------
+    public List<RiscLinesDTO> fetchRiscLines(int oid) {
+        return optionRiscRepos.getRiscLines(oid);
     }
 }
 
