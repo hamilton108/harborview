@@ -119,7 +119,7 @@ public class MaunaloaController {
     @GetMapping(value = "/clearrisclines/{ticker}", produces = MediaType.APPLICATION_JSON_VALUE)
     public JsonResult clearRiscLines(@PathVariable("ticker") int ticker) {
         try {
-            //maunaloaModel.clearRiscLines(ticker);
+            maunaloaModel.clearRiscLines(ticker);
             return new JsonResult(true, String.format("Risc Lines for %d cleared", ticker), 0);
         }
         catch (Exception ex) {

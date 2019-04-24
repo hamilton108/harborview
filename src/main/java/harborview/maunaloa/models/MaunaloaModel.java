@@ -87,5 +87,8 @@ public class MaunaloaModel {
     public List<RiscLinesDTO> fetchRiscLines(int oid) {
         return optionRiscRepos.getRiscLines(oid);
     }
+    public void clearRiscLines(int ticker) {
+        optionRiscRepos.clearRiscLines(ticker);
+    }
 }
 

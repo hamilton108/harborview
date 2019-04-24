@@ -124,7 +124,7 @@ update msg model =
 
         RiscLinesCleared (Ok status) ->
             if status.ok == True then
-                ( model, Cmd.none )
+                ( { model | dlgAlert = DLG.DialogVisibleAlert "RiscLinesCleared Ok" status.msg DLG.Info }, Cmd.none )
 
             else
                 ( { model | dlgAlert = DLG.DialogVisibleAlert "RiscLinesCleared Error" status.msg DLG.Error }, Cmd.none )
