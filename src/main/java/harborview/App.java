@@ -23,6 +23,7 @@ import org.springframework.context.annotation.ComponentScan;
         , "harborview.maunaloa.repos"
         , "harborview.critters"
         , "harborview.aop"
+        , "harborview.service.config"
         , "vega.financial.calculator"
 })
 @EnableCaching
