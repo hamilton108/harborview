@@ -15,8 +15,8 @@ public class DefaultConfig {
 
     @Bean
     public EtradeDownloader<Page, Serializable> downloader() {
-        //return new DefaultDownloader();
-        return new harborview.service.DemoDownloader();
+        return new DefaultDownloader();
+        //return new harborview.service.DemoDownloader();
     }
 
 }

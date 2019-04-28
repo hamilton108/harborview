@@ -39,8 +39,8 @@ public class MaunaloaModel {
         this.optionRiscRepos = optionRiscRepos;
     }
 
-    public StockPriceDTO spot(int ticker) {
-        return null;
+    public StockPriceDTO spot(int oid) {
+        return optionRiscRepos.spot(oid);
     }
 
 

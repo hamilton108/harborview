@@ -92,7 +92,7 @@ public class OptionRiscRepos {
         List<OptionDTO> derivativesDTO = derivatives.stream().map(OptionDTO::new).collect(Collectors.toList());
         return new StockAndOptions(stockPriceDTO, derivativesDTO);
     }
-    private StockPriceDTO spot(int oid) {
+    public StockPriceDTO spot(int oid) {
         Optional<StockPrice> stockPrice = etrade.stockPrice(oid);
         StockPriceDTO result = null;
         if (stockPrice.isPresent()) {

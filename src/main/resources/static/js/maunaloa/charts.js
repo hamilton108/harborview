@@ -145,6 +145,7 @@ document.addEventListener("DOMContentLoaded", function () {
             flags: chartRes
         });
         app.ports.drawCanvas.subscribe(cfg => {
+            console.log(cfg);
             scrap.clear();
             myChart.drawCanvases(cfg);
         });
