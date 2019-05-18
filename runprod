@@ -1,5 +1,5 @@
 #!/bin/bash
 
-java -jar harborview-0.1-SNAPSHOT.jar 
+java -jar build/libs/harborview-0.1-SNAPSHOT.jar 
 
 exit 0

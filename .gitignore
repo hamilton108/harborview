@@ -19,3 +19,8 @@ elm-critters.js
 *.map
 *.orig*
 node_modules/
+.psc-package/
+.pulp-cache/
+purescript/output/
+*.xlsx#
+

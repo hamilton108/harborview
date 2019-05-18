@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Profile;
 import java.io.Serializable;
 
 @Configuration
-@Profile("default")
+@Profile({"default","hilo"})
 public class DefaultConfig {
 
     @Bean
