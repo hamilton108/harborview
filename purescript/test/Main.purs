@@ -93,7 +93,7 @@ main = runTest do
       Assert.equal 30.0 val
     test "pixToValue (padding)" do
       let val = V.pixToValue testVRulerpadding (Pix 100.0)
-      Assert.assert "pixToValue with padding should be 16.66" $ moreOrLessEq 16.66 val
+      Assert.assert "pixToValue with padding should be 23.33" $ moreOrLessEq 23.33 val
     test "calcPpy" do
       let vr = ValueRange { minVal: 10.0, maxVal: 50.0 }
       Assert.equal 5.0 (calcPpy chartDim vr pad0)
@@ -115,13 +115,11 @@ main = runTest do
       let exTx (V.VRulerLine {tx}) = tx
       let resultTx = map exTx result
       Assert.equal ["50.0","40.0","30.0","20.0","10.0"] resultTx 
-      {-
     test "vruler lines (padding)" do
       let result = V.lines testVRulerpadding 4
       let exTx (V.VRulerLine {tx}) = tx
       let resultTx = map exTx result
       Assert.equal ["50.0","40.0","30.0","20.0","10.0"] resultTx 
-      -}
   suite "HRuler" do
     test "timeStampToPix half width of canvas" do
       let hr = testHRuler jan_2_19 

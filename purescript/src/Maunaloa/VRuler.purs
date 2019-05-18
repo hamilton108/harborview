@@ -43,23 +43,23 @@ draw_ vruler ctx = do
 instance graphLine :: Graph VRuler where
   draw = draw_
 
-createLine :: VRuler -> Number -> Int -> VRulerLine
-createLine vruler vpix n = 
+createLine :: VRuler -> Number -> Number -> Int -> VRulerLine
+createLine vruler vpix padTop n = 
   let
-    curPix = vpix * (toNumber n)
+    curPix = padTop + (vpix * (toNumber n))
     val = pixToValue vruler (Pix curPix) 
     tx = toStringWith (fixed 1) val
   in
   VRulerLine {y: curPix, tx: tx }
 
 lines :: VRuler -> Int -> Array VRulerLine
-lines vr@(VRuler {dim: (ChartDim dimx)}) num = 
+lines vr@(VRuler {dim: (ChartDim dimx),padding: (Padding p)}) num = 
   let
-    vpix = dimx.h / (toNumber num)
+    vpix = (dimx.h - p.top - p.bottom) / (toNumber num)
     -- sections = map (\z -> Pix (toNumber z)) $ range 0 num
     sections = range 0 num
   in 
-  map (createLine vr vpix) sections
+  map (createLine vr vpix p.top) sections
 
 
 create :: ValueRange -> ChartDim -> Padding -> VRuler 
@@ -83,4 +83,5 @@ valueToPix (VRuler {ppy:(Pix ppyVal), maxVal, padding: (Padding curPad)}) value 
   ((maxVal - value) * ppyVal) + curPad.top 
 
 pixToValue :: VRuler -> Pix -> Number
-pixToValue (VRuler {maxVal,ppy:(Pix ppyVal)}) (Pix p) = maxVal - (p / ppyVal)
+pixToValue (VRuler {maxVal,ppy:(Pix ppyVal),padding: (Padding curPad)}) (Pix p) = 
+  maxVal - ((p - curPad.top) / ppyVal)
