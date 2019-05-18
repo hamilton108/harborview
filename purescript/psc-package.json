@@ -1,0 +1,20 @@
+{
+  "name": "pureuser",
+  "set": "psc-0.12.1",
+  "source": "https://github.com/purescript/package-sets.git",
+  "depends": [
+    "arrays",
+    "canvas",
+    "console",
+    "foreign",
+    "lists",
+    "numbers",
+    "prelude",
+    "psci-support",
+    "random",
+    "refs",
+    "spec",
+    "test-unit",
+    "web-dom"
+  ]
+}
