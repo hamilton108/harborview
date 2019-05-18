@@ -40,14 +40,14 @@ hruler =
   let 
     april_1_19 :: CO.UnixTime 
     april_1_19 = CO.UnixTime 1554076800000.0
-    hr = H.create chartDim april_1_19 offsets (Just curPadding)
+    hr = H.create chartDim april_1_19 offsets curPadding
     hrx = unsafePartial $ fromJust hr
   in 
   hrx
 
 
 vruler :: V.VRuler
-vruler = V.create valueRange chartDim (Just curPadding)
+vruler = V.create valueRange chartDim curPadding
 
 prices :: Array Number
 prices = [48.0,50.0,38.0,30.6,17.0,10.0,30.4,42.0,44.1,46.0,45.6,45.0]
@@ -73,12 +73,12 @@ feb1_19 :: CO.UnixTime
 feb1_19 = CO.UnixTime 1548979200000.0
 
 hr :: H.HRuler
-hr = unsafePartial $ fromJust $ H.create (CO.ChartDim {w: 600.0, h: 200.0}) jan2_19 [10,9,8,6] (Just padding0)
+hr = unsafePartial $ fromJust $ H.create (CO.ChartDim {w: 600.0, h: 200.0}) jan2_19 [10,9,8,6] padding0
 
 
 demo :: Effect Unit
 demo = do 
-  let hrx = H.create (CO.ChartDim {w: 600.0, h: 200.0}) jan2_19 [30,10,8,3] (Just padding0)
+  let hrx = H.create (CO.ChartDim {w: 600.0, h: 200.0}) jan2_19 [30,10,8,3] padding0
   -- let p = H.calcPix hr feb1_19
   -- logShow p
   case hrx of 

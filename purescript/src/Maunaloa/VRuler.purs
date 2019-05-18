@@ -24,7 +24,7 @@ newtype VRuler = VRuler {
       ppy :: Pix
     , maxVal :: Number
     , dim :: ChartDim
-    , padding :: Maybe Padding
+    , padding :: Padding
 }
 
 newtype VRulerLine = VRulerLine {
@@ -62,7 +62,7 @@ lines vr@(VRuler {dim: (ChartDim dimx)}) num =
   map (createLine vr vpix) sections
 
 
-create :: ValueRange -> ChartDim -> Maybe Padding -> VRuler 
+create :: ValueRange -> ChartDim -> Padding -> VRuler 
 create vr@(ValueRange {maxVal}) dim pad = VRuler { 
       ppy: Pix $ calcPpy dim vr pad 
     , maxVal: maxVal 
@@ -78,14 +78,9 @@ yaxis vr values =
   map fn values
 
 valueToPix :: VRuler -> Number -> Number
-valueToPix (VRuler {ppy:(Pix ppyVal), maxVal, padding}) value = 
+valueToPix (VRuler {ppy:(Pix ppyVal), maxVal, padding: (Padding curPad)}) value = 
   -- Pix $ (maxVal - value) * ppyVal
-  let 
-    paddingTop = case padding of 
-      Nothing -> 0.0
-      Just (Padding p) -> p.top
-  in
-  ((maxVal - value) * ppyVal) + paddingTop
+  ((maxVal - value) * ppyVal) + curPad.top 
 
 pixToValue :: VRuler -> Pix -> Number
 pixToValue (VRuler {maxVal,ppy:(Pix ppyVal)}) (Pix p) = maxVal - (p / ppyVal)

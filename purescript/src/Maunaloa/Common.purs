@@ -63,30 +63,24 @@ instance showPadding :: Show Padding where
   show (Padding v) = "(Padding " <> show v <> ")"
 
 ------------------------- Util ------------------------- 
-calcPpx :: ChartDim -> Array Int -> Maybe Padding -> Maybe Number
-calcPpx (ChartDim dim) offsets padding = 
+calcPpx :: ChartDim -> Array Int -> Padding -> Maybe Number
+calcPpx (ChartDim dim) offsets (Padding p) = 
   head offsets >>= \offset0 ->
   last offsets >>= \offsetN ->
   -- padding >>= \padx ->
   let
     diffDays = toNumber $ offset0 - offsetN + 1
-    padding_w = case padding of 
-                  Nothing -> dim.w
-                  Just (Padding p) -> dim.w - p.left - p.right
+    padding_w = dim.w - p.left - p.right
   in 
   if diffDays < 0.0 then 
     Nothing
   else
     Just $ padding_w / diffDays
 
-calcPpy :: ChartDim -> ValueRange -> Maybe Padding -> Number
+calcPpy :: ChartDim -> ValueRange -> Padding -> Number
 -- calcPpy (ChartDim dim) (ValueRange {minVal,maxVal}) (Margin {top,bottom}) = 
-calcPpy (ChartDim dim) (ValueRange {minVal,maxVal}) padding = 
-  case padding of 
-    Nothing -> 
-      dim.h / (maxVal - minVal)
-    Just (Padding p) ->
-      let
-        padding_justified_h = dim.h - p.top - p.bottom
-      in
-      padding_justified_h / (maxVal - minVal)
+calcPpy (ChartDim dim) (ValueRange {minVal,maxVal}) (Padding p) = 
+  let
+    padding_justified_h = dim.h - p.top - p.bottom
+  in
+  padding_justified_h / (maxVal - minVal)

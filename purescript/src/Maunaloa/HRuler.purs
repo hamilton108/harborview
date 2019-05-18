@@ -21,7 +21,7 @@ newtype HRuler = HRuler { dim :: ChartDim
                         , startTime :: UnixTime
                         , xaxis :: Array Number
                         , ppx :: Pix 
-                        , padding :: Maybe Padding }
+                        , padding :: Padding }
 
 instance showHRuler :: Show HRuler where
   show (HRuler v) = "(HRuler " <> show v <> ")"
@@ -31,33 +31,27 @@ derive instance eqHRuler :: Eq HRuler
 dayInMillis :: Number
 dayInMillis = 86400000.0
 
-create :: ChartDim -> UnixTime -> Array Int -> Maybe Padding -> Maybe HRuler 
-create dim startTime offsets pad = 
-    calcPpx dim offsets pad >>= \pix ->
+create :: ChartDim -> UnixTime -> Array Int -> Padding -> Maybe HRuler 
+create dim startTime offsets p@(Padding pad) = 
+    calcPpx dim offsets p >>= \pix ->
     let 
       curPix = Pix pix
-      padLeft = case pad of
-                  Nothing -> 0.0
-                  Just (Padding p) -> p.left
     in
     Just $ HRuler { 
               dim: dim
             , startTime: startTime
-            , xaxis: offsetsToPix offsets curPix padLeft
+            , xaxis: offsetsToPix offsets curPix pad.left
             , ppx: curPix 
-            , padding: pad}
+            , padding: p}
 
 timeStampToPix :: HRuler -> UnixTime -> Number
-timeStampToPix (HRuler {startTime,ppx,padding}) (UnixTime tm) = 
+timeStampToPix (HRuler {startTime,ppx,padding: (Padding p)}) (UnixTime tm) = 
   let 
-    offset = case padding of
-                Nothing -> 0.0
-                Just (Padding p) -> p.left
     (UnixTime stm) = startTime
     (Pix pix) = ppx 
     days = (tm - stm) / dayInMillis
   in 
-    offset + (days * pix)
+    p.left + (days * pix)
     
 
 offsetsToPix :: Array Int -> Pix -> Number -> Array Number
