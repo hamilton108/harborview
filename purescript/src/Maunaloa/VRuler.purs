@@ -17,6 +17,8 @@ import Maunaloa.Common (
     , Padding(..)
     , class Graph
     , calcPpy
+    , RulerLineLevel
+    , RulerLineInfo(..) 
     )
 
   
@@ -27,32 +29,37 @@ newtype VRuler = VRuler {
     , padding :: Padding
 }
 
+{-
 newtype VRulerLine = VRulerLine {
-      y :: Number
+      p0 :: Number
     , tx :: String
 }
+-}
 
-foreign import js_lines :: Array VRulerLine -> Context2D -> Unit 
+-- type LinesX = { x1:: Number, x2 :: Number }
+
+foreign import js_lines :: Context2D -> RulerLineLevel -> Array RulerLineInfo -> Unit 
 
 draw_ :: VRuler -> Context2D -> Effect Unit
-draw_ vruler ctx = do
+draw_ vruler@(VRuler {padding: (Padding pad), dim: (ChartDim cd)}) ctx = do
   let curLines = lines vruler 4 
-  let _ = js_lines curLines ctx 
-  logShow "id"
+  let linesX = { p1: pad.left, p2: cd.w - pad.right }
+  let _ = js_lines ctx linesX curLines 
+  logShow "vruler"
 
 instance graphLine :: Graph VRuler where
   draw = draw_
 
-createLine :: VRuler -> Number -> Number -> Int -> VRulerLine
+createLine :: VRuler -> Number -> Number -> Int -> RulerLineInfo 
 createLine vruler vpix padTop n = 
   let
     curPix = padTop + (vpix * (toNumber n))
     val = pixToValue vruler (Pix curPix) 
     tx = toStringWith (fixed 1) val
   in
-  VRulerLine {y: curPix, tx: tx }
+  RulerLineInfo { p0: curPix, tx: tx }
 
-lines :: VRuler -> Int -> Array VRulerLine
+lines :: VRuler -> Int -> Array RulerLineInfo 
 lines vr@(VRuler {dim: (ChartDim dimx),padding: (Padding p)}) num = 
   let
     vpix = (dimx.h - p.top - p.bottom) / (toNumber num)

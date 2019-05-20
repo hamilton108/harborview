@@ -62,6 +62,11 @@ derive instance eqPadding :: Eq Padding
 instance showPadding :: Show Padding where
   show (Padding v) = "(Padding " <> show v <> ")"
 
+------------------------- RulerLine ------------------------- 
+type RulerLineLevel = { p1:: Number, p2 :: Number }
+
+newtype RulerLineInfo = RulerLineInfo { p0 :: Number, tx :: String }
+
 ------------------------- Util ------------------------- 
 calcPpx :: ChartDim -> Array Int -> Padding -> Maybe Number
 calcPpx (ChartDim dim) offsets (Padding p) = 

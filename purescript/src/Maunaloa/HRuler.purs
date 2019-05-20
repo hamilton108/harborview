@@ -4,16 +4,24 @@ import Prelude
 
 import Data.Int (toNumber)
 import Data.Maybe (Maybe(..))
+import Effect (Effect)
+import Effect.Console (logShow)
+import Graphics.Canvas (Context2D)
 
 import Maunaloa.Common (
       Pix(..)
     , UnixTime(..)
-    , ChartDim
     , Padding(..)
+    , ChartDim(..)
+    , class Graph
+    , RulerLineLevel
+    , RulerLineInfo(..) 
     , calcPpx)
 
 foreign import incMonths_ :: Number -> Int -> Number
 foreign import dateToString_ :: Number -> String 
+foreign import js_lines :: Context2D -> RulerLineLevel -> Array RulerLineInfo -> Unit 
+
 
 newtype HRulerLine = HRulerLine {}
 
@@ -27,6 +35,33 @@ instance showHRuler :: Show HRuler where
   show (HRuler v) = "(HRuler " <> show v <> ")"
       
 derive instance eqHRuler :: Eq HRuler
+
+
+draw_ :: HRuler -> Context2D -> Effect Unit
+draw_ hruler@(HRuler {padding: (Padding pad), dim: (ChartDim cd)}) ctx = do
+  logShow "hruler"
+  
+ 
+ {-
+createLine :: HRuler -> Number -> Number -> Int -> RulerLineInfo 
+createLine ruler hpix padLeft n = 
+  let
+    curPix = padLeft + (hpix * (toNumber n))
+    val = pixToValue vruler (Pix curPix) 
+    tx = toStringWith (fixed 1) val
+  in
+  RulerLineInfo { p0: curPix, tx: tx }
+-}
+
+lines :: HRuler -> Int -> Array RulerLineInfo 
+lines hr@(HRuler {dim: (ChartDim dimx),padding: (Padding p)}) num = 
+  let 
+    hpix = (dimx.w - p.left - p.right) / (toNumber num)
+  in
+  []
+
+instance graphLine :: Graph HRuler where
+  draw = draw_
 
 dayInMillis :: Number
 dayInMillis = 86400000.0
@@ -53,6 +88,8 @@ timeStampToPix (HRuler {startTime,ppx,padding: (Padding p)}) (UnixTime tm) =
   in 
     p.left + (days * pix)
     
+pixToTimeStamp :: HRuler -> Pix -> UnixTime
+pixToTimeStamp ruler (Pix pix) = UnixTime 3434.9
 
 offsetsToPix :: Array Int -> Pix -> Number -> Array Number
 offsetsToPix offsets (Pix pix) padLeft =

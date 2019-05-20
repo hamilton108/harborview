@@ -23,4 +23,5 @@ node_modules/
 .pulp-cache/
 purescript/output/
 *.xlsx#
+.local/
 

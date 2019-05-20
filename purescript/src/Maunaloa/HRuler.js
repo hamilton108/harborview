@@ -19,3 +19,11 @@ exports.dateToString_ = function (tm) {
         return m + "." + d.getFullYear();
     }
 }
+
+exports.js_lines = function (ctx) {
+    return function (level) {
+        return function (lines) {
+            console.log(level);
+        }
+    }
+}

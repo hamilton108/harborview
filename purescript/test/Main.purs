@@ -17,6 +17,7 @@ import Maunaloa.Common (
     , UnixTime(..)
     , ChartDim(..)
     , Padding(..)
+    , RulerLineInfo(..) 
     , calcPpx
     , calcPpy)
 import Effect (Effect)
@@ -28,8 +29,11 @@ jan_2_19 = UnixTime 1546387200000.0
 jan_11_19 :: UnixTime 
 jan_11_19 = UnixTime 1547164800000.0
 
+jan_20_19 :: UnixTime 
+jan_20_19 = UnixTime 1547942400000.0  
+
 jan_21_19 :: UnixTime 
-jan_21_19 = UnixTime 1547942400000.0  
+jan_21_19 = UnixTime 1548028800000.0
 
 april_1_19 :: UnixTime 
 april_1_19 = UnixTime 1554076800000.0
@@ -112,12 +116,12 @@ main = runTest do
       Assert.equal expectedYaxis cyrYaxis 
     test "vruler lines" do
       let result = V.lines testVRuler 4
-      let exTx (V.VRulerLine {tx}) = tx
+      let exTx (RulerLineInfo {tx}) = tx
       let resultTx = map exTx result
       Assert.equal ["50.0","40.0","30.0","20.0","10.0"] resultTx 
     test "vruler lines (padding)" do
       let result = V.lines testVRulerpadding 4
-      let exTx (V.VRulerLine {tx}) = tx
+      let exTx (RulerLineInfo {tx}) = tx
       let resultTx = map exTx result
       Assert.equal ["50.0","40.0","30.0","20.0","10.0"] resultTx 
   suite "HRuler" do
@@ -167,6 +171,22 @@ main = runTest do
     test "dateToString" do
       let s = H.dateToString jan_2_19 
       Assert.equal "01.2019" s
+      {-
+    test "pixToTimeStamp" do
+      let hr = testHRuler jan_2_19 
+      let result = H.pixToTimeStamp hr (Pix 100.0)
+      Assert.equal result (UnixTime 1231231.3)
+      -}
+
+      
+      {-
+    test "hruler lines" do
+      let hr = testHRuler jan_2_19 
+      let result = H.lines hr 4
+      let exTx (RulerLineInfo {tx}) = tx
+      let resultTx = map exTx result
+      Assert.equal ["50.0","40.0","30.0","20.0","10.0"] resultTx 
+      -}
 
 
 
