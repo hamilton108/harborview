@@ -135,11 +135,11 @@ main = runTest do
       Assert.equal 280.0 t
     test "timeStampToPix full width of canvas" do
       let hr = testHRuler jan_2_19 
-      let t = H.timeStampToPix hr jan_21_19
+      let t = H.timeStampToPix hr jan_20_19
       Assert.equal 600.0 t
     test "timeStampToPix full width of canvas (padding)" do
       let hr = testHRulerPadding jan_2_19 
-      let t = H.timeStampToPix hr jan_21_19
+      let t = H.timeStampToPix hr jan_20_19
       Assert.equal 550.0 t
     test "offsetsToPix" do
       let (H.HRuler {ppx: (Pix ppd),xaxis}) = testHRuler jan_2_19 
@@ -171,6 +171,15 @@ main = runTest do
     test "dateToString" do
       let s = H.dateToString jan_2_19 
       Assert.equal "01.2019" s
+    test "pixToDays" do
+      let hr = testHRuler jan_2_19 
+      let days = H.pixToDays hr (Pix 200.0)
+      Assert.equal 6.0 days
+    test "pixToDays (padding)" do
+      let hr = testHRulerPadding jan_2_19 
+      let days = H.pixToDays hr (Pix 200.0)
+      Assert.assert "pixToDays should be 6.33" $ moreOrLessEq 6.33 days
+      
       {-
     test "pixToTimeStamp" do
       let hr = testHRuler jan_2_19 

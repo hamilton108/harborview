@@ -98,6 +98,9 @@ offsetsToPix offsets (Pix pix) padLeft =
 incMonths :: UnixTime -> Int -> UnixTime
 incMonths (UnixTime tm) numMonths = UnixTime $ incMonths_ tm numMonths
 
+pixToDays :: HRuler -> Pix -> Number
+pixToDays (HRuler {ppx: (Pix ppxVal), padding: (Padding p)}) (Pix pix) = (pix - p.left) / ppxVal
+
 
 dateToString :: UnixTime -> String
 dateToString (UnixTime tm) = dateToString_ tm
