@@ -179,13 +179,14 @@ main = runTest do
       let hr = testHRulerPadding jan_2_19 
       let days = H.pixToDays hr (Pix 200.0)
       Assert.assert "pixToDays should be 6.33" $ moreOrLessEq 6.33 days
-      
-      {-
     test "pixToTimeStamp" do
       let hr = testHRuler jan_2_19 
-      let result = H.pixToTimeStamp hr (Pix 100.0)
-      Assert.equal result (UnixTime 1231231.3)
-      -}
+      let result = H.pixToTimeStamp hr (Pix 200.0)
+      Assert.equal result (UnixTime 1546905600000.0)
+    test "pixToTimeStamp (padding)" do
+      let hr = testHRulerPadding jan_2_19 
+      let result = H.pixToTimeStamp hr (Pix 200.0)
+      Assert.equal result (UnixTime 1546934400000.0)
 
       
       {-

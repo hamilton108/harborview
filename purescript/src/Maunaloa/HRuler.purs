@@ -89,7 +89,12 @@ timeStampToPix (HRuler {startTime,ppx,padding: (Padding p)}) (UnixTime tm) =
     p.left + (days * pix)
     
 pixToTimeStamp :: HRuler -> Pix -> UnixTime
-pixToTimeStamp ruler (Pix pix) = UnixTime 3434.9
+pixToTimeStamp ruler@(HRuler {startTime: (UnixTime stm)}) pix = 
+  let
+    days = pixToDays ruler pix
+    tm = stm + (dayInMillis * days)
+  in
+  UnixTime tm
 
 offsetsToPix :: Array Int -> Pix -> Number -> Array Number
 offsetsToPix offsets (Pix pix) padLeft =
