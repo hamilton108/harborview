@@ -182,11 +182,18 @@ main = runTest do
     test "pixToTimeStamp" do
       let hr = testHRuler jan_2_19 
       let result = H.pixToTimeStamp hr (Pix 200.0)
-      Assert.equal result (UnixTime 1546905600000.0)
+      Assert.equal (UnixTime 1546905600000.0) result 
     test "pixToTimeStamp (padding)" do
       let hr = testHRulerPadding jan_2_19 
       let result = H.pixToTimeStamp hr (Pix 200.0)
-      Assert.equal result (UnixTime 1546934400000.0)
+      Assert.equal (UnixTime 1546934400000.0) result 
+    test "startOfNextMonth" do
+      -- 
+      -- let expected = UnixTime 1546300800000.0
+      let expected = UnixTime 1548979200000.0
+      let result = H.startOfNextMonth jan_11_19 
+      Assert.equal expected result 
+
 
       
       {-

@@ -21,6 +21,7 @@ import Maunaloa.Common (
 foreign import incMonths_ :: Number -> Int -> Number
 foreign import dateToString_ :: Number -> String 
 foreign import js_lines :: Context2D -> RulerLineLevel -> Array RulerLineInfo -> Unit 
+foreign import js_startOfNextMonth :: Number -> Number
 
 
 newtype HRulerLine = HRulerLine {}
@@ -106,6 +107,10 @@ incMonths (UnixTime tm) numMonths = UnixTime $ incMonths_ tm numMonths
 pixToDays :: HRuler -> Pix -> Number
 pixToDays (HRuler {ppx: (Pix ppxVal), padding: (Padding p)}) (Pix pix) = (pix - p.left) / ppxVal
 
+
+startOfNextMonth :: UnixTime -> UnixTime
+startOfNextMonth (UnixTime tm) = 
+  UnixTime $ js_startOfNextMonth tm
 
 dateToString :: UnixTime -> String
 dateToString (UnixTime tm) = dateToString_ tm

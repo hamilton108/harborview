@@ -27,3 +27,9 @@ exports.js_lines = function (ctx) {
         }
     }
 }
+
+exports.js_startOfNextMonth = function (tm) {
+    const curDate = new Date(tm);
+    const som = new Date(curDate.getFullYear(),curDate.getMonth()+1,1);
+    return som.getTime();
+}
