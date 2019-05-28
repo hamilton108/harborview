@@ -54,21 +54,35 @@ chartDim = ChartDim { w: 600.0, h: 200.0 }
 valueRange :: ValueRange
 valueRange = ValueRange { minVal: 10.0, maxVal: 50.0 }
 
+testHRuler_ :: UnixTime -> Array Int -> Padding -> H.HRuler 
+testHRuler_ tm myOffsets myPadding =
+  let 
+    hr = H.create chartDim tm myOffsets myPadding 
+    hrx = unsafePartial $ fromJust hr
+  in 
+  hrx
+
 testHRuler :: UnixTime -> H.HRuler 
 testHRuler tm =
+  testHRuler_ tm offsets pad0
+{-
   let 
     hr = H.create chartDim tm offsets pad0
     hrx = unsafePartial $ fromJust hr
   in 
   hrx
+-}
 
 testHRulerPadding :: UnixTime -> H.HRuler 
 testHRulerPadding tm =
+  testHRuler_ tm offsets pad1
+{-
   let 
     hr = H.create chartDim tm offsets pad1
     hrx = unsafePartial $ fromJust hr
   in 
   hrx
+-}
 
 testVRuler :: V.VRuler
 testVRuler = V.create valueRange chartDim pad0
@@ -85,6 +99,7 @@ moreOrLessEq a b =
 
 main :: Effect Unit
 main = runTest do
+  {-
   suite "VRuler" do
     test "valueToPix" do
       let pix = V.valueToPix testVRuler 30.0
@@ -124,7 +139,9 @@ main = runTest do
       let exTx (RulerLineInfo {tx}) = tx
       let resultTx = map exTx result
       Assert.equal ["50.0","40.0","30.0","20.0","10.0"] resultTx 
+      -}
   suite "HRuler" do
+    {-
     test "timeStampToPix half width of canvas" do
       let hr = testHRuler jan_2_19 
       let t = H.timeStampToPix hr jan_11_19
@@ -188,41 +205,17 @@ main = runTest do
       let result = H.pixToTimeStamp hr (Pix 200.0)
       Assert.equal (UnixTime 1546934400000.0) result 
     test "startOfNextMonth" do
-      -- 
-      -- let expected = UnixTime 1546300800000.0
       let expected = UnixTime 1548979200000.0
       let result = H.startOfNextMonth jan_11_19 
       Assert.equal expected result 
-
-
-      
-      {-
-    test "hruler lines" do
-      let hr = testHRuler jan_2_19 
-      let result = H.lines hr 4
+      -}
+    test "monthly lines" do
+      let hr = testHRuler_ april_1_19 [100,0] pad0
+      let result = H.lines hr 3
       let exTx (RulerLineInfo {tx}) = tx
       let resultTx = map exTx result
-      Assert.equal ["50.0","40.0","30.0","20.0","10.0"] resultTx 
-      -}
+      Assert.equal ["50.0","40.0","309.0","20.0","10.0"] resultTx 
 
+      
 
-
-{-
-main = runTest do
-  suite "sync code" do
-    test "arithmetic" do
-      Assert.assert "2 + 2 should be 4" $ (2 + 2) == 4
-      Assert.assertFalse "2 + 2 shouldn't be 5" $ (2 + 2) == 5
-      Assert.equal 4 (2 + 2)
-      Assert.expectFailure "2 + 2 shouldn't be 5" $ Assert.equal 5 (2 + 2)
-
-  suite "async code" do
-    test "with async IO" do
-      fileContents <- FS.readTextFile UTF8 "file.txt"
-      Assert.equal "hello here are your file contents\n" fileContents
-    test "async operation with a timeout" do
-      timeout 100 $ do
-        file2Contents <- FS.readTextFile UTF8 "file2.txt"
-        Assert.equal "can we read a file in 100ms?\n" file2Contents
--}
 
