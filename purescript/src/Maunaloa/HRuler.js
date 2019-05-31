@@ -9,6 +9,14 @@ exports.incMonths_ = function (startTime) {
     }
 }
 
+exports.incDays_ = function (startTime) {
+    return function (offset) {
+        var stm = new Date(startTime);
+        var offsetTime = new Date(stm.getFullYear(), stm.getMonth(), stm.getDate() + offset);
+        return offsetTime.getTime();
+    }
+}
+
 exports.dateToString_ = function (tm) {
     var d = new Date(tm);
     var m = d.getMonth() + 1;

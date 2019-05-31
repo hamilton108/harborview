@@ -35,6 +35,9 @@ jan_20_19 = UnixTime 1547942400000.0
 jan_21_19 :: UnixTime 
 jan_21_19 = UnixTime 1548028800000.0
 
+feb_11_19 :: UnixTime 
+feb_11_19 = UnixTime  1549843200000.0 
+
 april_1_19 :: UnixTime 
 april_1_19 = UnixTime 1554076800000.0
 
@@ -208,13 +211,20 @@ main = runTest do
       let expected = UnixTime 1548979200000.0
       let result = H.startOfNextMonth jan_11_19 
       Assert.equal expected result 
+
       -}
+    test "incDays 9" do
+      let tm = H.incDays jan_2_19 9
+      Assert.equal jan_11_19 tm
+    test "incDays 40" do
+      let tm = H.incDays jan_2_19 40
+      Assert.equal feb_11_19 tm
     test "monthly lines" do
       let hr = testHRuler_ april_1_19 [100,0] pad0
       let result = H.lines hr 3
       let exTx (RulerLineInfo {tx}) = tx
       let resultTx = map exTx result
-      Assert.equal ["50.0","40.0","309.0","20.0","10.0"] resultTx 
+      Assert.equal ["07.2019","06.2019","05.2019"] resultTx 
 
       
 

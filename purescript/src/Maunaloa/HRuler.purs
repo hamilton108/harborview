@@ -4,6 +4,7 @@ import Prelude
 
 import Data.Int (toNumber)
 import Data.Maybe (Maybe(..))
+import Data.Array (head,(:))
 import Effect (Effect)
 import Effect.Console (logShow)
 import Graphics.Canvas (Context2D)
@@ -19,6 +20,7 @@ import Maunaloa.Common (
     , calcPpx)
 
 foreign import incMonths_ :: Number -> Int -> Number
+foreign import incDays_ :: Number -> Int -> Number
 foreign import dateToString_ :: Number -> String 
 foreign import js_lines :: Context2D -> RulerLineLevel -> Array RulerLineInfo -> Unit 
 foreign import js_startOfNextMonth :: Number -> Number
@@ -28,6 +30,7 @@ newtype HRulerLine = HRulerLine {}
 
 newtype HRuler = HRuler { dim :: ChartDim
                         , startTime :: UnixTime
+                        , endTime :: UnixTime
                         , xaxis :: Array Number
                         , ppx :: Pix 
                         , padding :: Padding }
@@ -54,12 +57,23 @@ createLine ruler hpix padLeft n =
   RulerLineInfo { p0: curPix, tx: tx }
 -}
 
+lines_ :: (UnixTime -> Number) -> UnixTime -> Array RulerLineInfo -> UnixTime -> Array RulerLineInfo
+lines_ timestampFn endTime curLines curTime 
+  | curTime >= endTime = curLines
+  | otherwise = 
+      let 
+        nextTime = incMonths curTime 1
+        newCurLines = RulerLineInfo { p0: timestampFn curTime, tx: dateToString curTime } : curLines
+      in 
+        lines_ timestampFn endTime newCurLines nextTime
+
 lines :: HRuler -> Int -> Array RulerLineInfo 
-lines hr@(HRuler {dim: (ChartDim dimx),padding: (Padding p)}) num = 
+lines hr@(HRuler {startTime, endTime, dim: (ChartDim dimx),padding: (Padding p)}) num = 
   let 
-    hpix = (dimx.w - p.left - p.right) / (toNumber num)
+    snm = startOfNextMonth startTime
+    timestampFn = timeStampToPix hr
   in
-  []
+  lines_ timestampFn endTime [] snm
 
 instance graphLine :: Graph HRuler where
   draw = draw_
@@ -70,12 +84,15 @@ dayInMillis = 86400000.0
 create :: ChartDim -> UnixTime -> Array Int -> Padding -> Maybe HRuler 
 create dim startTime offsets p@(Padding pad) = 
     calcPpx dim offsets p >>= \pix ->
+    head offsets >>= \offset0 ->
     let 
       curPix = Pix pix
+      endTime = incDays startTime offset0
     in
     Just $ HRuler { 
               dim: dim
             , startTime: startTime
+            , endTime: endTime
             , xaxis: offsetsToPix offsets curPix pad.left
             , ppx: curPix 
             , padding: p}
@@ -103,6 +120,9 @@ offsetsToPix offsets (Pix pix) padLeft =
 
 incMonths :: UnixTime -> Int -> UnixTime
 incMonths (UnixTime tm) numMonths = UnixTime $ incMonths_ tm numMonths
+
+incDays :: UnixTime -> Int -> UnixTime
+incDays (UnixTime tm) offset = UnixTime $ incDays_ tm offset
 
 pixToDays :: HRuler -> Pix -> Number
 pixToDays (HRuler {ppx: (Pix ppxVal), padding: (Padding p)}) (Pix pix) = (pix - p.left) / ppxVal
