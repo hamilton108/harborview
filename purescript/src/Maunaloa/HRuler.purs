@@ -15,14 +15,14 @@ import Maunaloa.Common (
     , Padding(..)
     , ChartDim(..)
     , class Graph
-    , RulerLineLevel
+    , RulerLineBoundary
     , RulerLineInfo(..) 
     , calcPpx)
 
 foreign import incMonths_ :: Number -> Int -> Number
 foreign import incDays_ :: Number -> Int -> Number
 foreign import dateToString_ :: Number -> String 
-foreign import js_lines :: Context2D -> RulerLineLevel -> Array RulerLineInfo -> Unit 
+foreign import js_lines :: Context2D -> RulerLineBoundary -> Array RulerLineInfo -> Unit 
 foreign import js_startOfNextMonth :: Number -> Number
 
 
@@ -33,7 +33,8 @@ newtype HRuler = HRuler { dim :: ChartDim
                         , endTime :: UnixTime
                         , xaxis :: Array Number
                         , ppx :: Pix 
-                        , padding :: Padding }
+                        , padding :: Padding 
+                        , myIncMonths :: Int }
 
 instance showHRuler :: Show HRuler where
   show (HRuler v) = "(HRuler " <> show v <> ")"
@@ -43,6 +44,9 @@ derive instance eqHRuler :: Eq HRuler
 
 draw_ :: HRuler -> Context2D -> Effect Unit
 draw_ hruler@(HRuler {padding: (Padding pad), dim: (ChartDim cd)}) ctx = do
+  let curLines = lines hruler 4 
+  let linesX = { p1: pad.top, p2: cd.h - pad.bottom }
+  let _ = js_lines ctx linesX curLines 
   logShow "hruler"
   
  
@@ -57,23 +61,23 @@ createLine ruler hpix padLeft n =
   RulerLineInfo { p0: curPix, tx: tx }
 -}
 
-lines_ :: (UnixTime -> Number) -> UnixTime -> Array RulerLineInfo -> UnixTime -> Array RulerLineInfo
-lines_ timestampFn endTime curLines curTime 
+lines_ :: (UnixTime -> Number) -> UnixTime -> Int -> Array RulerLineInfo -> UnixTime -> Array RulerLineInfo
+lines_ timestampFn endTime numMonths curLines curTime 
   | curTime >= endTime = curLines
   | otherwise = 
       let 
-        nextTime = incMonths curTime 1
+        nextTime = incMonths curTime numMonths 
         newCurLines = RulerLineInfo { p0: timestampFn curTime, tx: dateToString curTime } : curLines
       in 
-        lines_ timestampFn endTime newCurLines nextTime
+        lines_ timestampFn endTime numMonths newCurLines nextTime
 
 lines :: HRuler -> Int -> Array RulerLineInfo 
-lines hr@(HRuler {startTime, endTime, dim: (ChartDim dimx),padding: (Padding p)}) num = 
+lines hr@(HRuler {startTime, endTime, myIncMonths, dim: (ChartDim dimx), padding: (Padding p)}) num = 
   let 
     snm = startOfNextMonth startTime
     timestampFn = timeStampToPix hr
   in
-  lines_ timestampFn endTime [] snm
+  lines_ timestampFn endTime myIncMonths [] snm
 
 instance graphLine :: Graph HRuler where
   draw = draw_
@@ -95,7 +99,8 @@ create dim startTime offsets p@(Padding pad) =
             , endTime: endTime
             , xaxis: offsetsToPix offsets curPix pad.left
             , ppx: curPix 
-            , padding: p}
+            , padding: p
+            , myIncMonths: 1 }
 
 timeStampToPix :: HRuler -> UnixTime -> Number
 timeStampToPix (HRuler {startTime,ppx,padding: (Padding p)}) (UnixTime tm) = 

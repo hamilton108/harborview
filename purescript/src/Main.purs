@@ -62,6 +62,7 @@ main = void $ unsafePartial do
   let l = L.Line { yaxis: yaxis, xaxis: xaxis, strokeStyle: "#f00" }
   CO.draw l ctx
   CO.draw vr ctx
+  CO.draw hruler ctx
 
 jan2_19 :: CO.UnixTime 
 jan2_19 = CO.UnixTime 1546387200000.0

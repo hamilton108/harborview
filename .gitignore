@@ -24,4 +24,4 @@ node_modules/
 purescript/output/
 *.xlsx#
 .local/
-
+purescript/.psci_modules/

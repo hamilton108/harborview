@@ -1,11 +1,11 @@
 "use strict";
 
 exports.js_lines = function (ctx) {
-    return function (level) {
+    return function (boundary) {
         return function (lines) {
-            console.log(level);
-            const x1 = level.p1;
-            const x2 = level.p2;
+            console.log(boundary);
+            const x1 = boundary.p1;
+            const x2 = boundary.p2;
             ctx.strokeStyle = "#000";
             ctx.lineWidth = 0.25;
             ctx.beginPath();

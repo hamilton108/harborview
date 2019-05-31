@@ -17,7 +17,7 @@ import Maunaloa.Common (
     , Padding(..)
     , class Graph
     , calcPpy
-    , RulerLineLevel
+    , RulerLineBoundary
     , RulerLineInfo(..) 
     )
 
@@ -38,7 +38,7 @@ newtype VRulerLine = VRulerLine {
 
 -- type LinesX = { x1:: Number, x2 :: Number }
 
-foreign import js_lines :: Context2D -> RulerLineLevel -> Array RulerLineInfo -> Unit 
+foreign import js_lines :: Context2D -> RulerLineBoundary -> Array RulerLineInfo -> Unit 
 
 draw_ :: VRuler -> Context2D -> Effect Unit
 draw_ vruler@(VRuler {padding: (Padding pad), dim: (ChartDim cd)}) ctx = do

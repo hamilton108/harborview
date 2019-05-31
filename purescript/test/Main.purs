@@ -102,7 +102,6 @@ moreOrLessEq a b =
 
 main :: Effect Unit
 main = runTest do
-  {-
   suite "VRuler" do
     test "valueToPix" do
       let pix = V.valueToPix testVRuler 30.0
@@ -142,9 +141,7 @@ main = runTest do
       let exTx (RulerLineInfo {tx}) = tx
       let resultTx = map exTx result
       Assert.equal ["50.0","40.0","30.0","20.0","10.0"] resultTx 
-      -}
   suite "HRuler" do
-    {-
     test "timeStampToPix half width of canvas" do
       let hr = testHRuler jan_2_19 
       let t = H.timeStampToPix hr jan_11_19
@@ -211,8 +208,6 @@ main = runTest do
       let expected = UnixTime 1548979200000.0
       let result = H.startOfNextMonth jan_11_19 
       Assert.equal expected result 
-
-      -}
     test "incDays 9" do
       let tm = H.incDays jan_2_19 9
       Assert.equal jan_11_19 tm
