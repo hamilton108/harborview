@@ -18,13 +18,13 @@ import Maunaloa.VRuler as V
 foreign import fx :: C.Context2D -> Unit 
 
 offsets :: Array Int
-offsets = [17,16,15,14,11,10,9,8,7,4,3,0]
+offsets = [190,17,16,15,14,11,10,9,8,7,4,3,0]
 
 chartDim :: CO.ChartDim 
 chartDim = CO.ChartDim { w: 1200.0, h: 600.0 }
 
 valueRange :: CO.ValueRange
-valueRange = CO.ValueRange { minVal: 10.0, maxVal: 50.0 }
+valueRange = CO.ValueRange { minVal: 5.0, maxVal: 65.0 }
 
 padding :: CO.Padding
 padding = CO.Padding { left: 20.0, top: 20.0, right: 20.0, bottom: 20.0 }
@@ -50,7 +50,7 @@ vruler :: V.VRuler
 vruler = V.create valueRange chartDim curPadding
 
 prices :: Array Number
-prices = [48.0,50.0,38.0,30.6,17.0,10.0,30.4,42.0,44.1,46.0,45.6,45.0]
+prices = [60.0,48.0,50.0,38.0,30.6,17.0,10.0,30.4,42.0,44.1,46.0,45.6,45.0]
 
 main :: Effect Unit
 main = void $ unsafePartial do
