@@ -4,7 +4,7 @@ import Prelude
 
 import Data.Int (toNumber)
 import Data.Maybe (Maybe(..))
-import Data.Array (head,(:))
+import Data.Array (head,last,(:))
 import Effect (Effect)
 import Effect.Console (logShow)
 import Graphics.Canvas (Context2D)
@@ -17,6 +17,7 @@ import Maunaloa.Common (
     , class Graph
     , RulerLineBoundary
     , RulerLineInfo(..) 
+    , OffsetBoundary(..)
     , calcPpx)
 
 foreign import incMonths_ :: Number -> Int -> Number
@@ -87,9 +88,11 @@ dayInMillis = 86400000.0
 
 create :: ChartDim -> UnixTime -> Array Int -> Padding -> Maybe HRuler 
 create dim startTime offsets p@(Padding pad) = 
-    calcPpx dim offsets p >>= \pix ->
     head offsets >>= \offset0 ->
+    last offsets >>= \offsetN ->
     let 
+      offsetBoundary = OffsetBoundary { oHead: offset0, oLast: offsetN }
+      pix = calcPpx dim offsetBoundary p 
       curPix = Pix pix
       endTime = incDays startTime offset0
     in
