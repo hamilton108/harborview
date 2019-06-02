@@ -70,9 +70,22 @@ type RulerLineBoundary = { p1:: Number, p2 :: Number }
 
 newtype RulerLineInfo = RulerLineInfo { p0 :: Number, tx :: String }
 
+------------------------- Offset ------------------------- 
+
+newtype OffsetBoundary = OffsetBoundary { oHead :: Int, oLast :: Int }
+
 ------------------------- Util ------------------------- 
-calcPpx :: ChartDim -> Array Int -> Padding -> Maybe Number
-calcPpx (ChartDim dim) offsets (Padding p) = 
+
+calcPpx :: ChartDim -> OffsetBoundary -> Padding -> Number
+calcPpx (ChartDim dim) (OffsetBoundary b) (Padding p) = 
+  let
+    diffDays = toNumber $ b.oHead - b.oLast + 1
+    padding_w = dim.w - p.left - p.right
+  in 
+  padding_w / diffDays
+
+calcPpx_ :: ChartDim -> Array Int -> Padding -> Maybe Number
+calcPpx_ (ChartDim dim) offsets (Padding p) = 
   head offsets >>= \offset0 ->
   last offsets >>= \offsetN ->
   -- padding >>= \padx ->

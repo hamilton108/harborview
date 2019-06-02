@@ -18,6 +18,7 @@ import Maunaloa.Common (
     , ChartDim(..)
     , Padding(..)
     , RulerLineInfo(..) 
+    , OffsetBoundary(..)
     , calcPpx
     , calcPpy)
 import Effect (Effect)
@@ -170,17 +171,19 @@ main = runTest do
       let expectedOffests = [520.0,490.0,460.0,430.0,340.0,310.0,280.0,250.0,220.0,130.0,100.0,70.0,10.0]
       let result = Array.zipWith moreOrLessEq expectedOffests xaxis
       Assert.equal [true,true,true,true,true,true,true,true,true,true,true,true,true] result
+    {-
     test "wrong pix should be Nothing" do
       let wrongOffsets = [1,4,5,8,9]
       let wrongPix = calcPpx chartDim wrongOffsets pad0
       Assert.assert "Wrong pix should be Nothing" $ wrongPix == Nothing
+      -}
     test "pixPrUnit" do
-      let myOffsets = [12,9,8,7,1]
-      let pix = unsafePartial $ fromJust $ calcPpx chartDim myOffsets pad0
+      let myOffsets = OffsetBoundary { oHead: 12, oLast: 1 } -- [12,9,8,7,1]
+      let pix = calcPpx chartDim myOffsets pad0
       Assert.equal 50.0 pix 
     test "pixPrUnit (padding)" do
-      let myOffsets = [12,9,8,7,1]
-      let pix = unsafePartial $ fromJust $ calcPpx chartDim myOffsets pad1
+      let myOffsets = OffsetBoundary { oHead: 12, oLast: 1 } -- [12,9,8,7,1]
+      let pix = calcPpx chartDim myOffsets pad1
       Assert.equal 45.0 pix 
     test "incMonts" do
       let tm = H.incMonths jan_2_19 3
