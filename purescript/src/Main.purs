@@ -1,9 +1,18 @@
 module Main where
 
 import Prelude
-import Data.Maybe (Maybe(..),fromJust)
-
 import Effect (Effect)
+import Effect.Console (logShow)
+import Partial.Unsafe (unsafePartial)
+
+import Maunaloa.Chart as C
+
+main :: Effect Unit
+main = void $ unsafePartial do
+  logShow "main"
+
+{-
+import Data.Maybe (Maybe(..),fromJust)
 
 import Effect.Console (logShow)
 import Partial.Unsafe (unsafePartial)
@@ -54,6 +63,10 @@ prices = [60.0,48.0,50.0,38.0,30.6,17.0,10.0,30.4,42.0,44.1,46.0,45.6,45.0]
 
 main :: Effect Unit
 main = void $ unsafePartial do
+  logShow "main"
+
+xmain :: Effect Unit
+xmain = void $ unsafePartial do
   Just canvas <- C.getCanvasElementById "canvas"
   ctx <- C.getContext2D canvas
   let vr = vruler
@@ -91,3 +104,4 @@ demo = do
       in
       logShow p
 
+-}

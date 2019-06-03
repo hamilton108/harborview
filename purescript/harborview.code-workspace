@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "/home/rcs/opt/java/harborview/src/main/resources/static/js"
+		},
+		{
+			"path": "/home/rcs/opt/github/purescript/purescript-book/exercises/chapter10"
 		}
 	],
 	"settings": {}
