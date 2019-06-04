@@ -5,7 +5,15 @@ import Effect (Effect)
 import Effect.Console (logShow)
 import Partial.Unsafe (unsafePartial)
 
+import Foreign (F, Foreign)
+
 import Maunaloa.Chart as C
+
+demo :: Effect Unit
+demo = C.demo
+
+rc :: C.ChartId -> Foreign -> F C.Lines2 
+rc = C.readChartLines 
 
 main :: Effect Unit
 main = void $ unsafePartial do
