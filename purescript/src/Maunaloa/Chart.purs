@@ -9,16 +9,8 @@ import Data.Traversable (traverse)
 import Foreign (F, Foreign, readArray, readInt, readString, readNumber)
 import Foreign.Index ((!))
 
-{-
-instance showChart :: Show Chart where
-    show _ = "Chart"
+import Maunaloa.Common (ValueRange)
 
-newtype Line = Line (Array Number)
-
-newtype Lines = Lines (Array Line)
-
-data Chart = Chart Lines
--}
 
 newtype ChartId = ChartId String
 
@@ -28,6 +20,10 @@ readNumArray value =
 
 data Lines2 = Lines2 (Array (Array Number))
 
+newtype Chart = Chart {
+    lines :: Lines2
+}
+
 instance showLines2 :: Show Lines2 where
   show (Lines2 lx) = "(Lines2 " <> show lx <> ")"
 
@@ -36,6 +32,8 @@ readChartLines (ChartId cid) value = do
   items <- value ! cid ! "lines" >>= readArray >>= traverse readNumArray
   pure $ Lines2 items
 
-demo :: Effect Unit
-demo = 
-  logShow "demo"
+createChart :: ChartId -> Foreign -> Effect Unit
+createChart cid value = do
+    lines <- readChartLines cid value
+    logShow "createChart"
+    -- Chart { lines: lines }

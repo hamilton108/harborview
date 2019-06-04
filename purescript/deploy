@@ -1,0 +1,7 @@
+#!/bin/bash
+
+pbuild -s -f ps-charts
+
+cp dist/ps-charts.js ../src/main/resources/static/js/maunaloa/
+
+exit 0
