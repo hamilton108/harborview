@@ -9,8 +9,6 @@ import Foreign (F, Foreign)
 
 import Maunaloa.Chart as C
 
-rc :: C.ChartId -> Foreign -> F C.Lines2 
-rc = C.readChartLines 
 
 {-
 main :: Effect Unit

@@ -9,8 +9,10 @@ import Data.Traversable (traverse)
 import Control.Monad.Except (runExcept)
 import Data.Either (Either(..))
 
-import Foreign (F, Foreign, readArray, readInt, readString, readNumber, unsafeToForeign)
+import Foreign (F, Foreign, readNull, readArray, readInt, readString, readNumber, unsafeToForeign)
+import Foreign.NullOrUndefined (readNullOrUndefined)
 import Foreign.Index ((!))
+import Foreign.JSON (parseJSON)
 import Data.Array as A
 import Data.Maybe as M
 
@@ -21,7 +23,17 @@ import Util.Value (foreignValue)
 
 
 demo :: F Foreign
-demo = foreignValue """{ "startDate":1548115200000, "xaxis":[10,9,8,5,4], "chart": { "lines":[[3.0,2.2,3.1,4.2,3.2]], "valueRange":[2.2,4.2] }}"""
+demo = foreignValue """{ 
+  "startDate":1548115200000, 
+  "xaxis":[10,9,8,5,4], 
+  "chart2": null,
+  "chart": { "lines": null, "lines2":[[3.0,2.2,3.1,4.2,3.2]], "valueRange":[2.2,4.2] }}"""
+
+demox :: Foreign
+demox = 
+  case runExcept demo of
+    Right result -> result
+    Left _ -> unsafeToForeign "what?"
 
 newtype ChartId = ChartId String
 
@@ -66,7 +78,38 @@ lineToPix vr line =
   in
   map vfun line
 
+readChart :: ChartId -> Foreign -> F Chart
+readChart (ChartId cid) value = 
+  -- value ! cid ! "lines" >>= readNullOrUndefined >>= readArray >>= traverse readNumArray >>= \items ->
+  value ! cid ! "lines" >>= readArray >>= traverse readNumArray >>= \items ->
+  value ! cid ! "valueRange" >>= readNumArray >>= \valueRangex ->
+  let 
+    minVal = unsafePartial $ M.fromJust $ A.head valueRangex
+    maxVal = unsafePartial $ M.fromJust $ A.last valueRangex
+    valueRange = ValueRange { minVal: minVal, maxVal: maxVal }
+    curVruler = vruler valueRange
+    linesToPix = [] -- map (lineToPix curVruler) items
+  in
+  pure $ Chart { lines: Lines2 linesToPix }
 
+rundemox = 
+  demox ! "chart" ! "lines" >>= readNull -- >>= readArray >>= traverse readNumArray >>= \items ->
+  --pure items
+
+
+
+runDemox2 :: Chart
+runDemox2 = 
+  let 
+    cid = ChartId "chart"
+    rc = runExcept $ readChart cid demox
+    cx = case rc of 
+              Right rcx -> rcx
+              Left _ -> Chart {lines: Lines2 [[1.1]] }
+  in
+  cx
+
+{-
 readChartLines :: ChartId -> Foreign -> F Lines2 
 readChartLines (ChartId cid) value = 
   value ! cid ! "lines" >>= readArray >>= traverse readNumArray >>= \items ->
@@ -141,8 +184,8 @@ runDemox =
   let 
     cid = ChartId "chart"
   in
-  -- valueRangeDemo cid demox
   createChart cid demox 
+-}
 
 
 
