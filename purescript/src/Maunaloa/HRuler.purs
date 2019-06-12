@@ -127,10 +127,12 @@ offsetsToPix offsets (Pix pix) padLeft =
   map (\x -> padLeft + ((toNumber x) * pix)) offsets
 
 incMonths :: UnixTime -> Int -> UnixTime
-incMonths (UnixTime tm) numMonths = UnixTime $ incMonths_ tm numMonths
+incMonths (UnixTime tm) numMonths = UnixTime $ incMonths_ tm numMonths
+
 
 incDays :: UnixTime -> Int -> UnixTime
-incDays (UnixTime tm) offset = UnixTime $ incDays_ tm offset
+incDays (UnixTime tm) offset = UnixTime $ incDays_ tm offset
+
 
 pixToDays :: HRuler -> Pix -> Number
 pixToDays (HRuler {ppx: (Pix ppxVal), padding: (Padding p)}) (Pix pix) = (pix - p.left) / ppxVal
