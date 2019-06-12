@@ -8,6 +8,7 @@ import Effect.Console (logShow)
 import Data.Traversable (traverse)
 import Control.Monad.Except (runExcept)
 import Data.Either (Either(..))
+import Data.Maybe (Maybe(..))
 
 import Foreign (F, Foreign, readNull, readArray, readInt, readString, readNumber, unsafeToForeign)
 import Foreign.NullOrUndefined (readNullOrUndefined)
@@ -21,13 +22,12 @@ import Maunaloa.VRuler as V
 
 import Util.Value (foreignValue)
 
-
 demo :: F Foreign
 demo = foreignValue """{ 
   "startDate":1548115200000, 
   "xaxis":[10,9,8,5,4], 
   "chart2": null,
-  "chart": { "lines": null, "lines2":[[3.0,2.2,3.1,4.2,3.2]], "valueRange":[2.2,4.2] }}"""
+  "chart": { "lines2": null, "lines":[[3.0,2.2,3.1,4.2,3.2]], "valueRange":[2.2,4.2] }}"""
 
 demox :: Foreign
 demox = 
@@ -37,13 +37,19 @@ demox =
 
 newtype ChartId = ChartId String
 
+cix = ChartId "chart"
+
+newtype FragmentId = FragmentId String
+
+frx = FragmentId "lines"
+
 readNumArray :: Foreign -> F (Array Number)
 readNumArray value = 
   readArray value >>= traverse readNumber >>= pure
 
 type Line = Array Number
 
-data Lines2 = Lines2 (Array Line)
+type Lines2 = Array Line
 
 newtype Chart = Chart {
     lines :: Lines2
@@ -52,8 +58,8 @@ newtype Chart = Chart {
 instance showChart :: Show Chart where
   show (Chart cx) = "(Chart " <> show cx.lines <> ")"
 
-instance showLines2 :: Show Lines2 where
-  show (Lines2 lx) = "(Lines2 " <> show lx <> ")"
+--instance showLines2 :: Show Lines2 where
+--  show (Lines2 lx) = "(Lines2 " <> show lx <> ")"
 
 {-
 readChartLines :: ChartId -> Foreign -> F Lines2 
@@ -78,6 +84,44 @@ lineToPix vr line =
   in
   map vfun line
 
+fragment :: ChartId -> FragmentId -> Foreign -> Maybe Foreign
+fragment (ChartId cid) (FragmentId fid) value = 
+  let 
+    fr = runExcept $ value ! cid ! fid >>= readNull 
+  in case fr of
+                Right frx -> frx
+                Left _ -> Nothing
+
+-- lines :: ChartId -> 
+
+fragment2 = 
+    demox ! "chart" ! "lines" >>= readNull 
+
+rx2 :: F Chart
+rx2 =
+  fragment2 >>= \f2 ->
+    case f2 of 
+      Nothing -> 
+        pure $ Chart { lines: [] }
+      Just f2x ->
+        readArray f2x >>= traverse readNumArray >>= \items ->
+        pure $ Chart { lines: items }
+
+
+
+{-
+lines = 
+  let 
+    mfr = fragment cix frx demox
+    res = case mfr of 
+            Nothing -> []
+            Just resx -> 
+              readArray resx >>= traverse readNumArray 
+
+  in
+-}
+
+
 readChart :: ChartId -> Foreign -> F Chart
 readChart (ChartId cid) value = 
   -- value ! cid ! "lines" >>= readNullOrUndefined >>= readArray >>= traverse readNumArray >>= \items ->
@@ -90,11 +134,37 @@ readChart (ChartId cid) value =
     curVruler = vruler valueRange
     linesToPix = [] -- map (lineToPix curVruler) items
   in
-  pure $ Chart { lines: Lines2 linesToPix }
+  pure $ Chart { lines: linesToPix }
 
 rundemox = 
-  demox ! "chart" ! "lines" >>= readNull -- >>= readArray >>= traverse readNumArray >>= \items ->
+  let bx = runExcept $
+             demox ! "chart" ! "lines" >>= readNull -- >>= readArray >>= traverse readNumArray 
+      result = case bx of 
+                Right bx2 -> 
+                  case bx2 of 
+                    Just bx3 -> 1
+                    Nothing -> 2
+                Left _ -> 3
+
+  in
+  result
+
+ax value cid = 
+  runExcept $ value ! cid ! "lines" >>= readNull
+
+ax2 value cid = 
+  value ! cid ! "lines" >>= readNull
+{-
+  let 
+    lines = demox ! "chart" ! "lines" >>= readNull -- >>= readArray >>= traverse readNumArray >>= \items ->
+    bx = case lines of 
+          Nothing -> Lines2 []
+          Just lx -> readArray lx >>= traverse readNumArray >>= \items -> 
+            pure $ Lines2 items
+  in
+  "sdfsd"
   --pure items
+  -}
 
 
 
@@ -105,7 +175,7 @@ runDemox2 =
     rc = runExcept $ readChart cid demox
     cx = case rc of 
               Right rcx -> rcx
-              Left _ -> Chart {lines: Lines2 [[1.1]] }
+              Left _ -> Chart {lines: [[1.1]] }
   in
   cx
 
