@@ -2,24 +2,37 @@ module Maunaloa.Lines where
 
 import Prelude 
 
-import Effect (Effect)
-import Graphics.Canvas as C 
+
+import Data.Maybe (Maybe(..))
+import Data.Traversable (traverse)
+import Foreign (F, Foreign, readArray, readNumber, unsafeToForeign)
 
 import Maunaloa.Common (class Graph)
+import Maunaloa.VRuler as V
+import Maunaloa.Util.Foreign as FU
 
-import Effect.Console (logShow)
-import Data.Foldable (for_)
-import Data.Array ((..))
+type Line = Array Number
 
-import Data.Int (toNumber)
+type Lines2 = Array Line
 
+lines :: Maybe Foreign -> F Lines2
+lines Nothing = pure []
+lines (Just fx) = readArray fx >>= traverse FU.readNumArray 
+
+lineToPix :: V.VRuler -> Line -> Line 
+lineToPix vr line = 
+  let
+    vfun = V.valueToPix vr
+  in
+  map vfun line
+
+{-
 foreign import js_draw :: Line -> C.Context2D -> Unit 
 
 newtype Line = Line { yaxis :: Array Number 
                     , xaxis :: Array Number
                     , strokeStyle :: String }
 
-{-
 xdraw_ :: Line -> C.Context2D -> Effect Unit
 xdraw_ line ctx = do
   _ <- C.setFillStyle ctx "#AA00BB" 
@@ -48,7 +61,6 @@ xdraw_ line ctx = do
          }
     _ <- C.fillPath ctx path
     C.strokePath ctx path
--}
 
 draw_ :: Line -> C.Context2D -> Effect Unit
 draw_ r ctx = do
@@ -59,3 +71,4 @@ draw_ r ctx = do
 
 instance graphLine :: Graph Line where
   draw = draw_
+-}
