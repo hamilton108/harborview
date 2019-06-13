@@ -5,10 +5,41 @@ import Effect (Effect)
 import Effect.Console (logShow)
 import Partial.Unsafe (unsafePartial)
 
-import Foreign (F, Foreign)
+import Control.Monad.Except (runExcept)
+import Foreign (F, Foreign, unsafeToForeign)
+import Data.Either (Either(..))
+import Data.Maybe (Maybe(..)) 
 
+import Util.Value (foreignValue)
 import Maunaloa.Chart as C
 
+demo :: F Foreign
+demo = foreignValue """{ 
+  "startDate":1548115200000, 
+  "xaxis":[10,9,8,5,4], 
+  "chart2": null,
+  "chart": { "lines": null, "lines3":[[3.0,2.2,3.1,4.2,3.5],[3.0,2.2,3.1,4.2,3.2]], "valueRange":[2.2,4.2] }}"""
+
+demox :: Foreign
+demox = 
+  case runExcept demo of
+    Right result -> result
+    Left _ -> unsafeToForeign "what?"
+
+cix = C.ChartId "chart"
+
+frx = C.FragmentId "lines"
+
+rundemox :: Maybe C.Chart
+rundemox = 
+  let 
+    cid = C.ChartId "chart"
+    rc = runExcept $ C.readChart cid demox
+    cx = case rc of 
+              Right rcx -> Just rcx
+              Left _ -> Nothing 
+  in
+  cx
 
 {-
 main :: Effect Unit

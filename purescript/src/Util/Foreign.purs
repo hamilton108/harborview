@@ -1,4 +1,4 @@
-module Maunaloa.Util.Foreign where
+module Util.Foreign where
 
 import Prelude
 import Foreign (F, Foreign, readNull, readArray, readInt, readString, readNumber, unsafeToForeign)

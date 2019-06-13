@@ -9,7 +9,7 @@ import Foreign (F, Foreign, readArray, readNumber, unsafeToForeign)
 
 import Maunaloa.Common (class Graph)
 import Maunaloa.VRuler as V
-import Maunaloa.Util.Foreign as FU
+import Util.Foreign as FU
 
 type Line = Array Number
 
