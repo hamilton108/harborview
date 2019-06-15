@@ -1,18 +1,10 @@
 module Test.Common where
 
 import Data.Number.Approximate as Approximate
-import Foreign (F, Foreign)
-import Util.Value (foreignValue)
 import Maunaloa.Common (
       Padding(..)
     , ChartDim(..))
 
-foreignTestData :: F Foreign
-foreignTestData = foreignValue """{ 
-  "startDate":1548115200000, 
-  "xaxis":[10,9,8,5,4], 
-  "chart2": null,
-  "chart": { "lines": null, "lines3":[[3.0,2.2,3.1,4.2,3.5],[3.0,2.2,3.1,4.2,3.2]], "valueRange":[2.2,4.2] }}"""
 
 moreOrLessEq :: Number -> Number -> Boolean
 moreOrLessEq a b = 

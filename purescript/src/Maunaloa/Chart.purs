@@ -25,6 +25,8 @@ newtype Chart = Chart {
     lines :: L.Lines2
 }
 
+derive instance eqChart :: Eq Chart
+
 instance showChart :: Show Chart where
   show (Chart cx) = "(Chart " <> show cx.lines <> ")"
 

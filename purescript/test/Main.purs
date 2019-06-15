@@ -9,10 +9,12 @@ import Effect (Effect)
 import Test.CandlesticksTest (testCandlesticksSuite)
 import Test.HRulerTest (testHRulerSuite)
 import Test.VRulerTest (testVRulerSuite)
+import Test.ChartTest (testChartSuite)
 
 
 main :: Effect Unit
 main = runTest do
-  testCandlesticksSuite
-  testHRulerSuite
-  testVRulerSuite
+  testChartSuite
+  --testCandlesticksSuite
+  --testHRulerSuite
+  --testVRulerSuite

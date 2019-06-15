@@ -28,8 +28,6 @@ demox =
 
 cix = C.ChartId "chart"
 
-frx = C.FragmentId "lines"
-
 rundemox :: Maybe C.Chart
 rundemox = 
   let 
