@@ -15,6 +15,6 @@ import Test.ChartTest (testChartSuite)
 main :: Effect Unit
 main = runTest do
   testChartSuite
-  --testCandlesticksSuite
-  --testHRulerSuite
-  --testVRulerSuite
+  testCandlesticksSuite
+  testHRulerSuite
+  testVRulerSuite

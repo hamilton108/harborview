@@ -6,12 +6,13 @@ import Foreign (F, Foreign, unsafeToForeign)
 import Control.Monad.Except (runExcept)
 import Test.Unit.Assert as Assert
 import Test.Unit (suite, test, TestSuite)
-import Data.Maybe (fromJust)
+import Data.Maybe (fromJust,isJust)
 import Data.Array as Array
 
 import Partial.Unsafe (unsafePartial)
 import Data.Either (Either(..),isRight,fromRight)
 
+import Maunaloa.Common (ValueRange(..))
 import Util.Value (foreignValue)
 import Maunaloa.Chart as C
 
@@ -38,10 +39,6 @@ echart = C.Chart {
   lines: [[360.0,600.0,330.0,0.0,210.0]]
 }
 
-chartx = runExcept $ C.readChart cid demox
-
-chartxx = unsafePartial $ fromRight chartx
-
 getLines :: C.Chart -> L.Lines2
 getLines (C.Chart {lines}) = lines
 
@@ -55,7 +52,11 @@ getLine c =
 testChartSuite :: TestSuite
 testChartSuite = 
   suite "TestChartSuite" do
-    test "readChart chart2 and chart3 is are null" do
+    test "valueRangeFor" do
+      let vr = C.valueRangeFor [10.0,35.0]
+      let expVr = ValueRange { minVal: 10.0, maxVal: 35.0 }
+      Assert.equal expVr vr
+    test "readChart chart2 and chart3 are null" do
       let chart = runExcept $ C.readChart cid demox
       let rchart = unsafePartial $ fromRight chart
       Assert.equal true $ isRight chart
@@ -63,3 +64,10 @@ testChartSuite =
       let eline = getLine echart
       let result = Array.zipWith TC.moreOrLessEq rline eline
       Assert.equal [true,true,true,true,true] result
+    test "Create HRuler" do
+      let ruler = runExcept $ C.readHRuler demox
+      Assert.equal true $ isRight ruler
+      let mr = unsafePartial $ fromRight ruler
+      Assert.equal true $ isJust mr
+      -- let result = unsafePartial $ fromJust mr
+
