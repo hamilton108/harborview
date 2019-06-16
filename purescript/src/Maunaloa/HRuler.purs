@@ -14,7 +14,6 @@ import Maunaloa.Common (
     , UnixTime(..)
     , Padding(..)
     , ChartDim(..)
-    , class Graph
     , RulerLineBoundary
     , RulerLineInfo(..) 
     , OffsetBoundary(..)
@@ -80,8 +79,8 @@ lines hr@(HRuler {startTime, endTime, myIncMonths, dim: (ChartDim dimx), padding
   in
   lines_ timestampFn endTime myIncMonths [] snm
 
-instance graphLine :: Graph HRuler where
-  draw = draw_
+--instance graphLine :: Graph HRuler where
+--  draw = draw_
 
 dayInMillis :: Number
 dayInMillis = 86400000.0

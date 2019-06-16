@@ -69,7 +69,8 @@ readHRuler value =
   pure $ H.create chartDim tm x padding
 
 newtype ChartCollection = ChartCollection {
-    charts :: List Chart
+      charts :: List Chart
+    , hruler :: H.HRuler
 }
 
 

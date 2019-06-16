@@ -11,8 +11,8 @@ import Data.Maybe (Maybe(..))
 import Data.Array (head,last)
 
 ------------------------- Graph ------------------------- 
-class Graph a where
-    draw :: a -> Context2D -> Effect Unit
+--class Graph a where
+--    draw :: a -> Context2D -> Effect Unit
 
 {-
 newtype ChartWidth = ChartWidth Number

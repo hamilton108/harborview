@@ -7,7 +7,6 @@ import Data.Maybe (Maybe(..))
 import Data.Traversable (traverse)
 import Foreign (F, Foreign, readArray, readNumber, unsafeToForeign)
 
-import Maunaloa.Common (class Graph)
 import Maunaloa.VRuler as V
 import Util.Foreign as FU
 

@@ -15,7 +15,6 @@ import Maunaloa.Common (
     , Pix(..)
     , ChartDim(..)
     , Padding(..)
-    , class Graph
     , calcPpy
     , RulerLineBoundary
     , RulerLineInfo(..) 
@@ -47,8 +46,8 @@ draw_ vruler@(VRuler {padding: (Padding pad), dim: (ChartDim cd)}) ctx = do
   let _ = js_lines ctx linesX curLines 
   logShow "vruler"
 
-instance graphLine :: Graph VRuler where
-  draw = draw_
+-- instance graphLine :: Graph VRuler where
+--  draw = draw_
 
 createLine :: VRuler -> Number -> Number -> Int -> RulerLineInfo 
 createLine vruler vpix padTop n = 
