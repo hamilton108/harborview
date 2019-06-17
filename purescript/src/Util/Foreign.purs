@@ -1,7 +1,7 @@
 module Util.Foreign where
 
 import Prelude
-import Foreign (F, Foreign, readNull, readArray, readInt, readString, readNumber, unsafeToForeign)
+import Foreign (F, Foreign, readArray, readInt, readNumber)
 import Data.Traversable (traverse)
 
 readNumArray :: Foreign -> F (Array Number)

@@ -2,11 +2,8 @@ module Test.VRulerTest where
 
 import Prelude
 
-import Partial.Unsafe (unsafePartial)
-import Data.Maybe (Maybe(..),fromJust)
 import Test.Unit.Assert as Assert
 import Test.Unit (suite, test, TestSuite)
-import Data.Array as Array
 
 import Maunaloa.VRuler as V
 import Maunaloa.Common (

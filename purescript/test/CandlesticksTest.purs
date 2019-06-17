@@ -1,13 +1,9 @@
 module Test.CandlesticksTest where
 
-import Prelude
-
-import Data.Number.Approximate as Approximate
 import Test.Unit (TestSuite,suite,test)
 import Test.Unit.Assert as Assert
 
 import Maunaloa.Candlesticks as CA
-import Maunaloa.VRuler as V
 import Test.VRulerTest as VT
 
 testCandle :: CA.Candlestick

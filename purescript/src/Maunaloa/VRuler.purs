@@ -2,7 +2,6 @@ module Maunaloa.VRuler where
 
 import Prelude 
 
-import Data.Maybe (Maybe(..))
 import Data.Array (range)
 import Data.Int (toNumber)
 import Data.Number.Format (toStringWith,fixed)

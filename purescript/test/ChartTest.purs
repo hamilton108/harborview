@@ -33,8 +33,10 @@ demox =
     Right result -> result
     Left _ -> unsafeToForeign "what?"
 
+cid :: C.ChartId
 cid = C.ChartId "chart"
 
+echart :: C.Chart
 echart = C.Chart {
   lines: [[360.0,600.0,330.0,0.0,210.0]]
 }

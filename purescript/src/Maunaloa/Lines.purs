@@ -5,7 +5,7 @@ import Prelude
 
 import Data.Maybe (Maybe(..))
 import Data.Traversable (traverse)
-import Foreign (F, Foreign, readArray, readNumber, unsafeToForeign)
+import Foreign (F, Foreign, readArray)
 
 import Maunaloa.VRuler as V
 import Util.Foreign as FU

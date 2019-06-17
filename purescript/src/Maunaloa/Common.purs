@@ -2,8 +2,7 @@ module Maunaloa.Common where
   
 import Prelude
 
-import Effect (Effect)
-import Graphics.Canvas (Context2D)
+--import Graphics.Canvas (Context2D)
 
 -- import Data.Tuple (Tuple(..),fst,snd)
 import Data.Int (toNumber)

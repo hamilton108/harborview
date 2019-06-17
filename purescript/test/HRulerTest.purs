@@ -3,7 +3,7 @@ module Test.HRulerTest where
 import Prelude
 
 import Partial.Unsafe (unsafePartial)
-import Data.Maybe (Maybe(..),fromJust)
+import Data.Maybe (fromJust)
 import Test.Unit.Assert as Assert
 import Test.Unit (suite, test, TestSuite)
 import Data.Array as Array
@@ -14,7 +14,7 @@ import Maunaloa.Common (
     , UnixTime(..)
     , RulerLineInfo(..) 
     , OffsetBoundary(..)
-    , Padding(..)
+    , Padding
     , calcPpx )
 import Test.Common (moreOrLessEq,chartDim,pad0,pad1)
 

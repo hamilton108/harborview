@@ -2,21 +2,16 @@ module Maunaloa.Chart where
   
 import Prelude
 
-import Partial.Unsafe (unsafePartial)
--- import Data.Maybe (Maybe(..)) 
-import Data.Maybe as M
-import Data.Array as A
-
 import Foreign (F, Foreign, readNull, readNumber)
 import Foreign.Index ((!))
-import Data.Maybe (Maybe(..))
+import Data.Maybe (Maybe)
 
 import Maunaloa.Common (UnixTime(..),ValueRange(..),Padding(..),ChartDim(..))
 import Maunaloa.HRuler as H
 import Maunaloa.VRuler as V
 import Maunaloa.Lines as L
 import Util.Foreign as FU
-import Data.List (List(..))
+import Data.List (List)
 
 
 newtype ChartId = ChartId String

@@ -1,9 +1,9 @@
 module Main where
 
 import Prelude
-import Effect (Effect)
-import Effect.Console (logShow)
-import Partial.Unsafe (unsafePartial)
+--import Effect (Effect)
+--import Effect.Console (logShow)
+--import Partial.Unsafe (unsafePartial)
 
 import Control.Monad.Except (runExcept)
 import Foreign (F, Foreign, unsafeToForeign)
@@ -25,8 +25,6 @@ demox =
   case runExcept demo of
     Right result -> result
     Left _ -> unsafeToForeign "what?"
-
-cix = C.ChartId "chart"
 
 rundemox :: Maybe C.Chart
 rundemox = 
