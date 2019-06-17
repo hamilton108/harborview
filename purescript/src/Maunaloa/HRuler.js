@@ -1,7 +1,7 @@
 
 "use strict";
 
-exports.incMonths_ = function (startTime) {
+exports.fi_incMonths = function (startTime) {
     return function (numMonths) {
         var stm = new Date(startTime);
         var startOfMonth = new Date(stm.getFullYear(), stm.getMonth() + numMonths, 1);
@@ -9,7 +9,7 @@ exports.incMonths_ = function (startTime) {
     }
 }
 
-exports.incDays_ = function (startTime) {
+exports.fi_incDays = function (startTime) {
     return function (offset) {
         var stm = new Date(startTime);
         var offsetTime = new Date(stm.getFullYear(), stm.getMonth(), stm.getDate() + offset);
@@ -17,7 +17,7 @@ exports.incDays_ = function (startTime) {
     }
 }
 
-exports.dateToString_ = function (tm) {
+exports.fi_dateToString = function (tm) {
     var d = new Date(tm);
     var m = d.getMonth() + 1;
     if (m < 10) {
@@ -28,7 +28,7 @@ exports.dateToString_ = function (tm) {
     }
 }
 
-exports.js_lines = function (ctx) {
+exports.fi_lines = function (ctx) {
     return function (boundary) {
         return function (lines) {
             console.log(boundary);
@@ -50,7 +50,7 @@ exports.js_lines = function (ctx) {
     }
 }
 
-exports.js_startOfNextMonth = function (tm) {
+exports.fi_startOfNextMonth = function (tm) {
     const curDate = new Date(tm);
     const som = new Date(curDate.getFullYear(), curDate.getMonth() + 1, 1);
     return som.getTime();

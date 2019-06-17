@@ -19,17 +19,17 @@ import Maunaloa.Common (
     , OffsetBoundary(..)
     , calcPpx)
 
-foreign import incMonths_ :: Number -> Int -> Number
-foreign import incDays_ :: Number -> Int -> Number
-foreign import dateToString_ :: Number -> String 
-foreign import js_lines :: Context2D -> RulerLineBoundary -> Array RulerLineInfo -> Unit 
-foreign import js_startOfNextMonth :: Number -> Number
+foreign import fi_incMonths :: Number -> Int -> Number
+foreign import fi_incDays :: Number -> Int -> Number
+foreign import fi_dateToString :: Number -> String 
+foreign import fi_lines :: Context2D -> RulerLineBoundary -> Array RulerLineInfo -> Unit 
+foreign import fi_startOfNextMonth :: Number -> Number
 
 
 newtype HRulerLine = HRulerLine {}
 
-newtype HRuler = HRuler { dim :: ChartDim
-                        , startTime :: UnixTime
+newtype HRuler = HRuler { -- dim :: ChartDim
+                          startTime :: UnixTime
                         , endTime :: UnixTime
                         , xaxis :: Array Number
                         , ppx :: Pix 
@@ -42,12 +42,15 @@ instance showHRuler :: Show HRuler where
 derive instance eqHRuler :: Eq HRuler
 
 
-draw_ :: HRuler -> Context2D -> Effect Unit
-draw_ hruler@(HRuler {padding: (Padding pad), dim: (ChartDim cd)}) ctx = do
+draw :: HRuler -> ChartDim -> Context2D -> Effect Unit
+-- draw hruler@(HRuler {padding: (Padding pad)}) (ChartDim cd) ctx = do
+draw hruler (ChartDim cd) ctx = do
   let curLines = lines hruler 4 
-  let linesX = { p1: pad.top, p2: cd.h - pad.bottom }
-  let _ = js_lines ctx linesX curLines 
-  logShow "hruler"
+  --let linesX = { p1: pad.top, p2: cd.h - pad.bottom }
+  let linesX = { p1: 0.0, p2: cd.h }
+  let _ = fi_lines ctx linesX curLines 
+  -- logShow "hruler"
+  pure unit
   
  
  {-
@@ -72,7 +75,7 @@ lines_ timestampFn endTime numMonths curLines curTime
         lines_ timestampFn endTime numMonths newCurLines nextTime
 
 lines :: HRuler -> Int -> Array RulerLineInfo 
-lines hr@(HRuler {startTime, endTime, myIncMonths, dim: (ChartDim dimx), padding: (Padding p)}) num = 
+lines hr@(HRuler {startTime, endTime, myIncMonths}) num = 
   let 
     snm = startOfNextMonth startTime
     timestampFn = timeStampToPix hr
@@ -96,8 +99,8 @@ create dim startTime offsets p@(Padding pad) =
       endTime = incDays startTime offset0
     in
     Just $ HRuler { 
-              dim: dim
-            , startTime: startTime
+            --  dim: dim
+             startTime: startTime
             , endTime: endTime
             , xaxis: offsetsToPix offsets curPix pad.left
             , ppx: curPix 
@@ -126,11 +129,11 @@ offsetsToPix offsets (Pix pix) padLeft =
   map (\x -> padLeft + ((toNumber x) * pix)) offsets
 
 incMonths :: UnixTime -> Int -> UnixTime
-incMonths (UnixTime tm) numMonths = UnixTime $ incMonths_ tm numMonths
+incMonths (UnixTime tm) numMonths = UnixTime $ fi_incMonths tm numMonths
 
 
 incDays :: UnixTime -> Int -> UnixTime
-incDays (UnixTime tm) offset = UnixTime $ incDays_ tm offset
+incDays (UnixTime tm) offset = UnixTime $ fi_incDays tm offset
 
 
 pixToDays :: HRuler -> Pix -> Number
@@ -139,10 +142,10 @@ pixToDays (HRuler {ppx: (Pix ppxVal), padding: (Padding p)}) (Pix pix) = (pix - 
 
 startOfNextMonth :: UnixTime -> UnixTime
 startOfNextMonth (UnixTime tm) = 
-  UnixTime $ js_startOfNextMonth tm
+  UnixTime $ fi_startOfNextMonth tm
 
 dateToString :: UnixTime -> String
-dateToString (UnixTime tm) = dateToString_ tm
+dateToString (UnixTime tm) = fi_dateToString tm
 {-
 defcr :: Maybe HRuler
 defcr =
