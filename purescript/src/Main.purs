@@ -1,9 +1,10 @@
 module Main where
 
 import Prelude
---import Effect (Effect)
+import Effect (Effect)
+import Graphics.Canvas as Canvas
 --import Effect.Console (logShow)
---import Partial.Unsafe (unsafePartial)
+import Partial.Unsafe (unsafePartial)
 
 import Control.Monad.Except (runExcept)
 import Foreign (F, Foreign, unsafeToForeign)
@@ -12,6 +13,7 @@ import Data.Maybe (Maybe(..))
 
 import Util.Value (foreignValue)
 import Maunaloa.Chart as C
+import Maunaloa.Common (ChartDim(..))
 
 demo :: F Foreign
 demo = foreignValue """{ 
@@ -36,6 +38,12 @@ rundemox =
               Left _ -> Nothing 
   in
   cx
+
+main :: Effect Unit
+main = unsafePartial do
+  Just canvas <- Canvas.getCanvasElementById "canvas"
+  let dim = ChartDim { w: 1200.0, h: 600.0 }
+  pure unit
 
 {-
 main :: Effect Unit
