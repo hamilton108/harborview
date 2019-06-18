@@ -3,7 +3,7 @@ module Main where
 import Prelude
 import Effect (Effect)
 import Graphics.Canvas as Canvas
---import Effect.Console (logShow)
+import Effect.Console (logShow)
 import Partial.Unsafe (unsafePartial)
 
 import Control.Monad.Except (runExcept)
@@ -12,15 +12,16 @@ import Data.Either (Either(..))
 import Data.Maybe (Maybe(..)) 
 
 import Util.Value (foreignValue)
+import Maunaloa.ChartCollection as Collection
 import Maunaloa.Chart as C
-import Maunaloa.Common (ChartDim(..))
+import Maunaloa.HRuler as H
 
 demo :: F Foreign
 demo = foreignValue """{ 
   "startDate":1548115200000, 
   "xaxis":[10,9,8,5,4], 
   "chart2": null,
-  "chart": { "lines": null, "lines3":[[3.0,2.2,3.1,4.2,3.5],[3.0,2.2,3.1,4.2,3.2]], "valueRange":[2.2,4.2] }}"""
+  "chart": { "lines2": null, "lines":[[3.0,2.2,3.1,4.2,3.5],[3.0,2.2,3.1,4.2,3.2]], "valueRange":[2.2,4.2] }}"""
 
 demox :: Foreign
 demox = 
@@ -39,12 +40,17 @@ rundemox =
   in
   cx
 
-main :: Effect Unit
-main = unsafePartial do
-  Just canvas <- Canvas.getCanvasElementById "canvas"
-  let dim = ChartDim { w: 1200.0, h: 600.0 }
-  pure unit
+foreign import fi_demo :: Collection.ChartCollection -> Unit 
 
+main :: Effect Unit
+main = 
+  Canvas.getCanvasElementById "canvas" >>= \canvas ->
+  let 
+    coll = runExcept $ Collection.readChartCollection demox
+  in
+  case coll of 
+        Right collx -> pure $ fi_demo collx 
+        Left _ -> pure unit
 {-
 main :: Effect Unit
 main = void $ unsafePartial do

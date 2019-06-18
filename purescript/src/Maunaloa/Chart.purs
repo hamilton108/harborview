@@ -4,14 +4,15 @@ import Prelude
 
 import Foreign (F, Foreign, readNull, readNumber)
 import Foreign.Index ((!))
-import Data.Maybe (Maybe)
+import Data.Maybe (Maybe,fromJust)
+import Partial.Unsafe (unsafePartial)
 
 import Maunaloa.Common (UnixTime(..),ValueRange(..),Padding(..),ChartDim(..))
 import Maunaloa.HRuler as H
 import Maunaloa.VRuler as V
 import Maunaloa.Lines as L
 import Util.Foreign as FU
-import Data.List (List)
+
 
 
 newtype ChartId = ChartId String
@@ -19,7 +20,8 @@ newtype ChartId = ChartId String
 newtype FragmentId = FragmentId String
 
 newtype Chart = Chart {
-    lines :: L.Lines2
+      lines :: L.Lines2
+    --, dim :: ChartDim
 }
 
 derive instance eqChart :: Eq Chart
@@ -40,6 +42,7 @@ valueRangeFor :: Array Number -> ValueRange
 valueRangeFor [mi,ma] = ValueRange { minVal: mi, maxVal: ma }
 valueRangeFor _ = ValueRange { minVal: 0.0, maxVal: 0.0 }
 
+--readChart :: ChartId -> ChartDim -> Foreign -> F Chart
 readChart :: ChartId -> Foreign -> F Chart
 readChart (ChartId cid) value = 
   let 
@@ -52,7 +55,7 @@ readChart (ChartId cid) value =
     curVruler = vruler valueRange
     linesToPix = map (L.lineToPix curVruler) l1 
   in
-  pure $ Chart { lines: linesToPix }
+  pure $ Chart { lines: linesToPix}
 
 readHRuler :: Foreign -> F (Maybe H.HRuler)
 readHRuler value = 
@@ -62,12 +65,6 @@ readHRuler value =
     tm = UnixTime sd
   in
   pure $ H.create chartDim tm x padding
-
-newtype ChartCollection = ChartCollection {
-      charts :: List Chart
-    , hruler :: H.HRuler
-}
-
 
 
 
