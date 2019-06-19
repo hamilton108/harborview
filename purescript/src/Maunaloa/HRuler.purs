@@ -102,7 +102,7 @@ create dim startTime offsets p@(Padding pad) =
             --  dim: dim
              startTime: startTime
             , endTime: endTime
-            , xaxis: offsetsToPix offsets curPix pad.left
+            , xaxis: offsetsToPix offsetN offsets curPix pad.left
             , ppx: curPix 
             , padding: p
             , myIncMonths: 1 }
@@ -124,9 +124,9 @@ pixToTimeStamp ruler@(HRuler {startTime: (UnixTime stm)}) pix =
   in
   UnixTime tm
 
-offsetsToPix :: Array Int -> Pix -> Number -> Array Number
-offsetsToPix offsets (Pix pix) padLeft =
-  map (\x -> padLeft + ((toNumber x) * pix)) offsets
+offsetsToPix :: Int -> Array Int -> Pix -> Number -> Array Number
+offsetsToPix startOffset offsets (Pix pix) padLeft =
+  map (\x -> padLeft + ((toNumber (x - startOffset)) * pix)) offsets
 
 incMonths :: UnixTime -> Int -> UnixTime
 incMonths (UnixTime tm) numMonths = UnixTime $ fi_incMonths tm numMonths

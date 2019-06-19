@@ -6,6 +6,8 @@ import Foreign (F, Foreign, readNull, readNumber)
 import Foreign.Index ((!))
 import Data.Maybe (Maybe,fromJust)
 import Partial.Unsafe (unsafePartial)
+import Graphics.Canvas (Context2D)
+import Effect (Effect)
 
 import Maunaloa.Common (UnixTime(..),ValueRange(..),Padding(..),ChartDim(..))
 import Maunaloa.HRuler as H
@@ -66,5 +68,8 @@ readHRuler value =
   in
   pure $ H.create chartDim tm x padding
 
+draw :: Chart -> H.HRuler -> Context2D -> Effect Unit
+draw (Chart chart) hruler ctx =
+  pure unit
 
 

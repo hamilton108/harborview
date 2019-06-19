@@ -44,17 +44,20 @@ rundemox =
 foreign import fi_demo :: Collection.ChartCollection -> Unit 
 
 drawCollection :: Collection.ChartCollection -> Effect Unit
-drawCollection (Collection.ChartCollection coll) = 
+drawCollection coll = 
   Canvas.getCanvasElementById "canvas" >>= \canvas ->
   case canvas of
         Nothing -> 
           pure unit
         Just canvax ->
           Canvas.getContext2D canvax >>= \ctx ->
+            Collection.draw coll ctx
+          {-
           let 
             ruler = coll.hruler
           in
           H.draw ruler C.chartDim ctx
+          -}
 
 main :: Effect Unit
 main = 
@@ -63,7 +66,9 @@ main =
   in
   case coll of 
         --Right collx -> drawCollection collx -- pure $ fi_demo collx 
-        Right collx -> pure $ fi_demo collx 
+        --Right collx -> pure $ fi_demo collx 
+        Right collx -> 
+          pure (fi_demo collx) *> drawCollection collx
         Left _ -> pure unit
 {-
 main :: Effect Unit
