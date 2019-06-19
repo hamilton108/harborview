@@ -15,11 +15,12 @@ import Util.Value (foreignValue)
 import Maunaloa.ChartCollection as Collection
 import Maunaloa.Chart as C
 import Maunaloa.HRuler as H
+import Maunaloa.Common (ChartDim(..))
 
 demo :: F Foreign
 demo = foreignValue """{ 
   "startDate":1548115200000, 
-  "xaxis":[10,9,8,5,4], 
+  "xaxis":[90,9,8,5,4], 
   "chart2": null,
   "chart": { "lines2": null, "lines":[[3.0,2.2,3.1,4.2,3.5],[3.0,2.2,3.1,4.2,3.2]], "valueRange":[2.2,4.2] }}"""
 
@@ -42,13 +43,26 @@ rundemox =
 
 foreign import fi_demo :: Collection.ChartCollection -> Unit 
 
+drawCollection :: Collection.ChartCollection -> Effect Unit
+drawCollection (Collection.ChartCollection coll) = 
+  Canvas.getCanvasElementById "canvas" >>= \canvas ->
+  case canvas of
+        Nothing -> 
+          pure unit
+        Just canvax ->
+          Canvas.getContext2D canvax >>= \ctx ->
+          let 
+            ruler = coll.hruler
+          in
+          H.draw ruler C.chartDim ctx
+
 main :: Effect Unit
 main = 
-  Canvas.getCanvasElementById "canvas" >>= \canvas ->
   let 
     coll = runExcept $ Collection.readChartCollection demox
   in
   case coll of 
+        --Right collx -> drawCollection collx -- pure $ fi_demo collx 
         Right collx -> pure $ fi_demo collx 
         Left _ -> pure unit
 {-

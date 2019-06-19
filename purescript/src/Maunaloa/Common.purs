@@ -69,6 +69,9 @@ type RulerLineBoundary = { p1:: Number, p2 :: Number }
 
 newtype RulerLineInfo = RulerLineInfo { p0 :: Number, tx :: String }
 
+instance showRulerLineInfo :: Show RulerLineInfo where
+  show (RulerLineInfo v) = "(RulerLineInfo " <> show v <> ")"
+
 ------------------------- Offset ------------------------- 
 
 newtype OffsetBoundary = OffsetBoundary { oHead :: Int, oLast :: Int }
