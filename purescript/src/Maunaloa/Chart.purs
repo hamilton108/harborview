@@ -46,8 +46,8 @@ chartDim = ChartDim { w: 1200.0, h: 600.0 }
 padding :: Padding 
 padding = Padding { left: 0.0, top: 0.0, right: 0.0, bottom: 0.0 }
 
-vruler :: ValueRange -> V.VRuler
-vruler vr = V.create vr chartDim padding
+vruler :: ValueRange -> ChartHeight -> V.VRuler
+vruler vr ch = V.create vr ch padding
 
 valueRangeFor :: Array Number -> ValueRange
 valueRangeFor [mi,ma] = ValueRange { minVal: mi, maxVal: ma }
@@ -63,7 +63,7 @@ readChart (ChartId cid) caId h value =
   cidValue ! "valueRange" >>= FU.readNumArray >>= \v1 ->
   let 
     valueRange = valueRangeFor v1 
-    curVruler = vruler valueRange
+    curVruler = vruler valueRange h
     linesToPix = map (L.lineToPix curVruler) l1 
   in
   pure $ Chart { lines: linesToPix, canvasId: caId, chartH: h }

@@ -11,16 +11,16 @@ import Maunaloa.Common (
     , RulerLineInfo(..) 
     , ValueRange(..)
     , calcPpy )
-import Test.Common (moreOrLessEq,chartDim,pad0,pad1)
+import Test.Common (moreOrLessEq,chartHeight,pad0,pad1)
 
 valueRange :: ValueRange
 valueRange = ValueRange { minVal: 10.0, maxVal: 50.0 }
 
 testVRuler :: V.VRuler
-testVRuler = V.create valueRange chartDim pad0
+testVRuler = V.create valueRange chartHeight pad0
 
 testVRulerpadding :: V.VRuler
-testVRulerpadding = V.create valueRange chartDim pad1
+testVRulerpadding = V.create valueRange chartHeight pad1
 
 testVRulerSuite :: TestSuite
 testVRulerSuite = 
@@ -39,10 +39,10 @@ testVRulerSuite =
       Assert.assert "pixToValue with padding should be 23.33" $ moreOrLessEq 23.33 val
     test "calcPpy" do
       let vr = ValueRange { minVal: 10.0, maxVal: 50.0 }
-      Assert.equal 5.0 (calcPpy chartDim vr pad0)
+      Assert.equal 5.0 (calcPpy chartHeight vr pad0)
     test "calcPpy (padding)" do
       let vr = ValueRange { minVal: 10.0, maxVal: 50.0 }
-      Assert.equal 3.0 (calcPpy chartDim vr pad1)
+      Assert.equal 3.0 (calcPpy chartHeight vr pad1)
     test "yaxis" do
       let prices = [50.0,40.0,30.0,10.0]
       let cyrYaxis = V.yaxis testVRuler prices

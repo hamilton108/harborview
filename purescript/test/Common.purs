@@ -3,6 +3,7 @@ module Test.Common where
 import Data.Number.Approximate as Approximate
 import Maunaloa.Common (
       Padding(..)
+    , ChartHeight(..)
     , ChartDim(..))
 
 
@@ -21,3 +22,6 @@ pad1 = Padding { left: 10.0, top: 20.0, right: 50.0, bottom: 60.0 }
 
 chartDim :: ChartDim 
 chartDim = ChartDim { w: 600.0, h: 200.0 }
+
+chartHeight :: ChartHeight
+chartHeight = ChartHeight 200.0

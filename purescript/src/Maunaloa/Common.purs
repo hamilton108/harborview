@@ -121,10 +121,10 @@ calcPpx_ (ChartDim dim) offsets (Padding p) =
   else
     Just $ padding_w / diffDays
 
-calcPpy :: ChartDim -> ValueRange -> Padding -> Number
+calcPpy :: ChartHeight -> ValueRange -> Padding -> Number
 -- calcPpy (ChartDim dim) (ValueRange {minVal,maxVal}) (Margin {top,bottom}) = 
-calcPpy (ChartDim dim) (ValueRange {minVal,maxVal}) (Padding p) = 
+calcPpy (ChartHeight dim) (ValueRange {minVal,maxVal}) (Padding p) = 
   let
-    padding_justified_h = dim.h - p.top - p.bottom
+    padding_justified_h = dim - p.top - p.bottom
   in
   padding_justified_h / (maxVal - minVal)

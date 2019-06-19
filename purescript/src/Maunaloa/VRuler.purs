@@ -12,7 +12,7 @@ import Effect.Console (logShow)
 import Maunaloa.Common (
       ValueRange(..)
     , Pix(..)
-    , ChartDim(..)
+    , ChartHeight(..)
     , Padding(..)
     , calcPpy
     , RulerLineBoundary
@@ -23,7 +23,7 @@ import Maunaloa.Common (
 newtype VRuler = VRuler {
       ppy :: Pix
     , maxVal :: Number
-    , dim :: ChartDim
+    , dim :: ChartHeight
     , padding :: Padding
 }
 
@@ -38,12 +38,14 @@ newtype VRulerLine = VRulerLine {
 
 foreign import js_lines :: Context2D -> RulerLineBoundary -> Array RulerLineInfo -> Unit 
 
+{-
 draw_ :: VRuler -> Context2D -> Effect Unit
-draw_ vruler@(VRuler {padding: (Padding pad), dim: (ChartDim cd)}) ctx = do
+draw_ vruler@(VRuler {padding: (Padding pad), dim: (ChartHeight cd)}) ctx = do
   let curLines = lines vruler 4 
   let linesX = { p1: pad.left, p2: cd.w - pad.right }
   let _ = js_lines ctx linesX curLines 
   logShow "vruler"
+-}
 
 -- instance graphLine :: Graph VRuler where
 --  draw = draw_
@@ -58,16 +60,15 @@ createLine vruler vpix padTop n =
   RulerLineInfo { p0: curPix, tx: tx }
 
 lines :: VRuler -> Int -> Array RulerLineInfo 
-lines vr@(VRuler {dim: (ChartDim dimx),padding: (Padding p)}) num = 
+lines vr@(VRuler {dim: (ChartHeight dimx),padding: (Padding p)}) num = 
   let
-    vpix = (dimx.h - p.top - p.bottom) / (toNumber num)
-    -- sections = map (\z -> Pix (toNumber z)) $ range 0 num
+    vpix = (dimx - p.top - p.bottom) / (toNumber num)
     sections = range 0 num
   in 
   map (createLine vr vpix p.top) sections
 
 
-create :: ValueRange -> ChartDim -> Padding -> VRuler 
+create :: ValueRange -> ChartHeight -> Padding -> VRuler 
 create vr@(ValueRange {maxVal}) dim pad = VRuler { 
       ppy: Pix $ calcPpy dim vr pad 
     , maxVal: maxVal 
