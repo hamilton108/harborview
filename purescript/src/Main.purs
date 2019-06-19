@@ -30,6 +30,7 @@ demox =
     Right result -> result
     Left _ -> unsafeToForeign "what?"
 
+{-
 rundemox :: Maybe C.Chart
 rundemox = 
   let 
@@ -40,6 +41,7 @@ rundemox =
               Left _ -> Nothing 
   in
   cx
+-}
 
 foreign import fi_demo :: Collection.ChartCollection -> Unit 
 

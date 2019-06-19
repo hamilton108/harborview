@@ -9,7 +9,15 @@ import Partial.Unsafe (unsafePartial)
 import Graphics.Canvas (Context2D)
 import Effect (Effect)
 
-import Maunaloa.Common (UnixTime(..),ValueRange(..),Padding(..),ChartDim(..))
+import Maunaloa.Common 
+  ( UnixTime(..)
+  , ValueRange(..)
+  , Padding(..)
+  , ChartWidth(..)
+  , ChartHeight(..)
+  , CanvasId(..)
+  , ChartDim(..)
+  )
 import Maunaloa.HRuler as H
 import Maunaloa.VRuler as V
 import Maunaloa.Lines as L
@@ -21,9 +29,10 @@ newtype ChartId = ChartId String
 
 newtype FragmentId = FragmentId String
 
-newtype Chart = Chart {
-      lines :: L.Lines2
-    --, dim :: ChartDim
+newtype Chart = Chart { 
+  lines :: L.Lines2
+, canvasId :: CanvasId 
+, chartH :: ChartHeight
 }
 
 derive instance eqChart :: Eq Chart
@@ -45,8 +54,8 @@ valueRangeFor [mi,ma] = ValueRange { minVal: mi, maxVal: ma }
 valueRangeFor _ = ValueRange { minVal: 0.0, maxVal: 0.0 }
 
 --readChart :: ChartId -> ChartDim -> Foreign -> F Chart
-readChart :: ChartId -> Foreign -> F Chart
-readChart (ChartId cid) value = 
+readChart :: ChartId -> CanvasId -> ChartHeight -> Foreign -> F Chart
+readChart (ChartId cid) caId h value = 
   let 
     cidValue = value ! cid
   in
@@ -57,7 +66,7 @@ readChart (ChartId cid) value =
     curVruler = vruler valueRange
     linesToPix = map (L.lineToPix curVruler) l1 
   in
-  pure $ Chart { lines: linesToPix}
+  pure $ Chart { lines: linesToPix, canvasId: caId, chartH: h }
 
 readHRuler :: Foreign -> F (Maybe H.HRuler)
 readHRuler value = 

@@ -12,7 +12,11 @@ import Data.Array as Array
 import Partial.Unsafe (unsafePartial)
 import Data.Either (Either(..),isRight,fromRight)
 
-import Maunaloa.Common (ValueRange(..))
+import Maunaloa.Common 
+  ( ValueRange(..)
+  , CanvasId(..)
+  , ChartHeight(..)
+  )
 import Util.Value (foreignValue)
 import Maunaloa.Chart as C
 
@@ -36,9 +40,17 @@ demox =
 cid :: C.ChartId
 cid = C.ChartId "chart"
 
+canvId :: CanvasId
+canvId = CanvasId "canvasId"
+
+chartH :: ChartHeight
+chartH = ChartHeight 600.0
+
 echart :: C.Chart
 echart = C.Chart {
-  lines: [[360.0,600.0,330.0,0.0,210.0]]
+    lines: [[360.0,600.0,330.0,0.0,210.0]]
+  , canvasId: canvId
+  , chartH: chartH
 }
 
 getLines :: C.Chart -> L.Lines2
@@ -59,7 +71,7 @@ testChartSuite =
       let expVr = ValueRange { minVal: 10.0, maxVal: 35.0 }
       Assert.equal expVr vr
     test "readChart chart2 and chart3 are null" do
-      let chart = runExcept $ C.readChart cid demox
+      let chart = runExcept $ C.readChart cid canvId chartH demox 
       let rchart = unsafePartial $ fromRight chart
       Assert.equal true $ isRight chart
       let rline = getLine rchart

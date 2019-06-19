@@ -12,6 +12,9 @@ import Effect (Effect)
 
 import Maunaloa.Chart as C
 import Maunaloa.HRuler as H
+import Maunaloa.Common 
+    ( CanvasId(..)
+    , ChartHeight(..))
 
 
 newtype ChartCollection = ChartCollection {
@@ -24,7 +27,7 @@ instance showChartCollection :: Show ChartCollection where
 
 readChartCollection :: Foreign -> F ChartCollection
 readChartCollection value = 
-  C.readChart (C.ChartId "chart") value >>= \chart1 ->
+  C.readChart (C.ChartId "chart") (CanvasId "c1") (ChartHeight 600.0) value >>= \chart1 ->
   C.readHRuler value >>= \mhr ->
   let 
     hr = unsafePartial $ fromJust mhr        

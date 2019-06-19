@@ -36,6 +36,27 @@ derive instance eqChartDim :: Eq ChartDim
 instance showChartDim :: Show ChartDim where
   show (ChartDim dim) = "(ChartDim w: " <> show dim.w <> ", h: " <> show dim.h <> ")"
 
+------------------------- ChartWidth ------------------------- 
+newtype ChartWidth = ChartWidth Number
+
+instance showChartWidth :: Show ChartWidth where
+  show (ChartWidth x) = "(ChartWidth: " <> show x <> ")"
+
+------------------------- ChartHeight ------------------------- 
+newtype ChartHeight = ChartHeight Number
+
+instance showChartHeight :: Show ChartHeight where
+  show (ChartHeight x) = "(ChartHeight: " <> show x <> ")"
+
+derive instance eqChartHeight :: Eq ChartHeight
+
+------------------------- CanvasId ------------------------- 
+newtype CanvasId = CanvasId String 
+
+instance showCanvasId :: Show CanvasId where
+  show (CanvasId x) = "(CanvasId: " <> x <> ")"
+
+derive instance eqCanvasId :: Eq CanvasId 
 
 ------------------------- UnixTime ------------------------- 
 newtype UnixTime = UnixTime Number
