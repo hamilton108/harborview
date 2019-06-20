@@ -6,6 +6,7 @@ import Foreign (F, Foreign)
 import Data.List (List(..),(:))
 import Util.Foreign as FU
 import Data.Maybe (Maybe,fromJust)
+import Data.Traversable (traverse_)
 import Partial.Unsafe (unsafePartial)
 import Graphics.Canvas (Context2D)
 import Effect (Effect)
@@ -35,7 +36,9 @@ readChartCollection value =
   pure $ ChartCollection { charts: (chart1 : Nil), hruler: hr } 
 
 
-draw :: ChartCollection -> Context2D -> Effect Unit
-draw (ChartCollection coll) ctx = 
-  H.draw coll.hruler C.chartDim ctx *>
-  pure unit 
+draw :: ChartCollection -> Effect Unit
+draw (ChartCollection coll) = 
+  let 
+    draw_ = C.draw coll.hruler
+  in
+  traverse_ draw_ coll.charts 

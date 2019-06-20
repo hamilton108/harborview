@@ -14,6 +14,7 @@ import Maunaloa.Common (
     , UnixTime(..)
     , Padding(..)
     , ChartDim(..)
+    , ChartHeight(..)
     , RulerLineBoundary
     , RulerLineInfo(..) 
     , OffsetBoundary(..)
@@ -42,15 +43,13 @@ instance showHRuler :: Show HRuler where
 derive instance eqHRuler :: Eq HRuler
 
 
-draw :: HRuler -> ChartDim -> Context2D -> Effect Unit
+draw :: HRuler -> ChartHeight -> Context2D -> Effect Unit
 -- draw hruler@(HRuler {padding: (Padding pad)}) (ChartDim cd) ctx = do
-draw hruler (ChartDim cd) ctx = do
+draw hruler (ChartHeight cd) ctx = do
   let curLines = lines hruler 4 
   --let linesX = { p1: pad.top, p2: cd.h - pad.bottom }
-  let linesX = { p1: 0.0, p2: cd.h }
-  let _ = fi_lines ctx linesX curLines 
-  -- logShow "hruler"
-  pure unit
+  let linesX = { p1: 0.0, p2: cd }
+  pure $ fi_lines ctx linesX curLines 
   
  
  {-

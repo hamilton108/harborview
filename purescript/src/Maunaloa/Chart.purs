@@ -4,10 +4,11 @@ import Prelude
 
 import Foreign (F, Foreign, readNull, readNumber)
 import Foreign.Index ((!))
-import Data.Maybe (Maybe,fromJust)
+import Data.Maybe (Maybe(..),fromJust)
 import Partial.Unsafe (unsafePartial)
-import Graphics.Canvas (Context2D)
+import Graphics.Canvas as Canvas -- (Context2D,Canvas)
 import Effect (Effect)
+import Effect.Console (logShow)
 
 import Maunaloa.Common 
   ( UnixTime(..)
@@ -77,8 +78,14 @@ readHRuler value =
   in
   pure $ H.create chartDim tm x padding
 
-draw :: Chart -> H.HRuler -> Context2D -> Effect Unit
-draw (Chart chart) hruler ctx =
-  pure unit
+draw :: H.HRuler -> Chart -> Effect Unit
+draw hruler (Chart {canvasId: (CanvasId curId), chartH: (ChartHeight curH)}) =
+  Canvas.getCanvasElementById curId >>= \canvas ->
+  case canvas of
+        Nothing -> 
+          logShow $ "CanvasId " <> curId <> " does not exist!"
+        Just canvax ->
+          Canvas.getContext2D canvax >>= \ctx ->
+            logShow $ "Ctx ok!" 
 
 

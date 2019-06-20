@@ -2,7 +2,6 @@ module Main where
 
 import Prelude
 import Effect (Effect)
-import Graphics.Canvas as Canvas
 import Effect.Console (logShow)
 import Partial.Unsafe (unsafePartial)
 
@@ -45,6 +44,7 @@ rundemox =
 
 foreign import fi_demo :: Collection.ChartCollection -> Unit 
 
+{-
 drawCollection :: Collection.ChartCollection -> Effect Unit
 drawCollection coll = 
   Canvas.getCanvasElementById "canvas" >>= \canvas ->
@@ -54,12 +54,7 @@ drawCollection coll =
         Just canvax ->
           Canvas.getContext2D canvax >>= \ctx ->
             Collection.draw coll ctx
-          {-
-          let 
-            ruler = coll.hruler
-          in
-          H.draw ruler C.chartDim ctx
-          -}
+-}
 
 main :: Effect Unit
 main = 
@@ -70,7 +65,7 @@ main =
         --Right collx -> drawCollection collx -- pure $ fi_demo collx 
         --Right collx -> pure $ fi_demo collx 
         Right collx -> 
-          pure (fi_demo collx) *> drawCollection collx
+          pure (fi_demo collx) *> Collection.draw collx
         Left _ -> pure unit
 {-
 main :: Effect Unit
