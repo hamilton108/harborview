@@ -15,6 +15,7 @@ import Data.Either (Either(..),isRight,fromRight)
 import Maunaloa.Common 
   ( ValueRange(..)
   , CanvasId(..)
+  , ChartWidth(..)
   , ChartHeight(..)
   )
 import Util.Value (foreignValue)
@@ -42,6 +43,9 @@ cid = C.ChartId "chart"
 
 canvId :: CanvasId
 canvId = CanvasId "canvasId"
+
+chartW :: ChartWidth
+chartW = ChartWidth 200.0
 
 chartH :: ChartHeight
 chartH = ChartHeight 600.0
@@ -71,7 +75,7 @@ testChartSuite =
       let expVr = ValueRange { minVal: 10.0, maxVal: 35.0 }
       Assert.equal expVr vr
     test "readChart chart2 and chart3 are null" do
-      let chart = runExcept $ C.readChart cid canvId chartH demox 
+      let chart = runExcept $ C.readChart cid canvId chartW chartH demox 
       let rchart = unsafePartial $ fromRight chart
       Assert.equal true $ isRight chart
       let rline = getLine rchart

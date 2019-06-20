@@ -12,6 +12,7 @@ import Effect.Console (logShow)
 import Maunaloa.Common (
       ValueRange(..)
     , Pix(..)
+    , ChartWidth(..)
     , ChartHeight(..)
     , Padding(..)
     , calcPpy
@@ -23,7 +24,8 @@ import Maunaloa.Common (
 newtype VRuler = VRuler {
       ppy :: Pix
     , maxVal :: Number
-    , dim :: ChartHeight
+    , w :: ChartWidth
+    , h :: ChartHeight
     , padding :: Padding
 }
 
@@ -36,16 +38,13 @@ newtype VRulerLine = VRulerLine {
 
 -- type LinesX = { x1:: Number, x2 :: Number }
 
-foreign import js_lines :: Context2D -> RulerLineBoundary -> Array RulerLineInfo -> Unit 
+foreign import fi_lines :: Context2D -> RulerLineBoundary -> Array RulerLineInfo -> Unit 
 
-{-
-draw_ :: VRuler -> Context2D -> Effect Unit
-draw_ vruler@(VRuler {padding: (Padding pad), dim: (ChartHeight cd)}) ctx = do
+draw :: VRuler -> Context2D -> Effect Unit
+draw vruler@(VRuler {padding: (Padding pad), w: (ChartWidth wx)}) ctx = do
   let curLines = lines vruler 4 
-  let linesX = { p1: pad.left, p2: cd.w - pad.right }
-  let _ = js_lines ctx linesX curLines 
-  logShow "vruler"
--}
+  let linesX = { p1: 0.0, p2: wx }
+  pure $ fi_lines ctx linesX curLines 
 
 -- instance graphLine :: Graph VRuler where
 --  draw = draw_
@@ -60,19 +59,20 @@ createLine vruler vpix padTop n =
   RulerLineInfo { p0: curPix, tx: tx }
 
 lines :: VRuler -> Int -> Array RulerLineInfo 
-lines vr@(VRuler {dim: (ChartHeight dimx),padding: (Padding p)}) num = 
+lines vr@(VRuler {h: (ChartHeight hx),padding: (Padding p)}) num = 
   let
-    vpix = (dimx - p.top - p.bottom) / (toNumber num)
+    vpix = (hx - p.top - p.bottom) / (toNumber num)
     sections = range 0 num
   in 
   map (createLine vr vpix p.top) sections
 
 
-create :: ValueRange -> ChartHeight -> Padding -> VRuler 
-create vr@(ValueRange {maxVal}) dim pad = VRuler { 
-      ppy: Pix $ calcPpy dim vr pad 
+create :: ValueRange -> ChartWidth -> ChartHeight -> Padding -> VRuler 
+create vr@(ValueRange {maxVal}) w h pad = VRuler { 
+      ppy: Pix $ calcPpy h vr pad 
     , maxVal: maxVal 
-    , dim: dim
+    , w: w
+    , h: h
     , padding: pad 
  }
   

@@ -20,7 +20,7 @@ demo :: F Foreign
 demo = foreignValue """{ 
   "startDate":1548115200000, 
   "xaxis":[90,9,8,5,4], 
-  "chart2": null,
+  "chart2": { "lines2": null, "lines":[[3.0,2.2,3.1,4.2,3.5],[3.0,2.2,3.1,4.2,3.2]], "valueRange":[2.2,4.2] },
   "chart": { "lines2": null, "lines":[[3.0,2.2,3.1,4.2,3.5],[3.0,2.2,3.1,4.2,3.2]], "valueRange":[2.2,4.2] }}"""
 
 demox :: Foreign
@@ -62,11 +62,10 @@ main =
     coll = runExcept $ Collection.readChartCollection demox
   in
   case coll of 
-        --Right collx -> drawCollection collx -- pure $ fi_demo collx 
-        --Right collx -> pure $ fi_demo collx 
-        Right collx -> 
-          pure (fi_demo collx) *> Collection.draw collx
-        Left _ -> pure unit
+    Right collx -> 
+      -- pure (fi_demo collx) *> Collection.draw collx
+      Collection.draw collx
+    Left _ -> pure unit
 {-
 main :: Effect Unit
 main = void $ unsafePartial do

@@ -1,6 +1,6 @@
 "use strict";
 
-exports.js_lines = function (ctx) {
+exports.fi_lines = function (ctx) {
     return function (boundary) {
         return function (lines) {
             console.log(boundary);

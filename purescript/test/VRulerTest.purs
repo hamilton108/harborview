@@ -11,16 +11,16 @@ import Maunaloa.Common (
     , RulerLineInfo(..) 
     , ValueRange(..)
     , calcPpy )
-import Test.Common (moreOrLessEq,chartHeight,pad0,pad1)
+import Test.Common (moreOrLessEq,chartWidth,chartHeight,pad0,pad1)
 
 valueRange :: ValueRange
 valueRange = ValueRange { minVal: 10.0, maxVal: 50.0 }
 
 testVRuler :: V.VRuler
-testVRuler = V.create valueRange chartHeight pad0
+testVRuler = V.create valueRange chartWidth chartHeight pad0
 
 testVRulerpadding :: V.VRuler
-testVRulerpadding = V.create valueRange chartHeight pad1
+testVRulerpadding = V.create valueRange chartWidth chartHeight pad1
 
 testVRulerSuite :: TestSuite
 testVRulerSuite = 

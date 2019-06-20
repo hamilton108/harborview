@@ -47,16 +47,16 @@ chartDim = ChartDim { w: 1200.0, h: 600.0 }
 padding :: Padding 
 padding = Padding { left: 0.0, top: 0.0, right: 0.0, bottom: 0.0 }
 
-vruler :: ValueRange -> ChartHeight -> V.VRuler
-vruler vr ch = V.create vr ch padding
+vruler :: ValueRange -> ChartWidth -> ChartHeight -> V.VRuler
+vruler vr w h = V.create vr w h padding
 
 valueRangeFor :: Array Number -> ValueRange
 valueRangeFor [mi,ma] = ValueRange { minVal: mi, maxVal: ma }
 valueRangeFor _ = ValueRange { minVal: 0.0, maxVal: 0.0 }
 
 --readChart :: ChartId -> ChartDim -> Foreign -> F Chart
-readChart :: ChartId -> CanvasId -> ChartHeight -> Foreign -> F Chart
-readChart (ChartId cid) caId h value = 
+readChart :: ChartId -> CanvasId -> ChartWidth -> ChartHeight -> Foreign -> F Chart
+readChart (ChartId cid) caId w h value = 
   let 
     cidValue = value ! cid
   in
@@ -64,7 +64,7 @@ readChart (ChartId cid) caId h value =
   cidValue ! "valueRange" >>= FU.readNumArray >>= \v1 ->
   let 
     valueRange = valueRangeFor v1 
-    curVruler = vruler valueRange h
+    curVruler = vruler valueRange w h
     linesToPix = map (L.lineToPix curVruler) l1 
   in
   pure $ Chart { lines: linesToPix, canvasId: caId, chartH: h }
@@ -78,14 +78,19 @@ readHRuler value =
   in
   pure $ H.create chartDim tm x padding
 
+--draw hruler (Chart {canvasId: (CanvasId curId), chartH: (ChartHeight curH)}) =
 draw :: H.HRuler -> Chart -> Effect Unit
-draw hruler (Chart {canvasId: (CanvasId curId), chartH: (ChartHeight curH)}) =
+draw hruler (Chart chart) =
+  let 
+    (CanvasId curId) = chart.canvasId
+  in
   Canvas.getCanvasElementById curId >>= \canvas ->
   case canvas of
-        Nothing -> 
-          logShow $ "CanvasId " <> curId <> " does not exist!"
-        Just canvax ->
-          Canvas.getContext2D canvax >>= \ctx ->
-            logShow $ "Ctx ok!" 
+    Nothing -> 
+      logShow $ "CanvasId " <> curId <> " does not exist!"
+    Just canvax ->
+      logShow ("Drawing canvas: " <> curId) *>
+      Canvas.getContext2D canvax >>= \ctx ->
+        H.draw hruler chart.chartH ctx
 
 
