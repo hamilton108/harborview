@@ -42,6 +42,8 @@ newtype ChartWidth = ChartWidth Number
 instance showChartWidth :: Show ChartWidth where
   show (ChartWidth x) = "(ChartWidth: " <> show x <> ")"
 
+derive instance eqChartWidth :: Eq ChartWidth
+
 ------------------------- ChartHeight ------------------------- 
 newtype ChartHeight = ChartHeight Number
 

@@ -42,6 +42,6 @@ readChartCollection value =
 draw :: ChartCollection -> Effect Unit
 draw (ChartCollection coll) = 
   let 
-    draw_ = C.draw coll.hruler
+    paint_ = C.paint coll.hruler
   in
-  traverse_ draw_ coll.charts 
+  traverse_ paint_ coll.charts 

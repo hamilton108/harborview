@@ -23,6 +23,7 @@ import Maunaloa.Chart as C
 
 import Maunaloa.Lines as L
 import Test.Common as TC -- (moreOrLessEq,chartDim,pad0,pad1)
+import Test.VRulerTest as VT -- (moreOrLessEq,chartDim,pad0,pad1)
 
 demo :: F Foreign
 demo = foreignValue """{ 
@@ -54,7 +55,7 @@ echart :: C.Chart
 echart = C.Chart {
     lines: [[360.0,600.0,330.0,0.0,210.0]]
   , canvasId: canvId
-  , chartH: chartH
+  , vruler : VT.testVRuler 
 }
 
 getLines :: C.Chart -> L.Lines2

@@ -29,6 +29,8 @@ newtype VRuler = VRuler {
     , padding :: Padding
 }
 
+derive instance eqVRuler :: Eq VRuler 
+
 {-
 newtype VRulerLine = VRulerLine {
       p0 :: Number
@@ -40,8 +42,8 @@ newtype VRulerLine = VRulerLine {
 
 foreign import fi_lines :: Context2D -> RulerLineBoundary -> Array RulerLineInfo -> Unit 
 
-draw :: VRuler -> Context2D -> Effect Unit
-draw vruler@(VRuler {padding: (Padding pad), w: (ChartWidth wx)}) ctx = do
+paint :: VRuler -> Context2D -> Effect Unit
+paint vruler@(VRuler {padding: (Padding pad), w: (ChartWidth wx)}) ctx = do
   let curLines = lines vruler 4 
   let linesX = { p1: 0.0, p2: wx }
   pure $ fi_lines ctx linesX curLines 

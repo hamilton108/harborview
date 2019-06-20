@@ -43,9 +43,9 @@ instance showHRuler :: Show HRuler where
 derive instance eqHRuler :: Eq HRuler
 
 
-draw :: HRuler -> ChartHeight -> Context2D -> Effect Unit
+paint :: HRuler -> ChartHeight -> Context2D -> Effect Unit
 -- draw hruler@(HRuler {padding: (Padding pad)}) (ChartDim cd) ctx = do
-draw hruler (ChartHeight cd) ctx = do
+paint hruler (ChartHeight cd) ctx = do
   let curLines = lines hruler 4 
   --let linesX = { p1: pad.top, p2: cd.h - pad.bottom }
   let linesX = { p1: 0.0, p2: cd }

@@ -33,7 +33,7 @@ newtype FragmentId = FragmentId String
 newtype Chart = Chart { 
   lines :: L.Lines2
 , canvasId :: CanvasId 
-, chartH :: ChartHeight
+, vruler :: V.VRuler
 }
 
 derive instance eqChart :: Eq Chart
@@ -67,7 +67,7 @@ readChart (ChartId cid) caId w h value =
     curVruler = vruler valueRange w h
     linesToPix = map (L.lineToPix curVruler) l1 
   in
-  pure $ Chart { lines: linesToPix, canvasId: caId, chartH: h }
+  pure $ Chart { lines: linesToPix, canvasId: caId, vruler: curVruler }
 
 readHRuler :: Foreign -> F (Maybe H.HRuler)
 readHRuler value = 
@@ -79,11 +79,8 @@ readHRuler value =
   pure $ H.create chartDim tm x padding
 
 --draw hruler (Chart {canvasId: (CanvasId curId), chartH: (ChartHeight curH)}) =
-draw :: H.HRuler -> Chart -> Effect Unit
-draw hruler (Chart chart) =
-  let 
-    (CanvasId curId) = chart.canvasId
-  in
+paint :: H.HRuler -> Chart -> Effect Unit
+paint hruler (Chart {vruler: (V.VRuler vr), canvasId: (CanvasId curId)}) =
   Canvas.getCanvasElementById curId >>= \canvas ->
   case canvas of
     Nothing -> 
@@ -91,6 +88,6 @@ draw hruler (Chart chart) =
     Just canvax ->
       logShow ("Drawing canvas: " <> curId) *>
       Canvas.getContext2D canvax >>= \ctx ->
-        H.draw hruler chart.chartH ctx
+        H.paint hruler vr.h ctx
 
 
