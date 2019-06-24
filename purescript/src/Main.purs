@@ -2,19 +2,13 @@ module Main where
 
 import Prelude
 import Effect (Effect)
-import Effect.Console (logShow)
-import Partial.Unsafe (unsafePartial)
 
 import Control.Monad.Except (runExcept)
 import Foreign (F, Foreign, unsafeToForeign)
 import Data.Either (Either(..))
-import Data.Maybe (Maybe(..)) 
 
 import Util.Value (foreignValue)
 import Maunaloa.ChartCollection as Collection
-import Maunaloa.Chart as C
-import Maunaloa.HRuler as H
-import Maunaloa.Common (ChartDim(..))
 
 demo :: F Foreign
 demo = foreignValue """{ 

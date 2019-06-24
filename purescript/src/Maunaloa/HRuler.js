@@ -1,4 +1,3 @@
-
 "use strict";
 
 exports.fi_incMonths = function (startTime) {
@@ -29,19 +28,16 @@ exports.fi_dateToString = function (tm) {
 exports.fi_lines = function (ctx) {
     return function (boundary) {
         return function (lines) {
-            console.log(boundary);
             const y1 = boundary.p1;
             const y2 = boundary.p2;
             ctx.strokeStyle = "#000";
             ctx.lineWidth = 0.25;
             ctx.beginPath();
-            console.log(lines);
             for (var i = 0; i < lines.length; ++i) {
                 const x = lines[i].p0;
-                console.log("x: " + x + ", y1: " + y1 + ", y2: " + y2);
                 ctx.moveTo(x, y1);
                 ctx.lineTo(x, y2);
-                ctx.fillText(lines[i].tx, x, y1 + 15);
+                ctx.fillText(lines[i].tx, x + 5, y1 + 15);
             }
             ctx.stroke();
         }

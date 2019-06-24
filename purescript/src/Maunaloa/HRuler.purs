@@ -6,14 +6,13 @@ import Data.Int (toNumber)
 import Data.Maybe (Maybe(..))
 import Data.Array (head,last,(:))
 import Effect (Effect)
-import Effect.Console (logShow)
 import Graphics.Canvas (Context2D)
 
 import Maunaloa.Common (
       Pix(..)
     , UnixTime(..)
     , Padding(..)
-    , ChartDim(..)
+    , ChartDim
     , ChartHeight(..)
     , RulerLineBoundary
     , RulerLineInfo(..) 

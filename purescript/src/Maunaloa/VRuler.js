@@ -3,7 +3,6 @@
 exports.fi_lines = function (ctx) {
     return function (boundary) {
         return function (lines) {
-            console.log(boundary);
             const x1 = boundary.p1;
             const x2 = boundary.p2;
             ctx.strokeStyle = "#000";
@@ -13,7 +12,7 @@ exports.fi_lines = function (ctx) {
                 const y = lines[i].p0;
                 ctx.moveTo(x1, y);
                 ctx.lineTo(x2, y);
-                ctx.fillText(lines[i].tx, x1, y + 15);
+                ctx.fillText(lines[i].tx, x1 + 5, y + 15);
             }
             ctx.stroke();
         }

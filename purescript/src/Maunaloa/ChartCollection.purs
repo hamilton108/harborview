@@ -4,11 +4,9 @@ import Prelude
 
 import Foreign (F, Foreign)
 import Data.List (List(..),(:))
-import Util.Foreign as FU
-import Data.Maybe (Maybe,fromJust)
+import Data.Maybe (fromJust)
 import Data.Traversable (traverse_)
 import Partial.Unsafe (unsafePartial)
-import Graphics.Canvas (Context2D)
 import Effect (Effect)
 
 import Maunaloa.Chart as C

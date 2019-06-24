@@ -7,7 +7,6 @@ import Data.Int (toNumber)
 import Data.Number.Format (toStringWith,fixed)
 import Graphics.Canvas (Context2D)
 import Effect (Effect)
-import Effect.Console (logShow)
 
 import Maunaloa.Common (
       ValueRange(..)

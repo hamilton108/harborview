@@ -4,7 +4,7 @@ import Prelude
 
 import Foreign (F, Foreign, readNull, readNumber)
 import Foreign.Index ((!))
-import Data.Maybe (Maybe(..),fromJust)
+import Data.Maybe (Maybe(..))
 import Partial.Unsafe (unsafePartial)
 import Graphics.Canvas as Canvas -- (Context2D,Canvas)
 import Effect (Effect)
@@ -14,8 +14,8 @@ import Maunaloa.Common
   ( UnixTime(..)
   , ValueRange(..)
   , Padding(..)
-  , ChartWidth(..)
-  , ChartHeight(..)
+  , ChartWidth
+  , ChartHeight
   , CanvasId(..)
   , ChartDim(..)
   )
@@ -80,7 +80,7 @@ readHRuler value =
 
 --draw hruler (Chart {canvasId: (CanvasId curId), chartH: (ChartHeight curH)}) =
 paint :: H.HRuler -> Chart -> Effect Unit
-paint hruler (Chart {vruler: (V.VRuler vr), canvasId: (CanvasId curId)}) =
+paint hruler (Chart {vruler: vrobj@(V.VRuler vr), canvasId: (CanvasId curId)}) =
   Canvas.getCanvasElementById curId >>= \canvas ->
   case canvas of
     Nothing -> 
@@ -88,6 +88,7 @@ paint hruler (Chart {vruler: (V.VRuler vr), canvasId: (CanvasId curId)}) =
     Just canvax ->
       logShow ("Drawing canvas: " <> curId) *>
       Canvas.getContext2D canvax >>= \ctx ->
-        H.paint hruler vr.h ctx
+        H.paint hruler vr.h ctx *>
+        V.paint vrobj ctx
 
 
