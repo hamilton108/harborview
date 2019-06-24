@@ -4,16 +4,14 @@
 exports.fi_incMonths = function (startTime) {
     return function (numMonths) {
         var stm = new Date(startTime);
-        var startOfMonth = new Date(stm.getFullYear(), stm.getMonth() + numMonths, 1);
-        return startOfMonth.getTime();
+        return Date.UTC(stm.getFullYear(), stm.getMonth() + numMonths, 1);
     }
 }
 
 exports.fi_incDays = function (startTime) {
     return function (offset) {
         var stm = new Date(startTime);
-        var offsetTime = new Date(stm.getFullYear(), stm.getMonth(), stm.getDate() + offset);
-        return offsetTime.getTime();
+        return Date.UTC(stm.getFullYear(), stm.getMonth(), stm.getDate() + offset);
     }
 }
 
@@ -52,6 +50,5 @@ exports.fi_lines = function (ctx) {
 
 exports.fi_startOfNextMonth = function (tm) {
     const curDate = new Date(tm);
-    const som = new Date(curDate.getFullYear(), curDate.getMonth() + 1, 1);
-    return som.getTime();
+    return Date.UTC(curDate.getFullYear(), curDate.getMonth() + 1, 1);
 }
