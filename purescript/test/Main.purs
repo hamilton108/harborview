@@ -6,15 +6,18 @@ import Test.Unit.Main (runTest)
 
 import Effect (Effect)
 
-import Test.CandlesticksTest (testCandlesticksSuite)
+import Test.CandlestickTest (testCandlestickSuite)
 import Test.HRulerTest (testHRulerSuite)
 import Test.VRulerTest (testVRulerSuite)
 import Test.ChartTest (testChartSuite)
+import Test.ChartCollectionTest (testChartColletionSuite)
 
 
 main :: Effect Unit
 main = runTest do
-  testChartSuite
-  testCandlesticksSuite
-  testHRulerSuite
-  testVRulerSuite
+    testChartSuite
+    testCandlestickSuite
+    testHRulerSuite
+    testVRulerSuite
+    testVRulerSuite
+    testChartColletionSuite

@@ -1,6 +1,7 @@
 package harborview.service;
 
 import com.gargoylesoftware.htmlunit.Page;
+import nordnet.downloader.TickerInfo;
 import oahu.financial.html.EtradeDownloader;
 import oahu.financial.html.WebClientManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.IOException;
 import java.io.Serializable;
 
-public class DemoDownloader implements EtradeDownloader<Page, Serializable> {
+public class DemoDownloader implements EtradeDownloader<Page, TickerInfo, Serializable> {
 
     private WebClientManager<Page> webClientManager;
 
@@ -18,8 +19,8 @@ public class DemoDownloader implements EtradeDownloader<Page, Serializable> {
     }
 
     @Override
-    public Page downloadDerivatives(String ticker) throws IOException {
-        return webClientManager.getPage(tickerUrl(ticker));
+    public Page downloadDerivatives(TickerInfo tickerInfo) throws IOException {
+        return webClientManager.getPage(tickerUrl(tickerInfo.getTicker()));
     }
 
     @Override
@@ -36,6 +37,7 @@ public class DemoDownloader implements EtradeDownloader<Page, Serializable> {
         return null;
     }
 
+    /*
     @Override
     public Page downloadPaperHistory(String ticker) throws IOException {
         return null;
@@ -50,4 +52,6 @@ public class DemoDownloader implements EtradeDownloader<Page, Serializable> {
     public Page downloadPurchases(String ticker) throws IOException {
         return null;
     }
+
+     */
 }

@@ -12,7 +12,7 @@ import Maunaloa.Common (
       Pix(..)
     , UnixTime(..)
     , Padding(..)
-    , ChartDim
+    , ChartWidth
     , ChartHeight(..)
     , RulerLineBoundary
     , RulerLineInfo(..) 
@@ -22,7 +22,7 @@ import Maunaloa.Common (
 foreign import fi_incMonths :: Number -> Int -> Number
 foreign import fi_incDays :: Number -> Int -> Number
 foreign import fi_dateToString :: Number -> String 
-foreign import fi_lines :: Context2D -> RulerLineBoundary -> Array RulerLineInfo -> Unit 
+foreign import fi_lines :: Context2D -> RulerLineBoundary -> Array RulerLineInfo -> Effect Unit 
 foreign import fi_startOfNextMonth :: Number -> Number
 
 
@@ -46,9 +46,9 @@ paint :: HRuler -> ChartHeight -> Context2D -> Effect Unit
 -- draw hruler@(HRuler {padding: (Padding pad)}) (ChartDim cd) ctx = do
 paint hruler (ChartHeight cd) ctx = do
   let curLines = lines hruler 4 
-  --let linesX = { p1: pad.top, p2: cd.h - pad.bottom }
   let linesX = { p1: 0.0, p2: cd }
-  pure $ fi_lines ctx linesX curLines 
+  fi_lines ctx linesX curLines 
+  -- pure $ fi_lines ctx linesX curLines 
   
  
  {-
@@ -86,13 +86,13 @@ lines hr@(HRuler {startTime, endTime, myIncMonths}) num =
 dayInMillis :: Number
 dayInMillis = 86400000.0
 
-create :: ChartDim -> UnixTime -> Array Int -> Padding -> Maybe HRuler 
-create dim startTime offsets p@(Padding pad) = 
+create :: ChartWidth -> UnixTime -> Array Int -> Padding -> Maybe HRuler 
+create w startTime offsets p@(Padding pad) = 
     head offsets >>= \offset0 ->
     last offsets >>= \offsetN ->
     let 
       offsetBoundary = OffsetBoundary { oHead: offset0, oLast: offsetN }
-      pix = calcPpx dim offsetBoundary p 
+      pix = calcPpx w offsetBoundary p 
       curPix = Pix pix
       endTime = incDays startTime offset0
     in

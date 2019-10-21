@@ -2,6 +2,7 @@ package harborview.service.config;
 
 import com.gargoylesoftware.htmlunit.Page;
 import harborview.service.DemoDownloader;
+import nordnet.downloader.TickerInfo;
 import oahu.financial.html.EtradeDownloader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +15,7 @@ import java.io.Serializable;
 public class DemoConfig {
 
     @Bean
-    public EtradeDownloader<Page, Serializable> downloader() {
+    public EtradeDownloader<Page, TickerInfo, Serializable> downloader() {
         return new DemoDownloader();
     }
 

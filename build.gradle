@@ -10,7 +10,8 @@ apply from: '../gradlecommon/integrationTest.gradle'
 group = 'hamilton108'
 archivesBaseName = 'harborview'
 version = '0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+sourceCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
 	mavenCentral()
@@ -19,7 +20,10 @@ repositories {
 dependencies {
 	compile project(':oahu')
 	compile project(':critter-repos')
-	compile project(':netfonds-repos')
+	//compile project(':netfonds-repos')
+	compile project(':etrade-repos-common')
+	compile project(':nordnet-repos')
+	compile project(':euroinvestor-repos')
 	compile project(':vega')
 	//------------------- Google Guava-------------------
 	compile "com.google.guava:guava:25.1-jre"
@@ -32,4 +36,8 @@ dependencies {
 	runtimeOnly 'org.springframework.boot:spring-boot-devtools'
 	//testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testCompile "org.springframework.boot:spring-boot-starter-test"
+}
+
+task copydeps(type: Copy) {
+	into 'dist' from configurations.runtime
 }

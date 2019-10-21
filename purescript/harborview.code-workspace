@@ -7,7 +7,10 @@
 			"path": "/home/rcs/opt/java/harborview/src/main/resources/static/js"
 		},
 		{
-			"path": "/home/rcs/opt/github/purescript/purescript-book/exercises/chapter10"
+			"path": "/home/rcs/opt/github/purescript/purescript-sodium"
+		},
+		{
+			"path": "/home/rcs/opt/github/purescript/frpong"
 		}
 	],
 	"settings": {}

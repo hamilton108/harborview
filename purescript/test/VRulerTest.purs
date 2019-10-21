@@ -57,9 +57,9 @@ testVRulerSuite =
       let result = V.lines testVRuler 4
       let exTx (RulerLineInfo {tx}) = tx
       let resultTx = map exTx result
-      Assert.equal ["50.0","40.0","30.0","20.0","10.0"] resultTx 
+      Assert.equal ["50.00","40.00","30.00","20.00","10.00"] resultTx 
     test "vruler lines (padding)" do
       let result = V.lines testVRulerpadding 4
       let exTx (RulerLineInfo {tx}) = tx
       let resultTx = map exTx result
-      Assert.equal ["50.0","40.0","30.0","20.0","10.0"] resultTx 
+      Assert.equal ["50.00","40.00","30.00","20.00","10.00"] resultTx 

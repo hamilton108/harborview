@@ -16,7 +16,7 @@ import Maunaloa.Common (
     , OffsetBoundary(..)
     , Padding
     , calcPpx )
-import Test.Common (moreOrLessEq,chartDim,pad0,pad1)
+import Test.Common (moreOrLessEq,chartWidth,pad0,pad1)
 
 offsets :: Array Int
 offsets = [17,16,15,14,11,10,9,8,7,4,3,2,0]
@@ -42,7 +42,7 @@ april_1_19 = UnixTime 1554076800000.0
 testHRuler_ :: UnixTime -> Array Int -> Padding -> H.HRuler 
 testHRuler_ tm myOffsets myPadding =
   let 
-    hr = H.create chartDim tm myOffsets myPadding 
+    hr = H.create chartWidth tm myOffsets myPadding 
     hrx = unsafePartial $ fromJust hr
   in 
   hrx
@@ -88,11 +88,11 @@ testHRulerSuite =
       Assert.equal [true,true,true,true,true,true,true,true,true,true,true,true,true] result
     test "pixPrUnit" do
       let myOffsets = OffsetBoundary { oHead: 12, oLast: 1 } -- [12,9,8,7,1]
-      let pix = calcPpx chartDim myOffsets pad0
+      let pix = calcPpx chartWidth myOffsets pad0
       Assert.equal 50.0 pix 
     test "pixPrUnit (padding)" do
       let myOffsets = OffsetBoundary { oHead: 12, oLast: 1 } -- [12,9,8,7,1]
-      let pix = calcPpx chartDim myOffsets pad1
+      let pix = calcPpx chartWidth myOffsets pad1
       Assert.equal 45.0 pix 
     test "incMonts" do
       let tm = H.incMonths jan_2_19 3

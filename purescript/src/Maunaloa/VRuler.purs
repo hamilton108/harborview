@@ -39,13 +39,13 @@ newtype VRulerLine = VRulerLine {
 
 -- type LinesX = { x1:: Number, x2 :: Number }
 
-foreign import fi_lines :: Context2D -> RulerLineBoundary -> Array RulerLineInfo -> Unit 
+foreign import fi_lines :: Context2D -> RulerLineBoundary -> Array RulerLineInfo -> Effect Unit 
 
 paint :: VRuler -> Context2D -> Effect Unit
 paint vruler@(VRuler {padding: (Padding pad), w: (ChartWidth wx)}) ctx = do
   let curLines = lines vruler 4 
   let linesX = { p1: 0.0, p2: wx }
-  pure $ fi_lines ctx linesX curLines 
+  fi_lines ctx linesX curLines 
 
 -- instance graphLine :: Graph VRuler where
 --  draw = draw_
@@ -55,7 +55,7 @@ createLine vruler vpix padTop n =
   let
     curPix = padTop + (vpix * (toNumber n))
     val = pixToValue vruler (Pix curPix) 
-    tx = toStringWith (fixed 1) val
+    tx = toStringWith (fixed 2) val
   in
   RulerLineInfo { p0: curPix, tx: tx }
 

@@ -135,19 +135,26 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         newCanvas.remove();
     };
+    const toChartMappings = (c) => {
+        const mainChart = { chartId: "chart", canvasId: c.MAIN_CHART, chartHeight: 500.0, levelCanvasId: c.LEVEL_LINES };
+        const osc = { chartId: "chart2", canvasId: c.OSC, chartHeight: 200.0, levelCanvasId: "" };
+        return [mainChart, osc];
+    };
     const elmApp = (appId, chartRes, myCanvases, config) => {
         const levelLines = new LevelLines(config);
-        const myChart = new Chart(myCanvases, levelLines);
         const scrap = new Scrapbook(config);
         const node = document.getElementById(appId);
         const app = Elm.Maunaloa.Charts.Main.init({
             node: node,
             flags: chartRes
         });
+        //const myChart = new Chart(myCanvases, levelLines);
         app.ports.drawCanvas.subscribe(cfg => {
             console.log(cfg);
             scrap.clear();
-            myChart.drawCanvases(cfg);
+            //myChart.drawCanvases(cfg);
+            const mappings = toChartMappings(myCanvases);
+            PS.Main.paint(mappings)(cfg)();
         });
         const drawRiscLines = function (riscLines) {
             levelLines.addRiscLines(riscLines);

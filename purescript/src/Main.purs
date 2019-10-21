@@ -4,18 +4,80 @@ import Prelude
 import Effect (Effect)
 
 import Control.Monad.Except (runExcept)
-import Foreign (F, Foreign, unsafeToForeign)
+import Foreign (Foreign)
+
 import Data.Either (Either(..))
 
-import Util.Value (foreignValue)
 import Maunaloa.ChartCollection as Collection
 
+import Util.Foreign as UF
+
+{-
+newtype Ax = Ax
+  { a :: ChartHeight}
+
+instance showAx :: Show Ax where
+  show (Ax x) = "(Ax " <> show x <> ")"
+
+tryMe :: Number -> Ax -> Maybe Ax
+tryMe v (Ax {a: (ChartHeight h)}) = 
+  let 
+    axx = Ax { a: ChartHeight (v * h) }
+  in
+  Just axx
+
+tryMes :: Number -> Array Ax -> Effect Unit
+tryMes v axs = 
+  let 
+    tt = map (tryMe v) axs
+  in
+  logShow tt
+ -}
+
+
+paint :: Collection.ChartMappings -> Foreign -> Effect (Int -> Effect Unit)
+paint mappings value =
+  let 
+    coll = runExcept $ Collection.readChartCollection mappings value 
+  in
+  case coll of 
+    Right coll1 -> 
+      Collection.paint coll1
+    Left e -> 
+      UF.logErrors e *>
+        pure (\t -> pure unit)
+
+--paintx :: Collection.ChartMappings -> Effect Unit
+--paintx mappings = 
+--  paint mappings demox
+
+--main :: Effect Unit
+--main = 
+--  pure unit
+--  logShow "main"
+
+{-
+  let 
+    mappings = 
+      [ Collection.ChartMapping {chartId: ChartId "chart", canvasId: CanvasId "chart-1", chartHeight: ChartHeight 600.0}
+      ]
+  in
+  paint mappings demox
+-}
+
+{-
 demo :: F Foreign
 demo = foreignValue """{ 
   "startDate":1548115200000, 
   "xaxis":[90,9,8,5,4], 
-  "chart2": { "lines2": null, "lines":[[3.0,2.2,3.1,4.2,3.5],[3.0,2.2,3.1,4.2,3.2]], "valueRange":[2.2,4.2] },
-  "chart": { "lines2": null, "lines":[[3.0,2.2,3.1,4.2,3.5],[3.0,2.2,3.1,4.2,3.2]], "valueRange":[2.2,4.2] }}"""
+  "chart2": { "candlesticks": [
+      {"o":2.5,"h":3.1,"l":2.1,"c":2.1},
+      {"o":2.5,"h":3.1,"l":2.1,"c":2.1},
+      {"o":2.5,"h":3.1,"l":2.1,"c":2.1},
+      {"o":2.5,"h":3.1,"l":2.1,"c":2.1},
+      {"o":2.5,"h":3.1,"l":2.1,"c":2.1}
+      ], "lines":[[3.0,2.2,3.1,4.2,3.5]], "valueRange":[2.0,5.0] },
+  "chart": { "candlesticks": null, "lines":[[3.0,2.2,3.1,4.2,3.5],[3.0,2.2,3.1,4.2,3.2]], "valueRange":[2.2,4.2] }}"""
 
 demox :: Foreign
 demox = 
@@ -23,7 +85,6 @@ demox =
     Right result -> result
     Left _ -> unsafeToForeign "what?"
 
-{-
 rundemox :: Maybe C.Chart
 rundemox = 
   let 
@@ -36,7 +97,7 @@ rundemox =
   cx
 -}
 
-foreign import fi_demo :: Collection.ChartCollection -> Unit 
+--foreign import fi_demo :: Collection.ChartCollection -> Unit 
 
 {-
 drawCollection :: Collection.ChartCollection -> Effect Unit
@@ -50,16 +111,6 @@ drawCollection coll =
             Collection.draw coll ctx
 -}
 
-main :: Effect Unit
-main = 
-  let 
-    coll = runExcept $ Collection.readChartCollection demox
-  in
-  case coll of 
-    Right collx -> 
-      -- pure (fi_demo collx) *> Collection.draw collx
-      Collection.draw collx
-    Left _ -> pure unit
 {-
 main :: Effect Unit
 main = void $ unsafePartial do
