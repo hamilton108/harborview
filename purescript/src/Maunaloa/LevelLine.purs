@@ -150,9 +150,9 @@ addLine_ newLine (Lines l@{lines,selected}) =
 addLine :: LinesRef -> Event.Event -> Effect Unit
 addLine lref event =
     createLine event >>= \newLine -> 
-    Ref.modify_ (addLine_  newLine) lref 
-    --Ref.read lref >>= \lxx -> 
-    --logShow lxx 
+    Ref.modify_ (addLine_  newLine) lref *>
+    Ref.read lref >>= \lxx -> 
+    logShow lxx 
 
 mouseEventAddLine :: LinesRef -> Event.Event -> Effect Unit
 mouseEventAddLine lref event = 
