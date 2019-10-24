@@ -19,6 +19,7 @@ import Web.HTML as HTML
 import Web.HTML.Window as Window
 import Web.HTML.HTMLDocument as HTMLDocument
 
+import Maunaloa.Common (CanvasId(..))
 {-
 import Data.IORef (newIORef,modifyIORef,readIORef)
 
@@ -118,12 +119,11 @@ unlistener target elr dummy =
     Ref.read elr >>= \elrx -> 
         Traversable.traverse_ unlisten1 elrx
 
-
-initEvents :: Effect (Int -> Effect Unit)
-initEvents =
+initEvents :: CanvasId -> Effect (Int -> Effect Unit)
+initEvents (CanvasId caid) =
     logShow "initEvents" *>
     getDoc >>= \doc ->
-        getElementById "levellines-1" doc >>= \target ->
+        getElementById caid doc >>= \target ->
             case target of 
                 Nothing -> 
                     pure (\t -> pure unit) 

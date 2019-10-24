@@ -107,7 +107,10 @@ levelLines charts =
         Nothing ->
             pure $ \t -> pure unit
         Just (C.Chart levelLine1) ->
-            LevelLine.initEvents
+            let 
+                caid = unsafePartial $ fromJust levelLine1.levelCanvasId 
+            in
+            LevelLine.initEvents caid 
 
 paint :: ChartCollection -> Effect (Int -> Effect Unit)
 paint (ChartCollection coll) = 
