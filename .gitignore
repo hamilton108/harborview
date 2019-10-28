@@ -3,9 +3,9 @@ dbcp.properties
 netfonds.properties
 *.swp
 .gradle
-dist
 target/
 build/
+purescript/dist/ps-charts.js
 feed/
 *.log
 *.iml

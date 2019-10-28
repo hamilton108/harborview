@@ -1,8 +1,11 @@
 "use strict";
 
-exports.createLine = function (evt) {
-    return function () {
-        console.log(evt);
-        return { y: evt.offsetY, draggable: true};
+exports.createLine = function (valueToPix) {
+    return function (evt) {
+        return function () {
+            console.log(evt);
+            console.log(valueToPix);
+            return { y: evt.offsetY, draggable: true };
+        };
     };
 };

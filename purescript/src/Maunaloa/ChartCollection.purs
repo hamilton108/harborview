@@ -110,7 +110,7 @@ levelLines charts =
             let 
                 caid = unsafePartial $ fromJust levelLine1.levelCanvasId 
             in
-            LevelLine.initEvents caid 
+            LevelLine.initEvents levelLine1.vruler caid 
 
 paint :: ChartCollection -> Effect (Int -> Effect Unit)
 paint (ChartCollection coll) = 

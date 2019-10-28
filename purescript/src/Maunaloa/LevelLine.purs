@@ -19,7 +19,8 @@ import Web.HTML as HTML
 import Web.HTML.Window as Window
 import Web.HTML.HTMLDocument as HTMLDocument
 
-import Maunaloa.Common (CanvasId(..))
+import Maunaloa.Common (CanvasId(..),Pix)
+import Maunaloa.VRuler (VRuler,pixToValue)
 {-
 import Data.IORef (newIORef,modifyIORef,readIORef)
 
@@ -51,7 +52,8 @@ newtype Line =
     , draggable :: Boolean
     } 
 
-foreign import createLine :: Event.Event -> Effect Line
+foreign import createLine :: (VRuler -> Pix -> Number) -> Event.Event -> Effect Line
+
 
 instance showLine :: Show Line where
     show (Line v) = "Line: " <> show v 
@@ -97,10 +99,10 @@ addEventListenerRef :: EventListenerRef -> EventListenerInfo -> Effect Unit
 addEventListenerRef lref listener = 
     Ref.modify_ (\listeners -> listener : listeners) lref
 
-initMouseEvents :: Element -> EventListenerRef -> Effect Unit
-initMouseEvents target elr = 
+initMouseEvents :: VRuler -> Element -> EventListenerRef -> Effect Unit
+initMouseEvents vruler target elr = 
     linesRef >>= \lir -> 
-        EventTarget.eventListener (mouseEventAddLine lir) >>= \me1 -> 
+        EventTarget.eventListener (mouseEventAddLine vruler lir) >>= \me1 -> 
             let
                 info = EventListenerInfo {listener: me1, eventType: EventType "mouseup"}
             in 
@@ -119,8 +121,8 @@ unlistener target elr dummy =
     Ref.read elr >>= \elrx -> 
         Traversable.traverse_ unlisten1 elrx
 
-initEvents :: CanvasId -> Effect (Int -> Effect Unit)
-initEvents (CanvasId caid) =
+initEvents :: VRuler -> CanvasId -> Effect (Int -> Effect Unit)
+initEvents vruler (CanvasId caid) =
     logShow "initEvents" *>
     getDoc >>= \doc ->
         getElementById caid doc >>= \target ->
@@ -129,7 +131,7 @@ initEvents (CanvasId caid) =
                     pure (\t -> pure unit) 
                 Just targetx ->
                     eventListenerRef >>= \elr ->
-                        initMouseEvents targetx elr *>
+                        initMouseEvents vruler targetx elr *>
                             pure (unlistener targetx elr)
 
 defaultEventHandling :: Event.Event -> Effect Unit
@@ -149,13 +151,13 @@ addLine_ newLine (Lines l@{lines,selected}) =
 
 addLine :: LinesRef -> Event.Event -> Effect Unit
 addLine lref event =
-    createLine event >>= \newLine -> 
+    createLine pixToValue event >>= \newLine -> 
     Ref.modify_ (addLine_  newLine) lref *>
     Ref.read lref >>= \lxx -> 
     logShow lxx 
 
-mouseEventAddLine :: LinesRef -> Event.Event -> Effect Unit
-mouseEventAddLine lref event = 
+mouseEventAddLine :: VRuler -> LinesRef -> Event.Event -> Effect Unit
+mouseEventAddLine vruler lref event = 
     defaultEventHandling event *>
     addLine lref event 
     
