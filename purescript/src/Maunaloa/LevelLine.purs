@@ -52,7 +52,7 @@ newtype Line =
     , draggable :: Boolean
     } 
 
-foreign import createLine :: (VRuler -> Pix -> Number) -> Event.Event -> Effect Line
+foreign import createLine :: VRuler -> Event.Event -> Effect Line
 
 
 instance showLine :: Show Line where
@@ -149,9 +149,9 @@ addLine_ :: Line -> Lines -> Lines
 addLine_ newLine (Lines l@{lines,selected}) = 
     Lines $ l { lines = newLine : lines } 
 
-addLine :: LinesRef -> Event.Event -> Effect Unit
-addLine lref event =
-    createLine pixToValue event >>= \newLine -> 
+addLine :: VRuler -> LinesRef -> Event.Event -> Effect Unit
+addLine vruler lref event =
+    createLine vruler event >>= \newLine -> 
     Ref.modify_ (addLine_  newLine) lref *>
     Ref.read lref >>= \lxx -> 
     logShow lxx 
@@ -159,7 +159,7 @@ addLine lref event =
 mouseEventAddLine :: VRuler -> LinesRef -> Event.Event -> Effect Unit
 mouseEventAddLine vruler lref event = 
     defaultEventHandling event *>
-    addLine lref event 
+    addLine vruler lref event 
     
 getDoc :: Effect NonElementParentNode
 getDoc = 
