@@ -26,7 +26,8 @@ chartMapping levelCanvasId =
     { chartId: Chart.ChartId "chart"
     , canvasId: HtmlId "test-canvasId"
     , chartHeight: ChartHeight 500.0
-    , levelCanvasId: levelCanvasId
+    , levelCanvasId: HtmlId ""
+    , addLevelId: HtmlId ""
     }
 
 chartMappings :: ChartCollection.ChartMappings 
@@ -42,7 +43,6 @@ testChartColletionSuite =
             let collection = runExcept $ ChartCollection.fromMappings chartMappings TC.demox 
             let collection1 = unsafePartial $ fromRight collection
             let (Chart.Chart chart1) = unsafePartial $ fromJust $ Array.head collection1
-            Assert.equal chart1.levelCanvasId (Just (HtmlId "level-canvasid"))
-        --let result = CA.candleToPix VT.testVRuler testCandle
-        --Assert.equal pixCandle result
+            --Assert.equal chart1.levelCanvasId (Just (HtmlId "level-canvasid"))
+            Assert.equal chart1.chartLevel Nothing 
 

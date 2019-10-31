@@ -45,7 +45,7 @@ echart = C.Chart {
   , vruler : VT.testVRuler 
   , w: chartW
   , h: chartH
-  , levelCanvasId: Nothing
+  , chartLevel: Nothing 
 }
 
 getLines :: C.Chart -> L.Lines
@@ -66,7 +66,7 @@ testChartSuite =
       let expVr = ValueRange { minVal: 10.0, maxVal: 35.0 }
       Assert.equal expVr vr
     test "readChart chart2 and chart3 are null" do
-      let chart = runExcept $ C.readChart cid canvId chartW chartH TC.demox Nothing
+      let chart = runExcept $ C.readChart cid canvId chartW chartH Nothing TC.demox 
       let rchart = unsafePartial $ fromRight chart
       Assert.equal true $ isRight chart
       let rline = getLine rchart

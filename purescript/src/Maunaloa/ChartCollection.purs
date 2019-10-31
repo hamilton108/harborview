@@ -33,6 +33,7 @@ newtype ChartMapping = ChartMapping
     , canvasId :: HtmlId
     , chartHeight :: ChartHeight 
     , levelCanvasId :: HtmlId
+    , addLevelId :: HtmlId
     }
 
 instance showChartMapping :: Show ChartMapping where
@@ -54,15 +55,21 @@ fromMappings :: ChartMappings -> Foreign -> F (Array C.Chart)
 fromMappings mappings value =
     let
         tfn :: ChartMapping -> F C.Chart
-        tfn (ChartMapping {chartId, canvasId, chartHeight, levelCanvasId: (HtmlId lcid)}) = 
+        tfn (ChartMapping 
+            { chartId
+            , canvasId
+            , chartHeight
+            , levelCanvasId: (HtmlId lcid)
+            , addLevelId: (HtmlId alid)}) = 
             let 
                 lcid1 = 
                     if length lcid == 0 then
                         Nothing
                     else 
                         Just (HtmlId lcid)
+                chartLevel = Nothing
             in
-            C.readChart chartId canvasId globalChartWidth chartHeight value lcid1
+            C.readChart chartId canvasId globalChartWidth chartHeight Nothing value 
     in
     traverse tfn mappings
 
@@ -92,7 +99,7 @@ readChartCollection value =
 
 findChartPredicate :: C.Chart -> Boolean
 findChartPredicate (C.Chart chart) =
-    chart.levelCanvasId /= Nothing
+    chart.chartLevel /= Nothing
 
 findLevelLineChart :: Array C.Chart -> Maybe C.Chart
 findLevelLineChart charts = 
@@ -108,9 +115,9 @@ levelLines charts =
             pure $ \t -> pure unit
         Just (C.Chart levelLine1) ->
             let 
-                caid = unsafePartial $ fromJust levelLine1.levelCanvasId 
+                caid = unsafePartial $ fromJust levelLine1.chartLevel
             in
-            LevelLine.initEvents levelLine1.vruler caid 
+            LevelLine.initEvents levelLine1.vruler caid.levelCanvasId
 
 paint :: ChartCollection -> Effect (Int -> Effect Unit)
 paint (ChartCollection coll) = 
