@@ -1,3 +1,3 @@
 
 
-pulp build -O --to .\dist\main.js
+pulp build --skip-entry-point -O --to .\dist\ps-charts.js

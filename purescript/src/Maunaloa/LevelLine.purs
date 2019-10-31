@@ -19,7 +19,7 @@ import Web.HTML as HTML
 import Web.HTML.Window as Window
 import Web.HTML.HTMLDocument as HTMLDocument
 
-import Maunaloa.Common (CanvasId(..),Pix)
+import Maunaloa.Common (HtmlId(..),Pix)
 import Maunaloa.VRuler (VRuler,pixToValue)
 {-
 import Data.IORef (newIORef,modifyIORef,readIORef)
@@ -121,8 +121,8 @@ unlistener target elr dummy =
     Ref.read elr >>= \elrx -> 
         Traversable.traverse_ unlisten1 elrx
 
-initEvents :: VRuler -> CanvasId -> Effect (Int -> Effect Unit)
-initEvents vruler (CanvasId caid) =
+initEvents :: VRuler -> HtmlId -> Effect (Int -> Effect Unit)
+initEvents vruler (HtmlId caid) =
     logShow "initEvents" *>
     getDoc >>= \doc ->
         getElementById caid doc >>= \target ->

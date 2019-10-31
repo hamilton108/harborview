@@ -15,7 +15,7 @@ import Maunaloa.Common
   , Padding(..)
   , ChartWidth(..)
   , ChartHeight(..)
-  , CanvasId(..)
+  , HtmlId(..)
   )
 import Maunaloa.HRuler as H
 import Maunaloa.VRuler as V
@@ -35,11 +35,11 @@ instance showChartId :: Show ChartId where
 newtype Chart = Chart 
   { lines :: L.Lines
   , candlesticks :: CNDL.Candlesticks
-  , canvasId :: CanvasId 
+  , canvasId :: HtmlId 
   , vruler :: V.VRuler
   , w :: ChartWidth
   , h :: ChartHeight
-  , levelCanvasId :: Maybe CanvasId 
+  , levelCanvasId :: Maybe HtmlId 
   }
 
 derive instance eqChart :: Eq Chart
@@ -79,7 +79,7 @@ readValueRange :: F Foreign -> F (Array Number)
 readValueRange cidValue = 
   cidValue ! "valueRange" >>= FU.readNumArray
 
-readChart :: ChartId -> CanvasId -> ChartWidth -> ChartHeight -> Foreign -> Maybe CanvasId -> F Chart
+readChart :: ChartId -> HtmlId -> ChartWidth -> ChartHeight -> Foreign -> Maybe HtmlId -> F Chart
 readChart (ChartId cid) caId w h value levelCaId = 
   let 
     cidValue = value ! cid
@@ -116,7 +116,7 @@ toRectangle (Chart {w: (ChartWidth w), h: (ChartHeight h)} ) =
   {x: 0.0, y: 0.0, width: w, height: h} 
 
 paint :: H.HRuler -> Chart -> Effect Unit
-paint hruler chart@(Chart {vruler: vrobj@(V.VRuler vr), canvasId: (CanvasId curId), lines: lines, candlesticks: candlesticks}) =
+paint hruler chart@(Chart {vruler: vrobj@(V.VRuler vr), canvasId: (HtmlId curId), lines: lines, candlesticks: candlesticks}) =
   Canvas.getCanvasElementById curId >>= \canvas ->
   case canvas of
     Nothing -> 

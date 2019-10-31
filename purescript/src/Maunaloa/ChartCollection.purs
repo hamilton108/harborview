@@ -16,7 +16,7 @@ import Effect.Console (logShow)
 import Maunaloa.Chart as C
 import Maunaloa.HRuler as H
 import Maunaloa.Common 
-    ( CanvasId(..)
+    ( HtmlId(..)
     , ChartWidth(..)
     , ChartHeight
     )
@@ -30,9 +30,9 @@ newtype ChartCollection = ChartCollection
 
 newtype ChartMapping = ChartMapping 
     { chartId :: C.ChartId
-    , canvasId :: CanvasId
+    , canvasId :: HtmlId
     , chartHeight :: ChartHeight 
-    , levelCanvasId :: CanvasId
+    , levelCanvasId :: HtmlId
     }
 
 instance showChartMapping :: Show ChartMapping where
@@ -54,13 +54,13 @@ fromMappings :: ChartMappings -> Foreign -> F (Array C.Chart)
 fromMappings mappings value =
     let
         tfn :: ChartMapping -> F C.Chart
-        tfn (ChartMapping {chartId, canvasId, chartHeight, levelCanvasId: (CanvasId lcid)}) = 
+        tfn (ChartMapping {chartId, canvasId, chartHeight, levelCanvasId: (HtmlId lcid)}) = 
             let 
                 lcid1 = 
                     if length lcid == 0 then
                         Nothing
                     else 
-                        Just (CanvasId lcid)
+                        Just (HtmlId lcid)
             in
             C.readChart chartId canvasId globalChartWidth chartHeight value lcid1
     in

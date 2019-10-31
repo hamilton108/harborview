@@ -14,7 +14,7 @@ import Data.Either (Either(..),isRight,fromRight)
 
 import Maunaloa.Common 
   ( ValueRange(..)
-  , CanvasId(..)
+  , HtmlId(..)
   , ChartWidth(..)
   , ChartHeight(..)
   )
@@ -28,8 +28,8 @@ import Test.VRulerTest as VT -- (moreOrLessEq,chartDim,pad0,pad1)
 cid :: C.ChartId
 cid = C.ChartId "chart"
 
-canvId :: CanvasId
-canvId = CanvasId "canvasId"
+canvId :: HtmlId
+canvId = HtmlId "canvasId"
 
 chartW :: ChartWidth
 chartW = ChartWidth 200.0

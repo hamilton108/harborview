@@ -13,7 +13,7 @@ import Foreign.Index ((!))
 import Maunaloa.Common 
   ( ChartWidth(..)
   , ChartHeight(..)
-  , CanvasId(..)
+  , HtmlId(..)
   )
 
 import Maunaloa.Chart 
@@ -27,8 +27,8 @@ import Maunaloa.Chart
 
 import Demo.DemoData (demox)
 
-canvas :: CanvasId
-canvas = CanvasId "canvas1"
+canvas :: HtmlId
+canvas = HtmlId "canvas1"
 
 {-
 w :: ChartWidth
