@@ -3,15 +3,14 @@ module Maunaloa.ChartCollection where
 import Prelude
 
 import Foreign (F, Foreign)
-import Data.Maybe (fromJust)
+import Data.Maybe (Maybe(..),fromJust)
 import Data.String (length)
 import Data.Traversable (traverse,traverse_)
 import Partial.Unsafe (unsafePartial)
 import Effect (Effect)
-import Data.Maybe (Maybe(..))
 import Data.Array as Array
 
-import Effect.Console (logShow)
+--import Effect.Console (logShow)
 
 import Maunaloa.Chart as C
 import Maunaloa.HRuler as H

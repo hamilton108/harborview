@@ -15,9 +15,12 @@ import Test.ChartCollectionTest (testChartColletionSuite)
 
 main :: Effect Unit
 main = runTest do
+    testChartColletionSuite
+    {-
     testChartSuite
     testCandlestickSuite
     testHRulerSuite
     testVRulerSuite
     testVRulerSuite
     testChartColletionSuite
+    -}

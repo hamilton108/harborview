@@ -25,3 +25,6 @@ purescript/output/
 *.xlsx#
 .local/
 purescript/.psci_modules/
+purescript/deploy.bat
+purescript/dist/getjs
+

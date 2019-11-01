@@ -19,8 +19,8 @@ import Web.HTML as HTML
 import Web.HTML.Window as Window
 import Web.HTML.HTMLDocument as HTMLDocument
 
-import Maunaloa.Common (HtmlId(..),Pix)
-import Maunaloa.VRuler (VRuler,pixToValue)
+import Maunaloa.Common (HtmlId(..))
+import Maunaloa.VRuler (VRuler)
 {-
 import Data.IORef (newIORef,modifyIORef,readIORef)
 

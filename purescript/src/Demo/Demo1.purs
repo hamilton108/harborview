@@ -1,6 +1,11 @@
 module Demo.Demo1 where
 
 import Prelude
+
+a :: Int
+a = 3
+
+{-
 import Effect (Effect)
 import Effect.Console (logShow)
 
@@ -30,7 +35,6 @@ import Demo.DemoData (demox)
 canvas :: HtmlId
 canvas = HtmlId "canvas1"
 
-{-
 w :: ChartWidth
 w = ChartWidth 1200.0
 
