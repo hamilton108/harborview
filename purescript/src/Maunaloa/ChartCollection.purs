@@ -49,6 +49,17 @@ instance showChartCollection :: Show ChartCollection where
 globalChartWidth :: ChartWidth
 globalChartWidth = ChartWidth 1310.0
 
+mappingToChartLevel :: HtmlId -> HtmlId -> Maybe C.ChartLevel 
+mappingToChartLevel caId@(HtmlId caId1) addId = 
+    if length caId1 == 0 then
+        Nothing
+    else
+        Just
+        { levelCanvasId: caId 
+        , addLevelId: addId 
+        }
+
+
 
 fromMappings :: ChartMappings -> Foreign -> F (Array C.Chart)
 fromMappings mappings value =
@@ -58,17 +69,12 @@ fromMappings mappings value =
             { chartId
             , canvasId
             , chartHeight
-            , levelCanvasId: (HtmlId lcid)
-            , addLevelId: (HtmlId alid)}) = 
+            , levelCanvasId 
+            , addLevelId}) = 
             let 
-                lcid1 = 
-                    if length lcid == 0 then
-                        Nothing
-                    else 
-                        Just (HtmlId lcid)
-                chartLevel = Nothing
+                chartLevel = mappingToChartLevel levelCanvasId addLevelId
             in
-            C.readChart chartId canvasId globalChartWidth chartHeight Nothing value 
+            C.readChart chartId canvasId globalChartWidth chartHeight chartLevel value 
     in
     traverse tfn mappings
 

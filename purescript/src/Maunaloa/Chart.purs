@@ -48,6 +48,15 @@ newtype Chart =
     , chartLevel :: Maybe ChartLevel
     }
 
+newtype ChartConfig =
+    ChartConfig
+    { chartId :: ChartId
+    , htmlId :: HtmlId
+    , w :: ChartWidth
+    , h :: ChartHeight
+    , chartLevel :: Maybe ChartLevel
+    }
+
 derive instance eqChart :: Eq Chart
 
 instance showChart :: Show Chart where
