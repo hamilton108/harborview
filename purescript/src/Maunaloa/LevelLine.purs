@@ -21,6 +21,8 @@ import Web.HTML.HTMLDocument as HTMLDocument
 
 import Maunaloa.Common (HtmlId(..))
 import Maunaloa.VRuler (VRuler)
+import Maunaloa.Chart (ChartLevel(..))
+
 {-
 import Data.IORef (newIORef,modifyIORef,readIORef)
 
@@ -109,6 +111,7 @@ initMouseEvents vruler target elr =
             EventTarget.addEventListener (EventType "mouseup") me1 false (toEventTarget target) *>
             addEventListenerRef elr info 
 
+initAddLevelEvent :: 
 unlisten :: Element -> EventListenerInfo -> Effect Unit
 unlisten target (EventListenerInfo {listener,eventType}) = 
     EventTarget.removeEventListener eventType listener false (toEventTarget target)
@@ -121,18 +124,18 @@ unlistener target elr dummy =
     Ref.read elr >>= \elrx -> 
         Traversable.traverse_ unlisten1 elrx
 
-initEvents :: VRuler -> HtmlId -> Effect (Int -> Effect Unit)
-initEvents vruler (HtmlId caid) =
+initEvents :: VRuler -> ChartLevel -> Effect (Int -> Effect Unit)
+initEvents vruler {levelCanvasId: (HtmlId levelCanvasId1),addLevelId: (HtmlId addLevelId1)} =
     logShow "initEvents" *>
     getDoc >>= \doc ->
-        getElementById caid doc >>= \target ->
+        getElementById levelCanvasId1 doc >>= \target ->
             case target of 
                 Nothing -> 
                     pure (\t -> pure unit) 
-                Just targetx ->
+                Just target1 ->
                     eventListenerRef >>= \elr ->
-                        initMouseEvents vruler targetx elr *>
-                            pure (unlistener targetx elr)
+                        initMouseEvents vruler target1 elr *>
+                            pure (unlistener target1 elr)
 
 defaultEventHandling :: Event.Event -> Effect Unit
 defaultEventHandling event = 

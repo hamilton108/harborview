@@ -10,7 +10,13 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     const mappings = () => {
-        const mainChart = { chartId: "chart", canvasId: "levellines-1", chartHeight: 500.0, levelCanvasId: "levellines-1" };
+        const mainChart = {
+            chartId: "chart",
+            canvasId: "levellines-1",
+            chartHeight: 500.0,
+            levelCanvasId: "levellines-1",
+            addLevelId: "addLevel-1"
+        };
         return [mainChart];
     };
 
