@@ -21,7 +21,7 @@ import Web.HTML.HTMLDocument as HTMLDocument
 
 import Maunaloa.Common (HtmlId(..))
 import Maunaloa.VRuler (VRuler)
-import Maunaloa.Chart (ChartLevel(..))
+import Maunaloa.Chart (ChartLevel)
 
 {-
 import Data.IORef (newIORef,modifyIORef,readIORef)
