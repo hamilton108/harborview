@@ -56,6 +56,8 @@ newtype Line =
 
 foreign import createLine :: VRuler -> Event.Event -> Effect Line
 
+foreign import createLine2 :: Element -> VRuler -> Effect Line
+
 
 instance showLine :: Show Line where
     show (Line v) = "Line: " <> show v 
@@ -83,7 +85,8 @@ linesRef = Ref.new initLines
 
 newtype EventListenerInfo =
     EventListenerInfo 
-    { listener :: EventTarget.EventListener
+    { target :: Element 
+    , listener :: EventTarget.EventListener
     , eventType :: EventType
     }
 
@@ -106,23 +109,35 @@ initMouseEvents vruler target elr =
     linesRef >>= \lir -> 
         EventTarget.eventListener (mouseEventAddLine vruler lir) >>= \me1 -> 
             let
-                info = EventListenerInfo {listener: me1, eventType: EventType "mouseup"}
+                info = EventListenerInfo {target: target, listener: me1, eventType: EventType "mouseup"}
             in 
             EventTarget.addEventListener (EventType "mouseup") me1 false (toEventTarget target) *>
             addEventListenerRef elr info 
 
-initAddLevelEvent :: 
-unlisten :: Element -> EventListenerInfo -> Effect Unit
-unlisten target (EventListenerInfo {listener,eventType}) = 
+initButtonEvent :: VRuler -> Element -> EventListenerRef -> Effect Unit
+initButtonEvent vruler button elr = 
+    logShow "initButtonEvent" *>
+    linesRef >>= \lir -> 
+        EventTarget.eventListener (buttonEventAddLine vruler lir) >>= \me1 -> 
+            let
+                info = EventListenerInfo {target: button, listener: me1, eventType: EventType "click"}
+            in 
+            EventTarget.addEventListener (EventType "click") me1 false (toEventTarget button) *>
+            addEventListenerRef elr info 
+
+unlisten :: EventListenerInfo -> Effect Unit
+unlisten (EventListenerInfo {target,listener,eventType}) = 
     EventTarget.removeEventListener eventType listener false (toEventTarget target)
 
-unlistener :: Element -> EventListenerRef -> Int -> Effect Unit
-unlistener target elr dummy =
-    let 
-        unlisten1 = unlisten target
-    in
+unlistener :: EventListenerRef -> Int -> Effect Unit
+unlistener elr dummy =
     Ref.read elr >>= \elrx -> 
-        Traversable.traverse_ unlisten1 elrx
+        Traversable.traverse_ unlisten elrx
+
+dummyEvent :: Element -> VRuler -> Event.Event -> Effect Unit
+dummyEvent el vruler evt =
+    createLine2 el vruler *>
+    logShow "dummyEvent"
 
 initEvents :: VRuler -> ChartLevel -> Effect (Int -> Effect Unit)
 initEvents vruler {levelCanvasId: (HtmlId levelCanvasId1),addLevelId: (HtmlId addLevelId1)} =
@@ -133,9 +148,33 @@ initEvents vruler {levelCanvasId: (HtmlId levelCanvasId1),addLevelId: (HtmlId ad
                 Nothing -> 
                     pure (\t -> pure unit) 
                 Just target1 ->
-                    eventListenerRef >>= \elr ->
-                        initMouseEvents vruler target1 elr *>
-                            pure (unlistener target1 elr)
+                    getElementById addLevelId1 doc >>= \button ->
+                        case button of 
+                            Nothing -> 
+                                pure (\t -> pure unit) 
+                            Just button1 ->
+                                EventTarget.eventListener (dummyEvent target1 vruler) >>= \me1 -> 
+                                    EventTarget.addEventListener (EventType "click") me1 false (toEventTarget button1) *>
+                                    pure (\t -> pure unit) 
+
+xinitEvents :: VRuler -> ChartLevel -> Effect (Int -> Effect Unit)
+xinitEvents vruler {levelCanvasId: (HtmlId levelCanvasId1),addLevelId: (HtmlId addLevelId1)} =
+    logShow "initEvents" *>
+    getDoc >>= \doc ->
+        getElementById levelCanvasId1 doc >>= \target ->
+            case target of 
+                Nothing -> 
+                    pure (\t -> pure unit) 
+                Just target1 ->
+                    getElementById addLevelId1 doc >>= \button ->
+                        case target of 
+                            Nothing -> 
+                                pure (\t -> pure unit) 
+                            Just button1 ->
+                                eventListenerRef >>= \elr ->
+                                    initButtonEvent vruler button1 elr *>
+                                    initMouseEvents vruler target1 elr *>
+                                        pure (unlistener elr)
 
 defaultEventHandling :: Event.Event -> Effect Unit
 defaultEventHandling event = 
@@ -159,11 +198,27 @@ addLine vruler lref event =
     Ref.read lref >>= \lxx -> 
     logShow lxx 
 
+addLine2 :: VRuler -> LinesRef -> Effect Unit
+addLine2 vruler lref =
+    logShow "addLine2" 
+{-
+    createLine2 vruler >>= \newLine -> 
+    Ref.modify_ (addLine_  newLine) lref *>
+    Ref.read lref >>= \lxx -> 
+    logShow lxx 
+-}
+
 mouseEventAddLine :: VRuler -> LinesRef -> Event.Event -> Effect Unit
 mouseEventAddLine vruler lref event = 
     defaultEventHandling event *>
     addLine vruler lref event 
     
+buttonEventAddLine :: VRuler -> LinesRef -> Event.Event -> Effect Unit
+buttonEventAddLine vruler lref event = 
+    logShow "buttonEventAddLine" *>
+    defaultEventHandling event *>
+    addLine2 vruler lref 
+
 getDoc :: Effect NonElementParentNode
 getDoc = 
     HTML.window >>= \win ->
