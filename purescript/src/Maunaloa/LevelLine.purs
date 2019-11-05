@@ -8,7 +8,7 @@ import Effect (Effect)
 import Effect.Console (logShow)
 import Data.Traversable as Traversable
 
-import Graphics.Canvas as Canvas 
+import Graphics.Canvas (CanvasElement,getCanvasElementById)
 import Web.Event.Event (EventType(..))
 import Web.Event.Event as Event
 import Web.Event.EventTarget as EventTarget
@@ -57,7 +57,7 @@ newtype Line =
 
 foreign import createLine :: VRuler -> Event.Event -> Effect Line
 
-foreign import createLine2 :: Element -> VRuler -> Effect Line
+foreign import createLine2 :: CanvasElement -> VRuler -> Effect Line
 
 
 instance showLine :: Show Line where
@@ -98,7 +98,7 @@ type EventListeners = List.List EventListenerInfo
 type EventListenerRef = Ref.Ref EventListeners
 
 type HtmlContext = 
-    { canvasContext :: Canvas.CanvasElement --Canvas.Context2D
+    { canvasContext :: CanvasElement --Canvas.Context2D
     , canvasElement :: Element
     , buttonElement :: Element
     }
@@ -141,14 +141,14 @@ unlistener elr dummy =
     Ref.read elr >>= \elrx -> 
         Traversable.traverse_ unlisten elrx
 
-dummyEvent :: Element -> VRuler -> Event.Event -> Effect Unit
-dummyEvent el vruler evt =
-    createLine2 el vruler *>
+dummyEvent :: CanvasElement -> VRuler -> Event.Event -> Effect Unit
+dummyEvent ce vruler evt =
+    createLine2 ce vruler *>
     logShow "dummyEvent"
 
 
-htmlContext_ :: Maybe Element -> Maybe Element -> Maybe Canvas.CanvasElement -> Maybe HtmlContext
-htmlContext_ canvas button ctx = 
+getHtmlContext1 :: Maybe Element -> Maybe Element -> Maybe CanvasElement -> Maybe HtmlContext
+getHtmlContext1 canvas button ctx = 
     canvas >>= \canvas1 ->
         button >>= \button1 ->
             ctx >>= \ctx1 ->
@@ -158,14 +158,28 @@ htmlContext_ canvas button ctx =
                 , buttonElement: button1 
                 }
 
-htmlContext :: ChartLevel -> Effect (Maybe HtmlContext)
-htmlContext {levelCanvasId: (HtmlId levelCanvasId1), addLevelId: (HtmlId addLevelId1)} =
+getHtmlContext :: ChartLevel -> Effect (Maybe HtmlContext)
+getHtmlContext {levelCanvasId: (HtmlId levelCanvasId1), addLevelId: (HtmlId addLevelId1)} =
     getDoc >>= \doc ->
         getElementById levelCanvasId1 doc >>= \canvasElement ->
             getElementById addLevelId1 doc >>= \buttonElement ->
-                Canvas.getCanvasElementById levelCanvasId1 >>= \canvas ->
-                    pure $ htmlContext_ canvasElement buttonElement canvas 
+                getCanvasElementById levelCanvasId1 >>= \canvas ->
+                    pure $ getHtmlContext1 canvasElement buttonElement canvas 
 
+
+initEvents :: VRuler -> ChartLevel -> Effect (Int -> Effect Unit)
+initEvents vruler chartLevel =
+    getHtmlContext chartLevel >>= \context ->
+        case context of
+            Nothing ->
+                pure (\t -> pure unit) 
+            Just context1 ->
+                EventTarget.eventListener (dummyEvent context1.canvasContext vruler) >>= \me1 -> 
+                    EventTarget.addEventListener (EventType "click") me1 false (toEventTarget context1.buttonElement) *>
+                    pure (\t -> pure unit) 
+
+
+{-
 initEvents :: VRuler -> ChartLevel -> Effect (Int -> Effect Unit)
 initEvents vruler {levelCanvasId: (HtmlId levelCanvasId1),addLevelId: (HtmlId addLevelId1)} =
     logShow "initEvents" *>
@@ -202,6 +216,7 @@ xinitEvents vruler {levelCanvasId: (HtmlId levelCanvasId1),addLevelId: (HtmlId a
                                     initButtonEvent vruler button1 elr *>
                                     initMouseEvents vruler target1 elr *>
                                         pure (unlistener elr)
+-}
 
 defaultEventHandling :: Event.Event -> Effect Unit
 defaultEventHandling event = 
