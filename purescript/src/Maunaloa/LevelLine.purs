@@ -8,7 +8,8 @@ import Effect (Effect)
 import Effect.Console (logShow)
 import Data.Traversable as Traversable
 
-import Graphics.Canvas (CanvasElement,getCanvasElementById)
+import Graphics.Canvas as Canvas 
+import Graphics.Canvas (CanvasElement,Context2D)
 import Web.Event.Event (EventType(..))
 import Web.Event.Event as Event
 import Web.Event.EventTarget as EventTarget
@@ -57,7 +58,7 @@ newtype Line =
 
 foreign import createLine :: VRuler -> Event.Event -> Effect Line
 
-foreign import createLine2 :: CanvasElement -> VRuler -> Effect Line
+foreign import createLine2 :: Context2D -> VRuler -> Effect Line
 
 
 instance showLine :: Show Line where
@@ -143,8 +144,9 @@ unlistener elr dummy =
 
 dummyEvent :: CanvasElement -> VRuler -> Event.Event -> Effect Unit
 dummyEvent ce vruler evt =
-    createLine2 ce vruler *>
-    logShow "dummyEvent"
+    Canvas.getContext2D ce >>= \ctx ->
+        createLine2 ctx vruler *>
+            logShow "dummyEvent"
 
 
 getHtmlContext1 :: Maybe Element -> Maybe Element -> Maybe CanvasElement -> Maybe HtmlContext
@@ -163,7 +165,7 @@ getHtmlContext {levelCanvasId: (HtmlId levelCanvasId1), addLevelId: (HtmlId addL
     getDoc >>= \doc ->
         getElementById levelCanvasId1 doc >>= \canvasElement ->
             getElementById addLevelId1 doc >>= \buttonElement ->
-                getCanvasElementById levelCanvasId1 >>= \canvas ->
+                Canvas.getCanvasElementById levelCanvasId1 >>= \canvas ->
                     pure $ getHtmlContext1 canvasElement buttonElement canvas 
 
 
