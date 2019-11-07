@@ -56,9 +56,9 @@ newtype Line =
     , draggable :: Boolean
     } 
 
-foreign import createLine :: VRuler -> Event.Event -> Effect Line
+-- foreign import createLine :: VRuler -> Event.Event -> Effect Line
 
-foreign import createLine2 :: Context2D -> VRuler -> Effect Line
+foreign import createLine :: Context2D -> VRuler -> Effect Line
 
 
 instance showLine :: Show Line where
@@ -112,6 +112,7 @@ addEventListenerRef :: EventListenerRef -> EventListenerInfo -> Effect Unit
 addEventListenerRef lref listener = 
     Ref.modify_ (\listeners -> listener : listeners) lref
 
+{-
 initMouseEvents :: VRuler -> Element -> EventListenerRef -> Effect Unit
 initMouseEvents vruler target elr = 
     linesRef >>= \lir -> 
@@ -132,6 +133,7 @@ initButtonEvent vruler button elr =
             in 
             EventTarget.addEventListener (EventType "click") me1 false (toEventTarget button) *>
             addEventListenerRef elr info 
+-}
 
 unlisten :: EventListenerInfo -> Effect Unit
 unlisten (EventListenerInfo {target,listener,eventType}) = 
@@ -142,11 +144,13 @@ unlistener elr dummy =
     Ref.read elr >>= \elrx -> 
         Traversable.traverse_ unlisten elrx
 
-dummyEvent :: CanvasElement -> VRuler -> Event.Event -> Effect Unit
-dummyEvent ce vruler evt =
+dummyEvent :: LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Unit
+dummyEvent lref ce vruler evt =
     Canvas.getContext2D ce >>= \ctx ->
-        createLine2 ctx vruler *>
-            logShow "dummyEvent"
+        createLine ctx vruler >>= \newLine ->
+            Ref.modify_ (addLine newLine) lref *>
+                Ref.read lref >>= \lxx -> 
+                    logShow lxx 
 
 
 getHtmlContext1 :: Maybe Element -> Maybe Element -> Maybe CanvasElement -> Maybe HtmlContext
@@ -176,9 +180,10 @@ initEvents vruler chartLevel =
             Nothing ->
                 pure (\t -> pure unit) 
             Just context1 ->
-                EventTarget.eventListener (dummyEvent context1.canvasContext vruler) >>= \me1 -> 
-                    EventTarget.addEventListener (EventType "click") me1 false (toEventTarget context1.buttonElement) *>
-                    pure (\t -> pure unit) 
+                linesRef >>= \lir -> 
+                    EventTarget.eventListener (dummyEvent lir context1.canvasContext vruler) >>= \me1 -> 
+                        EventTarget.addEventListener (EventType "click") me1 false (toEventTarget context1.buttonElement) *>
+                        pure (\t -> pure unit) 
 
 
 {-
@@ -231,10 +236,11 @@ mouseEventDrag lref event =
     Ref.read lref >>= \lxx -> 
     logShow lxx
 
-addLine_ :: Line -> Lines -> Lines
-addLine_ newLine (Lines l@{lines,selected}) = 
+addLine :: Line -> Lines -> Lines
+addLine newLine (Lines l@{lines,selected}) = 
     Lines $ l { lines = newLine : lines } 
 
+{-
 addLine :: VRuler -> LinesRef -> Event.Event -> Effect Unit
 addLine vruler lref event =
     createLine vruler event >>= \newLine -> 
@@ -244,13 +250,10 @@ addLine vruler lref event =
 
 addLine2 :: VRuler -> LinesRef -> Effect Unit
 addLine2 vruler lref =
-    logShow "addLine2" 
-{-
     createLine2 vruler >>= \newLine -> 
     Ref.modify_ (addLine_  newLine) lref *>
     Ref.read lref >>= \lxx -> 
     logShow lxx 
--}
 
 mouseEventAddLine :: VRuler -> LinesRef -> Event.Event -> Effect Unit
 mouseEventAddLine vruler lref event = 
@@ -262,6 +265,7 @@ buttonEventAddLine vruler lref event =
     logShow "buttonEventAddLine" *>
     defaultEventHandling event *>
     addLine2 vruler lref 
+-}
 
 getDoc :: Effect NonElementParentNode
 getDoc = 
