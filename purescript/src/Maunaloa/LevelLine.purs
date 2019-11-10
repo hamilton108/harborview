@@ -2,8 +2,10 @@ module Maunaloa.LevelLine (initEvents) where
 
 import Prelude
 import Data.Maybe (Maybe(..))
-import Data.List as List
-import Data.List ((:)) 
+--import Data.List as List
+--import Data.List ((:)) 
+--import Data.Array as Array
+import Data.Array ((:)) 
 import Effect (Effect)
 import Effect.Console (logShow)
 import Data.Traversable as Traversable
@@ -66,7 +68,8 @@ instance showLine :: Show Line where
 
 newtype Lines = 
     Lines
-    { lines :: List.List Line
+    { lines :: Array Line
+    -- lines :: List.List Line
     , selected :: Maybe Line 
     }
 
@@ -78,7 +81,7 @@ type LinesRef = Ref.Ref Lines
 initLines :: Lines
 initLines = 
     Lines
-    { lines : List.Nil
+    { lines : [] -- List.Nil
     , selected : Nothing
     }
 
@@ -94,7 +97,7 @@ newtype EventListenerInfo =
 
 -- type EventListenerInfo = EventTarget.EventListener
 
-type EventListeners = List.List EventListenerInfo 
+type EventListeners = Array EventListenerInfo -- List.List EventListenerInfo 
 
 type EventListenerRef = Ref.Ref EventListeners
 
@@ -106,7 +109,7 @@ type HtmlContext =
 
 eventListenerRef :: Effect EventListenerRef
 eventListenerRef = 
-    Ref.new List.Nil
+    Ref.new [] -- List.Nil
 
 addEventListenerRef :: EventListenerRef -> EventListenerInfo -> Effect Unit
 addEventListenerRef lref listener = 
@@ -238,6 +241,7 @@ mouseEventDrag lref event =
 
 addLine :: Line -> Lines -> Lines
 addLine newLine (Lines l@{lines,selected}) = 
+    --Lines $ l { lines = newLine : lines } 
     Lines $ l { lines = newLine : lines } 
 
 {-
