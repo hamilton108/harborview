@@ -17,6 +17,24 @@ exports.createLine = function (vruler) {
 
 const x1 = 45.0;
 
+exports.onMouseDown = function (evt) {
+    return function (lines) {
+        return function () {
+            console.log(event);
+            console.log(lines);
+        }
+    }
+};
+
+exports.onMouseDrag = function (evt) {
+    return function (linesRef) {
+        return function () {
+            console.log(event);
+            console.log(linesRef);
+        }
+    }
+};
+
 exports.createLine = function (ctx) {
     return function (vruler) {
         return function () {

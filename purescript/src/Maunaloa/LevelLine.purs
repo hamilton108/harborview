@@ -62,6 +62,11 @@ newtype Line =
 
 foreign import createLine :: Context2D -> VRuler -> Effect Line
 
+foreign import onMouseDrag :: Event.Event -> LinesRef -> Effect Unit
+
+foreign import onMouseDown :: Event.Event -> Lines -> Effect Unit
+
+
 
 instance showLine :: Show Line where
     show (Line v) = "Line: " <> show v 
@@ -82,7 +87,7 @@ initLines :: Lines
 initLines = 
     Lines
     { lines : [] -- List.Nil
-    , selected : Nothing
+    , selected : Just $ Line { y: 12.3, draggable: true } -- Nothing
     }
 
 linesRef :: Effect (Ref.Ref Lines)
@@ -147,14 +152,28 @@ unlistener elr dummy =
     Ref.read elr >>= \elrx -> 
         Traversable.traverse_ unlisten elrx
 
-dummyEvent :: LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Unit
-dummyEvent lref ce vruler evt =
+buttonClick :: LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Unit
+buttonClick lref ce vruler evt =
+    defaultEventHandling evt *>
     Canvas.getContext2D ce >>= \ctx ->
         createLine ctx vruler >>= \newLine ->
             Ref.modify_ (addLine newLine) lref *>
                 Ref.read lref >>= \lxx -> 
                     logShow lxx 
 
+mouseEventDrag :: LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Unit
+mouseEventDrag lref ce vruler evt = 
+    defaultEventHandling evt *>
+    pure unit
+    --onMouseDrag evt lref 
+    --Ref.read lref >>= \lxx -> 
+    --logShow lxx
+
+mouseEventDown :: LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Unit
+mouseEventDown lref ce vruler evt = 
+    defaultEventHandling evt *>
+    Ref.read lref >>= \lxx -> 
+    onMouseDown evt lxx 
 
 getHtmlContext1 :: Maybe Element -> Maybe Element -> Maybe CanvasElement -> Maybe HtmlContext
 getHtmlContext1 canvas button ctx = 
@@ -176,6 +195,8 @@ getHtmlContext {levelCanvasId: (HtmlId levelCanvasId1), addLevelId: (HtmlId addL
                     pure $ getHtmlContext1 canvasElement buttonElement canvas 
 
 
+-- initButtonClickEvent :: VRuler -> CanvasElement -> Element -> 
+
 initEvents :: VRuler -> ChartLevel -> Effect (Int -> Effect Unit)
 initEvents vruler chartLevel =
     getHtmlContext chartLevel >>= \context ->
@@ -184,9 +205,13 @@ initEvents vruler chartLevel =
                 pure (\t -> pure unit) 
             Just context1 ->
                 linesRef >>= \lir -> 
-                    EventTarget.eventListener (dummyEvent lir context1.canvasContext vruler) >>= \me1 -> 
-                        EventTarget.addEventListener (EventType "click") me1 false (toEventTarget context1.buttonElement) *>
-                        pure (\t -> pure unit) 
+                    EventTarget.eventListener (buttonClick lir context1.canvasContext vruler) >>= \e1 -> 
+                    EventTarget.addEventListener (EventType "click") e1 false (toEventTarget context1.buttonElement) *>
+                    EventTarget.eventListener (mouseEventDown lir context1.canvasContext vruler) >>= \e2 -> 
+                    EventTarget.addEventListener (EventType "mousedown") e2 false (toEventTarget context1.canvasElement) *>
+                    EventTarget.eventListener (mouseEventDrag lir context1.canvasContext vruler) >>= \e3 -> 
+                    EventTarget.addEventListener (EventType "mousemove") e3 false (toEventTarget context1.canvasElement) *>
+                    pure (\t -> pure unit) 
 
 
 {-
@@ -233,11 +258,6 @@ defaultEventHandling event =
     Event.stopPropagation event *>
     Event.preventDefault event 
 
-mouseEventDrag :: LinesRef -> Event.Event -> Effect Unit
-mouseEventDrag lref event = 
-    defaultEventHandling event *>
-    Ref.read lref >>= \lxx -> 
-    logShow lxx
 
 addLine :: Line -> Lines -> Lines
 addLine newLine (Lines l@{lines,selected}) = 
