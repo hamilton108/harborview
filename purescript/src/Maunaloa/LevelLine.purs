@@ -74,7 +74,6 @@ instance showLine :: Show Line where
 newtype Lines = 
     Lines
     { lines :: Array Line
-    -- lines :: List.List Line
     , selected :: Maybe Line 
     }
 
@@ -87,7 +86,7 @@ initLines :: Lines
 initLines = 
     Lines
     { lines : [] -- List.Nil
-    , selected : Just $ Line { y: 12.3, draggable: true } -- Nothing
+    , selected : Nothing -- : Just $ Line { y: 12.3, draggable: true } -- Nothing
     }
 
 linesRef :: Effect (Ref.Ref Lines)

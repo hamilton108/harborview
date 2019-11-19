@@ -21,6 +21,13 @@ exports.onMouseDown = function (evt) {
     return function (lines) {
         return function () {
             console.log(event);
+            if (lines.length === 0) {
+                return;
+            }
+            if (lines.length === 1) {
+
+            }
+            lines.selected = PS["Data.Maybe"].Just.create(234 * Math.random());
             console.log(lines);
         }
     }
@@ -40,7 +47,7 @@ exports.createLine = function (ctx) {
         return function () {
             console.log(ctx);
             console.log(vruler);
-            const y = vruler.h / 2.0;
+            const y = vruler.h * Math.random();
             const x2 = vruler.w - x1;
             const displayValue = pixToValue(vruler, y);
             paint(x2, y, displayValue, ctx);
