@@ -17,17 +17,51 @@ exports.createLine = function (vruler) {
 
 const x1 = 45.0;
 
+const createPilotLine = function (y) {
+    return PS["Data.Maybe"].Just.create(y);
+}
+
+const closestLine = function (lines, y) {
+    var dist = 100000000;
+    var index = null;
+    for (var i = 0; i < lines.length; ++i) {
+        const curLine = lines[i];
+        if (curLine.draggable === false) {
+            continue;
+        }
+        const dy = curLine.y - y;
+        const thisDist = dy * dy;
+        if (thisDist < dist) {
+            index = i;
+            dist = thisDist;
+        }
+    }
+    if (index === null) {
+        return null;
+    }
+    else {
+        return createPilotLine(lines[index].y);
+    }
+}
+
 exports.onMouseDown = function (evt) {
-    return function (lines) {
+    return function (linesWrapper) {
         return function () {
             console.log(event);
+            const lines = linesWrapper.lines;
             if (lines.length === 0) {
                 return;
             }
             if (lines.length === 1) {
-
+                lines[0].selected = true;
+                lines.selected = createPilotLine(lines[0].y);
             }
-            lines.selected = PS["Data.Maybe"].Just.create(234 * Math.random());
+            else {
+                const cl = closestLine(lines, evt.offsetY);
+                if (cl !== null) {
+                    lines.selected = cl;
+                }
+            }
             console.log(lines);
         }
     }

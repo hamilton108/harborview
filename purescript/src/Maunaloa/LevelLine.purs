@@ -52,10 +52,16 @@ main = do
 -}
 
 
+newtype PilotLine = 
+    PilotLine 
+    { y :: Number
+    } 
+
 newtype Line = 
     Line 
     { y :: Number
     , draggable :: Boolean
+    , selected :: Boolean
     } 
 
 -- foreign import createLine :: VRuler -> Event.Event -> Effect Line
@@ -71,10 +77,13 @@ foreign import onMouseDown :: Event.Event -> Lines -> Effect Unit
 instance showLine :: Show Line where
     show (Line v) = "Line: " <> show v 
 
+instance showPilotLine :: Show PilotLine where
+    show (PilotLine v) = "PilotLine : " <> show v 
+
 newtype Lines = 
     Lines
     { lines :: Array Line
-    , selected :: Maybe Line 
+    , selected :: Maybe PilotLine 
     }
 
 instance showLines :: Show Lines where
