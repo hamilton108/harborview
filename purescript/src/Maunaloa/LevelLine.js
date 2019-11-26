@@ -40,7 +40,7 @@ const closestLine = function (lines, y) {
         return null;
     }
     else {
-        return createPilotLine(lines[index].y);
+        return [index,createPilotLine(lines[index].y)];
     }
 }
 
@@ -59,7 +59,8 @@ exports.onMouseDown = function (evt) {
             else {
                 const cl = closestLine(lines, evt.offsetY);
                 if (cl !== null) {
-                    lines.selected = cl;
+                    lines[cl[0]].selected = true;
+                    lines.selected = cl[1];
                 }
             }
             console.log(lines);
@@ -68,10 +69,22 @@ exports.onMouseDown = function (evt) {
 };
 
 exports.onMouseDrag = function (evt) {
-    return function (linesRef) {
+    return function (linesWrapper) {
         return function () {
             console.log(event);
             console.log(linesRef);
+        }
+    }
+};
+
+exports.onMouseUp = function (evt) {
+    return function (linesWrapper) {
+        return function () {
+            const lines = linesWrapper.lines;
+            for (var i = 0; i < lines.length; ++i) {
+                lines[i].selected = false;
+            }
+            console.log(lines);
         }
     }
 };
@@ -85,7 +98,7 @@ exports.createLine = function (ctx) {
             const x2 = vruler.w - x1;
             const displayValue = pixToValue(vruler, y);
             paint(x2, y, displayValue, ctx);
-            return { y: y, draggable: true };
+            return { y: y, draggable: true, selected: false };
         };
     };
 };
