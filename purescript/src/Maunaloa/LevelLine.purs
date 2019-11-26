@@ -57,6 +57,8 @@ newtype PilotLine =
     { y :: Number
     } 
 
+derive instance eqPilotLine :: Eq PilotLine 
+
 newtype Line = 
     Line 
     { y :: Number
@@ -85,11 +87,11 @@ instance showPilotLine :: Show PilotLine where
 newtype Lines = 
     Lines
     { lines :: Array Line
-    , selected :: Maybe PilotLine 
+    , pilotLine :: Maybe PilotLine 
     }
 
 instance showLines :: Show Lines where
-    show (Lines { lines, selected }) = "Lines, " <> show lines <> ", selected: " <> show selected
+    show (Lines { lines, pilotLine }) = "Lines, " <> show lines <> ", pilotLine: " <> show pilotLine
 
 type LinesRef = Ref.Ref Lines
 
@@ -97,7 +99,7 @@ initLines :: Lines
 initLines = 
     Lines
     { lines : [] -- List.Nil
-    , selected : Nothing -- : Just $ Line { y: 12.3, draggable: true } -- Nothing
+    , pilotLine : Nothing -- : Just $ Line { y: 12.3, draggable: true } -- Nothing
     }
 
 linesRef :: Effect (Ref.Ref Lines)
@@ -177,17 +179,28 @@ mouseEventDown lref evt =
     Ref.read lref >>= \lxx -> 
     onMouseDown evt lxx 
 
+
+hasPilotLine :: Lines -> Boolean
+hasPilotLine (Lines {pilotLine}) =
+    pilotLine /= Nothing
+
+
 mouseEventDrag :: LinesRef -> CanvasElement -> Event.Event -> Effect Unit
 mouseEventDrag lref ce evt = 
     defaultEventHandling evt *>
-    pure unit
-    --onMouseDrag evt lref 
+    Ref.read lref >>= \lxx -> 
+        if hasPilotLine lxx then 
+            onMouseDrag evt lxx 
+        else 
+            pure unit
     --Ref.read lref >>= \lxx -> 
     --logShow lxx
 
 mouseEventUp :: LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Unit
 mouseEventUp lref ce vruler evt = 
-    pure unit
+    defaultEventHandling evt *>
+    Ref.read lref >>= \lxx -> 
+    onMouseUp evt lxx 
 
 getHtmlContext1 :: Maybe Element -> Maybe Element -> Maybe CanvasElement -> Maybe HtmlContext
 getHtmlContext1 canvas button ctx = 
@@ -276,7 +289,7 @@ defaultEventHandling event =
 
 
 addLine :: Line -> Lines -> Lines
-addLine newLine (Lines l@{lines,selected}) = 
+addLine newLine (Lines l@{lines}) = 
     --Lines $ l { lines = newLine : lines } 
     Lines $ l { lines = newLine : lines } 
 

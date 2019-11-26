@@ -21,6 +21,10 @@ const createPilotLine = function (y) {
     return PS["Data.Maybe"].Just.create(y);
 }
 
+const nothing = function () {
+    return PS["Data.Maybe"].Nothing.value;
+}
+
 const closestLine = function (lines, y) {
     var dist = 100000000;
     var index = null;
@@ -40,27 +44,26 @@ const closestLine = function (lines, y) {
         return null;
     }
     else {
-        return [index,createPilotLine(lines[index].y)];
+        return [index, createPilotLine(lines[index].y)];
     }
 }
 
 exports.onMouseDown = function (evt) {
     return function (linesWrapper) {
         return function () {
-            console.log(event);
             const lines = linesWrapper.lines;
             if (lines.length === 0) {
                 return;
             }
             if (lines.length === 1) {
                 lines[0].selected = true;
-                lines.selected = createPilotLine(lines[0].y);
+                linesWrapper.pilotLine = createPilotLine(lines[0].y);
             }
             else {
                 const cl = closestLine(lines, evt.offsetY);
                 if (cl !== null) {
                     lines[cl[0]].selected = true;
-                    lines.selected = cl[1];
+                    linesWrapper.pilotLine = cl[1];
                 }
             }
             console.log(lines);
@@ -71,8 +74,7 @@ exports.onMouseDown = function (evt) {
 exports.onMouseDrag = function (evt) {
     return function (linesWrapper) {
         return function () {
-            console.log(event);
-            console.log(linesRef);
+            console.log(linesWrapper);
         }
     }
 };
@@ -84,7 +86,8 @@ exports.onMouseUp = function (evt) {
             for (var i = 0; i < lines.length; ++i) {
                 lines[i].selected = false;
             }
-            console.log(lines);
+            linesWrapper.pilotLine = nothing();
+            console.log(linesWrapper);
         }
     }
 };
