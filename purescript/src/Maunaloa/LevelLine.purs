@@ -72,7 +72,7 @@ foreign import createLine :: Context2D -> VRuler -> Effect Line
 
 foreign import onMouseDown :: Event.Event -> Lines -> Effect Unit
 
-foreign import onMouseDrag :: Event.Event -> Lines -> Effect Unit
+foreign import onMouseDrag :: Event.Event -> Lines -> Context2D -> VRuler -> Effect Unit
 
 foreign import onMouseUp :: Event.Event -> Lines -> Effect Unit
 
@@ -185,12 +185,13 @@ hasPilotLine (Lines {pilotLine}) =
     pilotLine /= Nothing
 
 
-mouseEventDrag :: LinesRef -> CanvasElement -> Event.Event -> Effect Unit
-mouseEventDrag lref ce evt = 
+mouseEventDrag :: LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Unit
+mouseEventDrag lref ce vruler evt = 
     defaultEventHandling evt *>
+    Canvas.getContext2D ce >>= \ctx ->
     Ref.read lref >>= \lxx -> 
         if hasPilotLine lxx then 
-            onMouseDrag evt lxx 
+            onMouseDrag evt lxx ctx vruler
         else 
             pure unit
     --Ref.read lref >>= \lxx -> 
@@ -236,7 +237,7 @@ initEvents vruler chartLevel =
                     EventTarget.addEventListener (EventType "click") e1 false (toEventTarget context1.buttonElement) *>
                     EventTarget.eventListener (mouseEventDown lir) >>= \e2 -> 
                     EventTarget.addEventListener (EventType "mousedown") e2 false (toEventTarget context1.canvasElement) *>
-                    EventTarget.eventListener (mouseEventDrag lir context1.canvasContext) >>= \e3 -> 
+                    EventTarget.eventListener (mouseEventDrag lir context1.canvasContext vruler) >>= \e3 -> 
                     EventTarget.addEventListener (EventType "mousemove") e3 false (toEventTarget context1.canvasElement) *>
                     EventTarget.eventListener (mouseEventUp lir context1.canvasContext vruler) >>= \e4 -> 
                     EventTarget.addEventListener (EventType "mouseup") e4 false (toEventTarget context1.canvasElement) *>
@@ -290,7 +291,6 @@ defaultEventHandling event =
 
 addLine :: Line -> Lines -> Lines
 addLine newLine (Lines l@{lines}) = 
-    --Lines $ l { lines = newLine : lines } 
     Lines $ l { lines = newLine : lines } 
 
 {-

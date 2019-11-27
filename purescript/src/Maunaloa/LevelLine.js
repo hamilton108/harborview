@@ -73,8 +73,12 @@ exports.onMouseDown = function (evt) {
 
 exports.onMouseDrag = function (evt) {
     return function (linesWrapper) {
-        return function () {
-            console.log(linesWrapper);
+        return function (ctx) {
+            return function (vruler) {
+                return function () {
+                    console.log(linesWrapper);
+                }
+            }
         }
     }
 };
