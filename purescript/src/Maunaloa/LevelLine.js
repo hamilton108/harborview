@@ -48,6 +48,44 @@ const closestLine = function (lines, y) {
     }
 }
 
+const draw = function(linesWrapper,vruler,ctx) {
+    ctx.clearRect(0, 0, vruler.w, vruler.h);
+
+
+    const lines = linesWrapper.lines;
+    for (var i = 0; i < lines.length; ++i) {
+        const curLine = lines[i];
+        if (curLine.selected == true) {
+            continue;
+        }
+        paintDisplayValueDefault(curLine.y,vruler,ctx);
+    }
+    paintDisplayValueDefault(linesWrapper.pilotLine.y,vruler,ctx);
+
+    /*
+    const len = this.lines.length;
+    for (let i = 0; i < len; ++i) {
+        this.lines[i].draw();
+    }
+    // draw markers if a line is being dragged
+    if (this.nearest) {
+        // point on line nearest to mouse
+        ctx.beginPath();
+        ctx.arc(this.nearest.pt.x, this.nearest.pt.y, 5, 0, Math.PI * 2);
+        ctx.strokeStyle = 'red';
+        ctx.stroke();
+    }
+    if (this._spot) {
+        const lineChart = MAUNALOA.lineChart(this.hruler, this.vruler, ctx);
+        lineChart.drawCandlestick(this._spot);
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "crimson";
+        const curTm = new Date(this._spot.tm);
+        ctx.fillText("Spot: " + curTm.toGMTString(), 1000, 50);
+    }
+    */
+};
+
 exports.onMouseDown = function (evt) {
     return function (linesWrapper) {
         return function () {
@@ -77,6 +115,8 @@ exports.onMouseDrag = function (evt) {
             return function (vruler) {
                 return function () {
                     console.log(linesWrapper);
+                    linesWrapper.pilotLine.y = evt.offsetY;
+                    draw(linesWrapper,vruler,ctx);
                 }
             }
         }
@@ -87,24 +127,30 @@ exports.onMouseUp = function (evt) {
     return function (linesWrapper) {
         return function () {
             const lines = linesWrapper.lines;
+
             for (var i = 0; i < lines.length; ++i) {
-                lines[i].selected = false;
+                const curLine = lines[i];
+                if (curLine.selected == true) {
+                    curLine.y = linesWrapper.pilotLine.y;
+                    curLine.selected = false;
+                }
             }
             linesWrapper.pilotLine = nothing();
-            console.log(linesWrapper);
         }
     }
 };
 
+const paintDisplayValueDefault = function(y,vruler,ctx) {
+    const x2 = vruler.w - x1;
+    const displayValue = pixToValue(vruler, y);
+    paint(x2, y, displayValue, ctx);
+}
+
 exports.createLine = function (ctx) {
     return function (vruler) {
         return function () {
-            console.log(ctx);
-            console.log(vruler);
             const y = vruler.h * Math.random();
-            const x2 = vruler.w - x1;
-            const displayValue = pixToValue(vruler, y);
-            paint(x2, y, displayValue, ctx);
+           paintDisplayValueDefault(y, vruler, ctx);
             return { y: y, draggable: true, selected: false };
         };
     };
