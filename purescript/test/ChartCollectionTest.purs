@@ -6,43 +6,56 @@ import Control.Monad.Except (runExcept)
 import Partial.Unsafe (unsafePartial)
 import Data.Array as Array
 import Data.Maybe (Maybe(..),fromJust)
-import Data.Either (Either(..),fromRight,isRight)
+import Data.Either (fromRight)
 import Test.Unit (TestSuite,suite,test)
 import Test.Unit.Assert as Assert
 
-import Util.Value (foreignValue)
+--import Util.Value (foreignValue)
 import Maunaloa.Chart as Chart 
 import Maunaloa.ChartCollection as ChartCollection
 import Maunaloa.Common 
-    ( CanvasId(..)
+    ( HtmlId(..)
     , ChartHeight(..)
     )
 
 import Test.Common as TC 
 
-chartMapping :: CanvasId -> ChartCollection.ChartMapping
-chartMapping levelCanvasId = 
+chartMapping :: HtmlId -> HtmlId -> ChartCollection.ChartMapping
+chartMapping levelCanvasId addLevelId = 
     ChartCollection.ChartMapping 
     { chartId: Chart.ChartId "chart"
-    , canvasId: CanvasId "test-canvasId"
+    , canvasId: HtmlId "test-canvasId"
     , chartHeight: ChartHeight 500.0
-    , levelCanvasId: levelCanvasId
+    , levelCanvasId: levelCanvasId 
+    , addLevelId: addLevelId 
     }
 
-chartMappings :: ChartCollection.ChartMappings 
-chartMappings = [chartMapping (CanvasId "level-canvasid")]
--- chartMappings = [chartMapping (CanvasId ""), chartMapping (CanvasId "test-level-canvasId") ]
+asChartLevel :: ChartCollection.ChartMapping -> Chart.ChartLevel
+asChartLevel (ChartCollection.ChartMapping m) = 
+    { levelCanvasId: m.levelCanvasId
+    , addLevelId: m.addLevelId
+    } 
+
+chartMappingsWithoutChartLevel :: ChartCollection.ChartMappings 
+chartMappingsWithoutChartLevel = [chartMapping (HtmlId "") (HtmlId "")]
      
---collectionx = runExcept $ ChartCollection.fromMappings chartMappings TC.demox 
+chartMappingWithChartLevel :: ChartCollection.ChartMapping
+chartMappingWithChartLevel = chartMapping (HtmlId "level-canvasid") (HtmlId "add-level-id")
+
+chartMappingsWithChartLevel :: ChartCollection.ChartMappings 
+chartMappingsWithChartLevel = [chartMappingWithChartLevel]
 
 testChartColletionSuite :: TestSuite
 testChartColletionSuite = 
     suite "ChartCollection" do
-        test "ChartCollection" do
-            let collection = runExcept $ ChartCollection.fromMappings chartMappings TC.demox 
+        test "Without ChartCollection" do
+            let collection = runExcept $ ChartCollection.fromMappings chartMappingsWithoutChartLevel TC.demox 
             let collection1 = unsafePartial $ fromRight collection
             let (Chart.Chart chart1) = unsafePartial $ fromJust $ Array.head collection1
-            Assert.equal chart1.levelCanvasId (Just (CanvasId "level-canvasid"))
-        --let result = CA.candleToPix VT.testVRuler testCandle
-        --Assert.equal pixCandle result
+            Assert.equal chart1.chartLevel Nothing 
+        test "With ChartCollection" do
+            let collection = runExcept $ ChartCollection.fromMappings chartMappingsWithChartLevel TC.demox 
+            let collection1 = unsafePartial $ fromRight collection
+            let (Chart.Chart chart1) = unsafePartial $ fromJust $ Array.head collection1
+            Assert.equal (Just $ asChartLevel chartMappingWithChartLevel) chart1.chartLevel 
 

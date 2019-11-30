@@ -55,12 +55,12 @@ instance showChartHeight :: Show ChartHeight where
 derive instance eqChartHeight :: Eq ChartHeight
 
 ------------------------- CanvasId ------------------------- 
-newtype CanvasId = CanvasId String 
+newtype HtmlId = HtmlId String 
 
-instance showCanvasId :: Show CanvasId where
-  show (CanvasId x) = "(CanvasId: " <> x <> ")"
+instance showHtmlId :: Show HtmlId where
+  show (HtmlId x) = "(HtmlId : " <> x <> ")"
 
-derive instance eqCanvasId :: Eq CanvasId 
+derive instance eqHtmlId :: Eq HtmlId 
 
 ------------------------- UnixTime ------------------------- 
 newtype UnixTime = UnixTime Number
