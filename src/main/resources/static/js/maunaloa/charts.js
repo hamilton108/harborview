@@ -8,16 +8,22 @@ document.addEventListener("DOMContentLoaded", function () {
             MAIN_CHART: 'chart-1',
             VOLUME: 'vol-1',
             OSC: 'osc-1',
+            LEVEL_LINES: 'levellines-1',
+            BTN_LEVELLINE: "btn-levelline-1"
         },
         WEEK: {
             MAIN_CHART: 'chart-2',
             VOLUME: 'vol-2',
             OSC: 'osc-2',
+            LEVEL_LINES: 'levellines-2',
+            BTN_LEVELLINE: "btn-levelline-2"
         },
         MONTH: {
             MAIN_CHART: 'chart-3',
             VOLUME: 'vol-3',
             OSC: 'osc-3',
+            LEVEL_LINES: 'levellines-3',
+            BTN_LEVELLINE: "btn-levelline-3"
         }
     };
     const scrapbooks = {
@@ -26,7 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
             DIV_DOODLE: 'div-1-doodle',
             DIV_LEVEL_LINES: 'div-1-levelline',
             DOODLE: 'doodle-1',
-            LEVEL_LINES: 'levellines-1',
             RG_LAYER: "rg-layer1",
             COLOR: "color1",
             RG_LINE_SIZE: "rg-line1",
@@ -36,7 +41,6 @@ document.addEventListener("DOMContentLoaded", function () {
             BTN_TEXT: "btn-scrapbook1-text",
             BTN_CLEAR: "btn-scrapbook1-clear",
             BTN_SAVE: "btn-scrapbook1-save",
-            BTN_LEVELLINE: "btn-levelline-1",
             BTN_DRAGGABLE: "btn-draggable-1",
             ARROW_ORIENT: "arrow1-orient",
             COMMENT: "comment1",
@@ -46,7 +50,6 @@ document.addEventListener("DOMContentLoaded", function () {
             DIV_DOODLE: 'div-2-doodle',
             DIV_LEVEL_LINES: 'div-2-levelline',
             DOODLE: 'doodle-2',
-            LEVEL_LINES: 'levellines-2',
             RG_LAYER: "rg-layer2",
             COLOR: "color2",
             RG_LINE_SIZE: "rg-line2",
@@ -56,7 +59,6 @@ document.addEventListener("DOMContentLoaded", function () {
             BTN_TEXT: "btn-scrapbook2-text",
             BTN_CLEAR: "btn-scrapbook2-clear",
             BTN_SAVE: "btn-scrapbook2-save",
-            BTN_LEVELLINE: "btn-levelline-2",
             BTN_DRAGGABLE: "btn-draggable-2",
             ARROW_ORIENT: "arrow2-orient",
             COMMENT: "comment2",
@@ -66,7 +68,6 @@ document.addEventListener("DOMContentLoaded", function () {
             DIV_DOODLE: 'div-3-doodle',
             DIV_LEVEL_LINES: 'div-3-levelline',
             DOODLE: 'doodle-3',
-            LEVEL_LINES: 'levellines-3',
             RG_LAYER: "rg-layer3",
             COLOR: "color3",
             RG_LINE_SIZE: "rg-line3",
@@ -76,7 +77,6 @@ document.addEventListener("DOMContentLoaded", function () {
             BTN_TEXT: "btn-scrapbook3-text",
             BTN_CLEAR: "btn-scrapbook3-clear",
             BTN_SAVE: "btn-scrapbook3-save",
-            BTN_LEVELLINE: "btn-levelline-3",
             BTN_DRAGGABLE: "btn-draggable-3",
             ARROW_ORIENT: "arrow3-orient",
             COMMENT: "comment3",
@@ -136,12 +136,19 @@ document.addEventListener("DOMContentLoaded", function () {
         newCanvas.remove();
     };
     const toChartMappings = (c) => {
-        const mainChart = { chartId: "chart", canvasId: c.MAIN_CHART, chartHeight: 500.0, levelCanvasId: c.LEVEL_LINES };
-        const osc = { chartId: "chart2", canvasId: c.OSC, chartHeight: 200.0, levelCanvasId: "" };
+        const mainChart = {
+            chartId: "chart", canvasId: c.MAIN_CHART, chartHeight: 500.0, levelCanvasId: c.LEVEL_LINES, addLevelId: c.BTN_LEVELLINE
+        };
+        const osc = {
+            chartId: "chart2", canvasId: c.OSC, chartHeight: 200.0, levelCanvasId: "", addLevelId: ""
+        };
         return [mainChart, osc];
     };
+
+    let unlistener = null;
+
     const elmApp = (appId, chartRes, myCanvases, config) => {
-        const levelLines = new LevelLines(config);
+        //===>>> const levelLines = new LevelLines(config);
         const scrap = new Scrapbook(config);
         const node = document.getElementById(appId);
         const app = Elm.Maunaloa.Charts.Main.init({
@@ -150,25 +157,30 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         //const myChart = new Chart(myCanvases, levelLines);
         app.ports.drawCanvas.subscribe(cfg => {
+            if (unlistener !== null) {
+                unlistener(1);
+            }
             console.log(cfg);
             scrap.clear();
             //myChart.drawCanvases(cfg);
             const mappings = toChartMappings(myCanvases);
-            PS.Main.paint(mappings)(cfg)();
+            //PS.Main.paint(mappings)(cfg)();
+            unlistener = PS.Main.paint(mappings)(cfg)();
+            console.log(unlistener);
         });
         const drawRiscLines = function (riscLines) {
-            levelLines.addRiscLines(riscLines);
+            //===>>> levelLines.addRiscLines(riscLines);
         };
         app.ports.drawRiscLines.subscribe(drawRiscLines);
         const drawSpot = function (spot) {
-            levelLines.spot = spot;
+            //===>>> levelLines.spot = spot;
         };
         app.ports.drawSpot.subscribe(drawSpot);
 
         const btnClear = document.getElementById(config.BTN_CLEAR);
         btnClear.onclick = () => {
             scrap.clear();
-            levelLines.clearCanvas();
+            //===>>> levelLines.clearCanvas();
         };
         const btnSave = document.getElementById(config.BTN_SAVE);
         btnSave.onclick = () => {
