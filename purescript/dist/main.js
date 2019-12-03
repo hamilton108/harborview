@@ -22,4 +22,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const unlistener = PS.Main.paint(mappings())(cfg)();
     console.log(unlistener);
+    const removeEventsBtn = document.getElementById("remove-events");
+    removeEventsBtn.addEventListener("click", (evt) => {
+        console.log(unlistener);
+        unlistener(34)();
+    });
+
 })

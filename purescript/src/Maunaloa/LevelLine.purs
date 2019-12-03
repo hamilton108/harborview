@@ -194,8 +194,6 @@ mouseEventDrag lref ce vruler evt =
             onMouseDrag evt lxx ctx vruler
         else 
             pure unit
-    --Ref.read lref >>= \lxx -> 
-    --logShow lxx
 
 mouseEventUp :: LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Unit
 mouseEventUp lref ce vruler evt = 
@@ -223,7 +221,14 @@ getHtmlContext {levelCanvasId: (HtmlId levelCanvasId1), addLevelId: (HtmlId addL
                     pure $ getHtmlContext1 canvasElement buttonElement canvas 
 
 
--- initButtonClickEvent :: VRuler -> CanvasElement -> Element -> 
+initEvent :: (Event.Event -> Effect Unit) -> Element -> EventType -> EventListenerRef -> Effect Unit
+initEvent toListener element eventType ref =
+    EventTarget.eventListener toListener >>= \e1 -> 
+    let
+        info = EventListenerInfo {target: element, listener: e1, eventType: eventType}
+    in 
+    EventTarget.addEventListener eventType e1 false (toEventTarget element) *>
+    addEventListenerRef ref info 
 
 initEvents :: VRuler -> ChartLevel -> Effect (Int -> Effect Unit)
 initEvents vruler chartLevel =
@@ -232,16 +237,13 @@ initEvents vruler chartLevel =
             Nothing ->
                 pure (\t -> pure unit) 
             Just context1 ->
+                eventListenerRef >>= \elr ->
                 linesRef >>= \lir -> 
-                    EventTarget.eventListener (buttonClick lir context1.canvasContext vruler) >>= \e1 -> 
-                    EventTarget.addEventListener (EventType "click") e1 false (toEventTarget context1.buttonElement) *>
-                    EventTarget.eventListener (mouseEventDown lir) >>= \e2 -> 
-                    EventTarget.addEventListener (EventType "mousedown") e2 false (toEventTarget context1.canvasElement) *>
-                    EventTarget.eventListener (mouseEventDrag lir context1.canvasContext vruler) >>= \e3 -> 
-                    EventTarget.addEventListener (EventType "mousemove") e3 false (toEventTarget context1.canvasElement) *>
-                    EventTarget.eventListener (mouseEventUp lir context1.canvasContext vruler) >>= \e4 -> 
-                    EventTarget.addEventListener (EventType "mouseup") e4 false (toEventTarget context1.canvasElement) *>
-                    pure (\t -> pure unit) 
+                    initEvent (buttonClick lir context1.canvasContext vruler) context1.buttonElement (EventType "click") elr *>
+                    initEvent (mouseEventDown lir) context1.canvasElement (EventType "mousedown") elr *>
+                    initEvent (mouseEventDrag lir context1.canvasContext vruler) context1.canvasElement (EventType "mousemove") elr *>
+                    initEvent (mouseEventUp lir context1.canvasContext vruler) context1.canvasElement (EventType "mouseup") elr *>
+                    pure (unlistener elr)
 
 
 {-
@@ -292,33 +294,6 @@ defaultEventHandling event =
 addLine :: Line -> Lines -> Lines
 addLine newLine (Lines l@{lines}) = 
     Lines $ l { lines = newLine : lines } 
-
-{-
-addLine :: VRuler -> LinesRef -> Event.Event -> Effect Unit
-addLine vruler lref event =
-    createLine vruler event >>= \newLine -> 
-    Ref.modify_ (addLine_  newLine) lref *>
-    Ref.read lref >>= \lxx -> 
-    logShow lxx 
-
-addLine2 :: VRuler -> LinesRef -> Effect Unit
-addLine2 vruler lref =
-    createLine2 vruler >>= \newLine -> 
-    Ref.modify_ (addLine_  newLine) lref *>
-    Ref.read lref >>= \lxx -> 
-    logShow lxx 
-
-mouseEventAddLine :: VRuler -> LinesRef -> Event.Event -> Effect Unit
-mouseEventAddLine vruler lref event = 
-    defaultEventHandling event *>
-    addLine vruler lref event 
-    
-buttonEventAddLine :: VRuler -> LinesRef -> Event.Event -> Effect Unit
-buttonEventAddLine vruler lref event = 
-    logShow "buttonEventAddLine" *>
-    defaultEventHandling event *>
-    addLine2 vruler lref 
--}
 
 getDoc :: Effect NonElementParentNode
 getDoc = 
