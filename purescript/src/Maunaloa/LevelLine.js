@@ -48,7 +48,7 @@ const closestLine = function (lines, y) {
     }
 }
 
-const draw = function(linesWrapper,vruler,ctx) {
+const draw = function (linesWrapper, vruler, ctx) {
     ctx.clearRect(0, 0, vruler.w, vruler.h);
 
 
@@ -58,9 +58,9 @@ const draw = function(linesWrapper,vruler,ctx) {
         if (curLine.selected == true) {
             continue;
         }
-        paintDisplayValueDefault(curLine.y,vruler,ctx);
+        paintDisplayValueDefault(curLine.y, vruler, ctx);
     }
-    paintDisplayValueDefault(linesWrapper.pilotLine.y,vruler,ctx);
+    paintDisplayValueDefault(linesWrapper.pilotLine.y, vruler, ctx);
 
     /*
     const len = this.lines.length;
@@ -116,7 +116,7 @@ exports.onMouseDrag = function (evt) {
                 return function () {
                     console.log(linesWrapper);
                     linesWrapper.pilotLine.y = evt.offsetY;
-                    draw(linesWrapper,vruler,ctx);
+                    draw(linesWrapper, vruler, ctx);
                 }
             }
         }
@@ -140,17 +140,25 @@ exports.onMouseUp = function (evt) {
     }
 };
 
-const paintDisplayValueDefault = function(y,vruler,ctx) {
+const paintDisplayValueDefault = function (y, vruler, ctx) {
     const x2 = vruler.w - x1;
     const displayValue = pixToValue(vruler, y);
     paint(x2, y, displayValue, ctx);
 }
 
+exports.redraw = function (ctx) {
+    return function (vruler) {
+        return function () {
+            ctx.clearRect(0, 0, vruler.w, vruler.h);
+        }
+    };
+};
+
 exports.createLine = function (ctx) {
     return function (vruler) {
         return function () {
             const y = vruler.h * Math.random();
-           paintDisplayValueDefault(y, vruler, ctx);
+            paintDisplayValueDefault(y, vruler, ctx);
             return { y: y, draggable: true, selected: false };
         };
     };

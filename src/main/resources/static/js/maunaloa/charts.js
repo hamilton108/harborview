@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function () {
         //const myChart = new Chart(myCanvases, levelLines);
         app.ports.drawCanvas.subscribe(cfg => {
             if (unlistener !== null) {
-                unlistener(1);
+                unlistener(1)();
             }
             console.log(cfg);
             scrap.clear();

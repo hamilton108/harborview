@@ -76,6 +76,8 @@ foreign import onMouseDrag :: Event.Event -> Lines -> Context2D -> VRuler -> Eff
 
 foreign import onMouseUp :: Event.Event -> Lines -> Effect Unit
 
+foreign import redraw :: Context2D -> VRuler -> Effect Line
+
 
 
 instance showLine :: Show Line where
@@ -161,6 +163,7 @@ unlisten (EventListenerInfo {target,listener,eventType}) =
 
 unlistener :: EventListenerRef -> Int -> Effect Unit
 unlistener elr dummy =
+    -- Ref.modify_ (\_ -> initLines) lref *>
     Ref.read elr >>= \elrx -> 
         Traversable.traverse_ unlisten elrx
 
@@ -237,12 +240,17 @@ initEvents vruler chartLevel =
             Nothing ->
                 pure (\t -> pure unit) 
             Just context1 ->
+                let 
+                    ce = context1.canvasContext  
+                in
+                Canvas.getContext2D ce >>= \ctx ->
                 eventListenerRef >>= \elr ->
                 linesRef >>= \lir -> 
-                    initEvent (buttonClick lir context1.canvasContext vruler) context1.buttonElement (EventType "click") elr *>
+                    redraw ctx vruler *>
+                    initEvent (buttonClick lir ce vruler) context1.buttonElement (EventType "click") elr *>
                     initEvent (mouseEventDown lir) context1.canvasElement (EventType "mousedown") elr *>
-                    initEvent (mouseEventDrag lir context1.canvasContext vruler) context1.canvasElement (EventType "mousemove") elr *>
-                    initEvent (mouseEventUp lir context1.canvasContext vruler) context1.canvasElement (EventType "mouseup") elr *>
+                    initEvent (mouseEventDrag lir ce vruler) context1.canvasElement (EventType "mousemove") elr *>
+                    initEvent (mouseEventUp lir ce vruler) context1.canvasElement (EventType "mouseup") elr *>
                     pure (unlistener elr)
 
 
@@ -289,7 +297,6 @@ defaultEventHandling :: Event.Event -> Effect Unit
 defaultEventHandling event = 
     Event.stopPropagation event *>
     Event.preventDefault event 
-
 
 addLine :: Line -> Lines -> Lines
 addLine newLine (Lines l@{lines}) = 
