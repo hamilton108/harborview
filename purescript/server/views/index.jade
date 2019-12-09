@@ -1,5 +1,8 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+    canvas#levellines-1(width='1200', height='600', style='border: 1px solid black; display: block; margin: auto;')
+    button#addLevel-1 Add Level Line
+    button#remove-events Remove event listeners
+    script(type='text/javascript', src='/js/ps-charts.js')
+    script(type='text/javascript', src='/js/main.js')
