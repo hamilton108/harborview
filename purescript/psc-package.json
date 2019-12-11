@@ -1,6 +1,6 @@
 {
   "name": "pureuser",
-  "set": "psc-0.13.4",
+  "set": "psc-0.13.5",
   "source": "https://github.com/purescript/package-sets.git",
   "depends": [
     "arrays",
@@ -20,6 +20,7 @@
     "web-events",
     "web-dom",
     "web-html",
-    "refs"
+    "refs",
+    "affjax"
   ]
 }

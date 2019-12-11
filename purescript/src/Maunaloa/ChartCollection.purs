@@ -33,6 +33,7 @@ newtype ChartMapping = ChartMapping
     , chartHeight :: ChartHeight 
     , levelCanvasId :: HtmlId
     , addLevelId :: HtmlId
+    , fetchLevelId :: HtmlId
     }
 
 instance showChartMapping :: Show ChartMapping where
@@ -49,14 +50,15 @@ instance showChartCollection :: Show ChartCollection where
 globalChartWidth :: ChartWidth
 globalChartWidth = ChartWidth 1310.0
 
-mappingToChartLevel :: HtmlId -> HtmlId -> Maybe C.ChartLevel 
-mappingToChartLevel caId@(HtmlId caId1) addId = 
+mappingToChartLevel :: HtmlId -> HtmlId -> HtmlId -> Maybe C.ChartLevel 
+mappingToChartLevel caId@(HtmlId caId1) addId fetchId = 
     if length caId1 == 0 then
         Nothing
     else
         Just
         { levelCanvasId: caId 
         , addLevelId: addId 
+        , fetchLevelId: fetchId 
         }
 
 
@@ -70,9 +72,10 @@ fromMappings mappings value =
             , canvasId
             , chartHeight
             , levelCanvasId 
-            , addLevelId}) = 
+            , addLevelId
+            , fetchLevelId}) = 
             let 
-                chartLevel = mappingToChartLevel levelCanvasId addLevelId
+                chartLevel = mappingToChartLevel levelCanvasId addLevelId fetchLevelId
             in
             C.readChart chartId canvasId globalChartWidth chartHeight chartLevel value 
     in

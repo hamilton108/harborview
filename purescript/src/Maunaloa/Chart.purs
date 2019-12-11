@@ -34,6 +34,7 @@ instance showChartId :: Show ChartId where
 type ChartLevel = 
     { levelCanvasId :: HtmlId
     , addLevelId :: HtmlId
+    , fetchLevelId :: HtmlId
     }
 
 newtype Chart = 

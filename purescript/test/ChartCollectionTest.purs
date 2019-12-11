@@ -20,27 +20,29 @@ import Maunaloa.Common
 
 import Test.Common as TC 
 
-chartMapping :: HtmlId -> HtmlId -> ChartCollection.ChartMapping
-chartMapping levelCanvasId addLevelId = 
+chartMapping :: HtmlId -> HtmlId -> HtmlId -> ChartCollection.ChartMapping
+chartMapping levelCanvasId addLevelId fetchLevelId = 
     ChartCollection.ChartMapping 
     { chartId: Chart.ChartId "chart"
     , canvasId: HtmlId "test-canvasId"
     , chartHeight: ChartHeight 500.0
     , levelCanvasId: levelCanvasId 
     , addLevelId: addLevelId 
+    , fetchLevelId: fetchLevelId 
     }
 
 asChartLevel :: ChartCollection.ChartMapping -> Chart.ChartLevel
 asChartLevel (ChartCollection.ChartMapping m) = 
     { levelCanvasId: m.levelCanvasId
     , addLevelId: m.addLevelId
+    , fetchLevelId: m.fetchLevelId 
     } 
 
 chartMappingsWithoutChartLevel :: ChartCollection.ChartMappings 
-chartMappingsWithoutChartLevel = [chartMapping (HtmlId "") (HtmlId "")]
+chartMappingsWithoutChartLevel = [chartMapping (HtmlId "") (HtmlId "") (HtmlId "")]
      
 chartMappingWithChartLevel :: ChartCollection.ChartMapping
-chartMappingWithChartLevel = chartMapping (HtmlId "level-canvasid") (HtmlId "add-level-id")
+chartMappingWithChartLevel = chartMapping (HtmlId "level-canvasid") (HtmlId "add-level-id") (HtmlId "fetch-level-id")
 
 chartMappingsWithChartLevel :: ChartCollection.ChartMappings 
 chartMappingsWithChartLevel = [chartMappingWithChartLevel]

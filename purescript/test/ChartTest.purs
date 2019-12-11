@@ -62,6 +62,7 @@ chartLevel :: C.ChartLevel
 chartLevel = 
     { levelCanvasId: HtmlId "canvasId"
     , addLevelId: HtmlId "levelId"
+    , fetchLevelId: HtmlId "fetchLevelId"
     }
 
   

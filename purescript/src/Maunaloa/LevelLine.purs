@@ -123,7 +123,8 @@ type EventListenerRef = Ref.Ref EventListeners
 type HtmlContext = 
     { canvasContext :: CanvasElement --Canvas.Context2D
     , canvasElement :: Element
-    , buttonElement :: Element
+    , addLevelLineBtn :: Element
+    , fetchLevelLinesBtn :: Element
     }
 
 eventListenerRef :: Effect EventListenerRef
@@ -204,24 +205,27 @@ mouseEventUp lref ce vruler evt =
     Ref.read lref >>= \lxx -> 
     onMouseUp evt lxx 
 
-getHtmlContext1 :: Maybe Element -> Maybe Element -> Maybe CanvasElement -> Maybe HtmlContext
-getHtmlContext1 canvas button ctx = 
+getHtmlContext1 :: Maybe Element -> Maybe Element -> Maybe Element -> Maybe CanvasElement -> Maybe HtmlContext
+getHtmlContext1 canvas addLlBtn fetchLlBtn ctx = 
     canvas >>= \canvas1 ->
-        button >>= \button1 ->
-            ctx >>= \ctx1 ->
-                Just
-                { canvasContext: ctx1 
-                , canvasElement: canvas1 
-                , buttonElement: button1 
-                }
+    addLlBtn >>= \addLlBtn1 ->
+    fetchLlBtn >>= \fetchLlBtn1 ->
+    ctx >>= \ctx1 ->
+        Just
+        { canvasContext: ctx1 
+        , canvasElement: canvas1 
+        , addLevelLineBtn : addLlBtn1
+        , fetchLevelLinesBtn : fetchLlBtn1
+        }
 
 getHtmlContext :: ChartLevel -> Effect (Maybe HtmlContext)
-getHtmlContext {levelCanvasId: (HtmlId levelCanvasId1), addLevelId: (HtmlId addLevelId1)} =
+getHtmlContext {levelCanvasId: (HtmlId levelCanvasId1), addLevelId: (HtmlId addLevelId1), fetchLevelId: (HtmlId fetchLevelId1)} =
     getDoc >>= \doc ->
         getElementById levelCanvasId1 doc >>= \canvasElement ->
-            getElementById addLevelId1 doc >>= \buttonElement ->
-                Canvas.getCanvasElementById levelCanvasId1 >>= \canvas ->
-                    pure $ getHtmlContext1 canvasElement buttonElement canvas 
+        getElementById addLevelId1 doc >>= \addLevelId2 ->
+        getElementById fetchLevelId1 doc >>= \fetchLevelId2 ->
+        Canvas.getCanvasElementById levelCanvasId1 >>= \canvas ->
+        pure $ getHtmlContext1 canvasElement addLevelId2 fetchLevelId2 canvas 
 
 
 initEvent :: (Event.Event -> Effect Unit) -> Element -> EventType -> EventListenerRef -> Effect Unit
@@ -247,7 +251,7 @@ initEvents vruler chartLevel =
                 eventListenerRef >>= \elr ->
                 linesRef >>= \lir -> 
                     redraw ctx vruler *>
-                    initEvent (buttonClick lir ce vruler) context1.buttonElement (EventType "click") elr *>
+                    initEvent (buttonClick lir ce vruler) context1.addLevelLineBtn (EventType "click") elr *>
                     initEvent (mouseEventDown lir) context1.canvasElement (EventType "mousedown") elr *>
                     initEvent (mouseEventDrag lir ce vruler) context1.canvasElement (EventType "mousemove") elr *>
                     initEvent (mouseEventUp lir ce vruler) context1.canvasElement (EventType "mouseup") elr *>
