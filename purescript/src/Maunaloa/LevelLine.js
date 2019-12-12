@@ -157,6 +157,7 @@ exports.redraw = function (ctx) {
 exports.createLine = function (ctx) {
     return function (vruler) {
         return function () {
+            console.log("createLine...");
             const y = vruler.h * Math.random();
             paintDisplayValueDefault(y, vruler, ctx);
             return { y: y, draggable: true, selected: false };

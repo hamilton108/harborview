@@ -168,14 +168,19 @@ unlistener elr dummy =
     Ref.read elr >>= \elrx -> 
         Traversable.traverse_ unlisten elrx
 
-buttonClick :: LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Unit
-buttonClick lref ce vruler evt =
+addLevelLineButtonClick :: LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Unit
+addLevelLineButtonClick lref ce vruler evt =
     defaultEventHandling evt *>
     Canvas.getContext2D ce >>= \ctx ->
         createLine ctx vruler >>= \newLine ->
             Ref.modify_ (addLine newLine) lref *>
                 Ref.read lref >>= \lxx -> 
                     logShow lxx 
+
+fetchLevelLineButtonClick :: LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Unit
+fetchLevelLineButtonClick lref ce vruler evt =
+    logShow "fetcing levellines..."
+
 
 mouseEventDown :: LinesRef -> Event.Event -> Effect Unit
 mouseEventDown lref evt = 
@@ -251,7 +256,8 @@ initEvents vruler chartLevel =
                 eventListenerRef >>= \elr ->
                 linesRef >>= \lir -> 
                     redraw ctx vruler *>
-                    initEvent (buttonClick lir ce vruler) context1.addLevelLineBtn (EventType "click") elr *>
+                    initEvent (addLevelLineButtonClick lir ce vruler) context1.addLevelLineBtn (EventType "click") elr *>
+                    initEvent (fetchLevelLineButtonClick lir ce vruler) context1.fetchLevelLinesBtn (EventType "click") elr *>
                     initEvent (mouseEventDown lir) context1.canvasElement (EventType "mousedown") elr *>
                     initEvent (mouseEventDrag lir ce vruler) context1.canvasElement (EventType "mousemove") elr *>
                     initEvent (mouseEventUp lir ce vruler) context1.canvasElement (EventType "mouseup") elr *>
