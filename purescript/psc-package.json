@@ -21,6 +21,7 @@
     "web-dom",
     "web-html",
     "refs",
-    "affjax"
+    "affjax",
+    "aff"
   ]
 }

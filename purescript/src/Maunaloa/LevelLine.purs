@@ -1,4 +1,4 @@
-module Maunaloa.LevelLine (initEvents) where
+module Maunaloa.LevelLine (initEvents,fetchLevelLines ) where
 
 import Prelude
 import Data.Maybe (Maybe(..))
@@ -6,8 +6,13 @@ import Data.Maybe (Maybe(..))
 --import Data.List ((:)) 
 --import Data.Array as Array
 import Data.Array ((:)) 
+import Data.Either (Either(..))
 import Effect (Effect)
+import Effect.Class (liftEffect)
 import Effect.Console (logShow)
+import Effect.Aff as Aff
+import Affjax as Affjax
+import Affjax.ResponseFormat as ResponseFormat
 import Data.Traversable as Traversable
 
 import Graphics.Canvas as Canvas 
@@ -22,6 +27,8 @@ import Web.DOM.Element (toEventTarget,Element)
 import Web.HTML as HTML
 import Web.HTML.Window as Window
 import Web.HTML.HTMLDocument as HTMLDocument
+
+import Data.Argonaut.Core as Argonaut
 
 import Maunaloa.Common (HtmlId(..))
 import Maunaloa.VRuler (VRuler)
@@ -135,29 +142,6 @@ addEventListenerRef :: EventListenerRef -> EventListenerInfo -> Effect Unit
 addEventListenerRef lref listener = 
     Ref.modify_ (\listeners -> listener : listeners) lref
 
-{-
-initMouseEvents :: VRuler -> Element -> EventListenerRef -> Effect Unit
-initMouseEvents vruler target elr = 
-    linesRef >>= \lir -> 
-        EventTarget.eventListener (mouseEventAddLine vruler lir) >>= \me1 -> 
-            let
-                info = EventListenerInfo {target: target, listener: me1, eventType: EventType "mouseup"}
-            in 
-            EventTarget.addEventListener (EventType "mouseup") me1 false (toEventTarget target) *>
-            addEventListenerRef elr info 
-
-initButtonEvent :: VRuler -> Element -> EventListenerRef -> Effect Unit
-initButtonEvent vruler button elr = 
-    logShow "initButtonEvent" *>
-    linesRef >>= \lir -> 
-        EventTarget.eventListener (buttonEventAddLine vruler lir) >>= \me1 -> 
-            let
-                info = EventListenerInfo {target: button, listener: me1, eventType: EventType "click"}
-            in 
-            EventTarget.addEventListener (EventType "click") me1 false (toEventTarget button) *>
-            addEventListenerRef elr info 
--}
-
 unlisten :: EventListenerInfo -> Effect Unit
 unlisten (EventListenerInfo {target,listener,eventType}) = 
     EventTarget.removeEventListener eventType listener false (toEventTarget target)
@@ -177,9 +161,26 @@ addLevelLineButtonClick lref ce vruler evt =
                 Ref.read lref >>= \lxx -> 
                     logShow lxx 
 
+fetchLevelLines :: Effect Unit
+fetchLevelLines = Aff.launchAff_ do
+    res <- Affjax.get ResponseFormat.json "http://172.17.0.4:3000/risclines/3"
+    case res of  
+        Left err -> 
+            liftEffect $ logShow "NOPE!"
+        Right response -> 
+            liftEffect $ logShow $ Argonaut.stringify (response.body)
+
 fetchLevelLineButtonClick :: LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Unit
-fetchLevelLineButtonClick lref ce vruler evt =
-    logShow "fetcing levellines..."
+fetchLevelLineButtonClick lref ce vruler evt = 
+    fetchLevelLines 
+    
+{-
+    Aff.launchAff do
+    res <- Affjax.get ResponseFormat.json "http://jsonplaceholder.typicode.com/todos"
+    liftEffect $ pure "fd"
+    --liftEffect $ logShow $ "GET /api response: " <> res.response
+    --liftEffect $ logShow "Yep"
+-}
 
 
 mouseEventDown :: LinesRef -> Event.Event -> Effect Unit
@@ -262,46 +263,6 @@ initEvents vruler chartLevel =
                     initEvent (mouseEventDrag lir ce vruler) context1.canvasElement (EventType "mousemove") elr *>
                     initEvent (mouseEventUp lir ce vruler) context1.canvasElement (EventType "mouseup") elr *>
                     pure (unlistener elr)
-
-
-{-
-initEvents :: VRuler -> ChartLevel -> Effect (Int -> Effect Unit)
-initEvents vruler {levelCanvasId: (HtmlId levelCanvasId1),addLevelId: (HtmlId addLevelId1)} =
-    logShow "initEvents" *>
-    getDoc >>= \doc ->
-        getElementById levelCanvasId1 doc >>= \target ->
-            case target of 
-                Nothing -> 
-                    pure (\t -> pure unit) 
-                Just target1 ->
-                    getElementById addLevelId1 doc >>= \button ->
-                        case button of 
-                            Nothing -> 
-                                pure (\t -> pure unit) 
-                            Just button1 ->
-                                EventTarget.eventListener (dummyEvent target1 vruler) >>= \me1 -> 
-                                    EventTarget.addEventListener (EventType "click") me1 false (toEventTarget button1) *>
-                                    pure (\t -> pure unit) 
-
-xinitEvents :: VRuler -> ChartLevel -> Effect (Int -> Effect Unit)
-xinitEvents vruler {levelCanvasId: (HtmlId levelCanvasId1),addLevelId: (HtmlId addLevelId1)} =
-    logShow "initEvents" *>
-    getDoc >>= \doc ->
-        getElementById levelCanvasId1 doc >>= \target ->
-            case target of 
-                Nothing -> 
-                    pure (\t -> pure unit) 
-                Just target1 ->
-                    getElementById addLevelId1 doc >>= \button ->
-                        case target of 
-                            Nothing -> 
-                                pure (\t -> pure unit) 
-                            Just button1 ->
-                                eventListenerRef >>= \elr ->
-                                    initButtonEvent vruler button1 elr *>
-                                    initMouseEvents vruler target1 elr *>
-                                        pure (unlistener elr)
--}
 
 defaultEventHandling :: Event.Event -> Effect Unit
 defaultEventHandling event = 
