@@ -168,8 +168,8 @@ chartWindow dropAmt takeAmt c scaling doNormalizeLines =
         c.numVlines
 
 
-chartInfoWindow : T.Drop -> T.Take -> T.ChartType -> T.ChartInfo -> T.ChartInfoWindow
-chartInfoWindow dropAmt takeAmt chartType ci =
+chartInfoWindow : T.Ticker -> T.Drop -> T.Take -> T.ChartType -> T.ChartInfo -> T.ChartInfoWindow
+chartInfoWindow ticker dropAmt takeAmt chartType ci =
     let
         incMonths =
             case chartType of

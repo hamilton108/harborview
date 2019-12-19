@@ -62,16 +62,16 @@ update msg model =
             in
             ( { model | selectedTicker = Just s }, C.fetchCharts curTick model.chartType False )
 
-        ChartsFetched (Ok chartInfo) ->
+        ChartsFetched ticker (Ok chartInfo) ->
             let
                 ciWin =
-                    ChartCommon.chartInfoWindow model.dropAmount model.takeAmount model.chartType chartInfo
+                    ChartCommon.chartInfoWindow ticker model.dropAmount model.takeAmount model.chartType chartInfo
             in
             ( { model | chartInfo = Just chartInfo, curValueRange = Just ciWin.chart.valueRange }
             , drawCanvas ciWin
             )
 
-        ChartsFetched (Err s) ->
+        ChartsFetched _ (Err s) ->
             ( DLG.errorAlert "Error" "ChartsFetched Error: " s model, Cmd.none )
 
         --ToggleResetCache ->
@@ -151,6 +151,6 @@ shift model newDrop =
         Just chartInfo ->
             let
                 ciWin =
-                    ChartCommon.chartInfoWindow newDrop model.takeAmount model.chartType chartInfo
+                    ChartCommon.chartInfoWindow NoTicker newDrop model.takeAmount model.chartType chartInfo
             in
             ( { model | dropAmount = newDrop }, drawCanvas ciWin )

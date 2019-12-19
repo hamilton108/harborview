@@ -12,6 +12,8 @@ feed/
 out/
 tmp/
 elm-charts.js
+elm-charts.tmp.js
+elm-charts.min.js
 elm-options.js
 elm-stuff/
 elm-optionpurchases.js
