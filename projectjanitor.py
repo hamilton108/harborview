@@ -67,5 +67,4 @@ if __name__ == '__main__':
     else:
         copy_templates()
         copy_static()
-        copy_static()
 

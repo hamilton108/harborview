@@ -1,6 +1,6 @@
 import { Chart } from "./canvas/chart.js";
 import { Scrapbook } from "./canvas/scrapbook.js";
-import { LevelLines } from "./canvas/levelline.js";
+//import { LevelLines } from "./canvas/levelline.js";
 
 document.addEventListener("DOMContentLoaded", function () {
     const canvases = {
@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
             VOLUME: 'vol-1',
             OSC: 'osc-1',
             LEVEL_LINES: 'levellines-1',
-            BTN_LEVELLINE: "btn-levelline-1"
+            BTN_LEVELLINE: "btn-levelline-1",
+            BTN_RISCLINES: "btn-persistent-levelline-1"
         },
         WEEK: {
             MAIN_CHART: 'chart-2',
@@ -137,10 +138,11 @@ document.addEventListener("DOMContentLoaded", function () {
     };
     const toChartMappings = (c) => {
         const mainChart = {
-            chartId: "chart", canvasId: c.MAIN_CHART, chartHeight: 500.0, levelCanvasId: c.LEVEL_LINES, addLevelId: c.BTN_LEVELLINE
+            chartId: "chart", canvasId: c.MAIN_CHART, chartHeight: 500.0, 
+            levelCanvasId: c.LEVEL_LINES, addLevelId: c.BTN_LEVELLINE, fetchLevelId: c.BTN_RISCLINES
         };
         const osc = {
-            chartId: "chart2", canvasId: c.OSC, chartHeight: 200.0, levelCanvasId: "", addLevelId: ""
+            chartId: "chart2", canvasId: c.OSC, chartHeight: 200.0, levelCanvasId: "", addLevelId: "", fetchLevelId: ""
         };
         return [mainChart, osc];
     };
@@ -179,9 +181,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const btnClear = document.getElementById(config.BTN_CLEAR);
         btnClear.onclick = () => {
-            scrap.clear();
             //===>>> levelLines.clearCanvas();
         };
+        scrap.clear();
         const btnSave = document.getElementById(config.BTN_SAVE);
         btnSave.onclick = () => {
             const blobCanvases = [];
