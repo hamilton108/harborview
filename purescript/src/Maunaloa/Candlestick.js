@@ -4,7 +4,7 @@ exports.fi_paint = function (xaxis) {
   return function (candlestix) {
     return function (ctx) {
       return function () {
-        console.log(candlestix);
+        //console.log(candlestix);
         ctx.strokeStyle = "#000000";
         ctx.fillStyle = "#ffaa00";
         ctx.lineWidth = 0.5;

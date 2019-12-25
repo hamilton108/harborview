@@ -1,0 +1,5 @@
+#!/bin/bash
+
+code --disable-gpu harborview.code-workspace
+
+exit 0

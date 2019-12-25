@@ -1,20 +1,5 @@
 "use strict";
 
-/*
-exports.createLine = function (vruler) {
-    return function (evt) {
-        return function () {
-            console.log(evt);
-            console.log(vruler);
-            const cur_y = evt.offsetY;
-            const valY = pixToValue(vruler, cur_y);
-            console.log("Value: " + valY);
-            return { y: cur_y, draggable: true };
-        };
-    };
-};
-*/
-
 const x1 = 45.0;
 
 const createPilotLine = function (y) {
@@ -51,7 +36,6 @@ const closestLine = function (lines, y) {
 const draw = function (linesWrapper, vruler, ctx) {
     ctx.clearRect(0, 0, vruler.w, vruler.h);
 
-
     const lines = linesWrapper.lines;
     for (var i = 0; i < lines.length; ++i) {
         const curLine = lines[i];
@@ -61,29 +45,6 @@ const draw = function (linesWrapper, vruler, ctx) {
         paintDisplayValueDefault(curLine.y, vruler, ctx);
     }
     paintDisplayValueDefault(linesWrapper.pilotLine.y, vruler, ctx);
-
-    /*
-    const len = this.lines.length;
-    for (let i = 0; i < len; ++i) {
-        this.lines[i].draw();
-    }
-    // draw markers if a line is being dragged
-    if (this.nearest) {
-        // point on line nearest to mouse
-        ctx.beginPath();
-        ctx.arc(this.nearest.pt.x, this.nearest.pt.y, 5, 0, Math.PI * 2);
-        ctx.strokeStyle = 'red';
-        ctx.stroke();
-    }
-    if (this._spot) {
-        const lineChart = MAUNALOA.lineChart(this.hruler, this.vruler, ctx);
-        lineChart.drawCandlestick(this._spot);
-        ctx.font = "16px Arial";
-        ctx.fillStyle = "crimson";
-        const curTm = new Date(this._spot.tm);
-        ctx.fillText("Spot: " + curTm.toGMTString(), 1000, 50);
-    }
-    */
 };
 
 exports.onMouseDown = function (evt) {
@@ -104,7 +65,7 @@ exports.onMouseDown = function (evt) {
                     linesWrapper.pilotLine = cl[1];
                 }
             }
-            console.log(lines);
+            //console.log(lines);
         }
     }
 };
@@ -114,7 +75,7 @@ exports.onMouseDrag = function (evt) {
         return function (ctx) {
             return function (vruler) {
                 return function () {
-                    console.log(linesWrapper);
+                    //console.log(linesWrapper);
                     linesWrapper.pilotLine.y = evt.offsetY;
                     draw(linesWrapper, vruler, ctx);
                 }
@@ -157,7 +118,7 @@ exports.redraw = function (ctx) {
 exports.createLine = function (ctx) {
     return function (vruler) {
         return function () {
-            console.log("createLine...");
+            //console.log("createLine...");
             const y = vruler.h * Math.random();
             paintDisplayValueDefault(y, vruler, ctx);
             return { y: y, draggable: true, selected: false };

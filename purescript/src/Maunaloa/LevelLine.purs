@@ -85,8 +85,6 @@ foreign import onMouseUp :: Event.Event -> Lines -> Effect Unit
 
 foreign import redraw :: Context2D -> VRuler -> Effect Line
 
-
-
 instance showLine :: Show Line where
     show (Line v) = "Line: " <> show v 
 
@@ -156,10 +154,10 @@ addLevelLineButtonClick :: LinesRef -> CanvasElement -> VRuler -> Event.Event ->
 addLevelLineButtonClick lref ce vruler evt =
     defaultEventHandling evt *>
     Canvas.getContext2D ce >>= \ctx ->
-        createLine ctx vruler >>= \newLine ->
-            Ref.modify_ (addLine newLine) lref *>
-                Ref.read lref >>= \lxx -> 
-                    logShow lxx 
+    createLine ctx vruler >>= \newLine ->
+    Ref.modify_ (addLine newLine) lref *>
+    Ref.read lref >>= \lxx -> 
+    logShow lxx 
 
 fetchLevelLines :: Effect Unit
 fetchLevelLines = Aff.launchAff_ do
@@ -224,14 +222,24 @@ getHtmlContext1 canvas addLlBtn fetchLlBtn ctx =
         , fetchLevelLinesBtn : fetchLlBtn1
         }
 
+showElement :: String -> Maybe Element -> Effect Unit
+showElement desc el = 
+    case el of
+        Nothing -> logShow ("ERROR!: " <> desc)
+        Just _ -> logShow ("OK: " <> desc)
+
 getHtmlContext :: ChartLevel -> Effect (Maybe HtmlContext)
 getHtmlContext {levelCanvasId: (HtmlId levelCanvasId1), addLevelId: (HtmlId addLevelId1), fetchLevelId: (HtmlId fetchLevelId1)} =
     getDoc >>= \doc ->
         getElementById levelCanvasId1 doc >>= \canvasElement ->
+        showElement "canvasElement" canvasElement *>
         getElementById addLevelId1 doc >>= \addLevelId2 ->
+        showElement "addLevelId2" addLevelId2 *>
         getElementById fetchLevelId1 doc >>= \fetchLevelId2 ->
+        showElement "fetchLevelId2" fetchLevelId2 *>
         Canvas.getCanvasElementById levelCanvasId1 >>= \canvas ->
-        pure $ getHtmlContext1 canvasElement addLevelId2 fetchLevelId2 canvas 
+        --showElement "canvas" canvas *>
+        pure (getHtmlContext1 canvasElement addLevelId2 fetchLevelId2 canvas)
 
 
 initEvent :: (Event.Event -> Effect Unit) -> Element -> EventType -> EventListenerRef -> Effect Unit
@@ -248,6 +256,7 @@ initEvents vruler chartLevel =
     getHtmlContext chartLevel >>= \context ->
         case context of
             Nothing ->
+                logShow "ERROR! (initEvents) No getHtmlContext chartLevel!" *>
                 pure (\t -> pure unit) 
             Just context1 ->
                 let 

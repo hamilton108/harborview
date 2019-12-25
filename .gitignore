@@ -5,7 +5,7 @@ netfonds.properties
 .gradle
 target/
 build/
-purescript/dist/ps-charts.js
+ps-charts.js
 feed/
 *.log
 *.iml

@@ -10,7 +10,6 @@ import Partial.Unsafe (unsafePartial)
 import Effect (Effect)
 import Data.Array as Array
 
---import Effect.Console (logShow)
 
 import Maunaloa.Chart as C
 import Maunaloa.HRuler as H
@@ -21,6 +20,8 @@ import Maunaloa.Common
     )
 import Maunaloa.LevelLine as LevelLine
 
+
+import Effect.Console (logShow)
 
 newtype ChartCollection = ChartCollection 
     { charts :: Array C.Chart -- List C.Chart
@@ -120,7 +121,8 @@ levelLines charts =
     in
     case levelLine of 
         Nothing ->
-            pure $ \t -> pure unit
+            logShow "ERROR! (levelLines) No levelLine!" *>
+            pure ( \t -> pure unit )
         Just (C.Chart levelLine1) ->
             let 
                 caid = unsafePartial $ fromJust levelLine1.chartLevel

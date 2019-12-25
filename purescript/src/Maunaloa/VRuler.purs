@@ -28,6 +28,9 @@ newtype VRuler = VRuler {
     , padding :: Padding
 }
 
+instance showHRuler :: Show VRuler where
+  show (VRuler v) = "(VRuler " <> show v <> ")"
+
 derive instance eqVRuler :: Eq VRuler 
 
 {-
