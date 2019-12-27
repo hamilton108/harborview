@@ -222,23 +222,23 @@ getHtmlContext1 canvas addLlBtn fetchLlBtn ctx =
         , fetchLevelLinesBtn : fetchLlBtn1
         }
 
-showElement :: String -> Maybe Element -> Effect Unit
-showElement desc el = 
+validateMaybe :: forall a . String -> Maybe a -> Effect Unit
+validateMaybe desc el = 
     case el of
         Nothing -> logShow ("ERROR!: " <> desc)
-        Just _ -> logShow ("OK: " <> desc)
+        Just _ -> pure unit -- logShow ("OK: " <> desc)
 
 getHtmlContext :: ChartLevel -> Effect (Maybe HtmlContext)
 getHtmlContext {levelCanvasId: (HtmlId levelCanvasId1), addLevelId: (HtmlId addLevelId1), fetchLevelId: (HtmlId fetchLevelId1)} =
     getDoc >>= \doc ->
         getElementById levelCanvasId1 doc >>= \canvasElement ->
-        showElement "canvasElement" canvasElement *>
         getElementById addLevelId1 doc >>= \addLevelId2 ->
-        showElement "addLevelId2" addLevelId2 *>
         getElementById fetchLevelId1 doc >>= \fetchLevelId2 ->
-        showElement "fetchLevelId2" fetchLevelId2 *>
         Canvas.getCanvasElementById levelCanvasId1 >>= \canvas ->
-        --showElement "canvas" canvas *>
+        validateMaybe "canvasElement" canvasElement *>
+        validateMaybe "addLevelId2" addLevelId2 *>
+        validateMaybe "fetchLevelId2" fetchLevelId2 *>
+        validateMaybe "canvas" canvas *>
         pure (getHtmlContext1 canvasElement addLevelId2 fetchLevelId2 canvas)
 
 
