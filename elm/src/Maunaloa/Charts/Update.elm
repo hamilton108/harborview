@@ -1,19 +1,15 @@
 port module Maunaloa.Charts.Update exposing (update)
 
-import Common.Html as CH
 import Common.ModalDialog as DLG
-import Common.Select as CS
 import Maunaloa.Charts.ChartCommon as ChartCommon
 import Maunaloa.Charts.Commands as C
 import Maunaloa.Charts.Types
     exposing
-        ( ChartInfo
-        , ChartInfoWindow
+        ( ChartInfoWindow
         , ChartType(..)
         , Drop(..)
         , Model
         , Msg(..)
-        , RiscLines
         , RiscLinesJs
         , Spot
         , Take(..)

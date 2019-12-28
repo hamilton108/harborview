@@ -30,9 +30,10 @@ chartDecoder numVlines =
         |> JP.hardcoded numVlines
 
 
-chartInfoDecoder : Decoder T.ChartInfo
-chartInfoDecoder =
+chartInfoDecoder : String -> Decoder T.ChartInfo
+chartInfoDecoder ticker =
     succeed T.ChartInfo
+        |> JP.hardcoded ticker
         |> JP.required "minDx" int
         |> JP.required "xAxis" (list int)
         |> JP.required "chart" (chartDecoder 10)

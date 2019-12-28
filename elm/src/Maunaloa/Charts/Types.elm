@@ -90,7 +90,8 @@ type alias ChartInfoWindow =
 
 
 type alias ChartInfo =
-    { minDx : UnixTime
+    { ticker : String
+    , minDx : UnixTime
     , xAxis : List UnixTime
     , chart : Chart
     , chart2 : Maybe Chart

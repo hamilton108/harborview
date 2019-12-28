@@ -7,10 +7,7 @@
 			"path": "/home/rcs/opt/java/harborview/src/main/resources/static/js"
 		},
 		{
-			"path": "/home/rcs/opt/github/purescript/purescript-sodium"
-		},
-		{
-			"path": "/home/rcs/opt/github/purescript/frpong"
+			"path": "/home/rcs/opt/java/harborview/elm"
 		}
 	],
 	"settings": {}
