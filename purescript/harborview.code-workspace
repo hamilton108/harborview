@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "/home/rcs/opt/java/harborview/elm"
+		},
+		{
+			"path": "/home/rcs/opt/java/harborview/jsdeploy"
 		}
 	],
 	"settings": {}
