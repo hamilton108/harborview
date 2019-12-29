@@ -15,6 +15,7 @@ import Maunaloa.Chart as C
 import Maunaloa.HRuler as H
 import Maunaloa.Common 
     ( HtmlId(..)
+    , Ticker
     , ChartWidth(..)
     , ChartHeight
     )
@@ -29,7 +30,8 @@ newtype ChartCollection = ChartCollection
     }
 
 newtype ChartMapping = ChartMapping 
-    { chartId :: C.ChartId
+    { ticker ::Ticker 
+    , chartId :: C.ChartId
     , canvasId :: HtmlId
     , chartHeight :: ChartHeight 
     , levelCanvasId :: HtmlId
@@ -69,7 +71,8 @@ fromMappings mappings value =
     let
         tfn :: ChartMapping -> F C.Chart
         tfn (ChartMapping 
-            { chartId
+            { ticker
+            , chartId
             , canvasId
             , chartHeight
             , levelCanvasId 

@@ -171,6 +171,9 @@ chartWindow dropAmt takeAmt c scaling doNormalizeLines =
 chartInfoWindow : T.Ticker -> T.Drop -> T.Take -> T.ChartType -> T.ChartInfo -> T.ChartInfoWindow
 chartInfoWindow ticker dropAmt takeAmt chartType ci =
     let
+        ticker1 = case ticker of 
+            T.NoTicker -> "-1"
+            T.Ticker t -> t
         incMonths =
             case chartType of
                 T.DayChart ->
@@ -208,4 +211,4 @@ chartInfoWindow ticker dropAmt takeAmt chartType ci =
                         Just (chartWindow dropAmt takeAmt c3 (T.Scaling 1.0) False)
                     )
     in
-    T.ChartInfoWindow minDx_ xAxis_ chw chw2 chw3 strokes incMonths
+    T.ChartInfoWindow ticker1 minDx_ xAxis_ chw chw2 chw3 strokes incMonths

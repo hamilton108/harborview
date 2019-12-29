@@ -54,7 +54,13 @@ instance showChartHeight :: Show ChartHeight where
 
 derive instance eqChartHeight :: Eq ChartHeight
 
-------------------------- CanvasId ------------------------- 
+------------------------- Ticker ------------------------- 
+newtype Ticker = Ticker String 
+
+instance showTicker :: Show Ticker where
+  show (Ticker x) = "(Ticker: " <> x <> ")"
+
+------------------------- HtmlId ------------------------- 
 newtype HtmlId = HtmlId String 
 
 instance showHtmlId :: Show HtmlId where

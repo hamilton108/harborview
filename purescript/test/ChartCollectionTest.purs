@@ -15,6 +15,7 @@ import Maunaloa.Chart as Chart
 import Maunaloa.ChartCollection as ChartCollection
 import Maunaloa.Common 
     ( HtmlId(..)
+    , Ticker(..)
     , ChartHeight(..)
     )
 
@@ -23,7 +24,8 @@ import Test.Common as TC
 chartMapping :: HtmlId -> HtmlId -> HtmlId -> ChartCollection.ChartMapping
 chartMapping levelCanvasId addLevelId fetchLevelId = 
     ChartCollection.ChartMapping 
-    { chartId: Chart.ChartId "chart"
+    { ticker: Ticker "1"
+    , chartId: Chart.ChartId "chart"
     , canvasId: HtmlId "test-canvasId"
     , chartHeight: ChartHeight 500.0
     , levelCanvasId: levelCanvasId 

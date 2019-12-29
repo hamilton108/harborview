@@ -79,7 +79,8 @@ type alias Chart =
 
 
 type alias ChartInfoWindow =
-    { startdate : UnixTime
+    { ticker : String
+    , startdate : UnixTime
     , xaxis : List UnixTime
     , chart : Chart
     , chart2 : Maybe Chart

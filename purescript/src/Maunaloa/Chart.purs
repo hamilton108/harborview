@@ -16,6 +16,7 @@ import Maunaloa.Common
   , ChartWidth(..)
   , ChartHeight(..)
   , HtmlId(..)
+  , Ticker
   )
 import Maunaloa.HRuler as H
 import Maunaloa.VRuler as V
