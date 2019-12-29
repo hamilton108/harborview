@@ -131,12 +131,23 @@ def deploy(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='A tutorial of argparse!')
+    parser.add_argument("--bp",action="store_true",help="Build Purecript")
     parser.add_argument("--p",action="store_true",help="Purecript")
     parser.add_argument("--e",action="store_true",help="Elm")
-    args = parser.parse_args()
-    clean(args)
-    deploy(args)
+    parser.add_argument("--js",action="store_true",help="Standard Javascript")
 
+    args = parser.parse_args()
+
+    if args.bp == True:
+        ps_build()
+
+    if args.e == True or args.p == True:
+        print ("Elm")
+        clean(args)
+        deploy(args)
+
+    if args.js == True:
+        print ("Standard Javascript")
     # clean(ELM+PURESCRIPT)
     # deploy()
     # print(generate_md5_from_src(ELM_FILE_NAME))
