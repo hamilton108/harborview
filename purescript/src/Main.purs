@@ -12,6 +12,9 @@ import Maunaloa.ChartCollection as Collection
 
 import Util.Foreign as UF
 
+import Maunaloa.Elm (ChartInfoWindow)
+import Effect.Console (logShow)
+
 {-
 newtype Ax = Ax
   { a :: ChartHeight}
@@ -35,17 +38,23 @@ tryMes v axs =
  -}
 
 
-paint :: Collection.ChartMappings -> Foreign -> Effect (Int -> Effect Unit)
-paint mappings value =
-  let 
-    coll = runExcept $ Collection.readChartCollection mappings value 
-  in
-  case coll of 
-    Right coll1 -> 
-      Collection.paint coll1
-    Left e -> 
-      UF.logErrors e *>
-        pure (\t -> pure unit)
+paint :: Collection.ChartMappings -> ChartInfoWindow -> Effect (Int -> Effect Unit)
+paint mappings ciWin = 
+    logShow ciWin *> 
+    pure (\t -> pure unit)
+
+
+xpaint :: Collection.ChartMappings -> Foreign -> Effect (Int -> Effect Unit)
+xpaint mappings value =
+    let 
+        coll = runExcept $ Collection.readChartCollection mappings value 
+    in
+    case coll of 
+        Right coll1 -> 
+            Collection.paint coll1
+        Left e -> 
+            UF.logErrors e *>
+                pure (\t -> pure unit)
 
 --paintx :: Collection.ChartMappings -> Effect Unit
 --paintx mappings = 

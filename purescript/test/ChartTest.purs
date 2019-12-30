@@ -81,7 +81,7 @@ testChartSuite =
             let expVr = ValueRange { minVal: 10.0, maxVal: 35.0 }
             Assert.equal expVr vr
         test "readChart chart2 and chart3 are null" do
-            let chart = runExcept $ C.readChart (Ticker "1") cid canvId chartW chartH Nothing TC.demox 
+            let chart = runExcept $ C.readChart cid canvId chartW chartH Nothing TC.demox 
             let rchart = unsafePartial $ fromRight chart
             Assert.equal true $ isRight chart
             let rline = getLine rchart
@@ -89,7 +89,7 @@ testChartSuite =
             let result = Array.zipWith TC.moreOrLessEq rline eline
             Assert.equal [true,true,true,true,true] result
         test "readChart with ChartLevel" do
-            let chart = runExcept $ C.readChart (Ticker "1") cid canvId chartW chartH (Just chartLevel) TC.demox 
+            let chart = runExcept $ C.readChart cid canvId chartW chartH (Just chartLevel) TC.demox 
             let rchart = unsafePartial $ fromRight chart
             let cl = getChartLevel rchart
             Assert.equal chartLevel cl
