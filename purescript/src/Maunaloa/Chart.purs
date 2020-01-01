@@ -108,7 +108,7 @@ readChart (ChartId cid) caId w h chartLevel value =
         valueRange = valueRangeFor v1 
         curVruler = vruler valueRange w h
         linesToPix = map (L.lineToPix curVruler) l1 
-        cndlToPix = map (CNDL.candleToPix curVruler) c1
+        cndlToPix = [] --map (CNDL.candleToPix curVruler) c1
     in
     pure $ Chart 
             { lines: linesToPix

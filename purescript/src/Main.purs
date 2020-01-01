@@ -12,7 +12,7 @@ import Maunaloa.ChartCollection as Collection
 
 import Util.Foreign as UF
 
-import Maunaloa.Elm (ChartInfoWindow)
+import Maunaloa.ElmTypes (ChartInfoWindow)
 import Effect.Console (logShow)
 
 {-

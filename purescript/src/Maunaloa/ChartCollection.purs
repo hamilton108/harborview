@@ -53,6 +53,22 @@ instance showChartCollection :: Show ChartCollection where
 globalChartWidth :: ChartWidth
 globalChartWidth = ChartWidth 1310.0
 
+mappingToChartLevel :: ChartMapping -> Maybe C.ChartLevel 
+mappingToChartLevel (ChartMapping {levelCanvasId, addLevelId, fetchLevelId}) = 
+    let 
+        (HtmlId lcaid) = levelCanvasId
+    in
+    if length lcaid == 0 then
+        Nothing
+    else
+        Just
+        { levelCanvasId: levelCanvasId
+        , addLevelId: addLevelId
+        , fetchLevelId: fetchLevelId
+        }
+
+
+{--
 mappingToChartLevel :: HtmlId -> HtmlId -> HtmlId -> Maybe C.ChartLevel 
 mappingToChartLevel caId@(HtmlId caId1) addId fetchId = 
     if length caId1 == 0 then
@@ -63,14 +79,14 @@ mappingToChartLevel caId@(HtmlId caId1) addId fetchId =
         , addLevelId: addId 
         , fetchLevelId: fetchId 
         }
-
+--}
 
 
 fromMappings :: ChartMappings -> Foreign -> F (Array C.Chart)
 fromMappings mappings value =
     let
         tfn :: ChartMapping -> F C.Chart
-        tfn (ChartMapping 
+        tfn cm@(ChartMapping 
             { ticker
             , chartId
             , canvasId
@@ -79,7 +95,7 @@ fromMappings mappings value =
             , addLevelId
             , fetchLevelId}) = 
             let 
-                chartLevel = mappingToChartLevel levelCanvasId addLevelId fetchLevelId
+                chartLevel = mappingToChartLevel cm -- levelCanvasId addLevelId fetchLevelId
             in
             C.readChart chartId canvasId globalChartWidth chartHeight chartLevel value 
     in

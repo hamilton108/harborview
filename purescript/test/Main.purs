@@ -16,12 +16,12 @@ import Test.ElmTest (testTransformSuite)
 
 main :: Effect Unit
 main = runTest do
-    {--
     testChartSuite
     testCandlestickSuite
     testHRulerSuite
     testVRulerSuite
     testVRulerSuite
     testChartColletionSuite
-    --}
     testTransformSuite
+    {--
+    --}

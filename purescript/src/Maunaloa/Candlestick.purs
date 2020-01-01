@@ -15,6 +15,9 @@ import Maunaloa.Common (Xaxis)
 
 import Maunaloa.VRuler as V
 import Maunaloa.HRuler as H
+import Maunaloa.ElmTypes 
+  ( ElmCandlestick 
+  )
 
 foreign import fi_paint :: Xaxis -> Candlesticks -> Context2D -> Effect Unit 
 
@@ -32,8 +35,8 @@ derive instance eqCandlestick :: Eq Candlestick
 
 type Candlesticks = Array Candlestick
 
-candleToPix :: V.VRuler -> Candlestick -> Candlestick 
-candleToPix vr (Candlestick {o,h,l,c}) =  
+candleToPix :: V.VRuler -> ElmCandlestick -> Candlestick 
+candleToPix vr {o,h,l,c} =  
     let 
         po = V.valueToPix vr o
         ph = V.valueToPix vr h

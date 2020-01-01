@@ -5,7 +5,12 @@ import Test.Unit.Assert as Assert
 
 import Data.Array (length)
 import Data.Nullable (null,notNull)
-import Maunaloa.Elm (ElmChart,ElmCandlestick,ChartInfoWindow,transform)
+import Maunaloa.Elm (transform)
+import Maunaloa.ElmTypes
+    ( ElmChart
+    , ChartInfoWindow
+    )
+    
 import Maunaloa.ChartCollection (ChartCollection(..),ChartMappings,ChartMapping(..))
 import Maunaloa.HRuler (HRuler)
 import Maunaloa.Chart (ChartId(..))
@@ -158,4 +163,4 @@ testTransformSuite =
         test "transform" do
             let mappings = [chartMapping1,chartMapping3]
             let (ChartCollection result) = transform mappings ciwin
-            Assert.equal (length result.charts) 0
+            Assert.equal 2 (length result.charts) 
