@@ -197,8 +197,7 @@ chartInfoWindow ticker dropAmt takeAmt chartType ci =
         chw =
             chartWindow dropAmt takeAmt ci.chart (T.Scaling 1.05) False
 
-        chw2 = Nothing
-        chw2x =
+        chw2 =
             ci.chart2
                 |> Maybe.andThen
                     (\c2 ->

@@ -65,7 +65,11 @@ instance showChart :: Show Chart where
     show (Chart cx) = 
         "(Chart lines: " <> show cx.lines <> 
         ", candlesticks: " <> show cx.candlesticks <> 
-            ", canvasId: " <> show cx.canvasId <> ")"
+        ", canvasId: " <> show cx.canvasId <> 
+        ", vruler: " <> show cx.vruler <> 
+        ", w: " <> show cx.w <> 
+        ", h: " <> show cx.h <> 
+        ", chartLevel: " <> show cx.chartLevel <> ")"
 
 
 {-

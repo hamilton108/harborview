@@ -1,9 +1,14 @@
 module Test.ElmTest where
 
+import Prelude
+import Effect.Aff (Aff)
+import Effect.Class (liftEffect)
 import Test.Unit (TestSuite,suite,test)
+--import Test.Unit.Console (consoleLog,log)
 import Test.Unit.Assert as Assert
+import Data.Maybe (Maybe(..))
 
-import Data.Array (length)
+import Data.Array (length,head,tail)
 import Data.Nullable (null,notNull)
 import Maunaloa.Elm (transform)
 import Maunaloa.ElmTypes
@@ -11,6 +16,7 @@ import Maunaloa.ElmTypes
     , ChartInfoWindow
     )
     
+import Maunaloa.Chart (Chart)
 import Maunaloa.ChartCollection (ChartCollection(..),ChartMappings,ChartMapping(..))
 import Maunaloa.HRuler (HRuler)
 import Maunaloa.Chart (ChartId(..))
@@ -23,6 +29,8 @@ import Maunaloa.Common
     , HtmlId(..)
     , Ticker(..)
     )
+
+import Effect.Console (logShow)
 
 {--
 { chart: 
@@ -157,10 +165,36 @@ chartMapping3 =
     , fetchLevelId: HtmlId "fetchLevelId-3"
     }
 
-testTransformSuite :: TestSuite
-testTransformSuite = 
+
+showChart :: Maybe Chart -> Aff Unit
+showChart c = 
+    case c of 
+        Nothing -> 
+            liftEffect $ logShow "NOPE"
+        Just c1 ->
+            liftEffect $ logShow c1
+
+showChartArray :: Maybe (Array Chart) -> Aff Unit
+showChartArray car = 
+    case car of 
+        Nothing -> 
+            liftEffect $ logShow "NOPE"
+        Just car1 ->
+            showChart (head car1)
+
+testElmSuite :: TestSuite
+testElmSuite = 
     suite "testTransformSuite" do
         test "transform" do
             let mappings = [chartMapping1,chartMapping3]
             let (ChartCollection result) = transform mappings ciwin
+            {--
+            let c1 = head result.charts
+            showChart c1
+            let c2 = tail result.charts
+            showChartArray c2
+            --}
             Assert.equal 2 (length result.charts) 
+
+
+            

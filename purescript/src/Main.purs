@@ -13,6 +13,7 @@ import Maunaloa.ChartCollection as Collection
 import Util.Foreign as UF
 
 import Maunaloa.ElmTypes (ChartInfoWindow)
+import Maunaloa.Elm as Elm
 import Effect.Console (logShow)
 
 {-
@@ -39,13 +40,17 @@ tryMes v axs =
 
 
 paint :: Collection.ChartMappings -> ChartInfoWindow -> Effect (Int -> Effect Unit)
-paint mappings ciWin = 
-    logShow ciWin *> 
-    pure (\t -> pure unit)
+paint mappings ciwin = 
+    logShow ciwin *> 
+    let 
+        coll = Elm.transform mappings ciwin
+    in 
+    Collection.paint coll
 
 
-xpaint :: Collection.ChartMappings -> Foreign -> Effect (Int -> Effect Unit)
-xpaint mappings value =
+{--
+paint :: Collection.ChartMappings -> Foreign -> Effect (Int -> Effect Unit)
+paint mappings value =
     let 
         coll = runExcept $ Collection.readChartCollection mappings value 
     in
@@ -55,6 +60,7 @@ xpaint mappings value =
         Left e -> 
             UF.logErrors e *>
                 pure (\t -> pure unit)
+--}
 
 --paintx :: Collection.ChartMappings -> Effect Unit
 --paintx mappings = 

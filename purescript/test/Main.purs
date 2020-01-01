@@ -11,7 +11,7 @@ import Test.HRulerTest (testHRulerSuite)
 import Test.VRulerTest (testVRulerSuite)
 import Test.ChartTest (testChartSuite)
 import Test.ChartCollectionTest (testChartColletionSuite)
-import Test.ElmTest (testTransformSuite)
+import Test.ElmTest (testElmSuite)
 
 
 main :: Effect Unit
@@ -22,6 +22,4 @@ main = runTest do
     testVRulerSuite
     testVRulerSuite
     testChartColletionSuite
-    testTransformSuite
-    {--
-    --}
+    testElmSuite
