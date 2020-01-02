@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (unlistener !== null) {
                 unlistener(1)();
             }
-            console.log(cfg);
+            //console.log(cfg);
             scrap.clear();
             //myChart.drawCanvases(cfg);
             const mappings = toChartMappings(myCanvases);

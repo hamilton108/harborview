@@ -2,28 +2,23 @@ module Test.ChartTest where
 
 import Prelude
 
---import Foreign (F, Foreign, unsafeToForeign)
-import Control.Monad.Except (runExcept)
 import Test.Unit.Assert as Assert
 import Test.Unit (suite, test, TestSuite)
-import Data.Maybe (fromJust,isJust,Maybe(..))
+import Data.Maybe (fromJust,Maybe(..))
 import Data.Array as Array
 
 import Partial.Unsafe (unsafePartial)
-import Data.Either (isRight,fromRight)
 
 import Maunaloa.Common 
   ( ValueRange(..)
   , HtmlId(..)
   , ChartWidth(..)
   , ChartHeight(..)
-  , Ticker(..)
   )
 --import Util.Value (foreignValue)
 import Maunaloa.Chart as C
 
 import Maunaloa.Line as L
-import Test.Common as TC -- (moreOrLessEq,chartDim,pad0,pad1)
 import Test.VRulerTest as VT -- (moreOrLessEq,chartDim,pad0,pad1)
 
 cid :: C.ChartId
@@ -80,8 +75,9 @@ testChartSuite =
             let vr = C.valueRangeFor [10.0,35.0]
             let expVr = ValueRange { minVal: 10.0, maxVal: 35.0 }
             Assert.equal expVr vr
+        {--
         test "readChart chart2 and chart3 are null" do
-            let chart = runExcept $ C.readChart (Ticker "1") cid canvId chartW chartH Nothing TC.demox 
+            let chart = runExcept $ C.readChart cid canvId chartW chartH Nothing TC.demox 
             let rchart = unsafePartial $ fromRight chart
             Assert.equal true $ isRight chart
             let rline = getLine rchart
@@ -89,7 +85,7 @@ testChartSuite =
             let result = Array.zipWith TC.moreOrLessEq rline eline
             Assert.equal [true,true,true,true,true] result
         test "readChart with ChartLevel" do
-            let chart = runExcept $ C.readChart (Ticker "1") cid canvId chartW chartH (Just chartLevel) TC.demox 
+            let chart = runExcept $ C.readChart cid canvId chartW chartH (Just chartLevel) TC.demox 
             let rchart = unsafePartial $ fromRight chart
             let cl = getChartLevel rchart
             Assert.equal chartLevel cl
@@ -98,5 +94,6 @@ testChartSuite =
             Assert.equal true $ isRight ruler
             let mr = unsafePartial $ fromRight ruler
             Assert.equal true $ isJust mr
-            -- let result = unsafePartial $ fromJust mr
+        --}
+
 

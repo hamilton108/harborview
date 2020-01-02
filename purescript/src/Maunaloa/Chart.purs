@@ -2,30 +2,22 @@ module Maunaloa.Chart where
   
 import Prelude
 
-import Foreign (F, Foreign, readNull, readNumber)
-import Foreign.Index ((!))
 import Data.Maybe (Maybe(..))
 import Graphics.Canvas as Canvas -- (Context2D,Canvas)
 import Effect (Effect)
 import Effect.Console (logShow)
 
 import Maunaloa.Common 
-  ( UnixTime(..)
-  , ValueRange(..)
+  ( ValueRange(..)
   , Padding(..)
   , ChartWidth(..)
   , ChartHeight(..)
   , HtmlId(..)
-  , Ticker
   )
 import Maunaloa.HRuler as H
 import Maunaloa.VRuler as V
 import Maunaloa.Line as L
 import Maunaloa.Candlestick as CNDL
-import Util.Foreign as FU
-
-
---foreign import fi_clearRect :: Canvas.Context2D -> Canvas.Rectangle -> Effect Unit 
 
 newtype ChartId = ChartId String
 
@@ -65,7 +57,11 @@ instance showChart :: Show Chart where
     show (Chart cx) = 
         "(Chart lines: " <> show cx.lines <> 
         ", candlesticks: " <> show cx.candlesticks <> 
-            ", canvasId: " <> show cx.canvasId <> ")"
+        ", canvasId: " <> show cx.canvasId <> 
+        ", vruler: " <> show cx.vruler <> 
+        ", w: " <> show cx.w <> 
+        ", h: " <> show cx.h <> 
+        ", chartLevel: " <> show cx.chartLevel <> ")"
 
 
 {-
@@ -83,50 +79,6 @@ vruler vr w h = V.create vr w h padding
 valueRangeFor :: Array Number -> ValueRange
 valueRangeFor [mi,ma] = ValueRange { minVal: mi, maxVal: ma }
 valueRangeFor _ = ValueRange { minVal: 0.0, maxVal: 0.0 }
-
-readLines :: F Foreign -> F L.Lines
-readLines cidValue = 
-    cidValue ! "lines" >>= readNull >>= L.lines 
-
-readCandlesticks :: F Foreign -> F CNDL.Candlesticks 
-readCandlesticks cidValue = 
-    cidValue ! "candlesticks" >>= readNull >>= CNDL.readCandlesticks 
-
-readValueRange :: F Foreign -> F (Array Number)
-readValueRange cidValue = 
-    cidValue ! "valueRange" >>= FU.readNumArray
-
-readChart :: ChartId -> HtmlId -> ChartWidth -> ChartHeight -> Maybe ChartLevel -> Foreign -> F Chart
-readChart (ChartId cid) caId w h chartLevel value = 
-    let 
-        cidValue = value ! cid
-    in
-    readLines cidValue >>= \l1 ->
-    readCandlesticks cidValue >>= \c1 -> 
-    readValueRange cidValue >>= \v1 ->
-    let 
-        valueRange = valueRangeFor v1 
-        curVruler = vruler valueRange w h
-        linesToPix = map (L.lineToPix curVruler) l1 
-        cndlToPix = map (CNDL.candleToPix curVruler) c1
-    in
-    pure $ Chart 
-            { lines: linesToPix
-            , candlesticks: cndlToPix
-            , canvasId: caId
-            , vruler: curVruler
-            , w: w 
-            , h: h
-            , chartLevel: chartLevel }
-
-readHRuler :: ChartWidth -> Foreign -> F (Maybe H.HRuler)
-readHRuler chartWidth value = 
-    value ! "startdate" >>= readNumber >>= \sd ->
-    value ! "xaxis" >>= FU.readIntArray >>= \x ->  
-    let 
-        tm = UnixTime sd
-    in
-    pure $ H.create chartWidth tm x padding
 
 toRectangle :: Chart -> Canvas.Rectangle
 toRectangle (Chart {w: (ChartWidth w), h: (ChartHeight h)} ) =  
