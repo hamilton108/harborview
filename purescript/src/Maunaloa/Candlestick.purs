@@ -5,12 +5,6 @@ import Prelude
 import Effect (Effect)
 import Graphics.Canvas (Context2D)
 
-import Data.Traversable (traverse)
-import Foreign (F,Foreign,readArray,readNumber)
-import Foreign.Index ((!))
-
-import Data.Maybe (Maybe(..))
-
 import Maunaloa.Common (Xaxis)
 
 import Maunaloa.VRuler as V
@@ -44,18 +38,6 @@ candleToPix vr {o,h,l,c} =
         pc = V.valueToPix vr c
     in
     Candlestick { o: po, h: ph, l: pl, c: pc }
-
-readCandlestick :: Foreign -> F Candlestick
-readCandlestick value = 
-  value ! "o" >>= readNumber >>= \opn ->
-  value ! "h" >>= readNumber >>= \hi ->
-  value ! "l" >>= readNumber >>= \lo ->
-  value ! "c" >>= readNumber >>= \cls ->
-  pure $ Candlestick {o:opn,h:hi,l:lo,c:cls}
-
-readCandlesticks :: Maybe Foreign -> F Candlesticks
-readCandlesticks Nothing = pure []
-readCandlesticks (Just cndls) = readArray cndls >>= traverse readCandlestick 
 
 paint :: H.HRuler -> Candlesticks -> Context2D -> Effect Unit
 paint (H.HRuler {xaxis: xaxis}) cndls ctx = 

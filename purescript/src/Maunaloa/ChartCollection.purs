@@ -2,10 +2,9 @@ module Maunaloa.ChartCollection where
 
 import Prelude
 
-import Foreign (F, Foreign)
 import Data.Maybe (Maybe(..),fromJust)
 import Data.String (length)
-import Data.Traversable (traverse,traverse_)
+import Data.Traversable (traverse_)
 import Partial.Unsafe (unsafePartial)
 import Effect (Effect)
 import Data.Array as Array
@@ -44,8 +43,6 @@ instance showChartMapping :: Show ChartMapping where
 
 type ChartMappings = Array ChartMapping
 
--- createChartFromMapping :: ChartMapping -> Foreign -> F 
-
 instance showChartCollection :: Show ChartCollection where
     show (ChartCollection coll) = "(ChartCollection " <> show coll <> ")"
 
@@ -67,63 +64,6 @@ mappingToChartLevel (ChartMapping {levelCanvasId, addLevelId, fetchLevelId}) =
         , fetchLevelId: fetchLevelId
         }
 
-
-{--
-mappingToChartLevel :: HtmlId -> HtmlId -> HtmlId -> Maybe C.ChartLevel 
-mappingToChartLevel caId@(HtmlId caId1) addId fetchId = 
-    if length caId1 == 0 then
-        Nothing
-    else
-        Just
-        { levelCanvasId: caId 
-        , addLevelId: addId 
-        , fetchLevelId: fetchId 
-        }
---}
-
-
-fromMappings :: ChartMappings -> Foreign -> F (Array C.Chart)
-fromMappings mappings value =
-    let
-        tfn :: ChartMapping -> F C.Chart
-        tfn cm@(ChartMapping 
-            { ticker
-            , chartId
-            , canvasId
-            , chartHeight
-            , levelCanvasId 
-            , addLevelId
-            , fetchLevelId}) = 
-            let 
-                chartLevel = mappingToChartLevel cm -- levelCanvasId addLevelId fetchLevelId
-            in
-            C.readChart chartId canvasId globalChartWidth chartHeight chartLevel value 
-    in
-    traverse tfn mappings
-
-readChartCollection :: ChartMappings -> Foreign -> F ChartCollection
-readChartCollection mappings value = 
-    fromMappings mappings value >>= \charts -> 
-    C.readHRuler globalChartWidth value >>= \mhr ->
-    let 
-        hr = unsafePartial $ fromJust mhr        
-    in
-    pure $ ChartCollection { charts: charts, hruler: hr } 
-
-{-
-readChartCollection :: Foreign -> F ChartCollection
-readChartCollection value = 
-  C.readChart (C.ChartId "chart") (CanvasId "chart-1") globalChartWidth (ChartHeight 600.0) value >>= \chart1 ->
-  C.readChart (C.ChartId "chart2") (CanvasId "osc-1") globalChartWidth (ChartHeight 200.0) value >>= \chart2 ->
-  C.readHRuler globalChartWidth value >>= \mhr ->
-  let 
-    hr = unsafePartial $ fromJust mhr        
-  in
-  pure $ ChartCollection { charts: (chart1 : chart2 : Nil), hruler: hr } 
--}
-
---initEvents :: Effect (Int -> Effect Unit)
---initEvents =
 
 findChartPredicate :: C.Chart -> Boolean
 findChartPredicate (C.Chart chart) =

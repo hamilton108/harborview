@@ -4,15 +4,13 @@ import Prelude
 
 import Partial.Unsafe (unsafePartial)
 import Data.Array (filter)
-import Data.Traversable (traverse)
 import Data.Nullable (toMaybe)
 import Data.Maybe 
     ( Maybe(..)
     , fromJust 
     )
 import Maunaloa.ElmTypes
-    ( ElmCandlestick
-    , ElmChart
+    ( ElmChart
     , ChartInfoWindow
     )
 import Maunaloa.ChartCollection 

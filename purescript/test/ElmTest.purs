@@ -8,7 +8,7 @@ import Test.Unit (TestSuite,suite,test)
 import Test.Unit.Assert as Assert
 import Data.Maybe (Maybe(..))
 
-import Data.Array (length,head,tail)
+import Data.Array (length,head)
 import Data.Nullable (null,notNull)
 import Maunaloa.Elm (transform)
 import Maunaloa.ElmTypes
@@ -16,16 +16,10 @@ import Maunaloa.ElmTypes
     , ChartInfoWindow
     )
     
-import Maunaloa.Chart (Chart)
-import Maunaloa.ChartCollection (ChartCollection(..),ChartMappings,ChartMapping(..))
-import Maunaloa.HRuler (HRuler)
-import Maunaloa.Chart (ChartId(..))
+import Maunaloa.ChartCollection (ChartCollection(..),ChartMapping(..))
+import Maunaloa.Chart (Chart,ChartId(..))
 import Maunaloa.Common 
-    ( UnixTime(..)
-    , ValueRange(..)
-    , Padding(..)
-    , ChartWidth(..)
-    , ChartHeight(..)
+    ( ChartHeight(..)
     , HtmlId(..)
     , Ticker(..)
     )

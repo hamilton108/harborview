@@ -1,15 +1,5 @@
 module Test.ChartCollectionTest where
 
-import Prelude 
-
-import Control.Monad.Except (runExcept)
-import Partial.Unsafe (unsafePartial)
-import Data.Array as Array
-import Data.Maybe (Maybe(..),fromJust)
-import Data.Either (fromRight)
-import Test.Unit (TestSuite,suite,test)
-import Test.Unit.Assert as Assert
-
 --import Util.Value (foreignValue)
 import Maunaloa.Chart as Chart 
 import Maunaloa.ChartCollection as ChartCollection
@@ -18,8 +8,6 @@ import Maunaloa.Common
     , Ticker(..)
     , ChartHeight(..)
     )
-
-import Test.Common as TC 
 
 chartMapping :: HtmlId -> HtmlId -> HtmlId -> ChartCollection.ChartMapping
 chartMapping levelCanvasId addLevelId fetchLevelId = 
@@ -49,6 +37,7 @@ chartMappingWithChartLevel = chartMapping (HtmlId "level-canvasid") (HtmlId "add
 chartMappingsWithChartLevel :: ChartCollection.ChartMappings 
 chartMappingsWithChartLevel = [chartMappingWithChartLevel]
 
+{--
 testChartColletionSuite :: TestSuite
 testChartColletionSuite = 
     suite "ChartCollection" do
@@ -62,4 +51,5 @@ testChartColletionSuite =
             let collection1 = unsafePartial $ fromRight collection
             let (Chart.Chart chart1) = unsafePartial $ fromJust $ Array.head collection1
             Assert.equal (Just $ asChartLevel chartMappingWithChartLevel) chart1.chartLevel 
+--}
 
