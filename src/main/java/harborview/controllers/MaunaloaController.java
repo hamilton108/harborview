@@ -1,17 +1,24 @@
 package harborview.controllers;
 
+import com.gargoylesoftware.htmlunit.javascript.host.canvas.ext.OES_standard_derivatives;
+import critterrepos.beans.options.DerivativePriceBean;
 import harborview.dto.html.*;
 import harborview.dto.html.options.OptionPriceForDTO;
 import harborview.dto.html.options.OptionRiscDTO;
 import harborview.dto.html.options.StockAndOptions;
 import harborview.maunaloa.models.MaunaloaModel;
+import oahu.financial.Derivative;
+import oahu.financial.DerivativePrice;
+import oahu.financial.StockPrice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/maunaloa")
@@ -112,7 +119,11 @@ public class MaunaloaController {
     @GetMapping(value = "/risclines/{ticker}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public List<RiscLinesDTO> riscLines(@PathVariable("ticker") int ticker) {
-        return maunaloaModel.fetchRiscLines(ticker);
+        List<RiscLinesDTO> result = new ArrayList<>();
+        RiscLinesDTO dto = new RiscLinesDTO(new DerivativePriceMock());
+        result.add(dto);
+        return result;
+        //return maunaloaModel.fetchRiscLines(ticker);
     }
 
     @ResponseBody

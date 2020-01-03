@@ -24,7 +24,8 @@ import Maunaloa.LevelLine as LevelLine
 import Effect.Console (logShow)
 
 newtype ChartCollection = ChartCollection 
-    { charts :: Array C.Chart -- List C.Chart
+    { ticker :: String
+    , charts :: Array C.Chart -- List C.Chart
     , hruler :: H.HRuler
     }
 
@@ -73,8 +74,8 @@ findLevelLineChart :: Array C.Chart -> Maybe C.Chart
 findLevelLineChart charts = 
     Array.find findChartPredicate charts
 
-levelLines :: Array C.Chart -> Effect (Int -> Effect Unit)
-levelLines charts = 
+levelLines :: String -> Array C.Chart -> Effect (Int -> Effect Unit)
+levelLines ticker charts = 
     let
         levelLine = Array.find findChartPredicate charts
     in
@@ -86,7 +87,7 @@ levelLines charts =
             let 
                 caid = unsafePartial $ fromJust levelLine1.chartLevel
             in
-            LevelLine.initEvents levelLine1.vruler caid
+            LevelLine.initEvents ticker levelLine1.vruler caid
 
 paint :: ChartCollection -> Effect (Int -> Effect Unit)
 paint (ChartCollection coll) = 
@@ -94,4 +95,4 @@ paint (ChartCollection coll) =
         paint_ = C.paint coll.hruler
     in
     traverse_ paint_ coll.charts *>
-    levelLines coll.charts
+    levelLines coll.ticker coll.charts

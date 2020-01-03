@@ -7,7 +7,7 @@ import Maunaloa.ChartCollection as Collection
 
 import Maunaloa.ElmTypes (ChartInfoWindow)
 import Maunaloa.Elm as Elm
-import Effect.Console (logShow)
+--import Effect.Console (logShow)
 
 {-
 newtype Ax = Ax
@@ -34,7 +34,7 @@ tryMes v axs =
 
 paint :: Collection.ChartMappings -> ChartInfoWindow -> Effect (Int -> Effect Unit)
 paint mappings ciwin = 
-    logShow ciwin *> 
+    --logShow ciwin *> 
     let 
         coll = Elm.transform mappings ciwin
     in 

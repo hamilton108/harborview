@@ -15,6 +15,11 @@ import Affjax as Affjax
 import Affjax.ResponseFormat as ResponseFormat
 import Data.Traversable as Traversable
 
+--import Partial.Unsafe (unsafePartial)
+--import Data.Maybe (fromJust,Maybe(..))
+
+-- import Data.StrMap as StrMap
+
 import Graphics.Canvas as Canvas 
 import Graphics.Canvas (CanvasElement,Context2D)
 import Web.Event.Event (EventType(..))
@@ -28,7 +33,7 @@ import Web.HTML as HTML
 import Web.HTML.Window as Window
 import Web.HTML.HTMLDocument as HTMLDocument
 
-import Data.Argonaut.Core as Argonaut
+import Data.Argonaut.Core (Json)
 
 import Maunaloa.Common (HtmlId(..))
 import Maunaloa.VRuler (VRuler)
@@ -84,6 +89,8 @@ foreign import onMouseDrag :: Event.Event -> Lines -> Context2D -> VRuler -> Eff
 foreign import onMouseUp :: Event.Event -> Lines -> Effect Unit
 
 foreign import redraw :: Context2D -> VRuler -> Effect Line
+
+foreign import showJson :: Json -> Effect Unit
 
 instance showLine :: Show Line where
     show (Line v) = "Line: " <> show v 
@@ -159,18 +166,39 @@ addLevelLineButtonClick lref ce vruler evt =
     Ref.read lref >>= \lxx -> 
     logShow lxx 
 
-fetchLevelLines :: Effect Unit
-fetchLevelLines = Aff.launchAff_ do
-    res <- Affjax.get ResponseFormat.json "http://172.17.0.4:3000/risclines/3"
-    case res of  
-        Left err -> 
-            liftEffect $ logShow "NOPE!"
-        Right response -> 
-            liftEffect $ logShow $ Argonaut.stringify (response.body)
+{-
+showObj o = 
+    case o of 
+        Nothing -> 
+            logShow "Nope"
+        Just ox -> 
+            let 
+                oxx = StrMap.lookup "be" o
+            in
+            case oxx of 
+                Nothing -> 
+                    logShow "Nopesky"
+                Just oxxx ->
+                    logShow oxxx 
+---}
 
-fetchLevelLineButtonClick :: LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Unit
-fetchLevelLineButtonClick lref ce vruler evt = 
-    fetchLevelLines 
+
+
+
+
+fetchLevelLines :: String -> Effect Unit
+fetchLevelLines ticker = 
+    Aff.launchAff_ $
+    Affjax.get ResponseFormat.json ("http://localhost:6346/maunaloa/risclines/" <> ticker) >>= \res ->
+        case res of  
+            Left err -> 
+                liftEffect $ logShow $ "Affjax Error: " <> Affjax.printError err
+            Right response -> 
+                liftEffect $ showJson response.body
+
+fetchLevelLineButtonClick :: String -> LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Unit
+fetchLevelLineButtonClick ticker lref ce vruler evt = 
+    fetchLevelLines ticker  
     
 {-
     Aff.launchAff do
@@ -251,8 +279,8 @@ initEvent toListener element eventType ref =
     EventTarget.addEventListener eventType e1 false (toEventTarget element) *>
     addEventListenerRef ref info 
 
-initEvents :: VRuler -> ChartLevel -> Effect (Int -> Effect Unit)
-initEvents vruler chartLevel =
+initEvents :: String -> VRuler -> ChartLevel -> Effect (Int -> Effect Unit)
+initEvents ticker vruler chartLevel =
     getHtmlContext chartLevel >>= \context ->
         case context of
             Nothing ->
@@ -267,7 +295,7 @@ initEvents vruler chartLevel =
                 linesRef >>= \lir -> 
                     redraw ctx vruler *>
                     initEvent (addLevelLineButtonClick lir ce vruler) context1.addLevelLineBtn (EventType "click") elr *>
-                    initEvent (fetchLevelLineButtonClick lir ce vruler) context1.fetchLevelLinesBtn (EventType "click") elr *>
+                    initEvent (fetchLevelLineButtonClick ticker lir ce vruler) context1.fetchLevelLinesBtn (EventType "click") elr *>
                     initEvent (mouseEventDown lir) context1.canvasElement (EventType "mousedown") elr *>
                     initEvent (mouseEventDrag lir ce vruler) context1.canvasElement (EventType "mousemove") elr *>
                     initEvent (mouseEventUp lir ce vruler) context1.canvasElement (EventType "mouseup") elr *>

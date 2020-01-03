@@ -47,6 +47,11 @@ const draw = function (linesWrapper, vruler, ctx) {
     paintDisplayValueDefault(linesWrapper.pilotLine.y, vruler, ctx);
 };
 
+exports.showJson = function(json) {
+    return function () {
+        console.log (json);
+    }
+}
 exports.onMouseDown = function (evt) {
     return function (linesWrapper) {
         return function () {

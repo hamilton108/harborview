@@ -18,7 +18,8 @@ import Maunaloa.ChartCollection
     , ChartMappings
     , ChartMapping(..)
     , globalChartWidth
-    , mappingToChartLevel)
+    , mappingToChartLevel
+    )
 import Maunaloa.Chart 
     ( ChartId(..)
     , Chart(..)
@@ -76,7 +77,8 @@ transform mappings ciwin =
         charts1 = map (unsafePartial $ fromJust) maybeCharts
     in
     ChartCollection 
-    { charts: charts1
+    { ticker: ciwin.ticker
+    , charts: charts1
     , hruler: ruler1
     }
 
