@@ -139,7 +139,7 @@ type Msg
     = AlertOk
     | TickersFetched (Result Http.Error CS.SelectItems)
     | FetchCharts String
-    | ChartsFetched Ticker (Result Http.Error ChartInfo)
+    | ChartsFetched (Result Http.Error ChartInfo)
     | Previous
     | Next
     | Last

@@ -51,7 +51,7 @@ fetchCharts ticker ct resetCache =
                         MonthChart ->
                             mainUrl ++ "/months/" ++ s
             in
-            Http.send (ChartsFetched ticker) <| Http.get url (DEC.chartInfoDecoder s)
+            Http.send ChartsFetched <| Http.get url (DEC.chartInfoDecoder s)
 
 
 fetchRiscLines : Ticker -> Cmd Msg
