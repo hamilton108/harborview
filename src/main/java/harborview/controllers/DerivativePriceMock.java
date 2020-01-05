@@ -44,7 +44,7 @@ public class DerivativePriceMock implements DerivativePrice {
 
     @Override
     public Optional<Double> getBreakEven() {
-        return Optional.of(30.0);
+        return Optional.of(36.0);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class DerivativePriceMock implements DerivativePrice {
 
     @Override
     public Optional<Double> getCurrentRiscStockPrice() {
-        return Optional.of(35.0);
+        return Optional.of(31.43);
     }
 
     @Override

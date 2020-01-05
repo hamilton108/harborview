@@ -1,4 +1,4 @@
-module Maunaloa.LevelLine (initEvents,fetchLevelLines ) where
+module Maunaloa.LevelLine (initEvents) where
 
 import Prelude
 import Data.Maybe (Maybe(..))
@@ -90,6 +90,8 @@ foreign import onMouseUp :: Event.Event -> Lines -> Effect Unit
 
 foreign import redraw :: Context2D -> VRuler -> Effect Line
 
+foreign import createRiscLines :: Json -> Context2D -> VRuler -> Effect (Array Line)
+
 foreign import showJson :: Json -> Effect Unit
 
 instance showLine :: Show Line where
@@ -162,59 +164,48 @@ addLevelLineButtonClick lref ce vruler evt =
     defaultEventHandling evt *>
     Canvas.getContext2D ce >>= \ctx ->
     createLine ctx vruler >>= \newLine ->
-    Ref.modify_ (addLine newLine) lref *>
-    Ref.read lref >>= \lxx -> 
-    logShow lxx 
+    Ref.modify_ (addLine newLine) lref 
+    --Ref.read lref >>= \lxx -> 
+    --logShow lxx 
 
-{-
-showObj o = 
-    case o of 
-        Nothing -> 
-            logShow "Nope"
-        Just ox -> 
-            let 
-                oxx = StrMap.lookup "be" o
-            in
-            case oxx of 
-                Nothing -> 
-                    logShow "Nopesky"
-                Just oxxx ->
-                    logShow oxxx 
----}
+addLine :: Line -> Lines -> Lines
+addLine newLine (Lines l@{lines}) = 
+    Lines $ l { lines = newLine : lines } 
 
+addRiscLevelLines :: Json -> LinesRef -> CanvasElement -> VRuler -> Effect Unit
+addRiscLevelLines json lref ce vruler =
+    Ref.modify_ (\_ -> initLines) lref *>
+    Canvas.getContext2D ce >>= \ctx ->
+    redraw ctx vruler *>
+    createRiscLines json ctx vruler >>= \newLines ->
+    Traversable.traverse_ (\newLine -> Ref.modify_ (addLine newLine) lref) newLines 
 
-
-
-
-fetchLevelLines :: String -> Effect Unit
-fetchLevelLines ticker = 
+fetchLevelLineButtonClick :: String -> LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Unit
+fetchLevelLineButtonClick ticker lref ce vruler evt = 
     Aff.launchAff_ $
     Affjax.get ResponseFormat.json ("http://localhost:6346/maunaloa/risclines/" <> ticker) >>= \res ->
         case res of  
             Left err -> 
-                liftEffect $ logShow $ "Affjax Error: " <> Affjax.printError err
+                liftEffect (
+                    defaultEventHandling evt *>
+                    logShow ("Affjax Error: " <> Affjax.printError err)
+                )
             Right response -> 
-                liftEffect $ showJson response.body
-
-fetchLevelLineButtonClick :: String -> LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Unit
-fetchLevelLineButtonClick ticker lref ce vruler evt = 
-    fetchLevelLines ticker  
+                liftEffect (
+                    defaultEventHandling evt *>
+                    addRiscLevelLines response.body lref ce vruler 
+                    {--
+                    Canvas.getContext2D ce >>= \ctx ->
+                    createLine ctx vruler >>= \newLine ->
+                    showJson response.body
+                    --}
+                )
     
-{-
-    Aff.launchAff do
-    res <- Affjax.get ResponseFormat.json "http://jsonplaceholder.typicode.com/todos"
-    liftEffect $ pure "fd"
-    --liftEffect $ logShow $ "GET /api response: " <> res.response
-    --liftEffect $ logShow "Yep"
--}
-
-
 mouseEventDown :: LinesRef -> Event.Event -> Effect Unit
 mouseEventDown lref evt = 
     defaultEventHandling evt *>
     Ref.read lref >>= \lxx -> 
     onMouseDown evt lxx 
-
 
 hasPilotLine :: Lines -> Boolean
 hasPilotLine (Lines {pilotLine}) =
@@ -224,9 +215,9 @@ hasPilotLine (Lines {pilotLine}) =
 mouseEventDrag :: LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Unit
 mouseEventDrag lref ce vruler evt = 
     defaultEventHandling evt *>
-    Canvas.getContext2D ce >>= \ctx ->
     Ref.read lref >>= \lxx -> 
         if hasPilotLine lxx then 
+            Canvas.getContext2D ce >>= \ctx ->
             onMouseDrag evt lxx ctx vruler
         else 
             pure unit
@@ -305,10 +296,6 @@ defaultEventHandling :: Event.Event -> Effect Unit
 defaultEventHandling event = 
     Event.stopPropagation event *>
     Event.preventDefault event 
-
-addLine :: Line -> Lines -> Lines
-addLine newLine (Lines l@{lines}) = 
-    Lines $ l { lines = newLine : lines } 
 
 getDoc :: Effect NonElementParentNode
 getDoc = 

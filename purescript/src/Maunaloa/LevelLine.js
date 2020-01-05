@@ -120,6 +120,31 @@ exports.redraw = function (ctx) {
     };
 };
 
+exports.createRiscLines = function (json) {
+    return function (ctx) {
+        return function (vruler) {
+            return function () {
+                var result = [];
+                console.log (json);
+                const x2 = vruler.w - x1;
+                for (var i=0; i<json.length; ++i) {
+                    const curJson = json[i];
+                    const bePix = valueToPix(vruler, curJson.be);
+                    const spPix = valueToPix(vruler, curJson.stockprice);
+                    const breakEvenLine = { y: bePix, draggable: false, selected: false };
+                    const riscLine = { y: spPix, draggable: true, selected: false };
+                    paint(x2, bePix, curJson.be, ctx);
+                    paint(x2, spPix, curJson.stockprice, ctx);
+                    result.push(breakEvenLine);
+                    result.push(riscLine);
+                }
+                return result;
+            };
+        };
+    };
+};
+
+
 exports.createLine = function (ctx) {
     return function (vruler) {
         return function () {
@@ -133,6 +158,10 @@ exports.createLine = function (ctx) {
 
 const pixToValue = function (v, pix) {
     return v.maxVal - ((pix - v.padding.top) / v.ppy);
+};
+const valueToPix = function (v, value) {
+    //((maxVal - value) * ppyVal) + curPad.top 
+    return ((v.maxVal - value) * v.ppy) + v.padding.top;
 };
 
 const paint = function (x2, y, displayValue, ctx) {
