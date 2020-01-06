@@ -67,6 +67,7 @@ main = do
 newtype PilotLine = 
     PilotLine 
     { y :: Number
+    , strokeStyle :: String
     } 
 
 derive instance eqPilotLine :: Eq PilotLine 
@@ -76,6 +77,8 @@ newtype Line =
     { y :: Number
     , draggable :: Boolean
     , selected :: Boolean
+    , riscLine :: Boolean
+    , strokeStyle :: String
     } 
 
 -- foreign import createLine :: VRuler -> Event.Event -> Effect Line
@@ -86,7 +89,7 @@ foreign import onMouseDown :: Event.Event -> Lines -> Effect Unit
 
 foreign import onMouseDrag :: Event.Event -> Lines -> Context2D -> VRuler -> Effect Unit
 
-foreign import onMouseUp :: Event.Event -> Lines -> Effect Unit
+foreign import onMouseUp :: Event.Event -> Lines -> Effect Line
 
 foreign import redraw :: Context2D -> VRuler -> Effect Line
 
@@ -226,7 +229,8 @@ mouseEventUp :: LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Uni
 mouseEventUp lref ce vruler evt = 
     defaultEventHandling evt *>
     Ref.read lref >>= \lxx -> 
-    onMouseUp evt lxx 
+    onMouseUp evt lxx >>= \selectedLine ->
+    logShow selectedLine
 
 getHtmlContext1 :: Maybe Element -> Maybe Element -> Maybe Element -> Maybe CanvasElement -> Maybe HtmlContext
 getHtmlContext1 canvas addLlBtn fetchLlBtn ctx = 
