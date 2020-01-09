@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "/home/rcs/opt/java/harborview/jsdeploy"
+		},
+		{
+			"path": "/home/rcs/opt/haskell/etradejanitor"
 		}
 	],
 	"settings": {}

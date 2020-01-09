@@ -225,12 +225,35 @@ mouseEventDrag lref ce vruler evt =
         else 
             pure unit
 
+handleRiscLine :: Line -> Effect Unit
+handleRiscLine (Line {y,riscLine}) = 
+    Aff.launchAff_ $
+    Affjax.get ResponseFormat.json ("http://localhost:6346/maunaloa/oopzs/" <> "sfsdf") >>= \res ->
+        case res of  
+            Left err -> 
+                liftEffect (
+                    logShow ("Affjax Error: " <> Affjax.printError err)
+                )
+            Right response -> 
+                liftEffect (
+                    showJson response.body
+                )
+
+checkIfRiscLine :: Line -> Effect Unit
+checkIfRiscLine curLine@(Line {riscLine}) = 
+    case riscLine of 
+        true ->
+            handleRiscLine curLine
+        false ->
+            pure unit
+
 mouseEventUp :: LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Unit
 mouseEventUp lref ce vruler evt = 
     defaultEventHandling evt *>
     Ref.read lref >>= \lxx -> 
     onMouseUp evt lxx >>= \selectedLine ->
-    logShow selectedLine
+    logShow selectedLine *> 
+    checkIfRiscLine selectedLine
 
 getHtmlContext1 :: Maybe Element -> Maybe Element -> Maybe Element -> Maybe CanvasElement -> Maybe HtmlContext
 getHtmlContext1 canvas addLlBtn fetchLlBtn ctx = 
