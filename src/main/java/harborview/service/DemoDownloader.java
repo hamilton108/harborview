@@ -1,7 +1,7 @@
 package harborview.service;
 
 import com.gargoylesoftware.htmlunit.Page;
-import nordnet.downloader.TickerInfo;
+import oahu.financial.html.TickerInfo;
 import oahu.financial.html.EtradeDownloader;
 import oahu.financial.html.WebClientManager;
 import org.springframework.beans.factory.annotation.Autowired;

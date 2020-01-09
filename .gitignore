@@ -33,5 +33,6 @@ purescript/server/public/js/
 purescript/server/package-lock.json
 src/main/resources/static/js/maunaloa/elm-charts-*.js
 src/main/resources/static/js/maunaloa/ps-charts-*.js
+src/test/jasmine/lib
 
 
