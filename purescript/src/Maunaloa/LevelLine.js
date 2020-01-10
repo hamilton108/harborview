@@ -146,7 +146,7 @@ exports.createRiscLines = function (json) {
         return function (vruler) {
             return function () {
                 var result = [];
-                const x2 = vruler.w - x1;
+                //const x2 = vruler.w - x1;
                 for (var i=0; i<json.length; ++i) {
                     const curJson = json[i];
                     const bePix = valueToPix(vruler, curJson.be);

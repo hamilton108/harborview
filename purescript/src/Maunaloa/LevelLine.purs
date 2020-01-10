@@ -183,10 +183,19 @@ addRiscLevelLines json lref ce vruler =
     createRiscLines json ctx vruler >>= \newLines ->
     Traversable.traverse_ (\newLine -> Ref.modify_ (addLine newLine) lref) newLines 
 
+fetchLevelLinesURL :: String -> String
+fetchLevelLinesURL ticker =
+    -- "http://localhost:6346/maunaloa/risclines/" <> ticker
+    "http://172.17.0.2:3000/risclines/" <> ticker
+
+optionPriceURL :: String
+optionPriceURL =
+    "http://172.17.0.2:3000/optionprice/3/2" 
+
 fetchLevelLineButtonClick :: String -> LinesRef -> CanvasElement -> VRuler -> Event.Event -> Effect Unit
 fetchLevelLineButtonClick ticker lref ce vruler evt = 
     Aff.launchAff_ $
-    Affjax.get ResponseFormat.json ("http://localhost:6346/maunaloa/risclines/" <> ticker) >>= \res ->
+    Affjax.get ResponseFormat.json (fetchLevelLinesURL ticker) >>= \res ->
         case res of  
             Left err -> 
                 liftEffect (
@@ -228,7 +237,7 @@ mouseEventDrag lref ce vruler evt =
 handleRiscLine :: Line -> Effect Unit
 handleRiscLine (Line {y,riscLine}) = 
     Aff.launchAff_ $
-    Affjax.get ResponseFormat.json ("http://localhost:6346/maunaloa/oopzs/" <> "sfsdf") >>= \res ->
+    Affjax.get ResponseFormat.json optionPriceURL >>= \res ->
         case res of  
             Left err -> 
                 liftEffect (

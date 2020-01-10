@@ -11,7 +11,11 @@ router.get('/rox', function (req, res, next) {
 });
 
 router.get('/risclines/:ticker', function (req, res, next) {
-  res.json({ be: 12.4, risc: 10.0, ask: 11.0, optionPrice: 23.0, stockPrice: 124.9 });
+  res.json([{ be: 32.4, risc: 10.0, ask: 11.0, optionprice: 23.0, stockprice: 28.9 }]);
+});
+
+router.get('/optionprice/:optionticker/:levelvalue', function (req, res, next) {
+  res.json({ risc: 5.4, optionprice: 23.0 });
 });
 
 module.exports = router;

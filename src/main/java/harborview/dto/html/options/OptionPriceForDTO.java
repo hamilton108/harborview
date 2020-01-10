@@ -2,17 +2,17 @@ package harborview.dto.html.options;
 
 public class OptionPriceForDTO {
     private final double risc;
-    private final double optionPrice;
+    private final double optionprice;
 
     public OptionPriceForDTO(double optionPrice, double risc) {
-        this.optionPrice = optionPrice;
+        this.optionprice = optionPrice;
         this.risc = risc;
     }
     public double getRisc() {
         return risc;
     }
 
-    public double getOptionPrice() {
-        return optionPrice;
+    public double getOptionprice() {
+        return optionprice;
     }
 }
